@@ -1,0 +1,81 @@
+/* ==========================================================================
+   Cave Wear – global styles
+   1. Fonts (@font-face)
+   2. Design tokens (CSS variables)
+   ========================================================================== */
+
+/* 1. Fonts
+   -------------------------------------------------------------------------- */
+
+/* Geist: variable font – one file contains every weight from 100 to 900. */
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Tusker Grotesk 5800 Super: one weight only.
+   The range 100–900 tells the browser "this file is right for any weight",
+   so it never fakes a bold version (h1 is bold by default).
+   Never set font-weight on this font. */
+@font-face {
+  font-family: "Tusker Grotesk";
+  src: url("/fonts/TuskerGrotesk-5800Super.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. Design tokens
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Palette – the raw colours, named after the brand colour names.
+     Do not use these directly in components – use the roles below. */
+  --color-dark-obsidian: #0d0d0e;
+  --color-obsidian: #131314;
+  --color-charcoal: #1e1e1e;
+  --color-flint: #6b655e;
+  --color-egret: #f3ebe0;
+  --color-weathered-bone: #c4b9ac;
+  --color-muted-stone: #8c857b;
+  --color-wild-honey: #c39132;
+  --color-amber-gold: #d4a54a;
+  --color-irr-olive: #4b573e;
+  --color-forest-fern: #5b7553;
+  --color-terracotta: #b86b43;
+  --color-moule: #382d2b;
+
+  /* Reserve – no role yet */
+  --color-tobacco-brown: #9a7354;
+  --color-alpine-oak: #ae946b;
+  --color-mossy-elm: #5e6d4e;
+
+  /* Roles – what each colour is for. Components use only these. */
+  --color-bg: var(--color-dark-obsidian);
+  --color-surface: var(--color-obsidian); /* header, footer, cards, bag */
+  --color-line: var(--color-charcoal); /* dividers – no form fields on it */
+  --color-input-border: var(--color-flint);
+
+  --color-text: var(--color-egret);
+  --color-text-secondary: var(--color-weathered-bone); /* prices, details */
+  --color-text-quiet: var(--color-muted-stone); /* only on bg or surface */
+
+  --color-accent: var(--color-wild-honey); /* everything clickable */
+  --color-accent-hover: var(--color-amber-gold);
+  --color-on-accent: var(--color-dark-obsidian); /* text on accent */
+
+  --color-brand-support: var(--color-irr-olive); /* large areas only, text: --color-text */
+
+  /* Status: colour only on icon / left border – message text stays --color-text */
+  --color-success: var(--color-forest-fern);
+  --color-error: var(--color-terracotta);
+
+  --color-logo-brown: var(--color-moule); /* 1.5:1 on dark – only on cream or large */
+
+  /* Fonts */
+  --font-body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Tusker Grotesk", Impact, "Arial Narrow", sans-serif; /* H1 / display only */
+}

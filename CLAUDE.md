@@ -101,6 +101,10 @@ Impressum · Privacy Policy. (No Kickstarter.)
 - **Selective scroll snap** (CSS only, `proximity`, never `mandatory`): only on the few key
   moments – hero, main call to action, max. one more. Everything else scrolls freely.
   Also used for the product image gallery and the mobile product row. 
+  - **Follow the journey** (build in public): progress timeline with real milestones only
+  (stored in a small data file, easy to update) + Instagram/Threads links. Main place: Brand
+  page. Short teaser on Home (possible snap moment). One line near "Reserve" on Products.
+  Links only – no embedded social feeds (no third-party scripts/cookies).
 `prefers-reduced-motion`.
 
 ## 7. Products (details still open)

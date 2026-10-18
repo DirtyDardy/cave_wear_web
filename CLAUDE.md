@@ -106,6 +106,75 @@ Impressum · Privacy Policy. (No Kickstarter.)
   page. Short teaser on Home (possible snap moment). One line near "Reserve" on Products.
   Links only – no embedded social feeds (no third-party scripts/cookies).
 `prefers-reduced-motion`.
+## 6b. Header & navigation (decided 18 Oct 2026)
+
+Goal: subtle, premium navigation. Blends into the hero on Home, becomes readable
+almost immediately when scrolling starts, always accessible.
+
+### Background (transparent → opaque)
+- **Home only:** at the very top the header background is almost invisible (~5% Obsidian),
+  so the hero shows through. The hero sits *under* the header on Home.
+- After a small scroll (~24–32px) the background **fades** (~0.3s) to solid Obsidian.
+  Back at the top it fades out again.
+- **Only the background** fades. Logo and links stay fully visible at all times (contrast).
+- All other pages: opaque from the start.
+- Detect scrolling with `IntersectionObserver` (no scroll listener for this part).
+- Hero readability: test once the real hero image exists. If needed, a soft gradient
+  at the top of the image – never a visible grey block.
+
+### Hide on scroll down / show on scroll up
+- Separate system from the background fade.
+- Hide only after scrolling a bit (threshold, no jitter on tiny movements).
+- Never hide while the mobile menu or the Brand submenu is open, or while keyboard
+  focus is inside the header.
+- When it reappears, the background is already opaque.
+- **Product detail pages (`/products/*`): never hide.** Reason: the Bag (and its count)
+  stays visible while people look at products and add them.
+- `prefers-reduced-motion`: no slide animation.
+
+### Active page
+- Inactive links: Weathered Bone, normal weight. Active link: **bold**, Egret.
+- **No square marker** (removed – looked dated).
+- Bold must not shift the layout (reserve the bold width).
+- "Products" is also active on product detail pages (`/products/...`).
+- Same look in every state: transparent, opaque, open, reappearing.
+
+### Brand submenu (the only submenu)
+- Only **Brand** has a submenu, marked with a small chevron. Products, Contact = plain links.
+  Home = the logo. **No mega menu.**
+- Why: the Brand page is the longest page with different topics. The submenu shows all
+  topics up front, so visitors jump to what interests them instead of leaving.
+- Items are **placeholders** until Dardan decides the Brand sections. They live in one
+  list in the code, so changing them = editing one line.
+  Placeholder items: Brand overview · The Idea · The Cave Bear · Conservation · The Journey
+- Clicking "Brand" opens/closes the submenu (button with `aria-expanded`). On devices
+  with hover, hover opens it too (small delay before closing). Escape and click outside
+  close it. Works with touch and keyboard. Disclosure pattern – not `role="menu"`.
+
+### Jump links
+- Submenu items link to sections: `/brand#cave-bear` etc.
+- Same page: smooth scroll via CSS. From another page: the page opens at the top, then
+  scrolls smoothly to the section (small JS, ~5–8 lines).
+- `scroll-margin-top` so headings don't land under the header.
+- `prefers-reduced-motion`: jump directly, no scrolling.
+
+### Mobile
+- Menu button top-right. **Bag stays visible** next to the menu button.
+- Brand submenu becomes an accordion inside the mobile menu.
+- Everything works with touch, nothing depends on hover.
+
+### Structure
+- Semantic `header` > `nav aria-label="Main navigation"` > `ul` > `li`.
+- All header sizes and spacing on the 4-pt grid (`--space-*`).
+- JS in small, separate, explained parts.
+
+### Build order (one step at a time, commit after each)
+1. Spacing scale + header on the 4-pt grid + new active style (CSS)
+2. Mobile menu (first JS feature)
+3. Background fade on scroll
+4. Hide/show on scroll + product page exception
+5. Brand submenu
+6. Jump links with smooth scroll
 
 ## 7. Products (details still open)
 

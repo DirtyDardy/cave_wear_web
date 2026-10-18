@@ -93,7 +93,7 @@
   --space-24: 6rem; /* 96px */
 
   /* Layout */
-  --max-width: 90rem; /* 1440px – content stops growing on ultrawide screens */
+  --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
   --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
   --header-height: 4.5rem; /* 72px = 18 × 4 */
 
@@ -156,10 +156,11 @@ a {
   outline-offset: 3px;
 }
 
-/* Centred content column – used by header, footer and page sections */
+/* Centred content column – used by header, footer and page sections.
+   The content itself is max 1440px; the gutters sit outside of it. */
 .container {
   inline-size: 100%;
-  max-inline-size: var(--max-width);
+  max-inline-size: calc(var(--max-width) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
 }

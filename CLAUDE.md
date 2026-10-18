@@ -97,7 +97,11 @@ Impressum · Privacy Policy. (No Kickstarter.)
 - **Home hero**: split screen *Built for the wild / Built for anywhere* (hover reveals a side
   on desktop), with subtle parallax as support. Needs a separate touch/mobile version.
   Prototype both variants in the browser and let Dardan decide.
-- Basic animations only, always respecting `prefers-reduced-motion`.
+- Basic animations only, always respecting
+- **Selective scroll snap** (CSS only, `proximity`, never `mandatory`): only on the few key
+  moments – hero, main call to action, max. one more. Everything else scrolls freely.
+  Also used for the product image gallery and the mobile product row. 
+`prefers-reduced-motion`.
 
 ## 7. Products (details still open)
 

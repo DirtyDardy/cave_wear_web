@@ -2,6 +2,8 @@
    Cave Wear – global styles
    1. Fonts (@font-face)
    2. Design tokens (CSS variables)
+   3. Base styles (body, text, links, focus, container)
+   4. Skip link
    ========================================================================== */
 
 /* 1. Fonts
@@ -78,4 +80,101 @@
   /* Fonts */
   --font-body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-display: "Tusker Grotesk", Impact, "Arial Narrow", sans-serif; /* H1 / display only */
+
+  /* Layout */
+  --max-width: 90rem; /* 1440px – content stops growing on ultrawide screens */
+  --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
+  --header-height: 4.5rem;
+
+  /* Tells the browser the site is dark: scrollbars and form controls follow */
+  color-scheme: dark;
+
+  /* Jump links (skip link, #anchors) stop below the sticky header */
+  scroll-padding-block-start: var(--header-height);
+}
+
+/* 3. Base styles
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased; /* light text on dark looks less heavy */
+
+  /* Footer stays at the bottom, even on short pages */
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+
+main {
+  flex: 1;
+}
+
+h1 {
+  margin-block: 0 0.5em;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw + 1rem, 6rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* No underlines – links are marked by colour (and weight inside running text) */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-accent-hover);
+  }
+}
+
+/* Visible focus ring for keyboard users only (not on mouse click) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* Centred content column – used by header, footer and page sections */
+.container {
+  inline-size: 100%;
+  max-inline-size: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Vertical space for a page section */
+.section {
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+/* 4. Skip link – hidden above the page until it gets keyboard focus
+   -------------------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-start: 0.5rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+
+  &:focus-visible {
+    transform: translateY(0);
+    outline-color: var(--color-text);
+  }
 }

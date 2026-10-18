@@ -1,0 +1,182 @@
+---
+import Logo from "../assets/logo-horizontal.svg";
+import BagIcon from "../assets/icons/bag.svg";
+
+// The main links. To add or rename a page, change only this list.
+const navLinks = [
+  { href: "/products", label: "Products" },
+  { href: "/brand", label: "Brand" },
+  { href: "/contact", label: "Contact" },
+];
+
+// The address of the page being built, without a slash at the end ("/products/" → "/products")
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo" aria-label="Cave Wear – Home">
+      <Logo aria-hidden="true" />
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul class="nav-list" role="list">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="nav-link"
+                aria-current={currentPath === link.href ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a
+        href="/bag"
+        class="bag-link"
+        aria-current={currentPath === "/bag" ? "page" : undefined}
+      >
+        <BagIcon class="bag-icon" />
+        <span>Bag</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Sticky bar, slightly see-through with a blur behind it */
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 50;
+    background-color: color-mix(in srgb, var(--color-surface) 85%, transparent);
+    backdrop-filter: blur(12px);
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .header-inner {
+    display: flex;
+    flex-wrap: wrap; /* until the mobile menu exists, the nav wraps below the logo */
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    min-block-size: var(--header-height);
+    padding-block: 0.75rem;
+  }
+
+  /* Logo: colour comes from CSS through currentColor */
+  .logo {
+    display: block;
+    color: var(--color-text);
+    transition: color 0.2s ease;
+
+    & svg {
+      display: block;
+      block-size: 1.75rem;
+      inline-size: auto;
+    }
+
+    &:hover {
+      color: var(--color-accent-hover);
+    }
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem clamp(1rem, 3vw, 2rem);
+  }
+
+  .nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem clamp(1rem, 3vw, 2.25rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Shared style: uppercase, wide letter-spacing – the tactical touch */
+  .nav-link,
+  .bag-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.5rem;
+    color: var(--color-text-secondary);
+
+    /* Small square marker – shows on hover and on the current page */
+    &::before {
+      content: "";
+      inline-size: 5px;
+      block-size: 5px;
+      background-color: var(--color-accent);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    &:hover {
+      color: var(--color-text);
+
+      &::before {
+        opacity: 0.5;
+      }
+    }
+
+    &[aria-current="page"] {
+      color: var(--color-text);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* Bag: framed like a small tag, set apart from the page links */
+  .bag-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--color-flint);
+    border-radius: 2px;
+    color: var(--color-text);
+
+    &:hover,
+    &[aria-current="page"] {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+
+  .bag-icon {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo,
+    .nav-link,
+    .nav-link::before,
+    .bag-link {
+      transition: none;
+    }
+  }
+</style>

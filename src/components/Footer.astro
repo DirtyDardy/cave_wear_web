@@ -1,0 +1,147 @@
+---
+import InstagramIcon from "../assets/icons/instagram.svg";
+import ThreadsIcon from "../assets/icons/threads.svg";
+import EmailIcon from "../assets/icons/email.svg";
+
+// Set once at build time, so the year is always current
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <ul class="social" role="list">
+        <li>
+          <a href="https://www.instagram.com/info.cave.wear/" class="icon-link" aria-label="Cave Wear on Instagram">
+            <InstagramIcon />
+          </a>
+        </li>
+        <li>
+          <a href="https://www.threads.com/@info.cave.wear" class="icon-link" aria-label="Cave Wear on Threads">
+            <ThreadsIcon />
+          </a>
+        </li>
+        <li>
+          <!-- Email address still open: the icon leads to the contact page for now -->
+          <a href="/contact" class="icon-link" aria-label="Contact Cave Wear">
+            <EmailIcon />
+          </a>
+        </li>
+      </ul>
+
+      <p class="bears">
+        <span class="label">Bear research</span>
+        <a href="https://www.bearbiology.org/">bearbiology.org<span aria-hidden="true"> ↗</span></a>
+      </p>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {year} Cave Wear</p>
+      <ul class="legal" role="list">
+        <li><a href="/impressum">Impressum</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--color-surface);
+    border-block-start: 1px solid var(--color-line);
+    padding-block: 3rem 2rem;
+  }
+
+  .footer-top,
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap; /* stacks on small screens */
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .footer-bottom {
+    margin-block-start: 2rem;
+    padding-block-start: 1.5rem;
+    border-block-start: 1px solid var(--color-line);
+    color: var(--color-text-quiet);
+    font-size: 0.875rem;
+
+    & p {
+      margin: 0;
+    }
+  }
+
+  .social,
+  .legal {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .social {
+    gap: 0.5rem;
+    margin-inline-start: -0.625rem; /* icons line up with the text below */
+  }
+
+  /* 44×44px clickable area around a 24px icon */
+  .icon-link {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+
+    & svg {
+      inline-size: 1.5rem;
+      block-size: 1.5rem;
+    }
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .bears {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+
+    & a {
+      font-weight: 500;
+    }
+  }
+
+  /* Small uppercase label, like the nav */
+  .label {
+    color: var(--color-text-quiet);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .legal {
+    gap: 1.5rem;
+
+    & a {
+      color: var(--color-text-quiet);
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon-link,
+    .legal a {
+      transition: none;
+    }
+  }
+</style>

@@ -148,6 +148,20 @@ Usage rules (all checked against WCAG):
 - **On Irr Olive areas:** text in Egret only (Weathered Bone fails there).
 - **Form fields** on Dark Obsidian or Obsidian, not on Charcoal.
 - One accent only – Wild Honey marks everything clickable.
+### Spacing – 4-point grid
+- Every size and space is a **multiple of 4px**: margin, padding, gap, component heights/widths
+  (buttons, inputs, icons), and **line heights**. Use only the `--space-*` scale (in rem,
+  1rem = 16px), never random values:
+  `--space-1` 4px · `--space-2` 8px · `--space-3` 12px · `--space-4` 16px · `--space-6` 24px ·
+  `--space-8` 32px · `--space-12` 48px · `--space-16` 64px · `--space-24` 96px
+  (the number = how many 4px units).
+- Why: consistent rhythm (like a baseline grid in print), fewer arbitrary decisions, clean
+  rendering on 1.5×/2× screens (odd values cause half-pixel blur).
+- Measure spacing from the element's **box** (bounding box), not from the text baseline.
+- Order of work: page margins first → component sizes → spacing between them.
+- Allowed exceptions: 1px borders/lines, `clamp()` font sizes, and spacing that results
+  automatically inside a component (e.g. text centred in a 48px button). Follow the grid until
+  it gets in the way – then break it deliberately, not by accident.
 
 ### Typography
 - **Geist** (variable) – main font for all body text, UI, navigation.

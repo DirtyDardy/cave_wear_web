@@ -1,6 +1,8 @@
 ---
 import Logo from "../assets/logo-horizontal.svg";
-import BagIcon from "../assets/icons/bag.svg";
+import BagIcon from "../assets/icons/backpack.svg";
+import MenuIcon from "../assets/icons/menu.svg";
+import CloseIcon from "../assets/icons/close.svg";
 
 // The main links. To add or rename a page, change only this list.
 const navLinks = [
@@ -28,30 +30,41 @@ function getCurrent(href: string) {
     </a>
 
     <nav class="nav" aria-label="Main navigation">
-      <ul class="nav-list" role="list">
+      <!-- Mobile only. Shown by CSS when JavaScript works. -->
+      <button
+        type="button"
+        class="menu-button"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="main-menu"
+      >
+        <MenuIcon class="menu-icon menu-icon-open" />
+        <CloseIcon class="menu-icon menu-icon-close" />
+      </button>
+
+      <ul id="main-menu" class="nav-list" role="list">
         {
           navLinks.map((link) => (
             <li>
-              <a
-                href={link.href}
-                class="nav-link"
-                data-label={link.label}
-                aria-current={getCurrent(link.href)}
-              >
-                {link.label}
+              <a href={link.href} class="nav-link" aria-current={getCurrent(link.href)}>
+                <span class="link-label" data-label={link.label}>
+                  {link.label}
+                </span>
               </a>
             </li>
           ))
         }
       </ul>
 
-      <a href="/bag" class="bag-link" aria-current={getCurrent("/bag")}>
+      <a href="/bag" class="nav-link bag-link" aria-current={getCurrent("/bag")}>
         <BagIcon class="bag-icon" />
-        <span>Bag</span>
+        <span class="link-label" data-label="Bag">Bag</span>
       </a>
     </nav>
   </div>
 </header>
+
+<script src="../scripts/mobile-menu.js"></script>
 
 <style>
   /* Sticky bar, slightly see-through with a blur behind it */
@@ -66,7 +79,7 @@ function getCurrent(href: string) {
 
   .header-inner {
     display: flex;
-    flex-wrap: wrap; /* until the mobile menu exists, the nav wraps below the logo */
+    flex-wrap: wrap; /* without JavaScript, the nav wraps below the logo on small screens */
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3) var(--space-8);
@@ -82,7 +95,7 @@ function getCurrent(href: string) {
 
     & svg {
       display: block;
-      block-size: 1.75rem; /* 28px = 7 × 4 */
+      block-size: var(--space-8); /* 32px */
       inline-size: auto;
     }
 
@@ -114,29 +127,23 @@ function getCurrent(href: string) {
     }
   }
 
-  /* Shared style: uppercase, wide letter-spacing – the tactical touch */
-  .nav-link,
-  .bag-link {
+  /* Nav links and Bag – uppercase, wide letter-spacing: the tactical touch.
+     12px + 24px line + 12px = 48px high */
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    color: var(--color-text-secondary);
     font-size: 0.875rem;
+    font-weight: 400;
     line-height: var(--space-6); /* 24px */
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  /* 12px + 24px line + 12px = 48px high */
-  .nav-link {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    padding-block: var(--space-3);
-    color: var(--color-text-secondary);
-    font-weight: 400;
+    transition: color 0.2s ease;
 
     &:hover {
-      color: var(--color-text);
+      color: var(--color-accent);
     }
 
     /* Active: current page ("page") or a page inside this section ("true") */
@@ -144,9 +151,15 @@ function getCurrent(href: string) {
       color: var(--color-text);
       font-weight: 700;
     }
+  }
 
-    /* Invisible bold copy of the label: the link is always as wide as its
-       bold version, so nothing moves when a link becomes active */
+  /* Invisible bold copy of the label: the link is always as wide as its
+     bold version, so nothing moves when a link becomes active */
+  .link-label {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+
     &::after {
       content: attr(data-label);
       content: attr(data-label) / "";
@@ -157,35 +170,143 @@ function getCurrent(href: string) {
     }
   }
 
-  /* Bag: framed like a small tag, set apart from the page links */
-  .bag-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    block-size: var(--space-12); /* 48px, same as the nav links */
-    padding-inline: var(--space-4);
-    border: 1px solid var(--color-flint);
-    border-radius: 2px;
-    color: var(--color-text);
-    font-weight: 500;
+  /* 20px = 5 × 4. Deliberate exception to the --space scale:
+     16px is too small for the backpack details, 24px too heavy next to the text */
+  .bag-icon {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
 
-    &:hover,
-    &[aria-current] {
-      border-color: var(--color-accent);
+  /* Menu button – hidden on desktop and when JavaScript is off */
+  .menu-button {
+    display: none;
+    place-items: center;
+    inline-size: var(--space-12); /* 48px */
+    block-size: var(--space-12);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
       color: var(--color-accent);
     }
   }
 
-  .bag-icon {
-    inline-size: var(--space-4);
-    block-size: var(--space-4);
+  /* Both icons sit on top of each other; one is visible at a time */
+  .menu-icon {
+    grid-area: 1 / 1;
+    inline-size: var(--space-6); /* 24px */
+    block-size: var(--space-6);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .menu-icon-close {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+
+  .menu-button[aria-expanded="true"] {
+    & .menu-icon-open {
+      opacity: 0;
+      transform: rotate(90deg);
+    }
+
+    & .menu-icon-close {
+      opacity: 1;
+      transform: rotate(0);
+    }
+  }
+
+  /* Mobile menu – only below 768px and only when JavaScript works */
+  @media (width < 48rem) {
+    :global(html[data-js]) {
+      & .header-inner {
+        flex-wrap: nowrap;
+      }
+
+      & .nav {
+        flex-wrap: nowrap;
+        column-gap: var(--space-4);
+      }
+
+      & .menu-button {
+        display: grid;
+      }
+
+      /* Bag sits left of the menu button */
+      & .bag-link {
+        order: -1;
+      }
+
+      /* The link list becomes a full-screen panel below the header.
+         (The header's blur makes it the reference box for "fixed".) */
+      & .nav-list {
+        position: fixed;
+        inset-block-start: var(--header-height);
+        inset-inline: 0;
+        block-size: calc(100dvh - var(--header-height));
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 0;
+        padding: var(--space-8) var(--gutter);
+        overflow-y: auto;
+        background-color: var(--color-surface);
+
+        /* Closed: invisible and not reachable with Tab */
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(calc(-1 * var(--space-2)));
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease,
+          visibility 0s linear 0.2s;
+      }
+
+      & .nav-list li + li {
+        border-block-start: 1px solid var(--color-line);
+      }
+
+      /* 16px + 32px line + 16px = 64px high */
+      & .nav-list .nav-link {
+        display: flex;
+        padding-block: var(--space-4);
+        font-size: 1.5rem;
+        line-height: var(--space-8);
+      }
+
+      & .nav-list .link-label {
+        align-items: flex-start;
+      }
+    }
+
+    /* Open: panel visible, page behind it does not scroll */
+    :global(html[data-js]:has(.menu-button[aria-expanded="true"])) {
+      overflow: hidden;
+
+      & .nav-list {
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+        transition:
+          opacity 0.2s ease,
+          transform 0.2s ease,
+          visibility 0s;
+      }
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .logo,
     .nav-link,
-    .bag-link {
-      transition: none;
+    .menu-button,
+    .menu-icon,
+    .nav-list {
+      transition: none !important;
     }
   }
 </style>

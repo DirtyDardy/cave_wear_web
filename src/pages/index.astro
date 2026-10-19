@@ -1,30 +1,51 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import heroImage from "../assets/placeholder.jpg";
 ---
 
 <BaseLayout title="Home">
-  <!-- TEMPORARY hero placeholder – replaced by the real hero image -->
+  <!-- TEMPORARY hero – placeholder image until the final hero is decided -->
   <section class="hero">
-    <div class="container">
+    <Image
+      src={heroImage}
+      alt=""
+      class="hero-image"
+      width={2400}
+      widths={[640, 1024, 1600, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="container hero-content">
       <h1>Cave Wear</h1>
-      <p class="hero-note">Hero image placeholder</p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  /* Full screen, pulled up under the header so it shows through */
+  /* 720px high, pulled up under the header so it shows through */
   .hero {
+    position: relative;
     display: grid;
     align-items: end;
-    min-block-size: 100dvh;
+    block-size: 45rem; /* 720px */
     margin-block-start: calc(-1 * var(--header-height));
-    padding-block: var(--space-24) var(--space-16);
-    background: linear-gradient(160deg, var(--color-brand-support), var(--color-bg) 75%);
+    padding-block-end: var(--space-16);
+    overflow: hidden;
   }
 
-  .hero-note {
-    margin: 0;
-    color: var(--color-text);
+  /* The image fills the whole hero, cropped instead of stretched */
+  .hero-image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Text sits on top of the image */
+  .hero-content {
+    position: relative;
   }
 </style>

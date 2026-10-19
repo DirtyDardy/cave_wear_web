@@ -170,11 +170,10 @@ function getCurrent(href: string) {
     }
   }
 
-  /* 20px = 5 × 4. Deliberate exception to the --space scale:
-     16px is too small for the backpack details, 24px too heavy next to the text */
+  /* 24px – same size as the menu icon */
   .bag-icon {
-    inline-size: 1.25rem;
-    block-size: 1.25rem;
+    inline-size: var(--space-6);
+    block-size: var(--space-6);
   }
 
   /* Menu button – hidden on desktop and when JavaScript is off */

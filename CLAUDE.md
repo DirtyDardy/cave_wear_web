@@ -279,3 +279,11 @@ Usage rules (all checked against WCAG):
 - Impressum details (Dardan will use his real address).
 - Netlify account setup (when deploying).
 - Final home page concept after prototyping.
+
+## 12. Nice to have (only when there is time – not a priority)
+
+- **Favicon:** a proper favicon based on the round bear icon (SVG favicon + fallback),
+  checked in light and dark browser tabs.
+- **Open backpack icon** (`backpack-open.svg`): a second version of the backpack icon,
+  drawn by Dardan in the same style (same grid, same line thickness). When and where it
+  shows (e.g. when the bag has items, or on hover) is still to decide.

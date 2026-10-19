@@ -124,6 +124,7 @@
   --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
   --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
   --header-height: 4.5rem; /* 72px = 18 × 4 */
+  --header-fade-distance: 12.5rem; /* 200px of scrolling: Home header fades from 5% to solid */
 
   /* Tells the browser the site is dark: scrollbars and form controls follow */
   color-scheme: dark;

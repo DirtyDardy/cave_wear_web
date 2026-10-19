@@ -26,8 +26,9 @@ function getCurrent(href: string) {
 const isHome = currentPath === "/";
 ---
 
-<!-- Invisible marker 32px below the top of the page. When it scrolls out of
-     view, the header gets its solid background (see header-scroll.js). -->
+<!-- Fallback for browsers without scroll-driven animations: invisible marker
+     32px below the top. When it scrolls out of view, the header turns solid
+     (see header-scroll.js). -->
 <div class="scroll-sentinel" aria-hidden="true"></div>
 
 <header class="site-header" data-transparent={isHome ? "" : undefined}>
@@ -73,6 +74,7 @@ const isHome = currentPath === "/";
 
 <script src="../scripts/mobile-menu.js"></script>
 <script src="../scripts/header-scroll.js"></script>
+<script src="../scripts/header-hide.js"></script>
 
 <style>
   .scroll-sentinel {
@@ -92,15 +94,59 @@ const isHome = currentPath === "/";
     border-block-end: 1px solid var(--color-line);
     transition:
       background-color 0.3s ease,
-      border-color 0.3s ease;
+      border-color 0.3s ease,
+      translate 0.3s ease;
   }
 
-  /* Home, at the very top: background almost invisible, no line.
+  /* --- Home: background fade ---------------------------------------------- */
+
+  /* From 5% Obsidian (no line) to solid Obsidian (with line) */
+  @keyframes header-fill {
+    from {
+      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      border-block-end-color: transparent;
+    }
+    to {
+      background-color: var(--color-surface);
+      border-block-end-color: var(--color-line);
+    }
+  }
+
+  /* Modern browsers: the page scroll drives the animation.
+     0px scrolled = 5%, --header-fade-distance (200px) scrolled = solid. */
+  @supports (animation-timeline: scroll()) {
+    /* Written as separate properties on purpose: the CSS minifier would merge
+       a shorthand + animation-timeline into one line that Chrome rejects. */
+    .site-header[data-transparent] {
+      animation-name: header-fill;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0 var(--header-fade-distance);
+    }
+
+    /* Mobile menu open: always solid */
+    .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) {
+      animation: none;
+    }
+  }
+
+  /* Older browsers (fallback): almost invisible at the top, solid after 32px.
      Only with JavaScript (otherwise it would stay transparent forever),
      and never while the mobile menu is open. */
-  :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) {
-    background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
-    border-block-end-color: transparent;
+  @supports not (animation-timeline: scroll()) {
+    :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) {
+      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      border-block-end-color: transparent;
+    }
+  }
+
+  /* --- Hide on scroll down / show on scroll up (header-hide.js) ---------- */
+
+  /* Slides up out of view – but never while keyboard focus is inside the
+     header (:focus-within) or while the mobile menu is open */
+  .site-header[data-hidden]:not(:focus-within):not(:has(.menu-button[aria-expanded="true"])) {
+    translate: 0 -100%;
   }
 
   .header-inner {

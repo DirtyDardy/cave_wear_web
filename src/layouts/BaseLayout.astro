@@ -7,10 +7,12 @@ import Footer from "../components/Footer.astro";
 interface Props {
   title: string;
   description?: string;
+  noindex?: boolean; // true = search engines should not list this page
 }
 
 const {
   title,
+  noindex = false,
   description = "Cave Wear – Rugged. Functional. Refined. Outdoor clothing that also looks right in the city.",
 } = Astro.props;
 ---
@@ -21,6 +23,7 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{`${title} | Cave Wear`}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#0d0d0e" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />

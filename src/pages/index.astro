@@ -1,7 +1,8 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import heroImage from "../assets/placeholder.jpg";
+import StyleGuide from "../components/StyleGuide.astro";
+import heroImage from "../assets/test/placeholder.jpg";
 ---
 
 <BaseLayout title="Home">
@@ -21,6 +22,10 @@ import heroImage from "../assets/placeholder.jpg";
       <h1>Cave Wear</h1>
     </div>
   </section>
+
+  <!-- TEMPORARY: style guide below the hero, for testing the design and scrolling -->
+  <StyleGuide />
+
 </BaseLayout>
 
 <style>

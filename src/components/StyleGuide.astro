@@ -1,0 +1,641 @@
+---
+// STYLE GUIDE – design test only. Used on /styleguide and (temporarily) on Home.
+// All cave bear text and all images in here are PLACEHOLDERS.
+
+interface Props {
+  // On its own page the title is the page's H1. On Home the hero already has
+  // the H1, so the title becomes an H2 that only LOOKS like an H1.
+  isPage?: boolean;
+}
+
+const { isPage = false } = Astro.props;
+const TitleTag = isPage ? "h1" : "h2";
+
+// Colour swatches – name, CSS variable, hex, role
+const colours = [
+  { name: "Dark Obsidian", token: "--color-dark-obsidian", hex: "#0D0D0E", role: "Background, text on accent" },
+  { name: "Obsidian", token: "--color-obsidian", hex: "#131314", role: "Surface – header, footer, cards, bag" },
+  { name: "Charcoal", token: "--color-charcoal", hex: "#1E1E1E", role: "Lines and dividers" },
+  { name: "Flint", token: "--color-flint", hex: "#6B655E", role: "Input borders" },
+  { name: "Egret", token: "--color-egret", hex: "#F3EBE0", role: "Main text" },
+  { name: "Weathered Bone", token: "--color-weathered-bone", hex: "#C4B9AC", role: "Secondary text – lead, prices, details" },
+  { name: "Muted Stone", token: "--color-muted-stone", hex: "#8C857B", role: "Quiet text – only on Dark Obsidian / Obsidian" },
+  { name: "Wild Honey", token: "--color-wild-honey", hex: "#C39132", role: "Accent – everything clickable" },
+  { name: "Amber Gold", token: "--color-amber-gold", hex: "#D4A54A", role: "Accent hover" },
+  { name: "Irr Olive", token: "--color-irr-olive", hex: "#4B573E", role: "Brand support – large surfaces, Egret text only" },
+  { name: "Forest Fern", token: "--color-forest-fern", hex: "#5B7553", role: "Success – icon / border only" },
+  { name: "Terracotta", token: "--color-terracotta", hex: "#B86B43", role: "Error – icon / border only" },
+  { name: "Moule", token: "--color-moule", hex: "#382D2B", role: "Logo dark brown – only on cream or large" },
+  { name: "Tobacco Brown", token: "--color-tobacco-brown", hex: "#9A7354", role: "Reserve – no role yet" },
+  { name: "Alpine Oak", token: "--color-alpine-oak", hex: "#AE946B", role: "Reserve – no role yet" },
+  { name: "Mossy Elm", token: "--color-mossy-elm", hex: "#5E6D4E", role: "Reserve – no role yet" },
+];
+
+// Type scale – one row per style. "text" is PLACEHOLDER text about the cave bear.
+const typeRows = [
+  {
+    name: "H1 – Tusker Grotesk 5800 Super",
+    tag: "p", className: "h1",
+    sizes: "48 → 128px (fluid) · line-height 0.9",
+    extra: "letter-spacing 0.02em · max 12ch · never set font-weight",
+    token: "h1 · --text-h1 · --tracking-h1 · --measure-h1",
+    css: "font-family: var(--font-display);\nfont-size: var(--text-h1);\nline-height: 0.9;",
+    used: "One per page – hero headline or page title.",
+    text: "Ursus spelaeus",
+  },
+  {
+    name: "H2 – Geist ExtraBold 800",
+    tag: "h2", className: "",
+    sizes: "32/40px → 48/56px",
+    extra: "letter-spacing −0.02em",
+    token: "h2 · --text-h2 · --leading-h2 · --tracking-h2",
+    css: "font-size: var(--text-h2);\nline-height: var(--leading-h2);\nfont-weight: 800;",
+    used: "Starts a section.",
+    text: "The bear of the caves",
+  },
+  {
+    name: "Lead – Geist Light 300",
+    tag: "p", className: "lead",
+    sizes: "24/32px → 32/40px",
+    extra: "Weathered Bone · max 40ch",
+    token: ".lead · --text-lead · --leading-lead · --measure-lead",
+    css: '<p class="lead">…</p>\nfont-size: var(--text-lead);\nfont-weight: 300;',
+    used: "Introduces a section, right below the H2.",
+    text: "The cave bear is a prehistoric species of bear that lived in Europe and Asia during the Pleistocene.",
+  },
+  {
+    name: "H3 – Geist ExtraBold 800",
+    tag: "h3", className: "",
+    sizes: "24/32px (all screens)",
+    extra: "letter-spacing −0.01em",
+    token: "h3 · --text-h3 · --leading-h3 · --tracking-h3",
+    css: "font-size: var(--text-h3);\nline-height: var(--leading-h3);\nfont-weight: 800;",
+    used: "Cards, product names, sub-parts of a section.",
+    text: "Almost entirely herbivorous",
+  },
+  {
+    name: "H4 – Label style",
+    tag: "h4", className: "",
+    sizes: "14/20px (all screens)",
+    extra: "uppercase · letter-spacing 0.14em",
+    token: "h4 · same as .label",
+    css: "/* no own size – uses the Label style */",
+    used: "Small headings, e.g. footer columns or inside cards.",
+    text: "Hibernation",
+  },
+  {
+    name: "H5 – Label style",
+    tag: "h5", className: "",
+    sizes: "14/20px (all screens)",
+    extra: "uppercase · letter-spacing 0.14em",
+    token: "h5 · same as .label",
+    css: "/* no own size – uses the Label style */",
+    used: "Same look as H4 – use rarely.",
+    text: "Heinrichshöhle, Hemer",
+  },
+  {
+    name: "H6 – Label style",
+    tag: "h6", className: "",
+    sizes: "14/20px (all screens)",
+    extra: "uppercase · letter-spacing 0.14em",
+    token: "h6 · same as .label",
+    css: "/* no own size – uses the Label style */",
+    used: "Same look as H4 – use rarely.",
+    text: "Dechenhöhle, Iserlohn",
+  },
+  {
+    name: "Body – Geist Regular 400",
+    tag: "p", className: "",
+    sizes: "16/24px → 18/28px",
+    extra: "max 65ch",
+    token: "p · --text-body · --leading-body · --measure-body",
+    css: "font-size: var(--text-body);\nline-height: var(--leading-body);\nmax-inline-size: var(--measure-body);",
+    used: "All reading text.",
+    text: "The common and scientific name for the species comes from their remains having been found largely in caves. Despite their name, they did not actually live in caves but only used them for hibernation.",
+  },
+  {
+    name: "Small – Geist Regular 400",
+    tag: "p", className: "small",
+    sizes: "14/20px (all screens)",
+    extra: "Weathered Bone",
+    token: ".small · --text-small · --leading-small",
+    css: '<p class="small">…</p>\nfont-size: var(--text-small);\nline-height: var(--leading-small);',
+    used: "Prices, details, captions, notes.",
+    text: "Up to 2 m long · males 350–600 kg",
+  },
+  {
+    name: "Label – Geist Medium 500",
+    tag: "p", className: "label",
+    sizes: "14/20px (all screens)",
+    extra: "uppercase · letter-spacing 0.14em",
+    token: ".label · --text-small · --tracking-wide",
+    css: '<p class="label">…</p>\nletter-spacing: var(--tracking-wide);\ntext-transform: uppercase;',
+    used: "Small titles above headings, footer labels, tags.",
+    text: "Pleistocene · Europe and Asia",
+  },
+  {
+    name: "Nav link – Geist Regular 400 (active: Bold 700)",
+    tag: "span", className: "sample-nav",
+    sizes: "14/24px (all screens) · 48px touch area",
+    extra: "uppercase · letter-spacing 0.14em",
+    token: ".nav-link (Header.astro) · --text-small · --tracking-wide",
+    css: "font-size: var(--text-small);\nline-height: var(--space-6);\nletter-spacing: var(--tracking-wide);",
+    used: "Header navigation. Active page: bold + Egret.",
+    text: "Products",
+  },
+  {
+    name: "Button text – Geist Medium 500",
+    tag: "span", className: "sample-button-text",
+    sizes: "14/24px (all screens) · button 48px high",
+    extra: "uppercase · letter-spacing 0.14em",
+    token: ".button (proposal – this page only)",
+    css: "font-size: var(--text-small);\nfont-weight: 500;\nletter-spacing: var(--tracking-wide);",
+    used: "Primary and secondary buttons.",
+    text: "Read more",
+  },
+];
+
+// Spacing scale – 4-point grid
+const spaces = [
+  { token: "--space-1", px: 4 },
+  { token: "--space-2", px: 8 },
+  { token: "--space-3", px: 12 },
+  { token: "--space-4", px: 16 },
+  { token: "--space-6", px: 24 },
+  { token: "--space-8", px: 32 },
+  { token: "--space-12", px: 48 },
+  { token: "--space-16", px: 64 },
+  { token: "--space-24", px: 96 },
+];
+---
+
+<!-- Notice: everything below is a design test -->
+  <div class="container">
+    <p class="notice" role="note">
+      <strong>Style guide</strong> – all text and images are placeholders and will be replaced before
+      launch. Text sources: <a href="https://en.wikipedia.org/wiki/Cave_bear">Wikipedia (Cave bear)</a>,
+      <a href="https://www.donsmaps.com/bear.html">donsmaps.com</a>.
+    </p>
+  </div>
+
+  <!-- PLACEHOLDER -->
+  <section class="container section">
+    <p class="label">Style guide · Cave Wear</p>
+    <TitleTag class="h1">The Cave Bear</TitleTag>
+    <p class="lead">
+      Cave bears were comparable in size to, or larger than, the largest modern-day bears.
+    </p>
+  </section>
+
+  <!-- ============ COLOURS ============ -->
+  <section class="container section sg-section">
+    <h2>Colours</h2>
+    <ul class="swatches" role="list">
+      {
+        colours.map((colour) => (
+          <li class="swatch">
+            <span class="swatch-colour" style={`background-color: var(${colour.token})`} />
+            <span class="swatch-name">{colour.name}</span>
+            <span class="small">{colour.hex}</span>
+            <span class="small">{colour.role}</span>
+            <code class="swatch-token">{colour.token}</code>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- ============ TYPE SCALE ============ -->
+  <section class="container section sg-section">
+    <h2>Type scale</h2>
+    <p>
+      Every size lives in a CSS variable in <code>global.css</code>. Change one value there and it
+      updates on the website and on this page. The "now" line shows the real size on your current
+      screen width.
+    </p>
+
+    <div class="type-scale">
+      {
+        typeRows.map((row) => {
+          const Tag = row.tag;
+          return (
+            <div class="type-row">
+              {/* PLACEHOLDER text in the sample */}
+              <div class="type-sample-wrap">
+                <Tag class:list={["type-sample", row.className]}>{row.text}</Tag>
+              </div>
+              <div class="type-specs">
+                <p class="type-name">{row.name}</p>
+                <p class="small">{row.sizes}</p>
+                <p class="small">{row.extra}</p>
+                <p class="type-live small">now: –</p>
+                <p class="small"><code>{row.token}</code></p>
+                <pre class="snippet"><code>{row.css}</code></pre>
+                <p class="small"><strong>Used for:</strong> {row.used}</p>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <h3 class="sg-subheading">How it works together</h3>
+    <ul class="rules" role="list">
+      <li><strong>H1</strong> – one per page. The big statement: hero headline or page title.</li>
+      <li><strong>H2</strong> – starts a section. Every section has exactly one.</li>
+      <li><strong>Lead</strong> – introduces the section in one or two sentences, right below the H2.</li>
+      <li><strong>H3</strong> – cards and sub-parts inside a section, e.g. product names.</li>
+      <li><strong>Body</strong> – everything people read. Never wider than 65 characters.</li>
+      <li><strong>Label / Small</strong> – details: titles above headings, prices, captions, notes.</li>
+      <li><strong>H4–H6</strong> – use the Label look. Fewer visible levels = clearer hierarchy.</li>
+    </ul>
+  </section>
+
+  <!-- ============ SPACING ============ -->
+  <section class="container section sg-section">
+    <h2>Spacing</h2>
+    <p>Every space is a multiple of 4px. Only these values are used.</p>
+
+    <h3 class="sg-subheading">Spacing scale</h3>
+    <ul class="space-scale" role="list">
+      {
+        spaces.map((space) => (
+          <li class="space-row">
+            <code class="space-token">{space.token}</code>
+            <span class="small space-px">{space.px}px</span>
+            <span class="space-bar" style={`inline-size: var(${space.token})`} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <h3 class="sg-subheading">How a section is built</h3>
+    <!-- PLACEHOLDER text inside the diagram -->
+    <div class="diagram" role="group" aria-label="Diagram: spacing between the parts of a section">
+      <div class="diagram-part"><p class="label">Label</p></div>
+      <div class="diagram-gap" style="block-size: var(--space-3)"><span class="small">12px · --space-3</span></div>
+      <div class="diagram-part"><p class="h2">H2 – The bear of the caves</p></div>
+      <div class="diagram-gap" style="block-size: var(--space-6)"><span class="small">24px · --space-6</span></div>
+      <div class="diagram-part"><p class="lead">Lead – a prehistoric species of bear.</p></div>
+      <div class="diagram-gap" style="block-size: var(--space-6)"><span class="small">24px · --space-6</span></div>
+      <div class="diagram-part"><p>Body – their remains were found largely in caves.</p></div>
+      <div class="diagram-gap" style="block-size: var(--space-4)"><span class="small">16px · --space-4 (between paragraphs)</span></div>
+      <div class="diagram-part"><p>Body – they used caves for hibernation.</p></div>
+      <div class="diagram-gap" style="block-size: var(--space-8)"><span class="small">32px · --space-8</span></div>
+      <div class="diagram-part"><span class="button button-primary">Button</span></div>
+    </div>
+  </section>
+
+  <!-- ============ EXAMPLE SECTION ============ -->
+  <!-- PLACEHOLDER: text from Wikipedia (Cave bear) and donsmaps.com -->
+  <section class="container section sg-section">
+    <p class="label">Example section · Prehistoric giant</p>
+    <h2>Built for the long cave winter</h2>
+    <p class="lead">
+      The cave bear (Ursus spelaeus) is a prehistoric species of bear that lived in Europe and Asia
+      during the Pleistocene.
+    </p>
+    <p>
+      Unlike brown bears, cave bears are thought to have been almost entirely or exclusively
+      herbivorous. It was a powerful animal, and could eat both animal and vegetable materials,
+      though it was apparently mostly vegetarian.
+    </p>
+    <p>
+      Reassessment of fossils in 2019 indicate that the cave bear probably died out 24,000 years ago.
+      Remains have been found in caves such as the Heinrichshöhle in Hemer and the Dechenhöhle in
+      Iserlohn. Read more on <a href="https://en.wikipedia.org/wiki/Cave_bear">Wikipedia</a>.
+    </p>
+
+    <!-- PLACEHOLDER image -->
+    <div class="placeholder-image ratio-16-9" role="img" aria-label="Placeholder image 16:9">
+      Placeholder image 16:9
+    </div>
+
+    <div class="button-row">
+      <button type="button" class="button button-primary">Read more</button>
+      <button type="button" class="button button-secondary">See the caves</button>
+    </div>
+  </section>
+
+  <!-- ============ CARD WITH 4:5 IMAGE ============ -->
+  <!-- PLACEHOLDER: text and image -->
+  <section class="container section sg-section">
+    <h2>Card</h2>
+    <p class="lead">A product card shape: 4:5 image, H3, small details.</p>
+    <article class="card">
+      <div class="placeholder-image ratio-4-5" role="img" aria-label="Placeholder image 4:5">
+        Placeholder image 4:5
+      </div>
+      <h3>Ursus spelaeus</h3>
+      <p class="small">Up to 2 m long · males 350–600 kg</p>
+    </article>
+  </section>
+
+  <!-- ============ LINKS AND BUTTONS ============ -->
+  <section class="container section sg-section">
+    <h2>Links and buttons</h2>
+
+    <h3 class="sg-subheading">Text links</h3>
+    <!-- PLACEHOLDER text -->
+    <p>
+      Inside running text, a link is Wild Honey and semi-bold, without underline: cave paintings show
+      that ancient humans encountered cave bears – see
+      <a href="https://www.donsmaps.com/bear.html">donsmaps.com</a>.
+    </p>
+    <p class="small">Hover: Amber Gold. Keyboard focus: 2px Wild Honey outline.</p>
+
+    <h3 class="sg-subheading">Buttons – proposal</h3>
+    <p class="small">48px high · label text style · 2px corners. Only on this page until approved.</p>
+    <div class="button-row">
+      <button type="button" class="button button-primary">Primary button</button>
+      <button type="button" class="button button-secondary">Secondary button</button>
+    </div>
+  </section>
+
+
+<script src="../scripts/styleguide-live-sizes.js"></script>
+
+<style>
+  /* Notice at the top – status style: colour only on the left border */
+  .notice {
+    max-inline-size: none;
+    margin-block-start: var(--space-8);
+    padding: var(--space-4) var(--space-6);
+    border-inline-start: 4px solid var(--color-accent);
+    background-color: var(--color-surface);
+  }
+
+  .sg-section {
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .sg-subheading {
+    margin-block-start: var(--space-12);
+  }
+
+  code,
+  pre {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: var(--text-small);
+  }
+
+  /* ---------- Colours ---------- */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: var(--space-8) var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .swatch-colour {
+    display: block;
+    block-size: var(--space-24);
+    margin-block-end: var(--space-2);
+    border: 1px solid var(--color-line);
+    border-radius: 2px;
+  }
+
+  .swatch-name {
+    font-weight: 500;
+  }
+
+  .swatch-token {
+    color: var(--color-text-quiet);
+  }
+
+  /* ---------- Type scale ---------- */
+  .type-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr); /* columns may shrink below their content */
+    gap: var(--space-6);
+    padding-block: var(--space-8);
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  @media (width >= 64rem) {
+    .type-row {
+      grid-template-columns: minmax(0, 1fr) 24rem;
+      gap: var(--space-12);
+    }
+  }
+
+  .type-sample-wrap {
+    min-inline-size: 0;
+  }
+
+  .type-sample {
+    margin: 0;
+    overflow-wrap: anywhere; /* long words never push the page wider */
+  }
+
+  .type-specs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+
+    & p {
+      margin: 0;
+    }
+  }
+
+  .type-name {
+    font-weight: 500;
+  }
+
+  .type-live {
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .snippet {
+    margin-block: var(--space-2);
+    padding: var(--space-3);
+    overflow-x: auto;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-line);
+    border-radius: 2px;
+    color: var(--color-text-secondary);
+  }
+
+  /* Nav link sample – same tokens as the header */
+  .sample-nav {
+    display: inline-block;
+    color: var(--color-text-secondary);
+    font-size: var(--text-small);
+    line-height: var(--space-6);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .sample-button-text {
+    display: inline-block;
+    font-size: var(--text-small);
+    font-weight: 500;
+    line-height: var(--space-6);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .rules {
+    display: grid;
+    gap: var(--space-2);
+    max-inline-size: var(--measure-body);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ---------- Spacing ---------- */
+  .space-scale {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .space-row {
+    display: grid;
+    grid-template-columns: 7rem 3rem 1fr;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .space-px {
+    text-align: end;
+  }
+
+  .space-bar {
+    display: block;
+    block-size: var(--space-4);
+    background-color: var(--color-flint);
+  }
+
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-inline-size: 36rem; /* leaves room on the right for the gap labels */
+  }
+
+  .diagram-part {
+    inline-size: 100%;
+    outline: 1px dashed var(--color-flint);
+
+    & p {
+      margin: 0;
+    }
+  }
+
+  /* The gap has the real height of the spacing value */
+  .diagram-gap {
+    position: relative;
+    inline-size: 100%;
+    background-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
+
+    & span {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: calc(100% + var(--space-4));
+      transform: translateY(-50%);
+      white-space: nowrap;
+    }
+  }
+
+  @media (width < 64rem) {
+    /* No room on the right: label sits inside the gap, at the right edge */
+    .diagram-gap span {
+      inset-inline-start: auto;
+      inset-inline-end: var(--space-2);
+      font-size: 0.75rem;
+      line-height: 1;
+    }
+  }
+
+  /* ---------- Images ---------- */
+  .placeholder-image {
+    display: grid;
+    place-items: center;
+    margin-block: var(--space-8);
+    background-color: var(--color-surface);
+    border: 1px dashed var(--color-flint);
+    color: var(--color-text-quiet);
+    font-size: var(--text-small);
+  }
+
+  .ratio-16-9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  .ratio-4-5 {
+    aspect-ratio: 4 / 5;
+    margin-block: 0 var(--space-4);
+  }
+
+  .card {
+    max-inline-size: 24rem;
+  }
+
+  /* ---------- Buttons (proposal) ---------- */
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-block-start: var(--space-8);
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--space-12); /* 48px */
+    padding-inline: var(--space-6);
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font: inherit;
+    font-size: var(--text-small);
+    font-weight: 500;
+    line-height: var(--space-6);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .button-primary {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+
+    &:hover {
+      background-color: var(--color-accent-hover);
+    }
+  }
+
+  .button-secondary {
+    background-color: transparent;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+
+    &:hover {
+      border-color: var(--color-accent-hover);
+      color: var(--color-accent-hover);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button {
+      transition: none;
+    }
+  }
+</style>

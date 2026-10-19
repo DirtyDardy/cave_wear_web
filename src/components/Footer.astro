@@ -30,7 +30,7 @@ const year = new Date().getFullYear();
       </ul>
 
       <p class="bears">
-        <span class="label">Bear research</span>
+        <span class="footer-label">Bear research</span>
         <a href="https://www.bearbiology.org/">bearbiology.org<span aria-hidden="true"> ↗</span></a>
       </p>
     </div>
@@ -50,6 +50,9 @@ const year = new Date().getFullYear();
     background-color: var(--color-surface);
     border-block-start: 1px solid var(--color-line);
     padding-block: 3rem 2rem;
+    /* Footer text stays 16/24 – it does not grow with the body text */
+    font-size: 1rem;
+    line-height: var(--space-6);
   }
 
   .footer-top,
@@ -66,7 +69,8 @@ const year = new Date().getFullYear();
     padding-block-start: 1.5rem;
     border-block-start: 1px solid var(--color-line);
     color: var(--color-text-quiet);
-    font-size: 0.875rem;
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
 
     & p {
       margin: 0;
@@ -118,7 +122,7 @@ const year = new Date().getFullYear();
   }
 
   /* Small uppercase label, like the nav */
-  .label {
+  .footer-label {
     color: var(--color-text-quiet);
     font-size: 0.75rem;
     letter-spacing: 0.14em;

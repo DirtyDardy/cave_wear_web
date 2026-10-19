@@ -21,9 +21,16 @@ function getCurrent(href: string) {
   if (currentPath.startsWith(href + "/")) return "true";
   return undefined;
 }
+
+// Only Home starts with a transparent header (the hero shows through)
+const isHome = currentPath === "/";
 ---
 
-<header class="site-header">
+<!-- Invisible marker 32px below the top of the page. When it scrolls out of
+     view, the header gets its solid background (see header-scroll.js). -->
+<div class="scroll-sentinel" aria-hidden="true"></div>
+
+<header class="site-header" data-transparent={isHome ? "" : undefined}>
   <div class="container header-inner">
     <a href="/" class="logo" aria-label="Cave Wear – Home">
       <Logo aria-hidden="true" />
@@ -65,16 +72,35 @@ function getCurrent(href: string) {
 </header>
 
 <script src="../scripts/mobile-menu.js"></script>
+<script src="../scripts/header-scroll.js"></script>
 
 <style>
-  /* Sticky bar, slightly see-through with a blur behind it */
+  .scroll-sentinel {
+    position: absolute;
+    inset-block-start: var(--space-8); /* 32px */
+    inline-size: 1px;
+    block-size: 1px;
+    pointer-events: none;
+  }
+
+  /* Sticky bar, solid Obsidian */
   .site-header {
     position: sticky;
     inset-block-start: 0;
     z-index: 50;
-    background-color: color-mix(in srgb, var(--color-surface) 85%, transparent);
-    backdrop-filter: blur(12px);
+    background-color: var(--color-surface);
     border-block-end: 1px solid var(--color-line);
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  /* Home, at the very top: background almost invisible, no line.
+     Only with JavaScript (otherwise it would stay transparent forever),
+     and never while the mobile menu is open. */
+  :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) {
+    background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+    border-block-end-color: transparent;
   }
 
   .header-inner {
@@ -242,8 +268,7 @@ function getCurrent(href: string) {
         order: -1;
       }
 
-      /* The link list becomes a full-screen panel below the header.
-         (The header's blur makes it the reference box for "fixed".) */
+      /* The link list becomes a full-screen panel below the header */
       & .nav-list {
         position: fixed;
         inset-block-start: var(--header-height);
@@ -300,6 +325,7 @@ function getCurrent(href: string) {
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .site-header,
     .logo,
     .nav-link,
     .menu-button,

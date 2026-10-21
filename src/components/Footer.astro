@@ -1,15 +1,25 @@
 ---
+import Logo from "../assets/logo-horizontal.svg";
 import InstagramIcon from "../assets/icons/instagram.svg";
 import ThreadsIcon from "../assets/icons/threads.svg";
-import EmailIcon from "../assets/icons/email.svg";
+import YouTubeIcon from "../assets/icons/youtube.svg";
 
 // Set once at build time, so the year is always current
 const year = new Date().getFullYear();
+
+// TODO: add the YouTube channel link here. While it is empty, the icon shows but is not a link.
+const youtubeUrl = "";
 ---
 
 <footer class="site-footer">
-  <div class="container">
-    <div class="footer-top">
+  <div class="container footer-top">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo" aria-label="Cave Wear – Home">
+        <Logo aria-hidden="true" />
+      </a>
+      <p class="footer-tagline">Built for the wild. Made for anywhere.</p>
+      <p class="footer-note">Not released yet – follow the journey.</p>
+
       <ul class="social" role="list">
         <li>
           <a href="https://www.instagram.com/info.cave.wear/" class="icon-link" aria-label="Cave Wear on Instagram">
@@ -22,21 +32,61 @@ const year = new Date().getFullYear();
           </a>
         </li>
         <li>
-          <!-- Email address still open: the icon leads to the contact page for now -->
-          <a href="/contact" class="icon-link" aria-label="Contact Cave Wear">
-            <EmailIcon />
-          </a>
+          {
+            youtubeUrl ? (
+              <a href={youtubeUrl} class="icon-link" aria-label="Cave Wear on YouTube">
+                <YouTubeIcon />
+              </a>
+            ) : (
+              <span class="icon-link" title="YouTube – coming soon">
+                <YouTubeIcon />
+              </span>
+            )
+          }
         </li>
       </ul>
-
-      <p class="bears">
-        <span class="footer-label">Bear research</span>
-        <a href="https://www.bearbiology.org/">bearbiology.org<span aria-hidden="true"> ↗</span></a>
-      </p>
     </div>
 
-    <div class="footer-bottom">
-      <p>© {year} Cave Wear</p>
+    <!-- Newsletter: Netlify Forms reads this form from the built HTML when the site is deployed.
+         The script sends it with fetch, so the page does not reload. -->
+    <form
+      class="newsletter"
+      name="newsletter"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      novalidate
+    >
+      <input type="hidden" name="form-name" value="newsletter" />
+      <!-- Honeypot: hidden from people, spam bots fill it in and get ignored -->
+      <p hidden>
+        <label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+      </p>
+
+      <label for="newsletter-email" class="newsletter-label">Launch news</label>
+      <div class="newsletter-row">
+        <input
+          id="newsletter-email"
+          class="newsletter-input"
+          type="email"
+          name="email"
+          required
+          autocomplete="email"
+          placeholder="you@example.com"
+          aria-describedby="newsletter-hint"
+        />
+        <button type="submit" class="newsletter-button">Sign up</button>
+      </div>
+      <p id="newsletter-hint" class="newsletter-hint">
+        We'll only email you if Cave Wear really launches. See our <a href="/privacy">Privacy Policy</a>.
+      </p>
+      <p class="newsletter-status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© {year} Cave Wear · A concept brand by Dardan Ademi</p>
       <ul class="legal" role="list">
         <li><a href="/impressum">Impressum</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
@@ -45,92 +95,211 @@ const year = new Date().getFullYear();
   </div>
 </footer>
 
+<script src="../scripts/newsletter.js"></script>
+
 <style>
+  /* Whole footer on Obsidian, separated from the page by one hairline */
   .site-footer {
     background-color: var(--color-surface);
     border-block-start: 1px solid var(--color-line);
-    padding-block: 3rem 2rem;
-    /* Footer text stays 16/24 – it does not grow with the body text */
-    font-size: 1rem;
-    line-height: var(--space-6);
-  }
-
-  .footer-top,
-  .footer-bottom {
-    display: flex;
-    flex-wrap: wrap; /* stacks on small screens */
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-  }
-
-  .footer-bottom {
-    margin-block-start: 2rem;
-    padding-block-start: 1.5rem;
-    border-block-start: 1px solid var(--color-line);
-    color: var(--color-text-quiet);
-    font-size: var(--text-small);
+    font-size: var(--text-small); /* footer text stays 14/20 – quiet, like Linear/Vercel */
     line-height: var(--leading-small);
+    color: var(--color-text-secondary);
 
     & p {
       margin: 0;
     }
   }
 
-  .social,
-  .legal {
+  /* Top: brand on the left, newsletter on the right (stacked on small screens) */
+  .footer-top {
+    display: grid;
+    gap: var(--space-8);
+    padding-block: var(--space-12);
+
+    @media (width >= 48rem) {
+      grid-template-columns: 1fr minmax(0, 24rem);
+      align-items: start;
+    }
+  }
+
+  .footer-brand {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+  }
+
+  .footer-logo {
+    display: block;
+    margin-block-end: var(--space-2);
+    color: var(--color-text);
+    transition: color 0.2s ease;
+
+    & svg {
+      display: block;
+      block-size: var(--space-6); /* 24px – small, the header carries the big logo */
+      inline-size: auto;
+    }
+
+    &:hover {
+      color: var(--color-accent-hover);
+    }
+  }
+
+  .footer-tagline {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .footer-note {
+    color: var(--color-text-quiet);
+  }
+
+  /* Social icons: 40px area, 20px icon, first icon lines up with the text */
+  .social {
     display: flex;
-    margin: 0;
+    gap: var(--space-1);
+    margin: var(--space-2) 0 0;
+    margin-inline-start: calc(var(--space-3) * -1);
     padding: 0;
     list-style: none;
   }
 
-  .social {
-    gap: 0.5rem;
-    margin-inline-start: -0.625rem; /* icons line up with the text below */
-  }
-
-  /* 44×44px clickable area around a 24px icon */
   .icon-link {
     display: grid;
     place-items: center;
-    inline-size: 2.75rem;
-    block-size: 2.75rem;
-    color: var(--color-text-secondary);
+    inline-size: 2.5rem; /* 40px */
+    block-size: 2.5rem; /* 40px */
+    color: var(--color-text-quiet);
     transition: color 0.2s ease;
 
     & svg {
-      inline-size: 1.5rem;
-      block-size: 1.5rem;
+      inline-size: 1.25rem; /* 20px */
+      block-size: 1.25rem;
     }
+  }
+
+  a.icon-link:hover {
+    color: var(--color-accent);
+  }
+
+  /* Newsletter */
+  .newsletter {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .newsletter-label {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .newsletter-row {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .newsletter-input,
+  .newsletter-button {
+    block-size: 2.5rem; /* 40px = 10 × 4 */
+    border-radius: var(--radius-sm);
+    font: inherit;
+  }
+
+  .newsletter-input {
+    flex: 1;
+    min-inline-size: 0;
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-input-border);
+    background-color: var(--color-bg); /* form fields only on Dark Obsidian / Obsidian */
+    color: var(--color-text);
+
+    &::placeholder {
+      color: var(--color-text-quiet);
+    }
+
+    &[aria-invalid="true"] {
+      border-color: var(--color-error);
+    }
+  }
+
+  .newsletter-button {
+    padding-inline: var(--space-4);
+    border: 0;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 
     &:hover {
-      color: var(--color-accent);
+      background-color: var(--color-accent-hover);
+    }
+
+    &:disabled {
+      cursor: wait;
+      opacity: 0.7;
     }
   }
 
-  .bears {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.75rem;
-    margin: 0;
+  .newsletter-hint {
+    color: var(--color-text-quiet);
 
     & a {
-      font-weight: 500;
+      color: var(--color-text-secondary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover {
+        color: var(--color-accent);
+      }
     }
   }
 
-  /* Small uppercase label, like the nav */
-  .footer-label {
+  /* Status: colour only on the left border, text stays Egret (CLAUDE.md rule) */
+  .newsletter-status {
+    color: var(--color-text);
+
+    &:empty {
+      display: none;
+    }
+
+    &[data-type] {
+      padding-block: var(--space-2);
+      padding-inline-start: var(--space-3);
+      border-inline-start: 2px solid;
+    }
+
+    &[data-type="success"] {
+      border-color: var(--color-success);
+    }
+
+    &[data-type="error"] {
+      border-color: var(--color-error);
+    }
+  }
+
+  /* Bottom row: hairline, compact */
+  .footer-bottom {
+    border-block-start: 1px solid var(--color-line);
     color: var(--color-text-quiet);
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+    padding-block: var(--space-4);
   }
 
   .legal {
-    gap: 1.5rem;
+    display: flex;
+    gap: var(--space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
 
     & a {
       color: var(--color-text-quiet);
@@ -143,7 +312,9 @@ const year = new Date().getFullYear();
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .footer-logo,
     .icon-link,
+    .newsletter-button,
     .legal a {
       transition: none;
     }

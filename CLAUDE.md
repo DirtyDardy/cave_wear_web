@@ -70,8 +70,14 @@ behaviour in `scripts`, content in `content`. Keep content in HTML/Markdown, not
 ## 5. Site structure
 
 **Global:** Navigation: Products · Brand · Contact · Shopping Bag. Logo links to Home.
-Footer: Instagram (`info.cave.wear`), Threads, email, link to bearbiology.org,
-Impressum · Privacy Policy. (No Kickstarter.)
+**Footer (minimal, Linear/Vercel style, built 21 Oct 2026):** on Obsidian with a hairline
+on top. Top: small logo → Home · "Built for the wild. Made for anywhere." · "Not released
+yet – follow the journey." · Instagram, Threads, YouTube (link still to add in
+`Footer.astro` → `youtubeUrl`) · newsletter sign-up (email only, Netlify Forms via fetch,
+`src/scripts/newsletter.js`, note "We'll only email you if Cave Wear really launches").
+Bottom (hairline, compact): © year Cave Wear · A concept brand by Dardan Ademi ·
+Impressum · Privacy Policy. No email icon, no pop-up, no bearbiology.org link (moves to
+the Brand page). **Dark mode only – no light mode.** (No Kickstarter.)
 
 1. **Home** – brand intro, featured products, short conservation overview, call to action,
    weather strip ("Field conditions").

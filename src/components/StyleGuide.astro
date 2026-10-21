@@ -134,12 +134,12 @@ const typeRows = [
     text: "Pleistocene · Europe and Asia",
   },
   {
-    name: "Nav link – Geist Regular 400 (active: Bold 700)",
+    name: "Nav link – Geist Medium 500 (active: Bold 700)",
     tag: "span", className: "sample-nav",
-    sizes: "14/24px (all screens) · 48px touch area",
-    extra: "uppercase · letter-spacing 0.14em",
-    token: ".nav-link (Header.astro) · --text-small · --tracking-wide",
-    css: "font-size: var(--text-small);\nline-height: var(--space-6);\nletter-spacing: var(--tracking-wide);",
+    sizes: "16/24px (all screens) · 48px touch area",
+    extra: "uppercase · letter-spacing 0.04em",
+    token: ".nav-link (Header.astro) · --tracking-nav",
+    css: "font-size: 1rem;\nfont-weight: 500;\nline-height: var(--space-6);\nletter-spacing: var(--tracking-nav);",
     used: "Header navigation. Active page: bold + Egret.",
     text: "Products",
   },
@@ -469,9 +469,10 @@ const spaces = [
   .sample-nav {
     display: inline-block;
     color: var(--color-text-secondary);
-    font-size: var(--text-small);
+    font-size: 1rem;
+    font-weight: 500;
     line-height: var(--space-6);
-    letter-spacing: var(--tracking-wide);
+    letter-spacing: var(--tracking-nav);
     text-transform: uppercase;
   }
 

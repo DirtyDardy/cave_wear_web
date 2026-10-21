@@ -86,7 +86,7 @@ const youtubeUrl = "";
 
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
-      <p>© {year} Cave Wear · A concept brand by Dardan Ademi</p>
+      <p>© {year} Cave Wear · A concept brand by <span class="nowrap">Dardan Ademi</span></p>
       <ul class="legal" role="list">
         <li><a href="/impressum">Impressum</a></li>
         <li><a href="/privacy">Privacy Policy</a></li>
@@ -160,7 +160,7 @@ const youtubeUrl = "";
     display: flex;
     gap: var(--space-1);
     margin: var(--space-2) 0 0;
-    margin-inline-start: calc(var(--space-3) * -1);
+    margin-inline-start: -0.625rem; /* (40px area − 20px icon) ÷ 2 = 10px – icon edge lines up with the text */
     padding: 0;
     list-style: none;
   }
@@ -292,6 +292,11 @@ const youtubeUrl = "";
     justify-content: space-between;
     gap: var(--space-2) var(--space-6);
     padding-block: var(--space-4);
+  }
+
+  /* Keeps the name on one line on small screens */
+  .nowrap {
+    white-space: nowrap;
   }
 
   .legal {

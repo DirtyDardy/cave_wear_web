@@ -1,6 +1,6 @@
 // Newsletter sign-up in the footer.
 // Checks the email, sends the form to Netlify Forms with fetch (no page reload)
-// and shows a message. Netlify only accepts it on the deployed site – locally you see the error message.
+// and shows a message. Netlify only receives it on the deployed site – locally you get a test-mode message.
 
 const form = document.querySelector(".newsletter");
 const emailInput = form.querySelector('input[type="email"]');
@@ -25,6 +25,14 @@ form.addEventListener("submit", async (event) => {
     return;
   }
   emailInput.removeAttribute("aria-invalid");
+
+  // On your computer (npm run dev) there is no Netlify – the dev server would answer "OK"
+  // to every request and fake a success. So in dev mode we stop here and say so honestly.
+  // import.meta.env.DEV is true only while running npm run dev, never on the live site.
+  if (import.meta.env.DEV) {
+    showStatus("success", "Test mode: email is valid, but nothing was sent (works after deploying to Netlify).");
+    return;
+  }
 
   // While sending: button can't be clicked twice
   button.disabled = true;

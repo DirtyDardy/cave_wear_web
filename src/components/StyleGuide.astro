@@ -34,12 +34,12 @@ const colours = [
 // Type scale – one row per style. "text" is PLACEHOLDER text about the cave bear.
 const typeRows = [
   {
-    name: "H1 – Tusker Grotesk 5800 Super",
+    name: "H1 – Barlow Condensed Bold 700",
     tag: "p", className: "h1",
     sizes: "48 → 128px (fluid) · line-height 0.9",
-    extra: "letter-spacing 0.02em · max 12ch · never set font-weight",
-    token: "h1 · --text-h1 · --tracking-h1 · --measure-h1",
-    css: "font-family: var(--font-display);\nfont-size: var(--text-h1);\nline-height: 0.9;",
+    extra: "uppercase · letter-spacing 0 · max 12ch",
+    token: "h1 · --font-display · --text-h1 · --tracking-h1 · --measure-h1",
+    css: "font-family: var(--font-display);\nfont-size: var(--text-h1);\nfont-weight: 700;\nline-height: 0.9;\ntext-transform: uppercase;",
     used: "One per page – hero headline or page title.",
     text: "Ursus spelaeus",
   },

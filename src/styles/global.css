@@ -18,14 +18,13 @@
   font-display: swap;
 }
 
-/* Tusker Grotesk 5800 Super: one weight only.
-   The range 100–900 tells the browser "this file is right for any weight",
-   so it never fakes a bold version (h1 is bold by default).
-   Never set font-weight on this font. */
+/* Barlow Condensed Bold: H1 only. One file, one weight (700).
+   Latin set from Google Fonts – covers English and German (ä ö ü ß).
+   Free font (SIL Open Font License). */
 @font-face {
-  font-family: "Tusker Grotesk";
-  src: url("/fonts/TuskerGrotesk-5800Super.woff2") format("woff2");
-  font-weight: 100 900;
+  font-family: "Barlow Condensed";
+  src: url("/fonts/BarlowCondensed-Bold.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -79,7 +78,7 @@
 
   /* Fonts */
   --font-body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Tusker Grotesk", Impact, "Arial Narrow", sans-serif; /* H1 / display only */
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif; /* H1 / display only */
 
   /* Spacing – 4-point grid. The number = how many 4px units. */
   --space-1: 0.25rem; /* 4px */
@@ -107,7 +106,7 @@
   --leading-small: 1.25rem; /* 20px */
 
   /* Letter spacing ("tracking") */
-  --tracking-h1: 0.02em;
+  --tracking-h1: 0;
   --tracking-h2: -0.02em;
   --tracking-h3: -0.01em;
   --tracking-wide: 0.14em; /* labels, buttons – uppercase text */
@@ -192,13 +191,15 @@ p {
   margin-block: 0;
 }
 
-/* H1 – Tusker, display only. Never set font-weight on it. */
+/* H1 – Barlow Condensed Bold, uppercase, display only */
 h1,
 .h1 {
   max-inline-size: var(--measure-h1); /* "ch" = width of the "0" – about two words per line */
   margin-block-end: var(--space-6);
   font-family: var(--font-display);
   font-size: var(--text-h1);
+  font-weight: 700; /* the only weight loaded for this font */
+  text-transform: uppercase;
   line-height: 0.9; /* deliberate grid exception: tight display setting */
   letter-spacing: var(--tracking-h1);
   text-wrap: balance;

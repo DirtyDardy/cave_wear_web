@@ -110,7 +110,8 @@
   --tracking-h1: 0.02em;
   --tracking-h2: -0.02em;
   --tracking-h3: -0.01em;
-  --tracking-wide: 0.14em; /* label, nav, buttons – uppercase text */
+  --tracking-wide: 0.14em; /* labels, buttons – uppercase text */
+  --tracking-nav: 0.04em; /* header nav + Bag – tighter, more modern */
 
   /* Maximum line lengths ("measure"), in characters */
   --measure-h1: 12ch;
@@ -123,7 +124,7 @@
   /* Layout */
   --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
   --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
-  --header-height: 4.5rem; /* 72px = 18 × 4 */
+  --header-height: 4.5rem; /* 72px = 18 × 4 (mobile) – 92px from 768px */
   --header-fade-distance: 12.5rem; /* 200px of scrolling: Home header fades from 5% to solid */
 
   /* Tells the browser the site is dark: scrollbars and form controls follow */
@@ -143,6 +144,7 @@
     --text-body: 1.125rem; /* 18px */
     --leading-body: 1.75rem; /* 28px */
     --section-space: var(--space-24); /* 96px */
+    --header-height: 5.75rem; /* 92px = 23 × 4 – room for the 44px logo */
   }
 }
 

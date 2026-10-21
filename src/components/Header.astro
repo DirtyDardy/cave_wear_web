@@ -85,12 +85,12 @@ const isHome = currentPath === "/";
     pointer-events: none;
   }
 
-  /* Sticky bar, solid Obsidian */
+  /* Sticky bar, solid Dark Obsidian – same as the page, the line is the edge */
   .site-header {
     position: sticky;
     inset-block-start: 0;
     z-index: 50;
-    background-color: var(--color-surface);
+    background-color: var(--color-bg);
     border-block-end: 1px solid var(--color-line);
     transition:
       background-color 0.3s ease,
@@ -100,15 +100,28 @@ const isHome = currentPath === "/";
 
   /* --- Home: background fade ---------------------------------------------- */
 
-  /* From 5% Obsidian (no line) to solid Obsidian (with line) */
+  /* From 5% Dark Obsidian (no line) to solid Dark Obsidian (with line) */
   @keyframes header-fill {
     from {
-      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      background-color: color-mix(in srgb, var(--color-bg) 5%, transparent);
       border-block-end-color: transparent;
     }
     to {
-      background-color: var(--color-surface);
+      background-color: var(--color-bg);
       border-block-end-color: var(--color-line);
+    }
+  }
+
+  /* The Bag button fades with the header: fill and outline appear together
+     with the background (5% Obsidian, no outline → solid Obsidian, Flint) */
+  @keyframes bag-fill {
+    from {
+      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      border-color: transparent;
+    }
+    to {
+      background-color: var(--color-surface);
+      border-color: var(--color-input-border);
     }
   }
 
@@ -129,6 +142,22 @@ const isHome = currentPath === "/";
     .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) {
       animation: none;
     }
+
+    /* Same scroll timeline as the header */
+    .site-header[data-transparent] .bag-link {
+      animation-name: bag-fill;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+      animation-range: 0 var(--header-fade-distance);
+    }
+
+    /* An animation beats normal styles – so it is switched off on hover
+       (Egret box shows) and while the mobile menu is open (solid) */
+    .site-header[data-transparent] .bag-link:hover,
+    .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) .bag-link {
+      animation-name: none;
+    }
   }
 
   /* Older browsers (fallback): almost invisible at the top, solid after 32px.
@@ -136,8 +165,13 @@ const isHome = currentPath === "/";
      and never while the mobile menu is open. */
   @supports not (animation-timeline: scroll()) {
     :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) {
-      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      background-color: color-mix(in srgb, var(--color-bg) 5%, transparent);
       border-block-end-color: transparent;
+    }
+
+    :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) .bag-link:not(:hover) {
+      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      border-color: transparent;
     }
   }
 
@@ -167,8 +201,12 @@ const isHome = currentPath === "/";
 
     & svg {
       display: block;
-      block-size: var(--space-8); /* 32px */
+      block-size: var(--space-8); /* 32px on mobile */
       inline-size: auto;
+
+      @media (width >= 48rem) {
+        block-size: 2.75rem; /* 44px – 24px space above and below in the 92px header */
+      }
     }
 
     &:hover {
@@ -199,7 +237,8 @@ const isHome = currentPath === "/";
     }
   }
 
-  /* Nav links and Bag – uppercase, wide letter-spacing: the tactical touch.
+  /* Nav links and Bag – uppercase, Medium weight, tight letter-spacing:
+     modern instead of the wide "tactical label" look.
      12px + 24px line + 12px = 48px high */
   .nav-link {
     display: inline-flex;
@@ -207,10 +246,10 @@ const isHome = currentPath === "/";
     gap: var(--space-2);
     padding-block: var(--space-3);
     color: var(--color-text-secondary);
-    font-size: var(--text-small); /* 14px */
-    font-weight: 400;
+    font-size: 1rem; /* 16px */
+    font-weight: 500;
     line-height: var(--space-6); /* 24px */
-    letter-spacing: var(--tracking-wide);
+    letter-spacing: var(--tracking-nav);
     text-transform: uppercase;
     transition: color 0.2s ease;
 
@@ -242,10 +281,34 @@ const isHome = currentPath === "/";
     }
   }
 
-  /* 24px – same size as the menu icon */
+  /* Bag button – the one action in the nav, so it gets a box.
+     44px high with a 32px icon: the 6px inside follows from that
+     (deliberate grid exception, like text centred in a button). */
+  .bag-link {
+    block-size: 2.75rem; /* 44px */
+    gap: 0.375rem; /* 6px */
+    padding-block: 0;
+    padding-inline: 0.375rem; /* 6px */
+    border: 0.5px solid var(--color-input-border); /* Flint – hairline, as in the design (0.375pt) */
+    border-radius: var(--space-2); /* 8px */
+    background-color: var(--color-surface); /* Obsidian */
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+
+    /* Hover: Egret box, dark text. The border turns transparent instead of
+       disappearing, so the button keeps its size and nothing jumps. */
+    &:hover {
+      border-color: transparent;
+      background-color: var(--color-text);
+      color: var(--color-on-accent);
+    }
+  }
+
   .bag-icon {
-    inline-size: var(--space-6);
-    block-size: var(--space-6);
+    inline-size: var(--space-8); /* 32px */
+    block-size: var(--space-8);
   }
 
   /* Menu button – hidden on desktop and when JavaScript is off */
@@ -325,7 +388,7 @@ const isHome = currentPath === "/";
         gap: 0;
         padding: var(--space-8) var(--gutter);
         overflow-y: auto;
-        background-color: var(--color-surface);
+        background-color: var(--color-bg);
 
         /* Closed: invisible and not reachable with Tab */
         visibility: hidden;
@@ -376,7 +439,8 @@ const isHome = currentPath === "/";
     .nav-link,
     .menu-button,
     .menu-icon,
-    .nav-list {
+    .nav-list,
+    .bag-link {
       transition: none !important;
     }
   }

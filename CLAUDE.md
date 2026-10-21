@@ -294,6 +294,22 @@ Usage rules (all checked against WCAG):
 - Terminal: VS Code integrated terminal (PowerShell) in the project folder.
 - Run locally: `npm run dev` → http://localhost:4321
 - Claude Code in VS Code runs in **Manual** permission mode – every edit is reviewed.
+- Git: one branch, **`main`** (default on GitHub, repo `DirtyDardy/cave_wear_web`, public).
+
+### Deployment (live since 21 Oct 2026)
+- **Netlify** project `cave-wear-concept` → **https://cave-wear-concept.netlify.app** (public).
+- Every push to `main` builds and goes live automatically (~1 min). Rollback = one click in
+  Netlify → Deploys. Branches can get preview links.
+- Build: `npm run build`, publish folder `dist`. Environment variable **`NODE_VERSION=24`**
+  (project needs Node ≥ 22.22).
+- **Only what is in Git reaches Netlify.** Anything in `.gitignore` (e.g. `src/assets/test/`)
+  exists only locally – never import from there. Before a risky push: test with a fresh
+  clone (`git clone` → `npm ci` → `npm run build`).
+- **Netlify Forms:** form detection is enabled. A new form only works after a deploy with
+  detection on (Netlify then removes `data-netlify="true"` from the live HTML – that's the
+  check). Submissions: Netlify → Forms. Locally, `newsletter.js` shows a test-mode message.
+- Name check: "CAVEWEAR – Underground Tech Fashion" exists (cavewear.netlify.app) – do a
+  DPMA/EUIPO trademark check (class 25) before buying a domain or a real launch.
 
 ## 11. Still open (ask, don't assume)
 
@@ -301,7 +317,8 @@ Usage rules (all checked against WCAG):
 - Weather → product suggestion mapping.
 - Domain + email address (form recipient).
 - Impressum details (Dardan will use his real address).
-- Netlify account setup (when deploying).
+- Custom domain (planned: `cavewear.de` + mailbox, e.g. at all-inkl) – connect to Netlify
+  via DNS, then form notifications to the new address.
 - Final home page concept after prototyping.
 
 ## 12. Nice to have (only when there is time – not a priority)

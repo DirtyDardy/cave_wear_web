@@ -91,6 +91,13 @@
   --space-16: 4rem; /* 64px */
   --space-24: 6rem; /* 96px */
 
+  /* Corners – default is sharp (0). Only round where Dardan decides it.
+     Same element type = same radius everywhere. */
+  --radius-sm: 0.25rem; /* 4px – inputs, small tags */
+  --radius-md: 0.5rem; /* 8px – buttons, cards */
+  --radius-lg: 1rem; /* 16px – large images, big containers */
+  --radius-full: 9999px; /* real circles / pills only, e.g. a badge */
+
   /* Type scale – size + line height ("leading", as in print).
      Mobile values here; larger values from 768px in the media query below. */
   --text-h1: clamp(3rem, 7vw + 1rem, 8rem); /* 48 → 128px, grows with the screen */

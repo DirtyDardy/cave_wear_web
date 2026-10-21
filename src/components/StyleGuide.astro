@@ -167,6 +167,14 @@ const spaces = [
   { token: "--space-16", px: 64 },
   { token: "--space-24", px: 96 },
 ];
+
+// Corner radius scale
+const radii = [
+  { token: "--radius-sm", value: "4px", used: "inputs, small tags" },
+  { token: "--radius-md", value: "8px", used: "buttons, cards" },
+  { token: "--radius-lg", value: "16px", used: "large images, big containers" },
+  { token: "--radius-full", value: "9999px", used: "real circles / pills only" },
+];
 ---
 
 <!-- Notice: everything below is a design test -->
@@ -264,6 +272,20 @@ const spaces = [
             <code class="space-token">{space.token}</code>
             <span class="small space-px">{space.px}px</span>
             <span class="space-bar" style={`inline-size: var(${space.token})`} />
+          </li>
+        ))
+      }
+    </ul>
+
+    <h3 class="sg-subheading">Corners</h3>
+    <p>Default is sharp (0). Same element type = same radius.</p>
+    <ul class="radius-scale" role="list">
+      {
+        radii.map((radius) => (
+          <li class="radius-item">
+            <span class="radius-box" style={`border-radius: var(${radius.token})`} />
+            <code class="radius-token">{radius.token}</code>
+            <span class="small">{radius.value} · {radius.used}</span>
           </li>
         ))
       }
@@ -400,7 +422,7 @@ const spaces = [
     block-size: var(--space-24);
     margin-block-end: var(--space-2);
     border: 1px solid var(--color-line);
-    border-radius: 2px;
+    border-radius: var(--radius-sm); /* 4px */
   }
 
   .swatch-name {
@@ -461,7 +483,7 @@ const spaces = [
     overflow-x: auto;
     background-color: var(--color-bg);
     border: 1px solid var(--color-line);
-    border-radius: 2px;
+    border-radius: var(--radius-sm); /* 4px */
     color: var(--color-text-secondary);
   }
 
@@ -518,6 +540,36 @@ const spaces = [
     display: block;
     block-size: var(--space-4);
     background-color: var(--color-flint);
+  }
+
+  /* ---------- Corners ---------- */
+  .radius-scale {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .radius-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    max-inline-size: 12rem;
+  }
+
+  /* 64 × 64px box, outline only, so you see just the corner shape */
+  .radius-box {
+    display: block;
+    inline-size: var(--space-16);
+    block-size: var(--space-16);
+    margin-block-end: var(--space-2);
+    border: 1px solid var(--color-flint);
+  }
+
+  .radius-token {
+    color: var(--color-text);
   }
 
   .diagram {
@@ -600,7 +652,7 @@ const spaces = [
     block-size: var(--space-12); /* 48px */
     padding-inline: var(--space-6);
     border: 1px solid transparent;
-    border-radius: 2px;
+    border-radius: var(--radius-sm); /* 4px */
     font: inherit;
     font-size: var(--text-small);
     font-weight: 500;

@@ -231,6 +231,20 @@ Usage rules (all checked against WCAG):
 - Allowed exceptions: 1px borders/lines, `clamp()` font sizes, and spacing that results
   automatically inside a component (e.g. text centred in a 48px button). Follow the grid until
   it gets in the way – then break it deliberately, not by accident.
+  ### Corners
+- **Default is sharp (0).** Rounding only where Dardan decides it, per element.
+  Never round something "because it looks nicer" without asking.
+- **If something is rounded:** normal rounded corners (circular, CSS `border-radius`).
+  Works in every browser. No squircle / `corner-shape`, no chamfers, no mixed styles.
+- **Only values from the scale** (on the 4-pt grid), as CSS variables:
+  `--radius-sm` 4px (inputs, small tags) · `--radius-md` 8px (buttons, cards) ·
+  `--radius-lg` 16px (large images, big containers) · `--radius-full` 9999px
+  (only for real circles / pills, e.g. a badge).
+- **Same element type = same radius** everywhere on the site.
+- **Nested corners:** an inner element's radius = outer radius − the space between them
+  (e.g. card 16px with 8px padding → image inside 8px), so the curves run parallel.
+- **Currently rounded (decided):** Bag button in the header (8px = `--radius-md`).
+  Style guide buttons, swatches and code boxes (4px = `--radius-sm`).
 
 ### Typography
 - **Geist** (variable) – main font for all body text, UI, navigation.

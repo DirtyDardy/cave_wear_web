@@ -97,15 +97,15 @@ Impressum · Privacy Policy. (No Kickstarter.)
 - **Home hero**: split screen *Built for the wild / Built for anywhere* (hover reveals a side
   on desktop), with subtle parallax as support. Needs a separate touch/mobile version.
   Prototype both variants in the browser and let Dardan decide.
-- Basic animations only, always respecting
+- Basic animations only, always respecting `prefers-reduced-motion`.
 - **Selective scroll snap** (CSS only, `proximity`, never `mandatory`): only on the few key
   moments – hero, main call to action, max. one more. Everything else scrolls freely.
-  Also used for the product image gallery and the mobile product row. 
-  - **Follow the journey** (build in public): progress timeline with real milestones only
+  Also used for the product image gallery and the mobile product row.
+- **Follow the journey** (build in public): progress timeline with real milestones only
   (stored in a small data file, easy to update) + Instagram/Threads links. Main place: Brand
   page. Short teaser on Home (possible snap moment). One line near "Reserve" on Products.
   Links only – no embedded social feeds (no third-party scripts/cookies).
-`prefers-reduced-motion`.
+
 ## 6b. Header & navigation (decided 18 Oct 2026)
 
 Goal: subtle, premium navigation. Blends into the hero on Home, becomes readable
@@ -231,7 +231,8 @@ Usage rules (all checked against WCAG):
 - Allowed exceptions: 1px borders/lines, `clamp()` font sizes, and spacing that results
   automatically inside a component (e.g. text centred in a 48px button). Follow the grid until
   it gets in the way – then break it deliberately, not by accident.
-  ### Corners
+
+### Corners
 - **Default is sharp (0).** Rounding only where Dardan decides it, per element.
   Never round something "because it looks nicer" without asking.
 - **If something is rounded:** normal rounded corners (circular, CSS `border-radius`).
@@ -248,12 +249,14 @@ Usage rules (all checked against WCAG):
 
 ### Typography
 - **Geist** (variable) – main font for all body text, UI, navigation.
-- **Tusker Grotesk 5800 Super** – H1 / big display headlines only. Single weight: never
-  set `font-weight` on it.
-- Fonts to be converted to **WOFF2** before use (originals are TTF).
+- **Barlow Condensed Bold** – H1 / big display headlines only (`--font-display`), uppercase.
+  One file, one weight (700) – never use another weight with it. Replaced Tusker Grotesk
+  (Tusker removed from the project).
+- Fonts are **WOFF2** in `public/fonts/` (`Geist-Variable.woff2`,
+  `BarlowCondensed-Bold.woff2`), defined in `src/styles/global.css`. Originals stay outside
+  the repo.
 - Headline sizes with `clamp()` – must never clip on mobile. Body text ≥ 1rem, readable weight.
-- Licence note: Tusker's web licence is unclear; acceptable for the short demo,
-  replace before any official launch.
+- Licence: Geist and Barlow Condensed are both free (SIL Open Font License) – fine for launch.
 
 ### Logo
 - Files (cleaned SVG, Corel leftovers removed): `bear-dark/light`, `logo-stacked-dark/light`,
@@ -261,7 +264,8 @@ Usage rules (all checked against WCAG):
   the header and colour it via CSS).
 - The two-tone bear's head (Moule `#382D2B`) has only 1.5:1 contrast on Dark Obsidian.
   On the dark site use the single-colour versions; two-tone only on cream or at large size.
-- Favicon: round bear icon → later as SVG favicon.
+- Favicon: done – set in `public/` (`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`,
+  `icon-192.png`, `icon-512.png`, `site.webmanifest`), linked in `BaseLayout.astro`.
 
 ## 9. Quality requirements (from the brief)
 
@@ -296,8 +300,6 @@ Usage rules (all checked against WCAG):
 
 ## 12. Nice to have (only when there is time – not a priority)
 
-- **Favicon:** a proper favicon based on the round bear icon (SVG favicon + fallback),
-  checked in light and dark browser tabs.
 - **Open backpack icon** (`backpack-open.svg`): a second version of the backpack icon,
   drawn by Dardan in the same style (same grid, same line thickness). When and where it
   shows (e.g. when the bag has items, or on hover) is still to decide.

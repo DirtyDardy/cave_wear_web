@@ -1,69 +1,19 @@
 ---
-import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-// Web-sized copy (2560px, ~760 KB) of the 15 MB original in assets/test/ (that folder is not in Git)
-import heroImage from "../assets/hero-placeholder.jpg";
+import HeroSplit from "../components/HeroSplit.astro";
 ---
 
 <BaseLayout title="Home">
-  <!-- TEMPORARY hero – placeholder image until the final hero is decided -->
-  <section class="hero">
-    <Image
-      src={heroImage}
-      alt=""
-      class="hero-image"
-      width={2400}
-      widths={[640, 1024, 1600, 2400]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <div class="container hero-content">
-      <h1>Cave Wear</h1>
-    </div>
-  </section>
+  <HeroSplit wildFocus="center 70%" anywhereFocus="center 60%" />
 
-  <!-- TEMPORARY: links to the hero prototype and the style guide -->
-  <section class="container section test-links">
-    <a href="/hero-test" class="test-link">Hero test</a>
-    <a href="/hero-test-2" class="test-link">Hero test 2</a>
+  <!-- TEMPORARY: way into the style guide while the site is being built -->
+  <section class="container section">
     <a href="/styleguide" class="test-link">Style guide</a>
   </section>
 </BaseLayout>
 
 <style>
-  /* 720px high, pulled up under the header so it shows through */
-  .hero {
-    position: relative;
-    display: grid;
-    align-items: end;
-    block-size: 45rem; /* 720px */
-    margin-block-start: calc(-1 * var(--header-height) - 1px); /* header + its 1px bottom line */
-    padding-block-end: var(--space-16);
-    overflow: hidden;
-  }
-
-  /* The image fills the whole hero, cropped instead of stretched */
-  .hero-image {
-    position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    object-fit: cover;
-  }
-
-  /* Text sits on top of the image */
-  .hero-content {
-    position: relative;
-  }
-
-  /* TEMPORARY test links – outlined, so they don't look like a final design */
-  .test-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-  }
-
+  /* TEMPORARY link – outlined, so it doesn't look like a final design */
   .test-link {
     display: inline-flex;
     align-items: center;

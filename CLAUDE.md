@@ -100,9 +100,20 @@ the Brand page). **Dark mode only – no light mode.** (No Kickstarter.)
   location?"* [Use my location] [Show Regensburg]. Browser permission only after the click.
   Declined/unavailable → **Regensburg** fallback. Shows weather + a matching product
   suggestion (mapping still to be decided). Mention location → Open-Meteo in privacy policy.
-- **Home hero**: split screen *Built for the wild / Built for anywhere* (hover reveals a side
+- **Home hero**: split screen *Built for the wild / Made for anywhere* (hover reveals a side
   on desktop), with subtle parallax as support. Needs a separate touch/mobile version.
-  Prototype both variants in the browser and let Dardan decide.
+  **Built (22 Oct 2026), live on Home:** `src/components/HeroSplit.astro`.
+  Forest photo left, city photo right (`src/assets/hero/hero-wild.jpg`, `hero-anywhere.jpg`),
+  cut along the same diagonal as the bear logo. The logo bear sits centred on the cut.
+  Hover a side → the other side goes black, that half of the bear becomes outline only,
+  headline + short text appear on the dark side. No button (informational only).
+  Hidden H1: "Built for the wild. Made for anywhere." Soft dark gradient at the top for
+  header readability.
+  **Bear style: smoked glass** (decided 22 Oct 2026 after comparing no glow, glows, clear,
+  frost, smoked, olive, amber and logo-colour versions). Clear felt too trendy, amber
+  competed with Wild Honey.
+  Still open: final photos (licence + photographer, Nike logo on the forest photo,
+  larger downloads), "ANYWHERE" headline touching the bear, mobile version.
 - Basic animations only, always respecting `prefers-reduced-motion`.
 - **Selective scroll snap** (CSS only, `proximity`, never `mandatory`): only on the few key
   moments – hero, main call to action, max. one more. Everything else scrolls freely.
@@ -203,7 +214,7 @@ Products will live as Markdown files in `src/content/products/`.
 | Role | Name | Hex |
 |---|---|---|
 | Background | Dark Obsidian | `#0D0D0E` |
-| Surface (header, footer, cards, bag) | Obsidian | `#131314` |
+| Surface (header, footer, bag) – cards use smoked glass, see "Cards & glass" | Obsidian | `#131314` |
 | Line / divider | Charcoal | `#1E1E1E` |
 | Input border | Flint | `#6B655E` |
 | Main text | Egret | `#F3EBE0` |
@@ -237,6 +248,18 @@ Usage rules (all checked against WCAG):
 - Allowed exceptions: 1px borders/lines, `clamp()` font sizes, and spacing that results
   automatically inside a component (e.g. text centred in a 48px button). Follow the grid until
   it gets in the way – then break it deliberately, not by accident.
+
+### Cards & glass (decided 22 Oct 2026)
+- **Every card uses the same smoked glass as the hero bear.** No coloured cards, no
+  card-by-card decisions. Colour comes from the content (photos, text), not the card.
+- Smoked glass = the background behind is blurred (12px, saturate 1.2, brightness 0.9) +
+  a dark tint on top (Dark Obsidian at 45%) + a light edge (Egret, fading) + a soft shadow.
+  Reference: the bear in `src/components/HeroSplit.astro`.
+- On a plain dark page there is little behind a card to blur, so the glass reads as a
+  dark surface – it shows most over photos. Text on glass must still pass WCAG contrast.
+- Same element type = same radius and same border everywhere (card radius still to decide).
+- Exception: a whole **section** may be Irr Olive (conservation); cards inside it keep the
+  same smoked glass.
 
 ### Corners
 - **Default is sharp (0).** Rounding only where Dardan decides it, per element.

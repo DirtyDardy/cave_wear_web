@@ -1,27 +1,19 @@
 ---
 // SPLIT HERO (prototype) – one cave, two sides: the wild and anywhere.
 // The diagonal cut is the same cut that runs through the bear logo.
+// The bear is smoked glass (decided 22 Oct 2026).
 // To change a photo: replace the file in src/assets/hero/ (keep the file name).
 import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
-import defaultWild from "../assets/hero/hero-wild.jpg";
-import defaultAnywhere from "../assets/hero/hero-anywhere.jpg";
+import wildImage from "../assets/hero/hero-wild.jpg";
+import anywhereImage from "../assets/hero/hero-anywhere.jpg";
 
-// Optional: a page can pass other photos, and which part of each photo
-// should stay visible ("center", "center 70%" = a bit lower, ...)
+// Which part of each photo stays visible ("center", "center 70%" = a bit lower)
 interface Props {
-  wildImage?: ImageMetadata;
-  anywhereImage?: ImageMetadata;
   wildFocus?: string;
   anywhereFocus?: string;
 }
 
-const {
-  wildImage = defaultWild,
-  anywhereImage = defaultAnywhere,
-  wildFocus = "center",
-  anywhereFocus = "center",
-} = Astro.props;
+const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
 ---
 
 <section class="hero-split" style={`--wild-focus: ${wildFocus}; --anywhere-focus: ${anywhereFocus};`}>
@@ -35,9 +27,9 @@ const {
     <Image src={anywhereImage} alt="" class="side-image" widths={[640, 1024, 1600, 2400]} sizes="60vw" loading="eager" fetchpriority="high" />
   </div>
 
-  <!-- Optional "glass" layer: a blurred copy of both photos, lined up exactly
-       with the real ones and cut to the bear's shape with a mask (the logo file).
-       Hidden unless a page switches it on. Same image files = no extra download. -->
+  <!-- Glass layer: a blurred copy of both photos, lined up exactly with the
+       real ones and cut to the bear's shape with a mask (the logo file).
+       Same image files = no extra download. -->
   <div class="bear-glass" aria-hidden="true">
     <div class="glass-scene">
       <div class="side side-wild">
@@ -74,15 +66,13 @@ const {
   <div class="copy copy-wild">
     <div class="container copy-inner">
       <p class="h1" aria-hidden="true">Built for<br />the wild</p>
-      <!-- PLACEHOLDER text -->
-      <p class="copy-text">Cold mornings, wet trails, long days outside. Clothing that keeps going when you do.</p>
+      <p class="copy-text">Cold mornings, rough terrain, and days that take you further than expected. Gear for the unpredictable, designed to keep up when the conditions change and the way forward gets rough.</p>
     </div>
   </div>
   <div class="copy copy-anywhere">
     <div class="container copy-inner">
       <p class="h1" aria-hidden="true">Made for<br />anywhere</p>
-      <!-- PLACEHOLDER text -->
-      <p class="copy-text">The same pieces look right in the city, at the bar or at a family dinner.</p>
+      <p class="copy-text">From slow mornings to late nights, from familiar streets to somewhere new. Pieces that fit naturally into your everyday life, without asking you to dress for a different version of yourself.</p>
     </div>
   </div>
 </section>
@@ -192,16 +182,17 @@ const {
     pointer-events: none; /* the mouse "sees" the photos through the bear */
   }
 
+  /* Smoked glass bear:
+     1. glass layer = the photos behind, blurred (see .glass-scene)
+     2. dark tint on top (fill) = the "smoke"
+     3. light edge that fades along the outline (stroke)
+     4. thin light rim + soft dark shadow below, so it floats (filter) */
   .bear {
-    /* Optional light glow around the outline. Off by default – a page can
-       switch it on by setting --bear-glow (TEMPORARY: compared on Hero test 2) */
-    filter: var(--bear-glow, none);
+    filter: drop-shadow(0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent))
+      drop-shadow(0 12px 32px color-mix(in srgb, var(--color-bg) 60%, transparent));
   }
 
-  /* Glass: blurs and brightens whatever is behind it, cut to the bear shape.
-     Off by default – a page switches it on with --bear-glass: block */
   .bear-glass {
-    display: var(--bear-glass, none);
     overflow: hidden;
     /* The logo file as a stencil: only where the bear is, the layer shows */
     mask: url(/logo/bear-light.svg) center / 100% 100% no-repeat;
@@ -216,14 +207,12 @@ const {
     inset-inline-start: calc(-1 * (50cqi - var(--bear-w) * 0.5161));
     inline-size: 100cqi;
     block-size: var(--hero-h);
-    /* A page can change the look of the glass with --glass-filter */
-    filter: var(--glass-filter, blur(12px) saturate(1.4) brightness(1.2));
+    filter: blur(12px) saturate(1.2) brightness(0.9);
   }
 
-  /* Fill and outline can be changed by a page (used for the style tests) */
   .bear-half path {
-    fill: var(--bear-fill, var(--color-bg));
-    stroke: var(--bear-stroke, var(--color-text));
+    fill: color-mix(in srgb, var(--color-bg) 45%, transparent); /* the smoke tint */
+    stroke: url(#bear-edge);
     stroke-width: 1.5px;
     vector-effect: non-scaling-stroke; /* line stays 1.5px, whatever the bear size */
     transition: fill var(--speed) ease;
@@ -242,7 +231,14 @@ const {
   .copy-inner {
     display: flex;
     flex-direction: column;
-    padding-block-start: calc(var(--header-height) + var(--space-12));
+    padding-block-start: calc(var(--header-height) + var(--space-8)); /* 32px below the header */
+  }
+
+  /* Hero headline a little smaller than a normal H1 (max 112px instead of 128px),
+     so headline + text stay clear of the bear */
+  .copy .h1 {
+    font-size: clamp(3rem, 6vw + 1rem, 7rem);
+    margin-block-end: var(--space-4); /* 16px to the text below */
   }
 
   /* Wild: text on the right (the city side goes dark). Anywhere: on the left. */
@@ -258,7 +254,7 @@ const {
   /* Short text under the headline – narrow, so it stays clear of the bear.
      The space above comes from the headline's own 24px margin. */
   .copy-text {
-    max-inline-size: 30ch;
+    max-inline-size: 26ch;
     color: var(--color-text-secondary);
   }
 

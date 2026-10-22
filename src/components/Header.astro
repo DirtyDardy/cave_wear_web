@@ -22,9 +22,8 @@ function getCurrent(href: string) {
   return undefined;
 }
 
-// Only Home starts with a transparent header (the hero shows through).
-// TEMPORARY: the hero test pages behave like Home.
-const isHome = currentPath === "/" || currentPath.startsWith("/hero-test");
+// Only Home starts with a transparent header (the hero shows through)
+const isHome = currentPath === "/";
 ---
 
 <!-- Fallback for browsers without scroll-driven animations: invisible marker

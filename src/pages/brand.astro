@@ -5,5 +5,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <BaseLayout title="Brand">
   <section class="container section">
     <h1>Brand</h1>
+    <!-- TEMPORARY: way into the style guide while the site is being built -->
+    <p class="styleguide-link"><a href="/styleguide">Style guide</a></p>
   </section>
 </BaseLayout>
+
+<style>
+  .styleguide-link {
+    margin-block-start: var(--space-8);
+  }
+</style>

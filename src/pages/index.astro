@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import StyleGuide from "../components/StyleGuide.astro";
 // Web-sized copy (2560px, ~760 KB) of the 15 MB original in assets/test/ (that folder is not in Git)
 import heroImage from "../assets/hero-placeholder.jpg";
 ---
@@ -24,9 +23,12 @@ import heroImage from "../assets/hero-placeholder.jpg";
     </div>
   </section>
 
-  <!-- TEMPORARY: style guide below the hero, for testing the design and scrolling -->
-  <StyleGuide />
-
+  <!-- TEMPORARY: links to the hero prototype and the style guide -->
+  <section class="container section test-links">
+    <a href="/hero-test" class="test-link">Hero test</a>
+    <a href="/hero-test-2" class="test-link">Hero test 2</a>
+    <a href="/styleguide" class="test-link">Style guide</a>
+  </section>
 </BaseLayout>
 
 <style>
@@ -53,5 +55,27 @@ import heroImage from "../assets/hero-placeholder.jpg";
   /* Text sits on top of the image */
   .hero-content {
     position: relative;
+  }
+
+  /* TEMPORARY test links – outlined, so they don't look like a final design */
+  .test-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .test-link {
+    display: inline-flex;
+    align-items: center;
+    block-size: var(--space-12); /* 48px */
+    padding-inline: var(--space-6);
+    border: 1px solid var(--color-accent);
+    color: var(--color-accent);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--color-accent-hover);
+      color: var(--color-accent-hover);
+    }
   }
 </style>

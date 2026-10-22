@@ -301,6 +301,16 @@ p a {
   padding-inline: var(--gutter);
 }
 
+/* Hidden on screen, but still read by screen readers and search engines */
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Vertical space for a page section */
 .section {
   padding-block: var(--section-space); /* 64px → 96px from 768px */

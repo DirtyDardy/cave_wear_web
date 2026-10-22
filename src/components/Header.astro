@@ -22,8 +22,9 @@ function getCurrent(href: string) {
   return undefined;
 }
 
-// Only Home starts with a transparent header (the hero shows through)
-const isHome = currentPath === "/";
+// Only Home starts with a transparent header (the hero shows through).
+// TEMPORARY: the hero test pages behave like Home.
+const isHome = currentPath === "/" || currentPath.startsWith("/hero-test");
 ---
 
 <!-- Fallback for browsers without scroll-driven animations: invisible marker
@@ -128,6 +129,19 @@ const isHome = currentPath === "/";
   /* Modern browsers: the page scroll drives the animation.
      0px scrolled = 5%, --header-fade-distance (200px) scrolled = solid. */
   @supports (animation-timeline: scroll()) {
+    /* Start look without the animation: if the page is too short to scroll
+       (e.g. on a tall monitor), the scroll animation does not run at all –
+       the header must then stay see-through, not fall back to solid. */
+    .site-header[data-transparent]:not(:has(.menu-button[aria-expanded="true"])) {
+      background-color: color-mix(in srgb, var(--color-bg) 5%, transparent);
+      border-block-end-color: transparent;
+    }
+
+    .site-header[data-transparent]:not(:has(.menu-button[aria-expanded="true"])) .bag-link:not(:hover) {
+      background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
+      border-color: transparent;
+    }
+
     /* Written as separate properties on purpose: the CSS minifier would merge
        a shorthand + animation-timeline into one line that Chrome rejects. */
     .site-header[data-transparent] {

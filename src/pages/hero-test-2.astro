@@ -1,0 +1,12 @@
+---
+// HERO TEST 2 – same split hero, with the forest-person + foggy-alley photos.
+// Test page only, hidden from search engines.
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroSplit from "../components/HeroSplit.astro";
+import wild from "../assets/hero/hero2-wild.jpg";
+import anywhere from "../assets/hero/hero2-anywhere.jpg";
+---
+
+<BaseLayout title="Hero test 2" noindex>
+  <HeroSplit wildImage={wild} anywhereImage={anywhere} wildFocus="center 70%" anywhereFocus="center 60%" />
+</BaseLayout>

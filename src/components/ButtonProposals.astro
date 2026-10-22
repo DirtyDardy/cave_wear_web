@@ -6,6 +6,16 @@ import { Image } from "astro:assets";
 import photo from "../assets/hero/hero-anywhere.jpg";
 import BagIcon from "../assets/icons/backpack.svg";
 import CloseIcon from "../assets/icons/close.svg";
+
+// Corner sizes for the "from soft to pill" row (all multiples of 4px)
+const corners = [
+  { label: "4px · --radius-sm", value: "var(--radius-sm)" },
+  { label: "8px · --radius-md (B)", value: "var(--radius-md)" },
+  { label: "12px · --radius-button ✓", value: "var(--radius-button)" },
+  { label: "16px · --radius-lg", value: "var(--radius-lg)" },
+  { label: "20px · new", value: "1.25rem" },
+  { label: "Pill · --radius-full (A)", value: "var(--radius-full)" },
+];
 ---
 
 <section class="container section bp">
@@ -37,6 +47,27 @@ import CloseIcon from "../assets/icons/close.svg";
     <button type="button" class="bp-btn bp-primary bp-soft">Discover the collection</button>
     <button type="button" class="bp-btn bp-secondary bp-soft">Our story</button>
     <a href="/products" class="bp-link">Learn more <span aria-hidden="true">›</span></a>
+  </div>
+
+  <!-- CORNER LADDER: everything between B and A --------------------------------->
+  <h3 class="bp-heading">Corner options – from soft to pill</h3>
+  <p class="small">
+    <strong>Decided (22 Oct 2026): 12px for every button</strong> (<code>--radius-button</code>).
+    The same buttons with every corner size on the 4-pt grid. A 48px button is a full pill at
+    24px, so 24px and "pill" look the same here. 12px and 20px are not in the corner scale yet –
+    if you pick one, it gets its own variable.
+  </p>
+  <div class="bp-ladder">
+    {
+      corners.map((corner) => (
+        <div class="bp-ladder-step" style={`--bp-radius: ${corner.value}`}>
+          <button type="button" class="bp-btn bp-primary bp-ladder-btn">Discover</button>
+          <button type="button" class="bp-btn bp-secondary bp-ladder-btn">Our story</button>
+          <button type="button" class="bp-btn bp-primary bp-ladder-btn bp-compact">Add to bag</button>
+          <span class="small">{corner.label}</span>
+        </div>
+      ))
+    }
   </div>
 
   <!-- C: GLASS ---------------------------------------------------------------->
@@ -156,6 +187,25 @@ import CloseIcon from "../assets/icons/close.svg";
 
   .bp-soft {
     border-radius: var(--radius-md);
+  }
+
+  /* Corner ladder: one column per corner size, read from --bp-radius */
+  .bp-ladder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    margin-block-start: var(--space-6);
+  }
+
+  .bp-ladder-step {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .bp-ladder-btn {
+    border-radius: var(--bp-radius);
   }
 
   /* Filled main button – the one thing to click */

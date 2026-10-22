@@ -94,7 +94,8 @@
   /* Corners – default is sharp (0). Only round where Dardan decides it.
      Same element type = same radius everywhere. */
   --radius-sm: 0.25rem; /* 4px – inputs, small tags */
-  --radius-md: 0.5rem; /* 8px – buttons, cards */
+  --radius-md: 0.5rem; /* 8px – cards */
+  --radius-button: 0.75rem; /* 12px – every button (decided 22 Oct 2026), icon buttons are round */
   --radius-lg: 1rem; /* 16px – large images, big containers */
   --radius-full: 9999px; /* real circles / pills only, e.g. a badge */
 

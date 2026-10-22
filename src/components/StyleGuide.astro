@@ -1,6 +1,7 @@
 ---
 // STYLE GUIDE – design test only, used on /styleguide.
 // All cave bear text and all images in here are PLACEHOLDERS.
+import ButtonSystem from "./ButtonSystem.astro";
 import ButtonProposals from "./ButtonProposals.astro";
 
 // Colour swatches – name, CSS variable, hex, role
@@ -163,7 +164,8 @@ const spaces = [
 // Corner radius scale
 const radii = [
   { token: "--radius-sm", value: "4px", used: "inputs, small tags" },
-  { token: "--radius-md", value: "8px", used: "buttons, cards" },
+  { token: "--radius-md", value: "8px", used: "cards" },
+  { token: "--radius-button", value: "12px", used: "every button (icon buttons are round)" },
   { token: "--radius-lg", value: "16px", used: "large images, big containers" },
   { token: "--radius-full", value: "9999px", used: "real circles / pills only" },
 ];
@@ -359,12 +361,15 @@ const radii = [
     <p class="small">Hover: Amber Gold. Keyboard focus: 2px Wild Honey outline.</p>
 
     <h3 class="sg-subheading">Buttons – proposal</h3>
-    <p class="small">48px high · label text style · 2px corners. Only on this page until approved.</p>
+    <p class="small">48px high · label text style · 12px corners (<code>--radius-button</code>, decided). Colours and text style still open.</p>
     <div class="button-row">
       <button type="button" class="button button-primary">Primary button</button>
       <button type="button" class="button button-secondary">Secondary button</button>
     </div>
   </section>
+
+  <!-- ============ BUTTON SYSTEM (recommended) ============ -->
+  <ButtonSystem />
 
   <!-- ============ BUTTON PROPOSALS (Apple-inspired) ============ -->
   <ButtonProposals />
@@ -647,7 +652,7 @@ const radii = [
     block-size: var(--space-12); /* 48px */
     padding-inline: var(--space-6);
     border: 1px solid transparent;
-    border-radius: var(--radius-sm); /* 4px */
+    border-radius: var(--radius-button); /* 12px */
     font: inherit;
     font-size: var(--text-small);
     font-weight: 500;

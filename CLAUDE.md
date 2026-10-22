@@ -276,14 +276,18 @@ Usage rules (all checked against WCAG):
 - **If something is rounded:** normal rounded corners (circular, CSS `border-radius`).
   Works in every browser. No squircle / `corner-shape`, no chamfers, no mixed styles.
 - **Only values from the scale** (on the 4-pt grid), as CSS variables:
-  `--radius-sm` 4px (inputs, small tags) · `--radius-md` 8px (buttons, cards) ·
-  `--radius-lg` 16px (large images, big containers) · `--radius-full` 9999px
-  (only for real circles / pills, e.g. a badge).
+  `--radius-sm` 4px (inputs, small tags) · `--radius-md` 8px (cards) ·
+  `--radius-button` 12px (every button) · `--radius-lg` 16px (large images, big containers) ·
+  `--radius-full` 9999px (only for real circles / pills, e.g. a badge, round icon buttons).
 - **Same element type = same radius** everywhere on the site.
 - **Nested corners:** an inner element's radius = outer radius − the space between them
   (e.g. card 16px with 8px padding → image inside 8px), so the curves run parallel.
-- **Currently rounded (decided):** Bag button in the header (8px = `--radius-md`).
-  Style guide buttons, swatches and code boxes (4px = `--radius-sm`).
+- **Buttons (decided 22 Oct 2026): 12px for every button** (`--radius-button`) – filled,
+  outline, compact, glass, the header Bag button, the footer "Sign up" button. Chosen from a
+  4px → pill comparison in the style guide: modern and Mac-like, but still solid next to the
+  sharp cards and the hero cut; looks the same at 48px and 40px. Icon-only buttons are round.
+- **Currently rounded (decided):** all buttons (12px, see above). Inputs (4px). Style guide
+  swatches and code boxes (4px = `--radius-sm`).
 
 ### Typography
 - **Geist** (variable) – main font for all body text, UI, navigation.
@@ -364,8 +368,9 @@ Usage rules (all checked against WCAG):
   taller than the window (live site did not have the 90% cap yet). Re-test on Safari after
   the next deploy, ask Dardan what exactly looks wrong, then fix.
 - **Button design** (all buttons site-wide): Dardan wants it closer to Apple's UI (Linro
-  works on MacBooks). Not decided yet – the placeholder uses the style guide's primary
-  button. Decide together with the CTA; any rounding needs Dardan's OK (corner rules).
+  works on MacBooks). **Corners decided: 12px.** Still open: colours/roles (Wild Honey vs.
+  smoked glass), text style (sentence case vs. uppercase). Proposals live in
+  `src/components/ButtonProposals.astro` on `/styleguide`.
 
 ## 12. Nice to have (only when there is time – not a priority)
 

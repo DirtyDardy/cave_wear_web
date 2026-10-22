@@ -1,0 +1,398 @@
+---
+// BUTTON SYSTEM – RECOMMENDED (style guide only, not decided yet).
+// Shows the proposed button hierarchy "in action": on a photo, in a product
+// card and in a plain dark section. All buttons use the decided 12px corners.
+import { Image } from "astro:assets";
+import cityPhoto from "../assets/hero/hero-anywhere.jpg";
+import forestPhoto from "../assets/hero/hero-wild.jpg";
+import CloseIcon from "../assets/icons/close.svg";
+import BagIcon from "../assets/icons/backpack.svg";
+---
+
+<section class="container section bs">
+  <h2>Button system – recommended</h2>
+  <p class="lead">
+    One loud button per section, quieter ones around it. Shown in real situations below.
+    Not decided yet – this is the recommendation to look at.
+  </p>
+
+  <!-- 1. THE FOUR ROLES -------------------------------------------------------->
+  <h3 class="bs-heading">1 · The roles</h3>
+  <div class="bs-roles">
+    <div class="bs-role">
+      <button type="button" class="bs-btn bs-primary">Discover the collection</button>
+      <p class="bs-role-name">Primary</p>
+      <p class="small">Wild Honey, filled. The one main action – max. one per section.</p>
+    </div>
+    <div class="bs-role bs-role-photo">
+      <Image src={cityPhoto} alt="" class="bs-fill" widths={[480, 960]} sizes="320px" />
+      <button type="button" class="bs-btn bs-glass">Our story</button>
+      <p class="bs-role-name">Secondary on photos</p>
+      <p class="small">Smoked glass, Egret text. Wherever a button sits on an image.</p>
+    </div>
+    <div class="bs-role">
+      <button type="button" class="bs-btn bs-outline">Size guide</button>
+      <p class="bs-role-name">Secondary on dark</p>
+      <p class="small">Wild Honey outline. The alternative next to a primary.</p>
+    </div>
+    <div class="bs-role">
+      <a href="/brand" class="bs-link">Learn more <span aria-hidden="true">›</span></a>
+      <p class="bs-role-name">Tertiary</p>
+      <p class="small">Text link with arrow. Extra info, "see all".</p>
+    </div>
+  </div>
+
+  <!-- 2. ON A PHOTO (hero / banner) -------------------------------------------->
+  <h3 class="bs-heading">2 · On a photo – hero or banner</h3>
+  <p class="small">Primary + glass. The glass lets the photo through, so it doesn't fight the image.</p>
+  <div class="bs-banner">
+    <Image src={forestPhoto} alt="" class="bs-fill bs-banner-image" widths={[960, 1600]} sizes="100vw" />
+    <div class="bs-banner-content">
+      <p class="h2 bs-banner-title">Built for the wild</p>
+      <p class="bs-banner-text">Gear for the unpredictable.</p>
+      <div class="bs-row">
+        <button type="button" class="bs-btn bs-primary">Discover the collection</button>
+        <button type="button" class="bs-btn bs-glass">Our story</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PRODUCT CARD ----------------------------------------------------------->
+  <h3 class="bs-heading">3 · Product card</h3>
+  <p class="small">
+    Card in smoked glass (card rule), sharp corners (card radius still open). Primary "Add to
+    bag" + outline "Size guide" in the compact 40px size.
+  </p>
+  <div class="bs-cards">
+    <article class="bs-card">
+      <div class="bs-card-media">
+        <Image src={forestPhoto} alt="" class="bs-fill" widths={[320, 640]} sizes="320px" />
+      </div>
+      <h4 class="bs-card-title">Product name</h4>
+      <p class="small">PLACEHOLDER · technique · price</p>
+      <div class="bs-row bs-row-compact">
+        <button type="button" class="bs-btn bs-primary bs-compact">Add to bag</button>
+        <button type="button" class="bs-btn bs-outline bs-compact">Size guide</button>
+      </div>
+    </article>
+  </div>
+
+  <!-- 4. PLAIN DARK SECTION ----------------------------------------------------->
+  <h3 class="bs-heading">4 · Plain dark section</h3>
+  <p class="small">Primary + text link. On a flat dark background there is nothing to blur, so no glass here.</p>
+  <div class="bs-plain">
+    <p class="label">Follow the journey</p>
+    <p class="h2">Not released yet</p>
+    <p class="bs-plain-text">Real news only – the launch, a vote on the next product, a big announcement.</p>
+    <div class="bs-row">
+      <button type="button" class="bs-btn bs-primary">Sign up for the newsletter</button>
+      <a href="/brand" class="bs-link">Our story <span aria-hidden="true">›</span></a>
+    </div>
+  </div>
+
+  <!-- 5. ICON BUTTONS ------------------------------------------------------------>
+  <h3 class="bs-heading">5 · Icon buttons</h3>
+  <p class="small">Round (a real circle), neutral on dark. For close, bag, menu.</p>
+  <div class="bs-row">
+    <button type="button" class="bs-icon" aria-label="Close"><CloseIcon aria-hidden="true" /></button>
+    <button type="button" class="bs-icon" aria-label="Shopping bag"><BagIcon aria-hidden="true" /></button>
+  </div>
+
+  <!-- 6. RULES ------------------------------------------------------------------>
+  <h3 class="bs-heading">6 · Rules in short</h3>
+  <ul class="bs-rules" role="list">
+    <li><strong>One primary per section.</strong> If two buttons are equally loud, nothing stands out.</li>
+    <li><strong>On photos:</strong> primary (honey) + glass. Never an outline button on a photo – it gets lost.</li>
+    <li><strong>On dark:</strong> primary (honey) + outline or text link. No glass – nothing behind it to blur.</li>
+    <li><strong>All buttons:</strong> 12px corners, sentence case, 16px medium (compact: 40px, 14px).</li>
+    <li><strong>Wild Honey</strong> = main action and links. Glass buttons are clearly buttons by shape and edge.</li>
+  </ul>
+</section>
+
+<style>
+  .bs {
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .bs-heading {
+    margin-block-start: var(--space-12);
+  }
+
+  .bs-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block-start: var(--space-6);
+  }
+
+  .bs-row-compact {
+    gap: var(--space-2);
+    margin-block-start: var(--space-4);
+  }
+
+  /* Any photo that fills its box */
+  .bs-fill {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* --- Buttons (12px corners, sentence case) -------------------------------- */
+  .bs-btn {
+    position: relative; /* stays above photos */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--space-12); /* 48px */
+    padding-inline: var(--space-6);
+    border: 1px solid transparent;
+    border-radius: var(--radius-button);
+    font: inherit;
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--space-6);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      scale 0.1s ease;
+
+    &:active {
+      scale: 0.97;
+    }
+  }
+
+  .bs-compact {
+    block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+    padding-inline: var(--space-4);
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+  }
+
+  .bs-primary {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+
+    &:hover {
+      background-color: var(--color-accent-hover);
+    }
+  }
+
+  .bs-outline {
+    background-color: transparent;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+
+    &:hover {
+      border-color: var(--color-accent-hover);
+      color: var(--color-accent-hover);
+    }
+  }
+
+  /* Smoked glass – same recipe as the hero bear */
+  .bs-glass {
+    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    border-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+    color: var(--color-text);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+      border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    }
+  }
+
+  .bs-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-accent);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-accent-hover);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+
+  /* --- 1. Roles --------------------------------------------------------------- */
+  .bs-roles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-6);
+    margin-block-start: var(--space-6);
+  }
+
+  .bs-role {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  /* The glass example needs a photo behind it */
+  .bs-role-photo {
+    position: relative;
+    padding: var(--space-4);
+    overflow: hidden;
+
+    /* Soft dark fade, so the small text stays readable on bright fog */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 85%, transparent), transparent 80%);
+    }
+
+    & .bs-btn,
+    & .bs-role-name,
+    & .small {
+      position: relative;
+      z-index: 1;
+      color: var(--color-text);
+    }
+  }
+
+  .bs-role-name {
+    margin-block-start: var(--space-2);
+    font-weight: 600;
+  }
+
+  /* --- 2. Banner on a photo --------------------------------------------------- */
+  .bs-banner {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: 24rem; /* 384px */
+    margin-block-start: var(--space-6);
+    overflow: hidden;
+  }
+
+  .bs-banner-image {
+    object-position: center 65%;
+  }
+
+  /* Soft dark fade at the bottom, so the text stays readable */
+  .bs-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 80%, transparent), transparent 70%);
+  }
+
+  .bs-banner-content {
+    position: relative;
+    z-index: 1;
+    padding: var(--space-8);
+  }
+
+  .bs-banner-title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    margin-block-end: var(--space-2);
+  }
+
+  .bs-banner-text {
+    margin-block-end: 0;
+    color: var(--color-text);
+  }
+
+  /* --- 3. Product card (smoked glass card) ------------------------------------ */
+  .bs-cards {
+    margin-block-start: var(--space-6);
+  }
+
+  .bs-card {
+    inline-size: min(100%, 20rem); /* 320px */
+    padding: var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent); /* sharp – card radius still open */
+    background-color: color-mix(in srgb, var(--color-surface) 70%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+  }
+
+  .bs-card-media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .bs-card-title {
+    margin-block: var(--space-4) var(--space-1);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-text);
+  }
+
+  /* --- 4. Plain dark section --------------------------------------------------- */
+  .bs-plain {
+    margin-block-start: var(--space-6);
+    padding: var(--space-12) var(--space-8);
+    background-color: var(--color-surface);
+  }
+
+  .bs-plain-text {
+    color: var(--color-text-secondary);
+  }
+
+  /* --- 5. Icon buttons ---------------------------------------------------------- */
+  .bs-icon {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--space-12); /* 48px */
+    block-size: var(--space-12);
+    padding: 0;
+    border: 1px solid var(--color-input-border);
+    border-radius: var(--radius-full);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      scale 0.1s ease;
+
+    & svg {
+      inline-size: var(--space-6);
+      block-size: var(--space-6);
+    }
+
+    &:hover {
+      background-color: var(--color-text);
+      color: var(--color-bg);
+    }
+
+    &:active {
+      scale: 0.97;
+    }
+  }
+
+  /* --- 6. Rules ----------------------------------------------------------------- */
+  .bs-rules {
+    display: grid;
+    gap: var(--space-2);
+    margin-block-start: var(--space-4);
+    padding-inline-start: 0;
+    list-style: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bs-btn,
+    .bs-icon {
+      transition: none;
+
+      &:active {
+        scale: 1;
+      }
+    }
+  }
+</style>

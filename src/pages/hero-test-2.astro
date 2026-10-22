@@ -5,8 +5,83 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import HeroSplit from "../components/HeroSplit.astro";
 import wild from "../assets/hero/hero2-wild.jpg";
 import anywhere from "../assets/hero/hero2-anywhere.jpg";
+
+// TEMPORARY bear style switch – one entry per button (id = link target)
+const versions = [
+  { id: "glass", label: "Glass – clear" },
+  { id: "glass-smoke", label: "Glass – smoked" },
+  { id: "glass-amber", label: "Glass – amber" },
+];
 ---
 
 <BaseLayout title="Hero test 2" noindex>
+  <!-- TEMPORARY style switch: the links below jump to these invisible markers
+       (#glass etc.). CSS sees which one is the "target" and sets the style. -->
+  {versions.map((v) => <span id={v.id} class="glow-marker"></span>)}
+
   <HeroSplit wildImage={wild} anywhereImage={anywhere} wildFocus="center 70%" anywhereFocus="center 60%" />
+
+  <nav class="container section glow-switch" aria-label="Bear style versions">
+    <a href="#">No glow</a>
+    {versions.map((v) => <a href={`#${v.id}`}>{v.label}</a>)}
+  </nav>
 </BaseLayout>
+
+<style is:global>
+  /* Glass (like Apple's "Liquid Glass"): the photo shows through the bear,
+     blurred; a light edge that fades along the outline; a thin light rim +
+     a soft dark shadow below, so it floats. Same base for all glass versions. */
+  :root:has(:is(#glass, #glass-smoke, #glass-amber):target) {
+    --bear-glass: block;
+    --bear-fill: color-mix(in srgb, var(--color-text) 8%, transparent);
+    --bear-stroke: url(#bear-edge);
+    --bear-glow: drop-shadow(0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent))
+      drop-shadow(0 12px 32px color-mix(in srgb, var(--color-bg) 60%, transparent));
+  }
+
+  /* Tints: the fill colour on top of the blurred photo is the "glass colour".
+     --glass-filter changes how bright/colourful the photo behind looks. */
+
+  /* Smoked: dark tinted glass, like sunglasses – the calmest one */
+  :root:has(#glass-smoke:target) {
+    --bear-fill: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    --glass-filter: blur(12px) saturate(1.2) brightness(0.9);
+  }
+
+  /* Amber: warm brown glass, like an old bottle (reserve colour Alpine Oak) */
+  :root:has(#glass-amber:target) {
+    --bear-fill: color-mix(in srgb, var(--color-alpine-oak) 35%, transparent);
+    --glass-filter: blur(12px) saturate(1.2) brightness(1.1);
+  }
+
+  /* Markers sit at the very top, so clicking a link scrolls to the top */
+  .glow-marker {
+    position: absolute;
+    inset-block-start: 0;
+  }
+
+  .glow-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      block-size: var(--space-12); /* 48px */
+      padding-inline: var(--space-6);
+      border: 1px solid var(--color-accent);
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+  }
+
+  /* The active version gets a filled button */
+  :root:not(:has(.glow-marker:target)) .glow-switch a[href="#"],
+  :root:has(#glass:target) .glow-switch a[href="#glass"],
+  :root:has(#glass-smoke:target) .glow-switch a[href="#glass-smoke"],
+  :root:has(#glass-amber:target) .glow-switch a[href="#glass-amber"] {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+</style>

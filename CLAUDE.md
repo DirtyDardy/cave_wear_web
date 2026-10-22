@@ -387,6 +387,10 @@ Hierarchy – **one primary per section**, quieter buttons around it:
   Decide later, once Home has more sections: final text (direction: "Discover the
   collection" → Products), exact position, and whether a short line goes with it.
   Must stay always visible – never hover-only (fails on touch screens).
+- **Photo credits** – for every stock photo on the site, note the source link (Unsplash/
+  Pexels page), photographer and licence, and show a credit (e.g. a short "Photos" line in the
+  Impressum or footer). Currently: `src/assets/hero/hero-wild.jpg` (forest, retouched by
+  Dardan – brand logo removed) and `hero-anywhere.jpg` (foggy alley). Links: ask Dardan.
 - **Safari (Mac) check of the Home hero** – Dardan: "doesn't look good on Safari" (22 Oct
   2026, live site). Seen in his screenshot: header (logo + nav) not visible at the top, hero
   taller than the window (live site did not have the 90% cap yet). Re-test on Safari after

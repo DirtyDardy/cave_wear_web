@@ -255,8 +255,11 @@ Hierarchy – **one primary per section**, quieter buttons around it:
   (nothing to blur – it just looks grey).
 - All buttons: 12px corners (`--radius-button`), sentence case, 16px medium, 48px high.
   Compact: 40px high, 14px. Pressed: shrinks to 97% (off with `prefers-reduced-motion`).
+- **Code:** shared classes in `src/styles/global.css` (section 5): `.button` + one role
+  (`.button-primary`, `.button-glass`, `.button-outline`), `.button-compact`, `.text-link`,
+  `.icon-button`. Used on Home (CTA) and in the footer (Sign up, compact). Never restyle
+  buttons per component – change the shared classes.
 - Reference: "Button system" section on `/styleguide` (`src/components/ButtonSystem.astro`).
-  Not yet moved into `global.css` / used on the real pages – that's the next step.
 ### Above the fold (rule, 22 Oct 2026)
 - The above-the-fold section of a page (e.g. the Home hero) is **never taller than 90% of the
   viewport height** – it is a maximum, not a fixed size. Home hero: 720px, capped with
@@ -388,11 +391,6 @@ Hierarchy – **one primary per section**, quieter buttons around it:
   2026, live site). Seen in his screenshot: header (logo + nav) not visible at the top, hero
   taller than the window (live site did not have the 90% cap yet). Re-test on Safari after
   the next deploy, ask Dardan what exactly looks wrong, then fix.
-- **Button design** (all buttons site-wide): Dardan wants it closer to Apple's UI (Linro
-  works on MacBooks). **Decided: 12px corners + the hierarchy in section 8 "Buttons".**
-  Still to do: move the button styles into `global.css` and use them on the real pages
-  (Home CTA, footer Sign up, later Products/Reserve); then remove the old uppercase
-  "Buttons – proposal" and the proposals section from the style guide.
 
 ## 12. Nice to have (only when there is time – not a priority)
 

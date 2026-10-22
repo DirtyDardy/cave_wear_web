@@ -2,7 +2,6 @@
 // STYLE GUIDE – design test only, used on /styleguide.
 // All cave bear text and all images in here are PLACEHOLDERS.
 import ButtonSystem from "./ButtonSystem.astro";
-import ButtonProposals from "./ButtonProposals.astro";
 
 // Colour swatches – name, CSS variable, hex, role
 const colours = [
@@ -139,11 +138,11 @@ const typeRows = [
   {
     name: "Button text – Geist Medium 500",
     tag: "span", className: "sample-button-text",
-    sizes: "14/24px (all screens) · button 48px high",
-    extra: "uppercase · letter-spacing 0.14em",
-    token: ".button (proposal – this page only)",
-    css: "font-size: var(--text-small);\nfont-weight: 500;\nletter-spacing: var(--tracking-wide);",
-    used: "Primary and secondary buttons.",
+    sizes: "16/24px · button 48px high (compact: 14/20px, 40px high)",
+    extra: "sentence case · no extra letter-spacing",
+    token: ".button (global.css)",
+    css: "font-size: 1rem;\nfont-weight: 500;\nline-height: var(--space-6);",
+    used: "Every button. See \"Button system\" below.",
     text: "Read more",
   },
 ];
@@ -329,7 +328,7 @@ const radii = [
 
     <div class="button-row">
       <button type="button" class="button button-primary">Read more</button>
-      <button type="button" class="button button-secondary">See the caves</button>
+      <button type="button" class="button button-outline">See the caves</button>
     </div>
   </section>
 
@@ -359,20 +358,10 @@ const radii = [
       <a href="https://www.donsmaps.com/bear.html">donsmaps.com</a>.
     </p>
     <p class="small">Hover: Amber Gold. Keyboard focus: 2px Wild Honey outline.</p>
-
-    <h3 class="sg-subheading">Buttons – proposal</h3>
-    <p class="small">48px high · label text style · 12px corners (<code>--radius-button</code>, decided). Colours and text style still open.</p>
-    <div class="button-row">
-      <button type="button" class="button button-primary">Primary button</button>
-      <button type="button" class="button button-secondary">Secondary button</button>
-    </div>
   </section>
 
-  <!-- ============ BUTTON SYSTEM (recommended) ============ -->
+  <!-- ============ BUTTON SYSTEM ============ -->
   <ButtonSystem />
-
-  <!-- ============ BUTTON PROPOSALS (Apple-inspired) ============ -->
-  <ButtonProposals />
 
 
 <script src="../scripts/styleguide-live-sizes.js"></script>
@@ -500,11 +489,9 @@ const radii = [
 
   .sample-button-text {
     display: inline-block;
-    font-size: var(--text-small);
+    font-size: 1rem;
     font-weight: 500;
     line-height: var(--space-6);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
   }
 
   .rules {
@@ -637,58 +624,11 @@ const radii = [
     max-inline-size: 24rem;
   }
 
-  /* ---------- Buttons (proposal) ---------- */
+  /* Row of buttons – the buttons themselves come from global.css */
   .button-row {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
     margin-block-start: var(--space-8);
-  }
-
-  .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    block-size: var(--space-12); /* 48px */
-    padding-inline: var(--space-6);
-    border: 1px solid transparent;
-    border-radius: var(--radius-button); /* 12px */
-    font: inherit;
-    font-size: var(--text-small);
-    font-weight: 500;
-    line-height: var(--space-6);
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      border-color 0.2s ease,
-      color 0.2s ease;
-  }
-
-  .button-primary {
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
-
-    &:hover {
-      background-color: var(--color-accent-hover);
-    }
-  }
-
-  .button-secondary {
-    background-color: transparent;
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-
-    &:hover {
-      border-color: var(--color-accent-hover);
-      color: var(--color-accent-hover);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .button {
-      transition: none;
-    }
   }
 </style>

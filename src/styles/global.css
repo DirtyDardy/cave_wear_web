@@ -337,3 +337,146 @@ p a {
     outline-color: var(--color-text);
   }
 }
+
+/* 5. Buttons (decided 22 Oct 2026 – see CLAUDE.md, section 8 "Buttons")
+   --------------------------------------------------------------------------
+   Combine the base class with ONE role, e.g. class="button button-primary".
+   - .button-primary  Wild Honey filled – the one main action per section
+   - .button-glass    smoked glass – secondary on photos
+   - .button-outline  Wild Honey outline – secondary on dark backgrounds
+   - .button-compact  add for the small 40px size
+   - .text-link       tertiary: "Learn more ›"
+   - .icon-button     round, icon only (always with aria-label) */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  block-size: var(--space-12); /* 48px */
+  padding-inline: var(--space-6); /* 24px */
+  border: 1px solid transparent;
+  border-radius: var(--radius-button); /* 12px */
+  font: inherit;
+  font-size: 1rem; /* always 16px, sentence case – body text grows to 18px, buttons don't */
+  font-weight: 500;
+  line-height: var(--space-6);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    scale 0.1s ease;
+
+  /* Pressed: shrinks a tiny bit, like a real button */
+  &:active {
+    scale: 0.97;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    scale: 1;
+  }
+}
+
+.button-compact {
+  block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+  padding-inline: var(--space-4); /* 16px */
+  font-size: var(--text-small); /* 14px */
+  line-height: var(--leading-small);
+}
+
+.button-primary {
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+  }
+}
+
+.button-outline {
+  background-color: transparent;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-accent-hover);
+    color: var(--color-accent-hover);
+  }
+}
+
+/* Same smoked glass as the hero bear: blur what's behind, dark tint, light edge */
+.button-glass {
+  background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+  border-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+  color: var(--color-text);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
+  backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+
+  &:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+    border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+  }
+}
+
+/* Tertiary: text link with a small arrow */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-accent);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+/* Round icon-only button (close, bag, menu) */
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--space-12); /* 48px */
+  block-size: var(--space-12);
+  padding: 0;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--radius-full); /* a real circle */
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    scale 0.1s ease;
+
+  & svg {
+    inline-size: var(--space-6); /* 24px icon */
+    block-size: var(--space-6);
+  }
+
+  &:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  &:active {
+    scale: 0.97;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .icon-button {
+    transition: none;
+
+    &:active {
+      scale: 1;
+    }
+  }
+}

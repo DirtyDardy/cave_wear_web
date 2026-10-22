@@ -75,7 +75,7 @@ const youtubeUrl = "";
           placeholder="you@example.com"
           aria-describedby="newsletter-hint"
         />
-        <button type="submit" class="newsletter-button">Sign up</button>
+        <button type="submit" class="button button-primary button-compact newsletter-button">Sign up</button>
       </div>
       <p id="newsletter-hint" class="newsletter-hint">
         We'll only email you when there's real news – the launch, a vote on the next product
@@ -200,21 +200,10 @@ const youtubeUrl = "";
     gap: var(--space-2);
   }
 
-  .newsletter-input,
-  .newsletter-button {
-    block-size: 2.5rem; /* 40px = 10 × 4 */
-    font: inherit;
-  }
-
   .newsletter-input {
+    block-size: 2.5rem; /* 40px = 10 × 4, same as the compact button next to it */
     border-radius: var(--radius-sm); /* 4px – inputs */
-  }
-
-  .newsletter-button {
-    border-radius: var(--radius-button); /* 12px – every button */
-  }
-
-  .newsletter-input {
+    font: inherit;
     flex: 1;
     min-inline-size: 0;
     padding-inline: var(--space-3);
@@ -231,23 +220,10 @@ const youtubeUrl = "";
     }
   }
 
-  .newsletter-button {
-    padding-inline: var(--space-4);
-    border: 0;
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: var(--color-accent-hover);
-    }
-
-    &:disabled {
-      cursor: wait;
-      opacity: 0.7;
-    }
+  /* Look comes from the shared .button classes (global.css).
+     Only here: while the form is sending, the button is disabled → "wait" cursor */
+  .newsletter-button:disabled {
+    cursor: wait;
   }
 
   .newsletter-hint {
@@ -327,7 +303,6 @@ const youtubeUrl = "";
   @media (prefers-reduced-motion: reduce) {
     .footer-logo,
     .icon-link,
-    .newsletter-button,
     .legal a {
       transition: none;
     }

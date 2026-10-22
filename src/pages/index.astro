@@ -6,11 +6,11 @@ import HeroSplit from "../components/HeroSplit.astro";
 <BaseLayout title="Home">
   <HeroSplit wildFocus="center 70%" anywhereFocus="center 60%" />
 
-  <!-- PLACEHOLDER call to action: text, target and button design still open
+  <!-- PLACEHOLDER call to action: final text and position still open
        (see CLAUDE.md, section 11). Sits right under the hero, so it is always
        visible on load – the hero is never taller than 90% of the screen. -->
   <div class="container hero-cta">
-    <a href="/products" class="cta-button">Call to action</a>
+    <a href="/products" class="button button-primary">Call to action</a>
   </div>
 
   <!-- TEMPORARY: way into the style guide while the site is being built -->
@@ -27,27 +27,6 @@ import HeroSplit from "../components/HeroSplit.astro";
     padding-block-start: var(--space-8); /* 32px */
   }
 
-  /* PLACEHOLDER look – the style guide's primary button until the button design is decided */
-  .cta-button {
-    display: inline-flex;
-    align-items: center;
-    block-size: var(--space-12); /* 48px */
-    padding-inline: var(--space-6);
-    border-radius: var(--radius-button); /* 12px */
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
-    font-size: var(--text-small);
-    font-weight: 500;
-    letter-spacing: var(--tracking-wide);
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: var(--color-accent-hover);
-    }
-  }
-
   /* TEMPORARY link – outlined, so it doesn't look like a final design */
   .test-link {
     display: inline-flex;
@@ -61,12 +40,6 @@ import HeroSplit from "../components/HeroSplit.astro";
     &:hover {
       border-color: var(--color-accent-hover);
       color: var(--color-accent-hover);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cta-button {
-      transition: none;
     }
   }
 </style>

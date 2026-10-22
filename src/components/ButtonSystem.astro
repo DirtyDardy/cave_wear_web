@@ -1,7 +1,7 @@
 ---
 // BUTTON SYSTEM – decided 22 Oct 2026 (see CLAUDE.md, section 8 "Buttons").
 // Shows the button hierarchy "in action": on a photo, in a product card and in
-// a plain dark section. Not yet moved into global.css / the real pages.
+// a plain dark section. The buttons use the shared classes from global.css.
 import { Image } from "astro:assets";
 import cityPhoto from "../assets/hero/hero-anywhere.jpg";
 import forestPhoto from "../assets/hero/hero-wild.jpg";
@@ -20,23 +20,23 @@ import BagIcon from "../assets/icons/backpack.svg";
   <h3 class="bs-heading">1 · The roles</h3>
   <div class="bs-roles">
     <div class="bs-role">
-      <button type="button" class="bs-btn bs-primary">Discover the collection</button>
+      <button type="button" class="button button-primary">Discover the collection</button>
       <p class="bs-role-name">Primary</p>
       <p class="small">Wild Honey, filled. The one main action – max. one per section.</p>
     </div>
     <div class="bs-role bs-role-photo">
       <Image src={cityPhoto} alt="" class="bs-fill" widths={[480, 960]} sizes="320px" />
-      <button type="button" class="bs-btn bs-glass">Our story</button>
+      <button type="button" class="button button-glass">Our story</button>
       <p class="bs-role-name">Secondary on photos</p>
       <p class="small">Smoked glass, Egret text. Wherever a button sits on an image.</p>
     </div>
     <div class="bs-role">
-      <button type="button" class="bs-btn bs-outline">Size guide</button>
+      <button type="button" class="button button-outline">Size guide</button>
       <p class="bs-role-name">Secondary on dark</p>
       <p class="small">Wild Honey outline. The alternative next to a primary.</p>
     </div>
     <div class="bs-role">
-      <a href="/brand" class="bs-link">Learn more <span aria-hidden="true">›</span></a>
+      <a href="/brand" class="text-link">Learn more <span aria-hidden="true">›</span></a>
       <p class="bs-role-name">Tertiary</p>
       <p class="small">Text link with arrow. Extra info, "see all".</p>
     </div>
@@ -51,8 +51,8 @@ import BagIcon from "../assets/icons/backpack.svg";
       <p class="h2 bs-banner-title">Built for the wild</p>
       <p class="bs-banner-text">Gear for the unpredictable.</p>
       <div class="bs-row">
-        <button type="button" class="bs-btn bs-primary">Discover the collection</button>
-        <button type="button" class="bs-btn bs-glass">Our story</button>
+        <button type="button" class="button button-primary">Discover the collection</button>
+        <button type="button" class="button button-glass">Our story</button>
       </div>
     </div>
   </div>
@@ -71,8 +71,8 @@ import BagIcon from "../assets/icons/backpack.svg";
       <h4 class="bs-card-title">Product name</h4>
       <p class="small">PLACEHOLDER · technique · price</p>
       <div class="bs-row bs-row-compact">
-        <button type="button" class="bs-btn bs-primary bs-compact">Add to bag</button>
-        <button type="button" class="bs-btn bs-outline bs-compact">Size guide</button>
+        <button type="button" class="button button-primary button-compact">Add to bag</button>
+        <button type="button" class="button button-outline button-compact">Size guide</button>
       </div>
     </article>
   </div>
@@ -85,8 +85,8 @@ import BagIcon from "../assets/icons/backpack.svg";
     <p class="h2">Not released yet</p>
     <p class="bs-plain-text">Real news only – the launch, a vote on the next product, a big announcement.</p>
     <div class="bs-row">
-      <button type="button" class="bs-btn bs-primary">Sign up for the newsletter</button>
-      <a href="/brand" class="bs-link">Our story <span aria-hidden="true">›</span></a>
+      <button type="button" class="button button-primary">Sign up for the newsletter</button>
+      <a href="/brand" class="text-link">Our story <span aria-hidden="true">›</span></a>
     </div>
   </div>
 
@@ -94,8 +94,8 @@ import BagIcon from "../assets/icons/backpack.svg";
   <h3 class="bs-heading">5 · Icon buttons</h3>
   <p class="small">Round (a real circle), neutral on dark. For close, bag, menu.</p>
   <div class="bs-row">
-    <button type="button" class="bs-icon" aria-label="Close"><CloseIcon aria-hidden="true" /></button>
-    <button type="button" class="bs-icon" aria-label="Shopping bag"><BagIcon aria-hidden="true" /></button>
+    <button type="button" class="icon-button" aria-label="Close"><CloseIcon aria-hidden="true" /></button>
+    <button type="button" class="icon-button" aria-label="Shopping bag"><BagIcon aria-hidden="true" /></button>
   </div>
 
   <!-- 6. RULES ------------------------------------------------------------------>
@@ -140,88 +140,6 @@ import BagIcon from "../assets/icons/backpack.svg";
     object-fit: cover;
   }
 
-  /* --- Buttons (12px corners, sentence case) -------------------------------- */
-  .bs-btn {
-    position: relative; /* stays above photos */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    block-size: var(--space-12); /* 48px */
-    padding-inline: var(--space-6);
-    border: 1px solid transparent;
-    border-radius: var(--radius-button);
-    font: inherit;
-    font-size: var(--text-body);
-    font-weight: 500;
-    line-height: var(--space-6);
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      border-color 0.2s ease,
-      color 0.2s ease,
-      scale 0.1s ease;
-
-    &:active {
-      scale: 0.97;
-    }
-  }
-
-  .bs-compact {
-    block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
-    padding-inline: var(--space-4);
-    font-size: var(--text-small);
-    line-height: var(--leading-small);
-  }
-
-  .bs-primary {
-    background-color: var(--color-accent);
-    color: var(--color-on-accent);
-
-    &:hover {
-      background-color: var(--color-accent-hover);
-    }
-  }
-
-  .bs-outline {
-    background-color: transparent;
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-
-    &:hover {
-      border-color: var(--color-accent-hover);
-      color: var(--color-accent-hover);
-    }
-  }
-
-  /* Smoked glass – same recipe as the hero bear */
-  .bs-glass {
-    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
-    border-color: color-mix(in srgb, var(--color-text) 25%, transparent);
-    color: var(--color-text);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
-    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
-
-    &:hover {
-      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
-      border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
-    }
-  }
-
-  .bs-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    color: var(--color-accent);
-    font-weight: 500;
-    text-decoration: none;
-
-    &:hover {
-      color: var(--color-accent-hover);
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-  }
-
   /* --- 1. Roles --------------------------------------------------------------- */
   .bs-roles {
     display: grid;
@@ -251,7 +169,7 @@ import BagIcon from "../assets/icons/backpack.svg";
       background: linear-gradient(to top, color-mix(in srgb, var(--color-bg) 85%, transparent), transparent 80%);
     }
 
-    & .bs-btn,
+    & .button,
     & .bs-role-name,
     & .small {
       position: relative;
@@ -344,38 +262,6 @@ import BagIcon from "../assets/icons/backpack.svg";
     color: var(--color-text-secondary);
   }
 
-  /* --- 5. Icon buttons ---------------------------------------------------------- */
-  .bs-icon {
-    display: inline-grid;
-    place-items: center;
-    inline-size: var(--space-12); /* 48px */
-    block-size: var(--space-12);
-    padding: 0;
-    border: 1px solid var(--color-input-border);
-    border-radius: var(--radius-full);
-    background-color: var(--color-surface);
-    color: var(--color-text);
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      color 0.2s ease,
-      scale 0.1s ease;
-
-    & svg {
-      inline-size: var(--space-6);
-      block-size: var(--space-6);
-    }
-
-    &:hover {
-      background-color: var(--color-text);
-      color: var(--color-bg);
-    }
-
-    &:active {
-      scale: 0.97;
-    }
-  }
-
   /* --- 6. Rules ----------------------------------------------------------------- */
   .bs-rules {
     display: grid;
@@ -385,14 +271,4 @@ import BagIcon from "../assets/icons/backpack.svg";
     list-style: none;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .bs-btn,
-    .bs-icon {
-      transition: none;
-
-      &:active {
-        scale: 1;
-      }
-    }
-  }
 </style>

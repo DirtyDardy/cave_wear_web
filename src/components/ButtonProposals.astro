@@ -1,0 +1,313 @@
+---
+// BUTTON PROPOSALS – Apple-inspired button types to compare (style guide only).
+// Nothing here is used on the site yet. Dardan picks, then the chosen style
+// moves into global.css and replaces the old ".button" proposal.
+import { Image } from "astro:assets";
+import photo from "../assets/hero/hero-anywhere.jpg";
+import BagIcon from "../assets/icons/backpack.svg";
+import CloseIcon from "../assets/icons/close.svg";
+---
+
+<section class="container section bp">
+  <h2>Button proposals – Apple-inspired</h2>
+  <p class="lead">
+    Five button types to compare. Same idea as Apple: calm, sentence case, one filled main
+    button and quieter options next to it. Nothing here is used on the site yet.
+  </p>
+
+  <!-- A: PILL ------------------------------------------------------------------>
+  <h3 class="bp-heading">A · Pill</h3>
+  <p class="small">
+    Fully rounded ends (<code>--radius-full</code>) · 48px high · 16px medium, sentence case.
+    The most "Apple" look.
+  </p>
+  <div class="bp-row">
+    <button type="button" class="bp-btn bp-primary bp-pill">Discover the collection</button>
+    <button type="button" class="bp-btn bp-secondary bp-pill">Our story</button>
+    <a href="/products" class="bp-link">Learn more <span aria-hidden="true">›</span></a>
+  </div>
+
+  <!-- B: SOFT CORNERS --------------------------------------------------------->
+  <h3 class="bp-heading">B · Soft corners</h3>
+  <p class="small">
+    Same as A, but 8px corners (<code>--radius-md</code>, like the Bag button in the header).
+    Less round, a bit more "rugged".
+  </p>
+  <div class="bp-row">
+    <button type="button" class="bp-btn bp-primary bp-soft">Discover the collection</button>
+    <button type="button" class="bp-btn bp-secondary bp-soft">Our story</button>
+    <a href="/products" class="bp-link">Learn more <span aria-hidden="true">›</span></a>
+  </div>
+
+  <!-- C: GLASS ---------------------------------------------------------------->
+  <h3 class="bp-heading">C · Smoked glass</h3>
+  <p class="small">
+    The same smoked glass as the hero bear – for buttons that sit on photos. Shown here on
+    the hero's city photo, next to a filled pill.
+  </p>
+  <div class="bp-photo">
+    <Image src={photo} alt="" class="bp-photo-image" widths={[640, 1024]} sizes="(min-width: 1024px) 1024px, 100vw" />
+    <div class="bp-row bp-photo-row">
+      <button type="button" class="bp-btn bp-primary bp-pill">Discover the collection</button>
+      <button type="button" class="bp-btn bp-glass bp-pill">Our story</button>
+    </div>
+  </div>
+
+  <!-- D: COMPACT -------------------------------------------------------------->
+  <h3 class="bp-heading">D · Compact</h3>
+  <p class="small">
+    40px high, 14px text – for tight places like product cards ("Add to bag") or filters.
+  </p>
+  <div class="bp-row">
+    <button type="button" class="bp-btn bp-primary bp-pill bp-compact">Add to bag</button>
+    <button type="button" class="bp-btn bp-secondary bp-pill bp-compact">Size guide</button>
+    <button type="button" class="bp-btn bp-primary bp-soft bp-compact">Add to bag</button>
+    <button type="button" class="bp-btn bp-secondary bp-soft bp-compact">Size guide</button>
+  </div>
+
+  <!-- E: ICON BUTTONS --------------------------------------------------------->
+  <h3 class="bp-heading">E · Icon buttons</h3>
+  <p class="small">
+    Round, 48px, icon only (always with a label for screen readers) – e.g. close, bag.
+  </p>
+  <div class="bp-row">
+    <button type="button" class="bp-icon" aria-label="Close"><CloseIcon aria-hidden="true" /></button>
+    <button type="button" class="bp-icon" aria-label="Shopping bag"><BagIcon aria-hidden="true" /></button>
+    <button type="button" class="bp-icon bp-icon-accent" aria-label="Shopping bag"><BagIcon aria-hidden="true" /></button>
+  </div>
+
+  <!-- STATES ------------------------------------------------------------------>
+  <h3 class="bp-heading">States (shown with A)</h3>
+  <p class="small">
+    Hover: Amber Gold. Pressed: shrinks a tiny bit (like on a Mac). Keyboard focus: Wild Honey
+    ring. Disabled: dimmed, can't be clicked. Hover and press are only switched on here to show them.
+  </p>
+  <div class="bp-row">
+    <span class="bp-state"><button type="button" class="bp-btn bp-primary bp-pill">Normal</button><span class="small">Normal</span></span>
+    <span class="bp-state"><button type="button" class="bp-btn bp-primary bp-pill is-hover">Hover</button><span class="small">Hover</span></span>
+    <span class="bp-state"><button type="button" class="bp-btn bp-primary bp-pill is-pressed">Pressed</button><span class="small">Pressed</span></span>
+    <span class="bp-state"><button type="button" class="bp-btn bp-primary bp-pill is-focus">Focus</button><span class="small">Keyboard focus</span></span>
+    <span class="bp-state"><button type="button" class="bp-btn bp-primary bp-pill" disabled>Disabled</button><span class="small">Disabled</span></span>
+  </div>
+</section>
+
+<style>
+  .bp {
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .bp-heading {
+    margin-block-start: var(--space-12);
+  }
+
+  code {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: var(--text-small);
+  }
+
+  .bp-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    margin-block-start: var(--space-6);
+  }
+
+  /* --- Shared button base ---------------------------------------------------
+     Sentence case, medium weight, no wide letter spacing – calmer than the
+     old uppercase proposal. */
+  .bp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--space-12); /* 48px */
+    padding-inline: var(--space-6); /* 24px */
+    border: 1px solid transparent;
+    font: inherit;
+    font-size: var(--text-body); /* 16px */
+    font-weight: 500;
+    line-height: var(--space-6);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      scale 0.1s ease;
+
+    /* Pressed: shrinks to 97% – feels like a real button */
+    &:active,
+    &.is-pressed {
+      scale: 0.97;
+    }
+
+    &:disabled {
+      background-color: var(--color-line);
+      border-color: transparent;
+      color: var(--color-text-quiet);
+      cursor: not-allowed;
+      scale: 1;
+    }
+  }
+
+  /* Shapes */
+  .bp-pill {
+    border-radius: var(--radius-full);
+  }
+
+  .bp-soft {
+    border-radius: var(--radius-md);
+  }
+
+  /* Filled main button – the one thing to click */
+  .bp-primary {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+
+    &:hover:not(:disabled),
+    &.is-hover {
+      background-color: var(--color-accent-hover);
+    }
+  }
+
+  /* Outline – the quieter second option */
+  .bp-secondary {
+    background-color: transparent;
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+
+    &:hover:not(:disabled) {
+      border-color: var(--color-accent-hover);
+      color: var(--color-accent-hover);
+    }
+  }
+
+  /* Smoked glass – same recipe as the hero bear: blur what's behind,
+     dark tint on top, thin light edge */
+  .bp-glass {
+    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    border-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+    color: var(--color-text);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari needs the -webkit- name */
+    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+      border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    }
+  }
+
+  /* Compact size */
+  .bp-compact {
+    block-size: calc(var(--space-8) + var(--space-2)); /* 32 + 8 = 40px */
+    padding-inline: var(--space-4); /* 16px */
+    font-size: var(--text-small); /* 14px */
+    line-height: var(--leading-small);
+  }
+
+  /* Static focus ring, only to show it – the real one comes from :focus-visible */
+  .is-focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Text link with a small arrow – Apple's "Learn more ›" */
+  .bp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-accent);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-accent-hover);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+
+  /* Photo behind the glass example */
+  .bp-photo {
+    position: relative;
+    display: grid;
+    place-items: center;
+    block-size: 16rem; /* 256px */
+    margin-block-start: var(--space-6);
+    overflow: hidden;
+  }
+
+  .bp-photo-image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .bp-photo-row {
+    position: relative; /* sits on top of the photo */
+    margin-block-start: 0;
+  }
+
+  /* Round icon buttons */
+  .bp-icon {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--space-12); /* 48px */
+    block-size: var(--space-12);
+    padding: 0;
+    border: 1px solid var(--color-input-border);
+    border-radius: var(--radius-full);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      scale 0.1s ease;
+
+    & svg {
+      inline-size: var(--space-6); /* 24px icon */
+      block-size: var(--space-6);
+    }
+
+    &:hover {
+      background-color: var(--color-text);
+      color: var(--color-bg);
+    }
+
+    &:active {
+      scale: 0.97;
+    }
+  }
+
+  .bp-icon-accent {
+    border-color: transparent;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+
+    &:hover {
+      background-color: var(--color-accent-hover);
+      color: var(--color-on-accent);
+    }
+  }
+
+  /* State examples: button with its name underneath */
+  .bp-state {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bp-btn,
+    .bp-icon {
+      transition: none;
+
+      &:active {
+        scale: 1;
+      }
+    }
+  }
+</style>

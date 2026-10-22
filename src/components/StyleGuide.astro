@@ -1,15 +1,7 @@
 ---
-// STYLE GUIDE – design test only. Used on /styleguide and (temporarily) on Home.
+// STYLE GUIDE – design test only, used on /styleguide.
 // All cave bear text and all images in here are PLACEHOLDERS.
-
-interface Props {
-  // On its own page the title is the page's H1. On Home the hero already has
-  // the H1, so the title becomes an H2 that only LOOKS like an H1.
-  isPage?: boolean;
-}
-
-const { isPage = false } = Astro.props;
-const TitleTag = isPage ? "h1" : "h2";
+import ButtonProposals from "./ButtonProposals.astro";
 
 // Colour swatches – name, CSS variable, hex, role
 const colours = [
@@ -189,7 +181,7 @@ const radii = [
   <!-- PLACEHOLDER -->
   <section class="container section">
     <p class="label">Style guide · Cave Wear</p>
-    <TitleTag class="h1">The Cave Bear</TitleTag>
+    <h1>The Cave Bear</h1>
     <p class="lead">
       Cave bears were comparable in size to, or larger than, the largest modern-day bears.
     </p>
@@ -373,6 +365,9 @@ const radii = [
       <button type="button" class="button button-secondary">Secondary button</button>
     </div>
   </section>
+
+  <!-- ============ BUTTON PROPOSALS (Apple-inspired) ============ -->
+  <ButtonProposals />
 
 
 <script src="../scripts/styleguide-live-sizes.js"></script>

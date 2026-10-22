@@ -74,7 +74,9 @@ behaviour in `scripts`, content in `content`. Keep content in HTML/Markdown, not
 on top. Top: small logo → Home · "Built for the wild. Made for anywhere." · "Not released
 yet – follow the journey." · Instagram, Threads, YouTube (link still to add in
 `Footer.astro` → `youtubeUrl`) · newsletter sign-up (email only, Netlify Forms via fetch,
-`src/scripts/newsletter.js`, note "We'll only email you if Cave Wear really launches").
+`src/scripts/newsletter.js`; label "Sign up for the newsletter", note "We'll only email you
+when there's real news – the launch, a vote on the next product or a big announcement. No
+spam." – the Privacy Policy states the same purpose; keep both in sync).
 Bottom (hairline, compact): © year Cave Wear · A concept brand by Dardan Ademi ·
 Impressum · Privacy Policy. No email icon, no pop-up, no bearbiology.org link (moves to
 the Brand page). **Dark mode only – no light mode.** (No Kickstarter.)
@@ -234,6 +236,13 @@ Usage rules (all checked against WCAG):
 - **On Irr Olive areas:** text in Egret only (Weathered Bone fails there).
 - **Form fields** on Dark Obsidian or Obsidian, not on Charcoal.
 - One accent only – Wild Honey marks everything clickable.
+### Above the fold (rule, 22 Oct 2026)
+- The above-the-fold section of a page (e.g. the Home hero) is **never taller than 90% of the
+  viewport height** – it is a maximum, not a fixed size. Home hero: 720px, capped with
+  `min(45rem, 90svh)`, so on short screens the next section still peeks in at the bottom.
+- Everything inside the hero (e.g. the bear) scales with its height, so the layout stays the
+  same when the cap kicks in.
+
 ### Spacing – 4-point grid
 - Every size and space is a **multiple of 4px**: margin, padding, gap, component heights/widths
   (buttons, inputs, icons), and **line heights**. Use only the `--space-*` scale (in rem,
@@ -288,9 +297,11 @@ Usage rules (all checked against WCAG):
 - Licence: Geist and Barlow Condensed are both free (SIL Open Font License) – fine for launch.
 
 ### Logo
-- Files (cleaned SVG, Corel leftovers removed): `bear-dark/light`, `logo-stacked-dark/light`,
-  `logo-horizontal-dark/light`, and `logo-horizontal.svg` (uses `currentColor` – inline it in
-  the header and colour it via CSS).
+- Files in the project (only what is used): `src/assets/logo-horizontal.svg` (uses
+  `currentColor` – inlined in header + footer, coloured via CSS) and `public/logo/bear-light.svg`
+  (the hero's glass mask). The other cleaned versions (`bear-dark`, `logo-stacked-dark/light`,
+  `logo-horizontal-dark/light`) were removed on 22 Oct 2026 because nothing used them –
+  get them back from Git history or Dardan's design folder when needed.
 - The two-tone bear's head (Moule `#382D2B`) has only 1.5:1 contrast on Dark Obsidian.
   On the dark site use the single-colour versions; two-tone only on cream or at large size.
 - Favicon: done – set in `public/` (`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`,
@@ -343,6 +354,18 @@ Usage rules (all checked against WCAG):
 - Custom domain (planned: `cavewear.de` + mailbox, e.g. at all-inkl) – connect to Netlify
   via DNS, then form notifications to the new address.
 - Final home page concept after prototyping.
+- **Home call to action** (placeholder since 22 Oct 2026): a button labelled "Call to action"
+  sits centred right under the hero (`src/pages/index.astro`, links to `/products`).
+  Decide later, once Home has more sections: final text (direction: "Discover the
+  collection" → Products), exact position, and whether a short line goes with it.
+  Must stay always visible – never hover-only (fails on touch screens).
+- **Safari (Mac) check of the Home hero** – Dardan: "doesn't look good on Safari" (22 Oct
+  2026, live site). Seen in his screenshot: header (logo + nav) not visible at the top, hero
+  taller than the window (live site did not have the 90% cap yet). Re-test on Safari after
+  the next deploy, ask Dardan what exactly looks wrong, then fix.
+- **Button design** (all buttons site-wide): Dardan wants it closer to Apple's UI (Linro
+  works on MacBooks). Not decided yet – the placeholder uses the style guide's primary
+  button. Decide together with the CTA; any rounding needs Dardan's OK (corner rules).
 
 ## 12. Nice to have (only when there is time – not a priority)
 

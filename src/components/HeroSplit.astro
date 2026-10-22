@@ -81,7 +81,10 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
   .hero-split {
     /* All sizes are worked out from the hero height, so the photo cut
        always lines up with the cut in the bear */
-    --hero-h: 45rem; /* 720px */
+    /* 720px, but never more than 90% of the screen height (rule, see CLAUDE.md).
+       min() takes the smaller of the two values. svh = "small viewport height":
+       stays steady on phones when the browser bar slides in and out. */
+    --hero-h: min(45rem, 90svh);
     --bear-h: calc(var(--hero-h) * 0.5); /* bear = 50% of the hero height */
     --bear-w: calc(var(--bear-h) * 1.794); /* width/height of the bear logo */
     /* Middle of the bear = middle of the part you see below the header */
@@ -255,7 +258,7 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
      The space above comes from the headline's own 24px margin. */
   .copy-text {
     max-inline-size: 26ch;
-    color: var(--color-text-secondary);
+    color: var(--color-text-quiet); /* Muted Stone – it always sits on the dark side */
   }
 
   /* --- The two states ---------------------------------------------------------

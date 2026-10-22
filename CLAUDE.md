@@ -235,7 +235,28 @@ Usage rules (all checked against WCAG):
 - **Status messages:** colour only on the icon / left border; the message text is Egret.
 - **On Irr Olive areas:** text in Egret only (Weathered Bone fails there).
 - **Form fields** on Dark Obsidian or Obsidian, not on Charcoal.
-- One accent only – Wild Honey marks everything clickable.
+- One accent only – **Wild Honey marks the main action and links** (primary buttons, outline
+  buttons, text links). Smoked-glass buttons (on photos) use Egret text – they are clearly
+  buttons through their shape and light edge. (Changed 22 Oct 2026, was: "Wild Honey marks
+  everything clickable".)
+
+### Buttons (decided 22 Oct 2026)
+Hierarchy – **one primary per section**, quieter buttons around it:
+
+| Role | Look | When |
+|---|---|---|
+| **Primary** | Wild Honey filled, Dark Obsidian text, hover Amber Gold | The one main action: "Discover the collection", "Add to bag", "Reserve", "Sign up" |
+| **Secondary on photos** | Smoked glass (same recipe as the hero bear), Egret text, light edge | Any button that sits on an image: hero, banners, product photos |
+| **Secondary on dark** | Wild Honey outline, transparent | The alternative next to a primary on plain dark backgrounds, e.g. "Size guide" |
+| **Tertiary** | Text link with arrow, e.g. "Learn more ›" | Extra info, "Our story", "See all" |
+| **Icon button** | Round (real circle), neutral surface + Flint border | Close, bag, menu – always with `aria-label` |
+
+- Never an outline button on a photo (it gets lost); never glass on a flat dark background
+  (nothing to blur – it just looks grey).
+- All buttons: 12px corners (`--radius-button`), sentence case, 16px medium, 48px high.
+  Compact: 40px high, 14px. Pressed: shrinks to 97% (off with `prefers-reduced-motion`).
+- Reference: "Button system" section on `/styleguide` (`src/components/ButtonSystem.astro`).
+  Not yet moved into `global.css` / used on the real pages – that's the next step.
 ### Above the fold (rule, 22 Oct 2026)
 - The above-the-fold section of a page (e.g. the Home hero) is **never taller than 90% of the
   viewport height** – it is a maximum, not a fixed size. Home hero: 720px, capped with
@@ -368,9 +389,10 @@ Usage rules (all checked against WCAG):
   taller than the window (live site did not have the 90% cap yet). Re-test on Safari after
   the next deploy, ask Dardan what exactly looks wrong, then fix.
 - **Button design** (all buttons site-wide): Dardan wants it closer to Apple's UI (Linro
-  works on MacBooks). **Corners decided: 12px.** Still open: colours/roles (Wild Honey vs.
-  smoked glass), text style (sentence case vs. uppercase). Proposals live in
-  `src/components/ButtonProposals.astro` on `/styleguide`.
+  works on MacBooks). **Decided: 12px corners + the hierarchy in section 8 "Buttons".**
+  Still to do: move the button styles into `global.css` and use them on the real pages
+  (Home CTA, footer Sign up, later Products/Reserve); then remove the old uppercase
+  "Buttons – proposal" and the proposals section from the style guide.
 
 ## 12. Nice to have (only when there is time – not a priority)
 

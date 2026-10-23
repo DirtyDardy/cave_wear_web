@@ -1,9 +1,84 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+// Impressum (legal notice) – required by § 5 DDG and § 18 (2) MStV.
+// Personal details come from src/data/owner.js.
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { owner } from "../data/owner.js";
+
+// Shows the value, or a visible note if it is still missing
+const missing = (label: string) => `[${label} – to be added]`;
 ---
 
-<BaseLayout title="Impressum">
-  <section class="container section">
-    <h1>Impressum</h1>
-  </section>
-</BaseLayout>
+<LegalLayout
+  title="Impressum"
+  lead="Legal notice – who is behind this website and how to reach them."
+  description="Impressum (legal notice) of the Cave Wear concept website."
+>
+  <h2>Information according to § 5 DDG</h2>
+  <address>
+    {owner.name}<br />
+    {owner.street || <span class="missing">{missing("Street and house number")}</span>}<br />
+    {owner.postalCode || <span class="missing">{missing("Postcode")}</span>}
+    {" "}{owner.city || <span class="missing">{missing("City")}</span>}<br />
+    {owner.country}
+  </address>
+
+  <h3>Contact</h3>
+  <p>
+    Email:{" "}
+    {owner.email
+      ? <a href={`mailto:${owner.email}`}>{owner.email}</a>
+      : <span class="missing">{missing("Email address")}</span>}
+    {owner.phone && <><br />Phone: {owner.phone}</>}
+  </p>
+  <!-- TODO: once the contact form exists, add: "or use the contact form" with a link to /contact -->
+
+  <h2>Responsible for the content according to § 18 (2) MStV</h2>
+  <p>
+    {owner.name}, address as above.
+  </p>
+
+  <h2>About this project</h2>
+  <!-- Exact wording from Dardan (22 Oct 2026) – don't shorten it here -->
+  <p>
+    Cave Wear is a concept brand for a design portfolio. Products are concept mock-ups – some are
+    based on existing garments and edited. Nothing is for sale.
+  </p>
+  <p>
+    No contracts are concluded on this website. A "reservation" or a newsletter sign-up does not
+    create any obligation to buy or to pay.
+  </p>
+
+  <h2>Typefaces</h2>
+  <p>
+    Geist by Vercel and Barlow Condensed by Jeremy Tribby, both under the SIL Open Font License.
+    The fonts are stored on this website's own server.
+  </p>
+
+  <h2>External links</h2>
+  <p>
+    This website links to other websites (for example Instagram, Threads and YouTube). Their
+    content is the responsibility of their operators. When the links were set, no illegal content
+    was visible. If we learn of any, we will remove the link.
+  </p>
+
+  <!-- Photo credits: not required by Unsplash/Pexels, so they sit behind a small toggle.
+       <details> is built into HTML – opens and closes without JavaScript.
+       Every stock photo on the site gets a line here: photographer · source link · licence -->
+  <details class="credits">
+    <summary>Photo credits</summary>
+    <ul>
+      <!-- {" "} = a real space; Astro drops the line breaks around the links otherwise -->
+      <li>
+        Home, left (forest): photo by chickenbunny on{" "}
+        <a href="https://www.pexels.com/de-de/foto/person-gehen-wald-baume-10916672/">Pexels</a>{" "}
+        (Pexels License), retouched by Dardan Ademi (brand logo removed).
+      </li>
+      <li>
+        Home, right (foggy alley): photo by Andreas Rasmussen on{" "}
+        <a href="https://unsplash.com/de/fotos/person-die-tagsuber-auf-dem-weg-zwischen-gebauden-geht-Z-rn6NwbUZY">Unsplash</a>{" "}
+        (Unsplash License).
+      </li>
+      <li>Logo, icons and all other graphics: Dardan Ademi.</li>
+    </ul>
+  </details>
+</LegalLayout>

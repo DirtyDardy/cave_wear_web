@@ -1,18 +1,121 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+// Privacy Policy – information according to Art. 13 GDPR.
+// Describes ONLY what the website really does today. When a new feature collects data,
+// add a section here BEFORE it goes live:
+//   - contact form (Netlify Forms)          - Reserve / bag (Netlify Forms + localStorage)
+//   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
+// Keep the newsletter purpose in sync with the note in Footer.astro.
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { owner } from "../data/owner.js";
+
+const missing = (label: string) => `[${label} – to be added]`;
 ---
 
-<BaseLayout title="Privacy Policy">
-  <section class="container section">
-    <h1>Privacy Policy</h1>
+<LegalLayout
+  title="Privacy Policy"
+  lead="What happens with your data on this website – in plain words."
+  description="Privacy Policy of the Cave Wear concept website."
+>
+  <h2>The short version</h2>
+  <ul>
+    <li>No user accounts, no tracking, no analytics, no advertising.</li>
+    <li>No cookies – that's why there is no cookie banner.</li>
+    <li>Fonts and images come from this website's own server, not from Google or others.</li>
+    <li>
+      Data is only processed when you visit the site (technical server data) and when you sign up
+      for the newsletter (your email address).
+    </li>
+  </ul>
 
-    <!-- PLACEHOLDER: Dardan writes the final privacy policy text later -->
-    <h2>Newsletter</h2>
-    <p>
-      If you sign up for the newsletter in the footer, we store your email address via Netlify Forms
-      (Netlify, Inc.). We only use it to send you real news about Cave Wear – for example the
-      launch, a vote on the next product or a big announcement. You can ask us to delete it at
-      any time.
-    </p>
-  </section>
-</BaseLayout>
+  <h2>Who is responsible</h2>
+  <p>Responsible for data processing on this website (controller under the GDPR):</p>
+  <address>
+    {owner.name}<br />
+    {owner.street || <span class="missing">{missing("Street and house number")}</span>}<br />
+    {owner.postalCode || <span class="missing">{missing("Postcode")}</span>}
+    {" "}{owner.city || <span class="missing">{missing("City")}</span>}<br />
+    {owner.country}<br />
+    Email:{" "}
+    {owner.email
+      ? <a href={`mailto:${owner.email}`}>{owner.email}</a>
+      : <span class="missing">{missing("Email address")}</span>}
+  </address>
+
+  <h2>Hosting</h2>
+  <p>
+    This website is hosted by Netlify, Inc., 101 2nd Street, San Francisco, CA 94105, USA. When you
+    open a page, your browser automatically sends technical data to Netlify's servers: your IP
+    address, date and time, the page you requested, the website you came from, and your browser
+    and operating system. This is needed to deliver the website and to protect it against attacks.
+    We do not use this data to analyse visitors.
+  </p>
+  <p>
+    Legal basis: Art. 6 (1) (f) GDPR – our legitimate interest in a secure and reliable website.
+    Netlify processes the data on our behalf under a data processing agreement. Data may be
+    transferred to the USA. Netlify states that it complies with the EU-U.S. Data Privacy
+    Framework, for which the European Commission has issued an adequacy decision, and also uses
+    the EU Standard Contractual Clauses.
+  </p>
+
+  <h2>Newsletter</h2>
+  <p>
+    If you sign up for the newsletter in the footer, we store your email address via Netlify Forms
+    (Netlify, see "Hosting"). Netlify also records technical data of the sign-up, such as date and
+    time, and checks it automatically for spam. We only use your address to send you real news
+    about Cave Wear – for example the launch, a vote on the next product or a big announcement.
+  </p>
+  <p>
+    Legal basis: your consent, Art. 6 (1) (a) GDPR. You can withdraw it at any time without giving
+    a reason – a short email to the address above is enough. We then delete your address. Until
+    then, we keep it as long as the newsletter exists.
+  </p>
+
+  <h2>Data stored in your browser</h2>
+  <p>
+    This website itself stores nothing in your browser. Netlify shows a small "Netlify" badge on
+    the page. If you close it, your browser remembers this for 7 days (local storage), so the badge
+    stays hidden. This is only stored because you asked for it (§ 25 (2) no. 2 TDDDG); it contains
+    no personal data and is not used for tracking.
+  </p>
+
+  <h2>Links to social networks</h2>
+  <p>
+    Instagram, Threads and YouTube are linked as normal links – no buttons or feeds from these
+    services are embedded. No data is sent to them while you are on this website. Only when you
+    click a link do you go to their site, where their own privacy policies apply (Meta Platforms
+    for Instagram and Threads, Google for YouTube).
+  </p>
+
+  <h2>Encryption</h2>
+  <p>
+    All pages are sent over an encrypted connection (HTTPS). You can see this by the lock icon in
+    your browser's address bar.
+  </p>
+
+  <h2>Your rights</h2>
+  <p>Under the GDPR you have the right to:</p>
+  <ul>
+    <li>get information about the data we store about you (Art. 15),</li>
+    <li>have wrong data corrected (Art. 16),</li>
+    <li>have your data deleted (Art. 17),</li>
+    <li>have the processing restricted (Art. 18),</li>
+    <li>receive your data in a common format (Art. 20),</li>
+    <li>object to processing based on our legitimate interest (Art. 21),</li>
+    <li>withdraw a consent at any time, with effect for the future (Art. 7 (3)).</li>
+  </ul>
+  <p>A short email to the address above is enough.</p>
+  <p>
+    You can also complain to a data protection authority (Art. 77 GDPR). Responsible for us is the
+    Bayerisches Landesamt für Datenschutzaufsicht, Postfach 1349, 91504 Ansbach, Germany –{" "}
+    <a href="https://www.lda.bayern.de">lda.bayern.de</a>.
+  </p>
+
+  <h2>No automated decisions</h2>
+  <p>We don't make automated decisions about you and don't create profiles.</p>
+
+  <h2>Changes</h2>
+  <p>
+    When the website gets new features that process data – for example the contact form or the
+    reservation – this Privacy Policy will be updated before they go live.
+  </p>
+</LegalLayout>

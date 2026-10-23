@@ -12,34 +12,16 @@ import HeroSplit from "../components/HeroSplit.astro";
   <div class="container hero-cta">
     <a href="/products" class="button button-primary">Call to action</a>
   </div>
-
-  <!-- TEMPORARY: way into the style guide while the site is being built -->
-  <section class="container section">
-    <a href="/styleguide" class="test-link">Style guide</a>
-  </section>
+  <!-- The style guide is no longer linked from Home – open it directly: /styleguide -->
 </BaseLayout>
 
 <style>
-  /* Centred under the hero, close to it, so it reads as part of the hero */
+  /* Centred under the hero, close to it, so it reads as part of the hero.
+     Space below keeps the footer from sitting right under the button
+     (until the next Home sections exist). */
   .hero-cta {
     display: flex;
     justify-content: center;
-    padding-block-start: var(--space-8); /* 32px */
-  }
-
-  /* TEMPORARY link – outlined, so it doesn't look like a final design */
-  .test-link {
-    display: inline-flex;
-    align-items: center;
-    block-size: var(--space-12); /* 48px */
-    padding-inline: var(--space-6);
-    border: 1px solid var(--color-accent);
-    color: var(--color-accent);
-    text-decoration: none;
-
-    &:hover {
-      border-color: var(--color-accent-hover);
-      color: var(--color-accent-hover);
-    }
+    padding-block: var(--space-8) var(--section-space); /* 32px · 64 → 96px */
   }
 </style>

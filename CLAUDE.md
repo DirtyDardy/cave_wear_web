@@ -371,26 +371,48 @@ Hierarchy – **one primary per section**, quieter buttons around it:
   detection on (Netlify then removes `data-netlify="true"` from the live HTML – that's the
   check). Submissions: Netlify → Forms. Locally, `newsletter.js` shows a test-mode message.
 - Name check: "CAVEWEAR – Underground Tech Fashion" exists (cavewear.netlify.app) – do a
-  DPMA/EUIPO trademark check (class 25) before buying a domain or a real launch.
+  DPMA/EUIPO trademark check (class 25) before a real launch.
+
+### Domain & email (done 23 Oct 2026)
+- **https://cavewear.de** (netcup "Webhosting 1000", domain inclusive) → Netlify via DNS
+  (A record + `www` CNAME). `www` and `http://` redirect to `https://cavewear.de`.
+  DNS lives in netcup CCP → Domains → cavewear.de → **CloudDNS** (not DNSSEC – untouched).
+- Mailbox **info@cavewear.de** (netcup mail panel = "Auto-Login MAIL", Plesk): forwarded to
+  info.cave.wear@gmail.com (copy kept at netcup), spam filter (mark `***SPAM***`), virus
+  scan in + out, no Plesk login with the mailbox password.
+- Gmail "Send mail as" info@cavewear.de via SMTP **mx2f26.netcup.net**, port 465, SSL
+  (`mail.cavewear.de` has a *.netcup.net certificate – don't use it as server name).
+- Email authentication: SPF (`include:_spf.webhosting.systems`), DKIM (netcup CNAMEs
+  `key1/key2._domainkey`), **DMARC `p=quarantine`** (started with `p=none`, switched after a
+  mail-tester score of 10/10). Planned: confirmation emails via a Netlify Function sending
+  through this mailbox (password only as a Netlify environment variable, never in code).
 
 ## 11. Still open (ask, don't assume)
 
 - Product details and donation model.
 - Weather → product suggestion mapping.
-- Domain + email address (form recipient).
-- Impressum details (Dardan will use his real address).
-- Custom domain (planned: `cavewear.de` + mailbox, e.g. at all-inkl) – connect to Netlify
-  via DNS, then form notifications to the new address.
+- Netlify → Notifications → form submission notifications to info@cavewear.de.
+- Newsletter confirmation email (double opt-in) + Reserve confirmation email
+  ("you reserved …") – Netlify Function + netcup mailbox, see "Domain & email".
+- Legal pages (done 23 Oct 2026): `/impressum` + `/privacy`, details in `src/data/owner.js`,
+  layout `src/layouts/LegalLayout.astro`. Two emails, no phone, no contact form yet
+  (Dardan's decision). **Extend the Privacy Policy before** contact form, Reserve/bag
+  (localStorage) or weather strip go live.
 - Final home page concept after prototyping.
 - **Home call to action** (placeholder since 22 Oct 2026): a button labelled "Call to action"
   sits centred right under the hero (`src/pages/index.astro`, links to `/products`).
   Decide later, once Home has more sections: final text (direction: "Discover the
   collection" → Products), exact position, and whether a short line goes with it.
   Must stay always visible – never hover-only (fails on touch screens).
-- **Photo credits** – for every stock photo on the site, note the source link (Unsplash/
-  Pexels page), photographer and licence, and show a credit (e.g. a short "Photos" line in the
-  Impressum or footer). Currently: `src/assets/hero/hero-wild.jpg` (forest, retouched by
-  Dardan – brand logo removed) and `hero-anywhere.jpg` (foggy alley). Links: ask Dardan.
+- **Concept disclaimer (must appear on the site)** – exact text from Dardan (22 Oct 2026):
+  *"Cave Wear is a concept brand for a design portfolio. Products are concept mock-ups –
+  some are based on existing garments and edited. Nothing is for sale."*
+  Applies to everything (brand, products, photos). **In the Impressum since 23 Oct 2026.**
+  Still to decide: a short version where people could think it's real (product pages,
+  Reserve/Bag).
+- **Photo credits** – done in the Impressum behind a small "Photo credits +" toggle
+  (`<details>`): forest = chickenbunny (Pexels), alley = Andreas Rasmussen (Unsplash).
+  Every new stock photo gets a line there (photographer · source link · licence).
 - **Safari (Mac) check of the Home hero** – Dardan: "doesn't look good on Safari" (22 Oct
   2026, live site). Seen in his screenshot: header (logo + nav) not visible at the top, hero
   taller than the window (live site did not have the 90% cap yet). Re-test on Safari after

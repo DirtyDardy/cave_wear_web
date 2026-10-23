@@ -1,0 +1,18 @@
+---
+// The contact email addresses from src/data/owner.js, one per line, each as a mailto link.
+// Used by the Impressum and the Privacy Policy, so both always show the same addresses.
+import { owner } from "../data/owner.js";
+---
+
+{
+  owner.emails.length > 0 ? (
+    owner.emails.map((email, index) => (
+      <>
+        {index > 0 && <br />}
+        <a href={`mailto:${email}`}>{email}</a>
+      </>
+    ))
+  ) : (
+    <span class="missing">[Email address – to be added]</span>
+  )
+}

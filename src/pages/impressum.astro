@@ -2,6 +2,7 @@
 // Impressum (legal notice) – required by § 5 DDG and § 18 (2) MStV.
 // Personal details come from src/data/owner.js.
 import LegalLayout from "../layouts/LegalLayout.astro";
+import EmailLinks from "../components/EmailLinks.astro";
 import { owner } from "../data/owner.js";
 
 // Shows the value, or a visible note if it is still missing
@@ -24,10 +25,8 @@ const missing = (label: string) => `[${label} – to be added]`;
 
   <h3>Contact</h3>
   <p>
-    Email:{" "}
-    {owner.email
-      ? <a href={`mailto:${owner.email}`}>{owner.email}</a>
-      : <span class="missing">{missing("Email address")}</span>}
+    Email:<br />
+    <EmailLinks />
     {owner.phone && <><br />Phone: {owner.phone}</>}
   </p>
   <!-- TODO: once the contact form exists, add: "or use the contact form" with a link to /contact -->

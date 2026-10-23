@@ -8,8 +8,9 @@ export const owner = {
   postalCode: "93055",
   city: "Regensburg",
   country: "Germany",
-  // Must really work before the site goes live with it (domain + mailbox still to set up)
-  email: "info@cavewear.de",
+  // Every address in this list is shown on the legal pages. All of them must really work.
+  // info@cavewear.de: works once domain + mailbox are set up. The Gmail address works now.
+  emails: ["info@cavewear.de", "info.cave.wear@gmail.com"],
   phone: "", // optional – only shown if filled in
 };
 

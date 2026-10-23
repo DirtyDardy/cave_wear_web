@@ -6,6 +6,7 @@
 //   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
 // Keep the newsletter purpose in sync with the note in Footer.astro.
 import LegalLayout from "../layouts/LegalLayout.astro";
+import EmailLinks from "../components/EmailLinks.astro";
 import { owner } from "../data/owner.js";
 
 const missing = (label: string) => `[${label} – to be added]`;
@@ -35,10 +36,8 @@ const missing = (label: string) => `[${label} – to be added]`;
     {owner.postalCode || <span class="missing">{missing("Postcode")}</span>}
     {" "}{owner.city || <span class="missing">{missing("City")}</span>}<br />
     {owner.country}<br />
-    Email:{" "}
-    {owner.email
-      ? <a href={`mailto:${owner.email}`}>{owner.email}</a>
-      : <span class="missing">{missing("Email address")}</span>}
+    Email:<br />
+    <EmailLinks />
   </address>
 
   <h2>Hosting</h2>

@@ -61,7 +61,7 @@ import BagIcon from "../assets/icons/backpack.svg";
   <h3 class="bs-heading">3 · Product card</h3>
   <p class="small">
     Card in smoked glass (card rule), sharp corners (card radius still open). Primary "Add to
-    bag" + outline "Size guide" in the compact 40px size.
+    bag" + outline "Size guide".
   </p>
   <div class="bs-cards">
     <article class="bs-card">
@@ -70,9 +70,9 @@ import BagIcon from "../assets/icons/backpack.svg";
       </div>
       <h4 class="bs-card-title">Product name</h4>
       <p class="small">PLACEHOLDER · technique · price</p>
-      <div class="bs-row bs-row-compact">
-        <button type="button" class="button button-primary button-compact">Add to bag</button>
-        <button type="button" class="button button-outline button-compact">Size guide</button>
+      <div class="bs-row bs-row-card">
+        <button type="button" class="button button-primary">Add to bag</button>
+        <button type="button" class="button button-outline">Size guide</button>
       </div>
     </article>
   </div>
@@ -104,7 +104,7 @@ import BagIcon from "../assets/icons/backpack.svg";
     <li><strong>One primary per section.</strong> If two buttons are equally loud, nothing stands out.</li>
     <li><strong>On photos:</strong> primary (honey) + glass. Never an outline button on a photo – it gets lost.</li>
     <li><strong>On dark:</strong> primary (honey) + outline or text link. No glass – nothing behind it to blur.</li>
-    <li><strong>All buttons:</strong> 12px corners, sentence case, 16px medium (compact: 40px, 14px).</li>
+    <li><strong>All buttons:</strong> 12px corners, sentence case, 14px medium, 40px high.</li>
     <li><strong>Wild Honey</strong> = main action and links. Glass buttons are clearly buttons by shape and edge.</li>
   </ul>
 </section>
@@ -126,7 +126,7 @@ import BagIcon from "../assets/icons/backpack.svg";
     margin-block-start: var(--space-6);
   }
 
-  .bs-row-compact {
+  .bs-row-card {
     gap: var(--space-2);
     margin-block-start: var(--space-4);
   }

@@ -352,22 +352,23 @@ p a {
    - .button-primary  Wild Honey filled – the one main action per section
    - .button-glass    smoked glass – secondary on photos
    - .button-outline  Wild Honey outline – secondary on dark backgrounds
-   - .button-compact  add for the small 40px size
    - .text-link       tertiary: "Learn more ›"
-   - .icon-button     round, icon only (always with aria-label) */
+   - .icon-button     round, icon only (always with aria-label)
+   One size for every button (decided 24 Oct 2026): 40px high, 14px text.
+   Bigger or smaller only where Dardan asks for it. */
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  block-size: var(--space-12); /* 48px */
-  padding-inline: var(--space-6); /* 24px */
+  block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+  padding-inline: var(--space-4); /* 16px */
   border: 1px solid transparent;
   border-radius: var(--radius-button); /* 12px */
   font: inherit;
-  font-size: 1rem; /* always 16px, sentence case – body text grows to 18px, buttons don't */
+  font-size: var(--text-small); /* always 14px, sentence case – body text grows, buttons don't */
   font-weight: 500;
-  line-height: var(--space-6);
+  line-height: var(--leading-small); /* 20px */
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -387,13 +388,6 @@ p a {
     opacity: 0.5;
     scale: 1;
   }
-}
-
-.button-compact {
-  block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
-  padding-inline: var(--space-4); /* 16px */
-  font-size: var(--text-small); /* 14px */
-  line-height: var(--leading-small);
 }
 
 .button-primary {

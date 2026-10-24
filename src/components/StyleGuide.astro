@@ -138,10 +138,10 @@ const typeRows = [
   {
     name: "Button text – Geist Medium 500",
     tag: "span", className: "sample-button-text",
-    sizes: "16/24px · button 48px high (compact: 14/20px, 40px high)",
+    sizes: "14/20px · button 40px high",
     extra: "sentence case · no extra letter-spacing",
     token: ".button (global.css)",
-    css: "font-size: 1rem;\nfont-weight: 500;\nline-height: var(--space-6);",
+    css: "font-size: var(--text-small);\nfont-weight: 500;\nline-height: var(--leading-small);",
     used: "Every button. See \"Button system\" below.",
     text: "Read more",
   },
@@ -489,9 +489,9 @@ const radii = [
 
   .sample-button-text {
     display: inline-block;
-    font-size: 1rem;
+    font-size: var(--text-small);
     font-weight: 500;
-    line-height: var(--space-6);
+    line-height: var(--leading-small);
   }
 
   .rules {

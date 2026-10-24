@@ -6,13 +6,12 @@ import HeroSplit from "../components/HeroSplit.astro";
 <BaseLayout title="Home">
   <HeroSplit wildFocus="center 70%" anywhereFocus="center 60%" />
 
-  <!-- Two compact buttons right under the hero, always visible on load (the
-       hero is never taller than 90% of the screen). Compact = quieter, so they
-       don't take attention away from the hero. Labels are placeholders.
+  <!-- Two buttons right under the hero, always visible on load (the hero is
+       never taller than 90% of the screen). Labels are placeholders.
        "Explore more" scrolls to the next section (id="explore"). -->
   <div class="container hero-cta">
-    <a href="/products" class="button button-primary button-compact">Discover the collection</a>
-    <a href="#explore" class="button button-outline button-compact">Explore more ↓</a>
+    <a href="/products" class="button button-primary">Discover the collection</a>
+    <a href="#explore" class="button button-outline">Explore more ↓</a>
   </div>
   <!-- Closing section: last thing before the footer. Points straight to the
        FAQ and the contact form (on /contact they need id="faq" and id="contact-form"). -->

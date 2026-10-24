@@ -1,425 +1,280 @@
 # CLAUDE.md – Cave Wear
 
-Project memory for Claude. Read this fully at the start of every session.
+Project memory for Claude. Read fully at the start of every session. Updated 24 Oct 2026.
+If this file and the code disagree, say so and ask – don't guess which one is right.
 
-## 1. The project in one paragraph
+## 1. Project
 
-Cave Wear is a fictional premium outdoor/everyday clothing brand by **Dardan Ademi**.
-The website is his portfolio piece for a **Brand & Content Designer** role at **Linro**
-(a cybersecurity company). Deadline: **11 November 2026** – a one-hour presentation of
-the site, its design/UX, the code and his decisions. The goal is not a big site but a
-small one that feels exceptionally well considered, works reliably, and that Dardan can
-fully explain.
+Cave Wear is a fictional premium outdoor/everyday clothing brand by **Dardan Ademi**. The site is
+his portfolio piece for a **Brand & Content Designer** role at **Linro** (cybersecurity).
+**Deadline 11 Nov 2026:** one-hour presentation of the site, its design/UX, the code and his
+decisions. Goal: a small site that feels exceptionally well considered, works reliably, and that
+Dardan can fully explain. Linro's references: linear.app, vercel.com.
 
-Brand language: **Rugged. Functional. Refined.** Outdoor capability that also looks right
-in the city, at a bar, at a family dinner. Dark, minimal, premium, subtle military influence.
-Strength without aggression, premium without flashy luxury. The Cave Bear is the symbol
-(strength, endurance, resilience) – use it with intent, never as decoration everywhere.
+- Brand language: **Rugged. Functional. Refined.** Outdoor capability that also looks right in the
+  city, at a bar, at a family dinner. Dark, minimal, premium, subtle military influence. Strength
+  without aggression, premium without flashy luxury.
+- The **Cave Bear** is the symbol (strength, endurance, resilience) – use it with intent, never as
+  decoration everywhere.
+- Tagline: **"Built for the wild. Made for anywhere."** Footer line: "Not released yet – follow the journey."
+- **Demo only:** nothing can be bought. Visitors can follow on social media, email, sign up for the newsletter.
+- Concept disclaimer (exact text): *"Cave Wear is a concept brand for a design portfolio. Products
+  are concept mock-ups – some are based on existing garments and edited. Nothing is for sale."*
 
-## 2. Who you are working with – read this
+## 2. Who you are working with
 
-- Dardan is the **creative director and decision-maker**. Claude is the technical
-  implementation partner.
-- Background: trained Medientechnologe Digitaldruck (digital printing), production
-  management, strong in CorelDRAW, GIMP, Photoshop. Not a formally trained media designer.
-- Code level:
-  - HTML/CSS: finished The Odin Project foundations. Uses modern CSS (logical properties,
-    Grid, Flexbox, nesting, range media queries). Explain new CSS concepts briefly.
-  - JavaScript: **beginner** (variables, types, operators, strings). Explain every JS
-    feature step by step while building it. Never dump large JS files without explanation.
-  - Git/Astro: new. Guide through commands.
-- Communication: direct, practical, clear next steps. No long theory, no lists of optional
-  technologies. He writes in English with a German background – keep language simple.
+- Dardan is the **creative director and decision-maker**. Claude is the technical partner.
+  Design is his call – Claude may suggest, but focuses on design only when asked.
+- Background: Medientechnologe Digitaldruck, production management; strong in CorelDRAW, GIMP,
+  Photoshop. Not a formally trained media designer.
+- HTML/CSS: The Odin Project foundations, modern CSS (logical properties, Grid, Flexbox, nesting,
+  range media queries). Explain new CSS concepts briefly.
+- JavaScript: **beginner**. Explain every JS feature step by step. Never dump large JS files.
+- Git/Astro: new. Guide through commands.
+- Communication: direct, practical, clear next steps, simple English (German background).
+  No long theory, no lists of optional technologies.
 
 ## 3. Working rules (non-negotiable)
 
-1. **Ask before anything that changes how the brand looks** (layout, colours, type, imagery,
-   copy tone). Purely technical improvements may be done, but say what and why.
-2. **Never build ahead.** Only work on what Dardan asked for. No unrequested pages,
-   features or files.
-3. **Small steps, each explained.** After each step: what changed, why, how to test it.
-4. **Suggest commits** with a short message after each meaningful step.
-5. **Presentation notes:** Dardan keeps his own notes folder *outside* this repo. When a
-   decision is worth presenting, point it out and give a short ready-to-copy note.
-   **Never write or update notes files yourself.**
-6. Not every visual problem needs code. If something belongs in Corel/Photoshop
-   (logo tweaks, image prep), say so.
-7. **No invented facts.** No fake certifications, partnerships, sustainability claims or
-   tech specs presented as real. Product info is plausible concept material.
-   Conservation: describe donations as *planned*; link bearbiology.org as a normal link –
-   never claim a partnership, never use their logo.
+1. **Ask before anything that changes how the brand looks** (layout, colours, type, imagery, copy
+   tone). Purely technical improvements are fine – say what and why.
+2. **Never build ahead.** Only what Dardan asked for. No unrequested pages, features or files.
+3. **Small steps, each explained:** what changed, why, how to test it.
+4. **Copy Dardan's designs (PDF, mockup) 1:1.** Ask about every difference – never decide it.
+5. For design choices, **show comparison versions** instead of changing things directly.
+6. **Localhost first.** Push to Netlify only when Dardan says it's final.
+7. After every major step, recommend and offer 3 options: **Commit / Commit + push / Don't commit**.
+   **Always show the full commit message (and the files it includes) right above the options.**
+   Commits split by topic; the message explains the why. Write commit messages in Dardan's
+   voice ("my notes", not "Dardan's notes"), as if he wrote them.
+   **Before removing anything from this file, give Dardan a copy of it first.**
+8. **Presentation notes:** Dardan keeps them outside this repo. When a decision is worth
+   presenting, point it out with a short ready-to-copy note. **Never write notes files yourself.**
+9. Not every problem needs code. If it belongs in Corel/Photoshop, say so.
+10. **No invented facts:** no fake certifications, partnerships, sustainability claims, material
+    claims (organic, GSM …) or specs presented as real. Donations are *planned*. bearbiology.org
+    = a normal link, never a partnership, never their logo. Never name Carinthia or copy its specs.
+11. When replacing something, remove the old version. Project-wide cleanups only when asked.
+12. Hosting/DNS/accounts: click-by-click numbered steps. Dardan sends a screenshot before every
+    final confirm button; Claude checks it first. Claude never handles passwords.
+13. **Desktop first.** Mobile polish is a later phase.
+14. Claude can't generate images: Claude writes prompts and checks results; Dardan generates in
+    Gemini and finishes in Photoshop.
 
-## 4. Tech stack & decisions (with reasons)
+## 4. Tech stack
 
 | Choice | Reason |
 |---|---|
-| **Astro 7** (minimal template) | Content site → finished HTML at build time, zero JS by default. Header/footer as components instead of copy-paste. Named in Linro's tech list. |
-| **No React** | Interactive parts are small; plain JS is enough and is what Dardan is learning. Astro could add a React island later if needed. |
+| **Astro 7** (minimal) | Finished HTML at build time, zero JS by default, components. In Linro's tech list. |
+| **No React** | Interactive parts are small; plain JS is enough and is what Dardan is learning. |
 | **Own CSS, no Tailwind** | Own design system (CSS variables) shows design craft. |
-| **Plain JavaScript** | Bag, forms, weather, menu. Each feature explained. |
-| **Netlify** hosting + **Netlify Forms** | Free, HTTPS automatic. Forms submitted via `fetch` (no page reload). |
-| **Open-Meteo** weather API | Free, no API key. Covers fetch / REST / JSON. |
-| **Git + GitHub** | From day one. Commit history shows progress. README with dev log. |
-| **English only** | Built so German could be added later (mention as next step). |
-| **No user accounts** | Deliberate: data minimisation – data you never store can't leak. |
-| **No cookie banner** | No tracking cookies used. |
+| **Plain JavaScript** | Menu, bag, forms, weather – each explained. |
+| **Netlify** + **Netlify Forms** | Free, HTTPS. Forms sent via `fetch` (no reload). |
+| **Open-Meteo** | Free weather API, no key. Covers fetch / REST / JSON. |
+| **English only** | Built so German could be added later. |
+| **No accounts, no cookie banner** | Data minimisation; no tracking cookies. |
+| **Dark mode only** | Never a light mode. |
 
-Separation of concerns: structure in `pages`/`components`, design in `styles`,
-behaviour in `scripts`, content in `content`. Keep content in HTML/Markdown, not in JS.
+Separation: structure in `pages`/`components`, design in `styles`, behaviour in `scripts`,
+content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 
-## 5. Site structure
+## 5. Workflow, deployment, domain, email
 
-**Global:** Navigation: Products · Brand · Contact · Shopping Bag. Logo links to Home.
-**Footer (minimal, Linear/Vercel style, built 21 Oct 2026):** on Obsidian with a hairline
-on top. Top: small logo → Home · "Built for the wild. Made for anywhere." · "Not released
-yet – follow the journey." · Instagram, Threads, YouTube (link still to add in
-`Footer.astro` → `youtubeUrl`) · newsletter sign-up (email only, Netlify Forms via fetch,
-`src/scripts/newsletter.js`; label "Sign up for the newsletter", note "We'll only email you
-when there's real news – the launch, a vote on the next product or a big announcement. No
-spam." – the Privacy Policy states the same purpose; keep both in sync).
-Bottom (hairline, compact): © year Cave Wear · A concept brand by Dardan Ademi ·
-Impressum · Privacy Policy. No email icon, no pop-up, no bearbiology.org link (moves to
-the Brand page). **Dark mode only – no light mode.** (No Kickstarter.)
+- Project `D:\project\cave_wear_web`. Design files outside the repo in `cave-wear-design/`.
+- `npm run dev` → http://localhost:4321. Git: one branch **`main`**, repo `DirtyDardy/cave_wear_web` (public).
+- Netlify project `cave-wear-concept`; every push to `main` goes live (~1 min). Build
+  `npm run build`, publish `dist`, `NODE_VERSION=24`. Form detection on.
+- **Only what is in Git reaches Netlify.** Never import from git-ignored folders
+  (e.g. `src/assets/test/`). Risky push → test with a fresh clone (`git clone`, `npm ci`, `npm run build`).
+- New Netlify form works only after a deploy (check: `data-netlify="true"` gone from live HTML).
+- **Domain https://cavewear.de** (netcup Webhosting 1000). Main address without www; `www` and
+  `http://` redirect to it. DNS: netcup CCP → Domains → cavewear.de → CloudDNS. Netlify = web
+  host only; netcup = domain, DNS, email. Don't use Netlify DNS.
+- **Mailbox info@cavewear.de** → forwarded to info.cave.wear@gmail.com (copy kept), spam filter,
+  virus scan. Gmail "Send mail as" via `mx2f26.netcup.net`, 465, SSL. SPF, DKIM, DMARC `p=quarantine`.
+- Planned: confirmation emails via a **Netlify Function** through this mailbox (password only as a
+  Netlify environment variable, never in code).
 
-1. **Home** – brand intro, featured products, short conservation overview, call to action,
-   weather strip ("Field conditions").
-2. **Products** – overview, product detail pages, shopping bag (items, quantities, total),
-   optional planned donation, **Reserve** (no payment).
-3. **Brand** – story & origin, identity & purpose, conservation commitment, transparent
-   explanation of the donation approach.
-4. **Contact** – contact info, contact form (really sends), FAQ.
-5. **Impressum**, **Privacy Policy**, **404 page**.
+## 6. Pages & status
 
-## 6. Features
+- **Global header + footer** – built (see 7 and 8).
+- **Home** – hero built (see 9). Placeholder "Call to action" button under the hero → `/products`.
+  Planned: featured products, short conservation overview, journey teaser, weather strip.
+- **Products** – overview, detail pages, bag (see 10). Not built.
+- **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
+  timeline, bearbiology.org link. Dardan has started the About/Brand content.
+- **Contact** – contact info, contact form, FAQ. Not built.
+- **Impressum, Privacy Policy** – built (see 13). **404** – not built.
+- **`/styleguide`** – hidden (no links, noindex), public by URL. **Delete before final launch.**
 
-- **Mobile menu** (first JS feature – simplest).
-- **Shopping bag**: add/remove, quantities, total, optional planned donation, persists in
-  the browser (localStorage). Ends in **Reserve**: name + email + bag contents sent via
-  Netlify Forms. Confirmation: *"Your items are reserved. No payment now. We'll notify you
-  at launch."* Must be honest – no checkout, no payment.
-- **Contact form**: Netlify Forms via fetch, client-side validation, clear feedback.
-- **Weather strip** (Open-Meteo): own "soft ask" first – *"Show today's conditions for your
-  location?"* [Use my location] [Show Regensburg]. Browser permission only after the click.
-  Declined/unavailable → **Regensburg** fallback. Shows weather + a matching product
-  suggestion (mapping still to be decided). Mention location → Open-Meteo in privacy policy.
-- **Home hero**: split screen *Built for the wild / Made for anywhere* (hover reveals a side
-  on desktop), with subtle parallax as support. Needs a separate touch/mobile version.
-  **Built (22 Oct 2026), live on Home:** `src/components/HeroSplit.astro`.
-  Forest photo left, city photo right (`src/assets/hero/hero-wild.jpg`, `hero-anywhere.jpg`),
-  cut along the same diagonal as the bear logo. The logo bear sits centred on the cut.
-  Hover a side → the other side goes black, that half of the bear becomes outline only,
-  headline + short text appear on the dark side. No button (informational only).
-  Hidden H1: "Built for the wild. Made for anywhere." Soft dark gradient at the top for
-  header readability.
-  **Bear style: smoked glass** (decided 22 Oct 2026 after comparing no glow, glows, clear,
-  frost, smoked, olive, amber and logo-colour versions). Clear felt too trendy, amber
-  competed with Wild Honey.
-  Still open: final photos (licence + photographer, Nike logo on the forest photo,
-  larger downloads), "ANYWHERE" headline touching the bear, mobile version.
-- Basic animations only, always respecting `prefers-reduced-motion`.
-- **Selective scroll snap** (CSS only, `proximity`, never `mandatory`): only on the few key
-  moments – hero, main call to action, max. one more. Everything else scrolls freely.
-  Also used for the product image gallery and the mobile product row.
-- **Follow the journey** (build in public): progress timeline with real milestones only
-  (stored in a small data file, easy to update) + Instagram/Threads links. Main place: Brand
-  page. Short teaser on Home (possible snap moment). One line near "Reserve" on Products.
-  Links only – no embedded social feeds (no third-party scripts/cookies).
+## 7. Features
 
-## 6b. Header & navigation (decided 18 Oct 2026)
+- **Mobile menu** – built. Brand submenu becomes an accordion inside it.
+- **Shopping bag** – add/remove, quantities, total, optional planned donation, saved in
+  localStorage. Ends in **Reserve** (name + email + bag via Netlify Forms), confirmation:
+  *"Your items are reserved. No payment now. We'll notify you at launch."* Honest: no payment.
+  OPEN: Reserve looks like a real pre-order – short disclaimer there, or rethink.
+- **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
+  test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
+  vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.
+- **Contact form** – Netlify Forms via fetch, client-side validation, clear feedback.
+- **Weather strip** ("Field conditions", Open-Meteo) – soft ask first: *"Show today's conditions
+  for your location?"* [Use my location] [Show Regensburg]. Browser permission only after the
+  click; declined → Regensburg. Shows weather + a product suggestion (mapping OPEN).
+- **Follow the journey** – timeline of real milestones only (small data file) + social links.
+  Main place Brand page, teaser on Home, one line near Reserve. Links only, no embedded feeds.
+- **Animations** basic only, always respecting `prefers-reduced-motion`.
+- **Scroll snap** CSS only, `proximity` never `mandatory`: hero, main CTA, max. one more.
+  Also for the product gallery and the mobile product row.
 
-Goal: subtle, premium navigation. Blends into the hero on Home, becomes readable
-almost immediately when scrolling starts, always accessible.
+## 8. Header & footer
 
-### Background (transparent → opaque)
-- **Home only:** at the very top the header background is almost invisible (~5% Obsidian),
-  so the hero shows through. The hero sits *under* the header on Home.
-- After a small scroll (~24–32px) the background **fades** (~0.3s) to solid Obsidian.
-  Back at the top it fades out again.
-- **Only the background** fades. Logo and links stay fully visible at all times (contrast).
-- All other pages: opaque from the start.
-- Detect scrolling with `IntersectionObserver` (no scroll listener for this part).
-- Hero readability: test once the real hero image exists. If needed, a soft gradient
-  at the top of the image – never a visible grey block.
+- Semantic `header` > `nav aria-label="Main navigation"` > `ul` > `li`. Nav: Products · Brand ·
+  Contact · Bag. Logo → Home.
+- Background Dark Obsidian, Charcoal bottom line. **Home:** 5% → solid over the first 200px of
+  scrolling (`--header-fade-distance`); only the background fades. Other pages: solid.
+- **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
+  the menu/submenu is open or focus is in the header. No slide with reduced motion.
+- **Product detail pages: never hide** (Bag stays visible) – decided, not built yet.
+- Height 92px from 768px, 72px mobile (temporary). Logo 44px / 32px mobile.
+- Nav: Geist 500, 16px, uppercase, `--tracking-nav` 0.04em. Inactive Weathered Bone; active
+  **bold Egret**, no layout shift, no marker; hover Wild Honey. "Products" active on `/products/*`.
+- Bag button: 44px high, 24px backpack icon (Dardan's drawing), "Bag" label, 12px corners,
+  Flint outline, Obsidian fill, Weathered Bone; hover Egret fill + Dark Obsidian. Fades in with
+  the header on Home. OPEN: Dardan to confirm the hover state.
+- **Brand submenu** (only submenu, chevron, disclosure pattern with `aria-expanded`, not
+  `role="menu"`; hover opens on hover devices; Escape/click outside closes) + **jump links**
+  (`/brand#…`, smooth scroll, `scroll-margin-top`, JS for cross-page jumps) – **postponed until
+  the pages have content**. Placeholder items: Brand overview · The Idea · The Cave Bear ·
+  Conservation · The Journey (one list in the code).
+- **Footer** – built: Obsidian + hairline. Small logo · tagline · journey line · Instagram,
+  Threads, YouTube · newsletter. Bottom: © year Cave Wear · A concept brand by Dardan Ademi ·
+  Impressum · Privacy Policy. No email icon, no pop-up, no bearbiology.org link.
 
-### Hide on scroll down / show on scroll up
-- Separate system from the background fade.
-- Hide only after scrolling a bit (threshold, no jitter on tiny movements).
-- Never hide while the mobile menu or the Brand submenu is open, or while keyboard
-  focus is inside the header.
-- When it reappears, the background is already opaque.
-- **Product detail pages (`/products/*`): never hide.** Reason: the Bag (and its count)
-  stays visible while people look at products and add them.
-- `prefers-reduced-motion`: no slide animation.
+## 9. Home hero (`src/components/HeroSplit.astro`)
 
-### Active page
-- Inactive links: Weathered Bone, normal weight. Active link: **bold**, Egret.
-- **No square marker** (removed – looked dated).
-- Bold must not shift the layout (reserve the bold width).
-- "Products" is also active on product detail pages (`/products/...`).
-- Same look in every state: transparent, opaque, open, reappearing.
+- Split screen *Built for the wild / Made for anywhere*: forest left, city right, cut along the
+  bear logo's diagonal. Bear centred on the cut, 50% of hero height, **smoked glass**.
+- Hover a side → other side goes black, that bear half becomes outline, headline + short text
+  appear (headline max 112px, 26ch column, small text Muted Stone). No button. Hidden H1
+  "Built for the wild. Made for anywhere." Soft dark gradient on top for header readability.
+- Height `min(45rem, 90svh)`; everything inside scales with it.
+- OPEN: text overlaps the bear at 1280px; mobile/touch version; Safari (Mac) check; larger
+  downloads of the hero photos; final CTA text (direction "Discover the collection") + position –
+  always visible, never hover-only.
 
-### Brand submenu (the only submenu)
-- Only **Brand** has a submenu, marked with a small chevron. Products, Contact = plain links.
-  Home = the logo. **No mega menu.**
-- Why: the Brand page is the longest page with different topics. The submenu shows all
-  topics up front, so visitors jump to what interests them instead of leaving.
-- Items are **placeholders** until Dardan decides the Brand sections. They live in one
-  list in the code, so changing them = editing one line.
-  Placeholder items: Brand overview · The Idea · The Cave Bear · Conservation · The Journey
-- Clicking "Brand" opens/closes the submenu (button with `aria-expanded`). On devices
-  with hover, hover opens it too (small delay before closing). Escape and click outside
-  close it. Works with touch and keyboard. Disclosure pattern – not `role="menu"`.
+## 10. Products & product images
 
-### Jump links
-- Submenu items link to sections: `/brand#cave-bear` etc.
-- Same page: smooth scroll via CSS. From another page: the page opens at the top, then
-  scrolls smoothly to the section (small JS, ~5–8 lines).
-- `scroll-margin-top` so headings don't land under the header.
-- `prefers-reduced-motion`: jump directly, no scrolling.
+Six products: **T-shirt · Hoodie · Half-zip (male + female version, same product) · Rain jacket
+· Beanie · Buff**. Products live as Markdown in `src/content/products/` (not built yet).
 
-### Mobile
-- Menu button top-right. **Bag stays visible** next to the menu button.
-- Brand submenu becomes an accordion inside the mobile menu.
-- Everything works with touch, nothing depends on hover.
+- **Real** (bought and photographed by Dardan): hoodie, half-zip, beanie, rain jacket.
+  **AI** (Gemini): T-shirt, buff.
+- Rain jacket = Dardan's own Carinthia jacket, Carinthia logo removed, Cave Wear logo added.
+- Some garments get an embroidered logo with visible stitch texture (OPEN: which ones).
+- OPEN: names, prices, sizes, colourways, descriptions, donation amount – **ask Dardan**.
+  Some real products still to order.
+- **Image recipe** (one shoot look): 4:5, front + back + side + 3–5 close-ups. Background soft
+  dark gradient (lighter charcoal centre → `#0D0D0E` edges), no texture. Ghost mannequin (beanie on
+  invisible head, buff on a form or rolled), no model. Soft diffused light + gentle rim light,
+  straight-on eye level, 85mm look. No logos/text except Dardan's own logo in its exact shape.
+- Real photos first, then they are the AI reference. Shop photos only as temporary shape
+  reference – never on the site. Every AI logo is checked against the logo file; fix in Photoshop.
+- No image generation until Dardan writes "Start generating". OPEN: review Gemini's updated recipe.
+- Product sheet layout (views, detail strip, labels) = HTML/CSS with real text, not baked into images.
 
-### Structure
-- Semantic `header` > `nav aria-label="Main navigation"` > `ul` > `li`.
-- All header sizes and spacing on the 4-pt grid (`--space-*`).
-- JS in small, separate, explained parts.
+## 11. Design system
 
-### Build order (one step at a time, commit after each)
-1. Spacing scale + header on the 4-pt grid + new active style (CSS)
-2. Mobile menu (first JS feature)
-3. Background fade on scroll
-4. Hide/show on scroll + product page exception
-5. Brand submenu
-6. Jump links with smooth scroll
-
-## 7. Products (details still open)
-
-Four products, each with the decoration technique that fits it (a story only Dardan can tell):
-
-| Product | Technique |
-|---|---|
-| T-shirt | Print (screen print / DTG) |
-| Hoodie | Print or chest embroidery |
-| Beanie | Embroidered bear (matches the stitching video) |
-| Buff | All-over sublimation (digital print – Dardan's trade) |
-
-Names, prices, sizes, colourways, descriptions and the donation amount: **ask Dardan**.
-Products will live as Markdown files in `src/content/products/`.
-
-## 8. Design system
-
-### Colours (final – use only these, via CSS variables)
+### Colours (final – only these, via CSS variables; components use role variables)
 
 | Role | Name | Hex |
 |---|---|---|
 | Background | Dark Obsidian | `#0D0D0E` |
-| Surface (header, footer, bag) – cards use smoked glass, see "Cards & glass" | Obsidian | `#131314` |
+| Surface (header, footer, bag) | Obsidian | `#131314` |
 | Line / divider | Charcoal | `#1E1E1E` |
 | Input border | Flint | `#6B655E` |
 | Main text | Egret | `#F3EBE0` |
-| Secondary text (prices, details) | Weathered Bone | `#C4B9AC` |
-| Quiet text (small labels, footer) – only on Dark Obsidian/Obsidian | Muted Stone | `#8C857B` |
-| Accent (buttons, links, focus, bag count) | Wild Honey | `#C39132` |
+| Secondary text | Weathered Bone | `#C4B9AC` |
+| Quiet text (only on Dark Obsidian/Obsidian) | Muted Stone | `#8C857B` |
+| Accent (main action, links, focus, bag count) | Wild Honey | `#C39132` |
 | Accent hover | Amber Gold | `#D4A54A` |
-| Text on accent | Dark Obsidian | `#0D0D0E` |
-| Brand support (conservation areas, large surfaces only) | Irr Olive | `#4B573E` |
-| Success (icon/border only) | Forest Fern | `#5B7553` |
-| Error (icon/border only) | Terracotta | `#B86B43` |
+| Brand support (large surfaces only) | Irr Olive | `#4B573E` |
+| Success / Error (icon or border only) | Forest Fern / Terracotta | `#5B7553` / `#B86B43` |
 | Logo dark brown | Moule | `#382D2B` |
 | Reserve (no role yet) | Tobacco Brown / Alpine Oak / Mossy Elm | `#9A7354` / `#AE946B` / `#5E6D4E` |
 
-Usage rules (all checked against WCAG):
-- **Status messages:** colour only on the icon / left border; the message text is Egret.
-- **On Irr Olive areas:** text in Egret only (Weathered Bone fails there).
-- **Form fields** on Dark Obsidian or Obsidian, not on Charcoal.
-- One accent only – **Wild Honey marks the main action and links** (primary buttons, outline
-  buttons, text links). Smoked-glass buttons (on photos) use Egret text – they are clearly
-  buttons through their shape and light edge. (Changed 22 Oct 2026, was: "Wild Honey marks
-  everything clickable".)
-
-### Buttons (decided 22 Oct 2026)
-Hierarchy – **one primary per section**, quieter buttons around it:
-
-| Role | Look | When |
-|---|---|---|
-| **Primary** | Wild Honey filled, Dark Obsidian text, hover Amber Gold | The one main action: "Discover the collection", "Add to bag", "Reserve", "Sign up" |
-| **Secondary on photos** | Smoked glass (same recipe as the hero bear), Egret text, light edge | Any button that sits on an image: hero, banners, product photos |
-| **Secondary on dark** | Wild Honey outline, transparent | The alternative next to a primary on plain dark backgrounds, e.g. "Size guide" |
-| **Tertiary** | Text link with arrow, e.g. "Learn more ›" | Extra info, "Our story", "See all" |
-| **Icon button** | Round (real circle), neutral surface + Flint border | Close, bag, menu – always with `aria-label` |
-
-- Never an outline button on a photo (it gets lost); never glass on a flat dark background
-  (nothing to blur – it just looks grey).
-- All buttons: 12px corners (`--radius-button`), sentence case, 16px medium, 48px high.
-  Compact: 40px high, 14px. Pressed: shrinks to 97% (off with `prefers-reduced-motion`).
-- **Code:** shared classes in `src/styles/global.css` (section 5): `.button` + one role
-  (`.button-primary`, `.button-glass`, `.button-outline`), `.button-compact`, `.text-link`,
-  `.icon-button`. Used on Home (CTA) and in the footer (Sign up, compact). Never restyle
-  buttons per component – change the shared classes.
-- Reference: "Button system" section on `/styleguide` (`src/components/ButtonSystem.astro`).
-### Above the fold (rule, 22 Oct 2026)
-- The above-the-fold section of a page (e.g. the Home hero) is **never taller than 90% of the
-  viewport height** – it is a maximum, not a fixed size. Home hero: 720px, capped with
-  `min(45rem, 90svh)`, so on short screens the next section still peeks in at the bottom.
-- Everything inside the hero (e.g. the bear) scales with its height, so the layout stays the
-  same when the cap kicks in.
+- Status messages: colour only on icon/left border; text Egret. On Irr Olive: Egret text only.
+- Form fields on Dark Obsidian or Obsidian, never on Charcoal. Text on accent: Dark Obsidian.
 
 ### Spacing – 4-point grid
-- Every size and space is a **multiple of 4px**: margin, padding, gap, component heights/widths
-  (buttons, inputs, icons), and **line heights**. Use only the `--space-*` scale (in rem,
-  1rem = 16px), never random values:
-  `--space-1` 4px · `--space-2` 8px · `--space-3` 12px · `--space-4` 16px · `--space-6` 24px ·
-  `--space-8` 32px · `--space-12` 48px · `--space-16` 64px · `--space-24` 96px
-  (the number = how many 4px units).
-- Why: consistent rhythm (like a baseline grid in print), fewer arbitrary decisions, clean
-  rendering on 1.5×/2× screens (odd values cause half-pixel blur).
-- Measure spacing from the element's **box** (bounding box), not from the text baseline.
-- Order of work: page margins first → component sizes → spacing between them.
-- Allowed exceptions: 1px borders/lines, `clamp()` font sizes, and spacing that results
-  automatically inside a component (e.g. text centred in a 48px button). Follow the grid until
-  it gets in the way – then break it deliberately, not by accident.
-
-### Cards & glass (decided 22 Oct 2026)
-- **Every card uses the same smoked glass as the hero bear.** No coloured cards, no
-  card-by-card decisions. Colour comes from the content (photos, text), not the card.
-- Smoked glass = the background behind is blurred (12px, saturate 1.2, brightness 0.9) +
-  a dark tint on top (Dark Obsidian at 45%) + a light edge (Egret, fading) + a soft shadow.
-  Reference: the bear in `src/components/HeroSplit.astro`.
-- On a plain dark page there is little behind a card to blur, so the glass reads as a
-  dark surface – it shows most over photos. Text on glass must still pass WCAG contrast.
-- Same element type = same radius and same border everywhere (card radius still to decide).
-- Exception: a whole **section** may be Irr Olive (conservation); cards inside it keep the
-  same smoked glass.
+Every size, space and line height is a multiple of 4px, only from `--space-*`: 1=4 · 2=8 · 3=12 ·
+4=16 · 6=24 · 8=32 · 12=48 · 16=64 · 24=96px. Measure from the box. Exceptions: 1px lines,
+`clamp()` font sizes, spacing that results inside a component. Break the grid only deliberately.
 
 ### Corners
-- **Default is sharp (0).** Rounding only where Dardan decides it, per element.
-  Never round something "because it looks nicer" without asking.
-- **If something is rounded:** normal rounded corners (circular, CSS `border-radius`).
-  Works in every browser. No squircle / `corner-shape`, no chamfers, no mixed styles.
-- **Only values from the scale** (on the 4-pt grid), as CSS variables:
-  `--radius-sm` 4px (inputs, small tags) · `--radius-md` 8px (cards) ·
-  `--radius-button` 12px (every button) · `--radius-lg` 16px (large images, big containers) ·
-  `--radius-full` 9999px (only for real circles / pills, e.g. a badge, round icon buttons).
-- **Same element type = same radius** everywhere on the site.
-- **Nested corners:** an inner element's radius = outer radius − the space between them
-  (e.g. card 16px with 8px padding → image inside 8px), so the curves run parallel.
-- **Buttons (decided 22 Oct 2026): 12px for every button** (`--radius-button`) – filled,
-  outline, compact, glass, the header Bag button, the footer "Sign up" button. Chosen from a
-  4px → pill comparison in the style guide: modern and Mac-like, but still solid next to the
-  sharp cards and the hero cut; looks the same at 48px and 40px. Icon-only buttons are round.
-- **Currently rounded (decided):** all buttons (12px, see above). Inputs (4px). Style guide
-  swatches and code boxes (4px = `--radius-sm`).
+Default **sharp (0)**. Rounding only where Dardan decides. Scale only: `--radius-sm` 4 (inputs,
+tags, style guide boxes) · `--radius-md` 8 · `--radius-button` 12 (**every button**) ·
+`--radius-lg` 16 · `--radius-full` (real circles only). Same element type = same radius.
+Nested: inner radius = outer − gap. No squircles/chamfers. OPEN: card radius.
+
+### Buttons (shared classes in `src/styles/global.css` – never restyle per component)
+- `.button` + `.button-primary` (Wild Honey filled, hover Amber Gold – **one per section**) ·
+  `.button-glass` (on photos, Egret text) · `.button-outline` (Wild Honey outline, on plain dark) ·
+  `.text-link` (tertiary, "Learn more ›") · `.icon-button` (round, Flint border, `aria-label`).
+- Never outline on a photo, never glass on flat dark. Sentence case, 16px medium, 48px high;
+  `.button-compact` 40px / 14px. Pressed 97% (off with reduced motion). Reference: `/styleguide`.
+
+### Cards & glass
+Every card = the hero bear's **smoked glass**: blur 12px, saturate 1.2, brightness 0.9 + Dark
+Obsidian 45% tint + fading Egret edge + soft shadow. No coloured cards. Text must pass WCAG.
+Exception: a whole section may be Irr Olive (conservation); cards inside stay glass.
 
 ### Typography
-- **Geist** (variable) – main font for all body text, UI, navigation.
-- **Barlow Condensed Bold** – H1 / big display headlines only (`--font-display`), uppercase.
-  One file, one weight (700) – never use another weight with it. Replaced Tusker Grotesk
-  (Tusker removed from the project).
-- Fonts are **WOFF2** in `public/fonts/` (`Geist-Variable.woff2`,
-  `BarlowCondensed-Bold.woff2`), defined in `src/styles/global.css`. Originals stay outside
-  the repo.
-- Headline sizes with `clamp()` – must never clip on mobile. Body text ≥ 1rem, readable weight.
-- Licence: Geist and Barlow Condensed are both free (SIL Open Font License) – fine for launch.
+- **Geist** (variable) – body, UI, nav. **Barlow Condensed Bold 700** – H1/display only,
+  uppercase, line height 0.9, 48–128px `clamp`, max 12ch. Never another weight.
+- WOFF2 self-hosted in `public/fonts/` (no Google requests). Both SIL OFL.
+- Scale: H2 32/40→48/56 · Lead 24/32→32/40 · H3 24/32 · Body 16/24→18/28 · Small 14/20 ·
+  Label 14/20 uppercase `--tracking-wide`; H4–H6 = Label. Headlines must never clip on mobile.
 
-### Logo
-- Files in the project (only what is used): `src/assets/logo-horizontal.svg` (uses
-  `currentColor` – inlined in header + footer, coloured via CSS) and `public/logo/bear-light.svg`
-  (the hero's glass mask). The other cleaned versions (`bear-dark`, `logo-stacked-dark/light`,
-  `logo-horizontal-dark/light`) were removed on 22 Oct 2026 because nothing used them –
-  get them back from Git history or Dardan's design folder when needed.
-- The two-tone bear's head (Moule `#382D2B`) has only 1.5:1 contrast on Dark Obsidian.
-  On the dark site use the single-colour versions; two-tone only on cream or at large size.
-- Favicon: done – set in `public/` (`favicon.svg`, `favicon.ico`, `apple-touch-icon.png`,
-  `icon-192.png`, `icon-512.png`, `site.webmanifest`), linked in `BaseLayout.astro`.
+### Logo & icons
+- `src/assets/logo-horizontal.svg` (`currentColor`, inlined in header/footer) and
+  `public/logo/bear-light.svg` (hero glass mask). Other versions in Git history / design folder.
+- Two-tone bear (Moule head) only on cream or at large size – 1.5:1 on Dark Obsidian.
+- Favicon set done (`public/`, linked in `BaseLayout.astro`). Icons: 30-unit artboard, 2-unit lines.
+- Corel SVG export preset: px, page = artboard, presentation attributes, hex, text as curves.
 
-## 9. Quality requirements (from the brief)
+## 12. Quality requirements
 
-- Semantic HTML; one `<h1>` per page; no skipped heading levels; header/main/footer inside `<body>`.
-- Works on mobile, tablet, desktop, ultrawide. No horizontal overflow.
-- Keyboard accessible, visible focus states (`a:focus-visible`, not on the SVG inside).
-- Icon-only links need `aria-label`. Meaningful `alt` texts.
-- Respect `prefers-reduced-motion`.
-- Forms and buttons give clear feedback.
-- All links work. No placeholder links in the final site.
-- Performance: optimised images (Astro image handling), no oversized assets, no
-  unnecessary scripts. Video: short loop, no audio, small file, poster image.
-- Images: product shape 4:5, wide images 16:9. Placeholders until real photos exist.
-  Stock/Wikipedia photos need licence check + credit.
+- Semantic HTML; one `<h1>` per page; no skipped levels; header/main/footer in `<body>`.
+- Mobile, tablet, desktop, ultrawide. No horizontal overflow.
+- Keyboard accessible, visible focus (`a:focus-visible`). Icon-only links/buttons need `aria-label`.
+  Meaningful `alt` texts. Respect `prefers-reduced-motion`. Forms give clear feedback.
+- All links work, no placeholder links in the final site.
+- Optimised images (Astro image handling), no oversized assets or unneeded scripts. Video: short
+  loop, no audio, small, poster. Product images 4:5, wide images 16:9.
+- Stock photos need licence check + a credit line in the Impressum.
 
-## 10. Folder & workflow
+## 13. Legal
 
-- Project: `D:\project\cave_wear_web` (Astro root, Git repo, on GitHub).
-- Dardan's design files live outside the repo in `cave-wear-design/`.
-- Terminal: VS Code integrated terminal (PowerShell) in the project folder.
-- Run locally: `npm run dev` → http://localhost:4321
-- Claude Code in VS Code runs in **Manual** permission mode – every edit is reviewed.
-- Git: one branch, **`main`** (default on GitHub, repo `DirtyDardy/cave_wear_web`, public).
+- **Impressum** + **Privacy Policy** built (English), details in `src/data/owner.js`, layout
+  `src/layouts/LegalLayout.astro`. Two emails, no phone, no contact form yet.
+- Impressum has the concept disclaimer and "Photo credits +" (`<details>`): forest = chickenbunny
+  (Pexels), alley = Andreas Rasmussen (Unsplash). Every new stock photo gets a line.
+- Privacy: no cookies/tracking, Netlify hosting, newsletter (consent), social links, GDPR rights.
+  **Extend before** contact form, bag/Reserve (localStorage), weather (location → Open-Meteo) or
+  confirmation emails go live.
+- netcup AVV agreed (PDF with home address stays outside the repo). OPEN: check Netlify's DPA.
+- Trademark check done 21 Oct (TMview, class 25): no hits in DE/EU. A website "CAVEWEAR –
+  Underground Tech Fashion" exists (not registered). Real launch → register at DPMA.
+- OPEN: short disclaimer on product/Bag/Reserve; note that some product images are AI (+ which
+  tool, check its terms); Gewerbe/VAT question.
 
-### Deployment (live since 21 Oct 2026)
-- **Netlify** project `cave-wear-concept` → **https://cave-wear-concept.netlify.app** (public).
-- Every push to `main` builds and goes live automatically (~1 min). Rollback = one click in
-  Netlify → Deploys. Branches can get preview links.
-- Build: `npm run build`, publish folder `dist`. Environment variable **`NODE_VERSION=24`**
-  (project needs Node ≥ 22.22).
-- **Only what is in Git reaches Netlify.** Anything in `.gitignore` (e.g. `src/assets/test/`)
-  exists only locally – never import from there. Before a risky push: test with a fresh
-  clone (`git clone` → `npm ci` → `npm run build`).
-- **Netlify Forms:** form detection is enabled. A new form only works after a deploy with
-  detection on (Netlify then removes `data-netlify="true"` from the live HTML – that's the
-  check). Submissions: Netlify → Forms. Locally, `newsletter.js` shows a test-mode message.
-- Name check: "CAVEWEAR – Underground Tech Fashion" exists (cavewear.netlify.app) – do a
-  DPMA/EUIPO trademark check (class 25) before a real launch.
+## 14. Still open (ask, don't assume)
 
-### Domain & email (done 23 Oct 2026)
-- **https://cavewear.de** (netcup "Webhosting 1000", domain inclusive) → Netlify via DNS
-  (A record + `www` CNAME). `www` and `http://` redirect to `https://cavewear.de`.
-  DNS lives in netcup CCP → Domains → cavewear.de → **CloudDNS** (not DNSSEC – untouched).
-- Mailbox **info@cavewear.de** (netcup mail panel = "Auto-Login MAIL", Plesk): forwarded to
-  info.cave.wear@gmail.com (copy kept at netcup), spam filter (mark `***SPAM***`), virus
-  scan in + out, no Plesk login with the mailbox password.
-- Gmail "Send mail as" info@cavewear.de via SMTP **mx2f26.netcup.net**, port 465, SSL
-  (`mail.cavewear.de` has a *.netcup.net certificate – don't use it as server name).
-- Email authentication: SPF (`include:_spf.webhosting.systems`), DKIM (netcup CNAMEs
-  `key1/key2._domainkey`), **DMARC `p=quarantine`** (started with `p=none`, switched after a
-  mail-tester score of 10/10). Planned: confirmation emails via a Netlify Function sending
-  through this mailbox (password only as a Netlify environment variable, never in code).
-
-## 11. Still open (ask, don't assume)
-
-- Product details and donation model.
-- Weather → product suggestion mapping.
-- Netlify → Notifications → form submission notifications to info@cavewear.de.
-- Newsletter confirmation email (double opt-in) + Reserve confirmation email
-  ("you reserved …") – Netlify Function + netcup mailbox, see "Domain & email".
-- Legal pages (done 23 Oct 2026): `/impressum` + `/privacy`, details in `src/data/owner.js`,
-  layout `src/layouts/LegalLayout.astro`. Two emails, no phone, no contact form yet
-  (Dardan's decision). **Extend the Privacy Policy before** contact form, Reserve/bag
-  (localStorage) or weather strip go live.
-- Final home page concept after prototyping.
-- **Home call to action** (placeholder since 22 Oct 2026): a button labelled "Call to action"
-  sits centred right under the hero (`src/pages/index.astro`, links to `/products`).
-  Decide later, once Home has more sections: final text (direction: "Discover the
-  collection" → Products), exact position, and whether a short line goes with it.
-  Must stay always visible – never hover-only (fails on touch screens).
-- **Concept disclaimer (must appear on the site)** – exact text from Dardan (22 Oct 2026):
-  *"Cave Wear is a concept brand for a design portfolio. Products are concept mock-ups –
-  some are based on existing garments and edited. Nothing is for sale."*
-  Applies to everything (brand, products, photos). **In the Impressum since 23 Oct 2026.**
-  Still to decide: a short version where people could think it's real (product pages,
-  Reserve/Bag).
-- **Photo credits** – done in the Impressum behind a small "Photo credits +" toggle
-  (`<details>`): forest = chickenbunny (Pexels), alley = Andreas Rasmussen (Unsplash).
-  Every new stock photo gets a line there (photographer · source link · licence).
-- **Safari (Mac) check of the Home hero** – Dardan: "doesn't look good on Safari" (22 Oct
-  2026, live site). Seen in his screenshot: header (logo + nav) not visible at the top, hero
-  taller than the window (live site did not have the 90% cap yet). Re-test on Safari after
-  the next deploy, ask Dardan what exactly looks wrong, then fix.
-
-## 12. Nice to have (only when there is time – not a priority)
-
-- **Open backpack icon** (`backpack-open.svg`): a second version of the backpack icon,
-  drawn by Dardan in the same style (same grid, same line thickness). When and where it
-  shows (e.g. when the bag has items, or on hover) is still to decide.
+- **2FA on the Cave Wear Gmail and netcup** (most important).
+- Netlify form notifications → info@cavewear.de.
+- Newsletter double opt-in + Reserve confirmation email (Netlify Function).
+- Product details, donation model, weather → product mapping.
+- Home sections + final CTA; Brand page sections, then submenu + jump links.
+- Hero at 1280px, mobile version, Safari check. Card radius. Bag hover check.
+- Delete `/styleguide` before launch. DNSSEC at the very end.

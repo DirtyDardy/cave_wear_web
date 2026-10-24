@@ -111,7 +111,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Global header + footer** – built (see 7 and 8).
 - **Home** – hero built (see 9). Under it two buttons: "Discover the collection" (filled
   → `/products`) + "Explore more ↓" (outline, smooth scroll to `#explore`); labels are placeholders.
-  Last section "Questions?" with FAQ (filled → `/contact#faq`) + "Write to us" (outline →
+  Last section "Questions?" with FAQ (filled → `/contact#faq`) + "Contact us" (outline →
   `/contact#contact-form`). `id="explore"` sits on it until the first real Home section exists.
   Planned: featured products, short conservation overview, journey teaser, weather strip.
 - **Products** – overview, detail pages, bag (see 10). Not built.
@@ -172,8 +172,14 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 
 - Semantic `header` > `nav aria-label="Main navigation"` > `ul` > `li`. Nav: Products · Brand ·
   Contact · Bag. Logo → Home.
-- Background Dark Obsidian, Charcoal bottom line. **Home:** 5% → solid over the first 200px of
-  scrolling (`--header-fade-distance`); only the background fades. Other pages: solid.
+- Background Dark Obsidian, Charcoal bottom line. **Photo pages** (see next point): 5% → solid
+  over the first 200px of scrolling (`--header-fade-distance`); only the background fades.
+  Pages without a top photo: solid.
+- **Photo header rule (decided 24 Oct): every page that starts with a photo** has the same top
+  as Home – full width, height `--hero-height` (`min(45rem, 90svh)`, in `global.css`), photo
+  under the transparent header (5% → solid), dark fade on top (`.top-fade`). The page goes into
+  `photoHeaderPages` in `Header.astro`. Photo focus per photo (Products: `center 70%` – between
+  centre and bottom, the forest always shows, the skyline is optional). The split screen stays Home only.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
 - **Product detail pages: never hide** (Bag stays visible) – decided, not built yet.
@@ -201,7 +207,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - Hover a side → other side goes black, that bear half becomes outline, headline + short text
   appear (headline max 112px, 26ch column, small text Muted Stone). No button. Hidden H1
   "Built for the wild. Made for anywhere." Soft dark gradient on top for header readability.
-- Height `min(45rem, 90svh)`; everything inside scales with it.
+- Height `--hero-height` (`min(45rem, 90svh)`, same as every photo header); everything inside scales with it.
 - OPEN: text overlaps the bear at 1280px; mobile/touch version; Safari (Mac) check; larger
   downloads of the hero photos (then re-check header readability + top gradient over them); final CTA text (direction "Discover the collection") + position –
   always visible, never hover-only.
@@ -219,7 +225,8 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 
 - **Fit:** drop shoulder, longer body – worn loose or tucked in ("military tuck") for a sharper look.
 - **Chest logo:** the normal bear logo, standard size, on the wearer's left chest (right side in
-  the photo). Tone on tone: always a little darker than the fabric, matte, subtle.
+  the photo). Tone on tone: a little lighter than the fabric (decided 24 Oct; on black a
+  darker logo disappears), matte, subtle – you notice it, it doesn't shout.
 - **Sleeve:** "CAVE·WEAR" wordmark (with the centre dot, as in the stacked logo: bear on top,
   wordmark, "Rugged. Functional. Refined.") near the end of the right sleeve. OPEN: exact
   position – Dardan shows it; stacked logo file still to send (not in the repo).
@@ -227,6 +234,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   heat transfer (only slightly raised, so nothing can get pulled off; no embroidery – it would
   pierce the waterproof fabric) · beanie in the style of a beanie Dardan loves (TAC VRK), picture
   follows. OPEN: half-zip front logo (embroidered?), buff, what goes on the rain jacket's back.
+- **Seams (T-shirt, decided 24 Oct):** flatlock (flat band of zigzag stitching, from military base
+  layers) on shoulder, armhole, side and underarm seams – the shoulders because backpack straps sit
+  there. Black thread, tone on tone, only visible up close. Hem, sleeve ends, collar: normal clean stitch.
 - **Neck labels:** pieces worn on bare skin (T-shirt, hoodie, half-zip) get a printed, tagless
   label with only size · Cave Bear logo · cavewear.de (so people always know where to get one).
   Dardan redoes the label file. Rain jacket: a normal sewn-in neck label, in black.

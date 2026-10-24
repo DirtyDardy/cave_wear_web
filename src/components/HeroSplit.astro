@@ -16,7 +16,8 @@ interface Props {
 const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
 ---
 
-<section class="hero-split" style={`--wild-focus: ${wildFocus}; --anywhere-focus: ${anywhereFocus};`}>
+<!-- top-fade: soft dark fade at the top for the header (global.css) -->
+<section class="hero-split top-fade" style={`--wild-focus: ${wildFocus}; --anywhere-focus: ${anywhereFocus};`}>
   <h1 class="visually-hidden">Built for the wild. Made for anywhere.</h1>
 
   <!-- The two photos. Each one is cut along the diagonal (clip-path). -->
@@ -81,10 +82,8 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
   .hero-split {
     /* All sizes are worked out from the hero height, so the photo cut
        always lines up with the cut in the bear */
-    /* 720px, but never more than 90% of the screen height (rule, see CLAUDE.md).
-       min() takes the smaller of the two values. svh = "small viewport height":
-       stays steady on phones when the browser bar slides in and out. */
-    --hero-h: min(45rem, 90svh);
+    /* Same height as every photo header (--hero-height in global.css) */
+    --hero-h: var(--hero-height);
     --bear-h: calc(var(--hero-h) * 0.5); /* bear = 50% of the hero height */
     --bear-w: calc(var(--bear-h) * 1.794); /* width/height of the bear logo */
     /* Middle of the bear = middle of the part you see below the header */
@@ -104,24 +103,6 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
     margin-block-start: calc(-1 * var(--header-height) - 1px); /* under the transparent header */
     overflow: hidden;
     background-color: var(--color-bg);
-  }
-
-  /* Soft dark fade at the top, so the header links stay readable on bright
-     photos (fog, sky). Sits above the photos, below the bear and the text. */
-  .hero-split::before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    inset-block-start: 0;
-    inset-inline: 0;
-    block-size: calc(var(--header-height) + var(--space-24)); /* 64 + 96 = 160px */
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-bg) 60%, transparent),
-      color-mix(in srgb, var(--color-bg) 25%, transparent) 50%,
-      transparent
-    );
-    pointer-events: none;
   }
 
   /* --- Photos --------------------------------------------------------------- */

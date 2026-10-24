@@ -22,8 +22,10 @@ function getCurrent(href: string) {
   return undefined;
 }
 
-// Only Home starts with a transparent header (the hero shows through)
-const isHome = currentPath === "/";
+// Pages that start with a full-width photo: the header starts transparent
+// (the photo shows through) and turns solid on scroll. Add new pages here.
+const photoHeaderPages = ["/", "/products"];
+const isTransparent = photoHeaderPages.includes(currentPath);
 ---
 
 <!-- Fallback for browsers without scroll-driven animations: invisible marker
@@ -31,7 +33,7 @@ const isHome = currentPath === "/";
      (see header-scroll.js). -->
 <div class="scroll-sentinel" aria-hidden="true"></div>
 
-<header class="site-header" data-transparent={isHome ? "" : undefined}>
+<header class="site-header" data-transparent={isTransparent ? "" : undefined}>
   <div class="container header-inner">
     <a href="/" class="logo" aria-label="Cave Wear – Home">
       <Logo aria-hidden="true" />
@@ -98,7 +100,7 @@ const isHome = currentPath === "/";
       translate 0.3s ease;
   }
 
-  /* --- Home: background fade ---------------------------------------------- */
+  /* --- Photo pages (Home, Products): background fade ----------------------- */
 
   /* From 5% Dark Obsidian (no line) to solid Dark Obsidian (with line) */
   @keyframes header-fill {

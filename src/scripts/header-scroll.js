@@ -1,4 +1,4 @@
-// Header background: almost transparent at the top of Home,
+// Header background: almost transparent at the top of photo pages (Home, Products),
 // solid after a small scroll. CSS does the fade – this script only
 // switches the data-scrolled attribute on the header.
 

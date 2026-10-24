@@ -132,7 +132,11 @@
   --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
   --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
   --header-height: 4rem; /* 64px on all screens – compact */
-  --header-fade-distance: 12.5rem; /* 200px of scrolling: Home header fades from 5% to solid */
+  --header-fade-distance: 12.5rem; /* 200px of scrolling: photo-page header fades from 5% to solid */
+  /* Photo header height on every page (Home hero, Products …): 720px, but never
+     more than 90% of the screen height. min() takes the smaller value.
+     svh = "small viewport height": steady on phones when the browser bar moves. */
+  --hero-height: min(45rem, 90svh);
 
   /* Tells the browser the site is dark: scrollbars and form controls follow */
   color-scheme: dark;
@@ -323,6 +327,25 @@ p a {
 /* Vertical space for a page section */
 .section {
   padding-block: var(--section-space); /* 64px → 96px from 768px */
+}
+
+/* Soft dark fade at the top of a photo header (Home hero, Products), so the
+   header links stay readable on bright photos (fog, sky). Sits above the
+   photo; the element itself needs position: relative. */
+.top-fade::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: calc(var(--header-height) + var(--space-24)); /* 64 + 96 = 160px */
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-bg) 60%, transparent),
+    color-mix(in srgb, var(--color-bg) 25%, transparent) 50%,
+    transparent
+  );
+  pointer-events: none;
 }
 
 /* 4. Skip link – hidden above the page until it gets keyboard focus

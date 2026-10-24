@@ -6,15 +6,18 @@ import HeroSplit from "../components/HeroSplit.astro";
 <BaseLayout title="Home">
   <HeroSplit wildFocus="center 70%" anywhereFocus="center 60%" />
 
-  <!-- PLACEHOLDER call to action: final text and position still open
-       (see CLAUDE.md, section 11). Sits right under the hero, so it is always
-       visible on load – the hero is never taller than 90% of the screen. -->
+  <!-- Two compact buttons right under the hero, always visible on load (the
+       hero is never taller than 90% of the screen). Compact = quieter, so they
+       don't take attention away from the hero. Labels are placeholders.
+       "Explore more" scrolls to the next section (id="explore"). -->
   <div class="container hero-cta">
-    <a href="/products" class="button button-primary">Call to action</a>
+    <a href="/products" class="button button-primary button-compact">Discover the collection</a>
+    <a href="#explore" class="button button-outline button-compact">Explore more ↓</a>
   </div>
   <!-- Closing section: last thing before the footer. Points straight to the
        FAQ and the contact form (on /contact they need id="faq" and id="contact-form"). -->
-  <section class="container section home-contact" aria-labelledby="home-contact-title">
+  <!-- id="explore" moves to the first real Home section once it exists -->
+  <section id="explore" class="container section home-contact" aria-labelledby="home-contact-title">
     <h2 id="home-contact-title">Questions?</h2>
     <p>Read the FAQ or write to us.</p>
     <div class="home-contact-buttons">
@@ -30,7 +33,9 @@ import HeroSplit from "../components/HeroSplit.astro";
      The space below comes from the next section. */
   .hero-cta {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    gap: var(--space-4); /* 16px */
     padding-block-start: var(--space-8); /* 32px */
   }
 

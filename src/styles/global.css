@@ -141,6 +141,14 @@
   scroll-padding-block-start: var(--header-height);
 }
 
+/* Jump links on the same page scroll smoothly – but only for people who
+   haven't asked their system for less motion (they get the instant jump) */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
 /* From 768px: only the token values change – the rules below stay the same */
 @media (width >= 48rem) {
   :root {

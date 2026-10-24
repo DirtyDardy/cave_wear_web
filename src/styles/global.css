@@ -392,8 +392,11 @@ p a {
   background-color: var(--color-accent);
   color: var(--color-on-accent);
 
+  /* The text colour is repeated on hover: on an <a>, the global link hover
+     (Amber Gold) would otherwise win and the text would vanish */
   &:hover:not(:disabled) {
     background-color: var(--color-accent-hover);
+    color: var(--color-on-accent);
   }
 }
 
@@ -416,9 +419,11 @@ p a {
   -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
   backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
 
+  /* Text colour repeated for the same reason as .button-primary */
   &:hover:not(:disabled) {
     background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
     border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    color: var(--color-text);
   }
 }
 

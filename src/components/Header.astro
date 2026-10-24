@@ -303,14 +303,22 @@ const isHome = currentPath === "/";
     transition:
       color 0.2s ease,
       background-color 0.2s ease,
-      border-color 0.2s ease;
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      backdrop-filter 0.2s ease;
 
-    /* Hover: Egret box, dark text. The border turns transparent instead of
-       disappearing, so the button keeps its size and nothing jumps. */
+    /* Hover: smoked glass like the hero bear – blur behind, 45% dark tint,
+       faint light edge, Egret text. The shadow is kept tiny: it must stay
+       inside the header (12px below the button) and not reach the hero. */
     &:hover {
-      border-color: transparent;
-      background-color: var(--color-text);
-      color: var(--color-on-accent);
+      border-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+      background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+      color: var(--color-text);
+      box-shadow:
+        0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
+        0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent);
+      -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
+      backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
     }
   }
 

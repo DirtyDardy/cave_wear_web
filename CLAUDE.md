@@ -17,6 +17,14 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 - The **Cave Bear** is the symbol (strength, endurance, resilience) – use it with intent, never as
   decoration everywhere.
 - Tagline: **"Built for the wild. Made for anywhere."** Footer line: "Not released yet – follow the journey."
+- First collection: the **Basic Collection** – minimal essentials made to last. The idea: no
+  fast fashion, no loud graphics; you only need one or two pieces and they stay with you
+  (longer life = better for the environment and cheaper in the long run). Brand-page material.
+- **Vision vs. fact:** production plans (material, print method, dyeing, where it's made) are
+  Dardan's *vision* and are always called that ("our vision", "planned", "what I'm working on"),
+  never stated as facts. Design intent (fit, look, why) can be shown freely. Never "Made in
+  Germany", "100% cotton", "military-grade", "environmentally friendly" or brand names of
+  production methods as claims.
 - **Demo only:** nothing can be bought. Visitors can follow on social media, email, sign up for the newsletter.
 - Concept disclaimer (exact text): *"Cave Wear is a concept brand for a design portfolio. Products
   are concept mock-ups – some are based on existing garments and edited. Nothing is for sale."*
@@ -120,7 +128,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Shopping bag** – add/remove, quantities, total, optional planned donation, saved in
   localStorage. Ends in **Reserve** (name + email + bag via Netlify Forms), confirmation:
   *"Your items are reserved. No payment now. We'll notify you at launch."* Honest: no payment.
-  OPEN: Reserve looks like a real pre-order – short disclaimer there, or rethink.
+  **Concept (decided 24 Oct):** Reserve = saving your place in the queue for the launch, not a
+  purchase – no money, no commitment, said clearly. After reserving, items can be removed but
+  not added. OPEN: how removing works later (link in the confirmation email?), whether a second
+  reservation is allowed, whether a queue number is shown.
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.
@@ -151,6 +162,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   last block, normal scrolling. Only one such section on the site. OPEN: what each logo part
   means (Dardan), bear only or bear + wordmark, Brand page or Home (teaser?). Needs the logo
   split into separate shapes in Corel – today `logo-horizontal.svg` = 1 shape, `bear-light.svg` = 4.
+- **Pre-launch pieces** – one extra T-shirt and one extra hoodie, only reservable before the
+  launch, separate from the Basic Collection. Idea only – discuss before anything is built.
 - Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
   enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
   category buttons).
@@ -164,10 +177,11 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
 - **Product detail pages: never hide** (Bag stays visible) – decided, not built yet.
-- Height 92px from 768px, 72px mobile (temporary). Logo 44px / 32px mobile.
+- Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
+  sizes from the design file looked too big on real screens).
 - Nav: Geist 500, 16px, uppercase, `--tracking-nav` 0.04em. Inactive Weathered Bone; active
   **bold Egret**, no layout shift, no marker; hover Wild Honey. "Products" active on `/products/*`.
-- Bag button: 44px high, 24px backpack icon (Dardan's drawing), "Bag" label, 12px corners,
+- Bag button: 40px high, 24px backpack icon (Dardan's drawing), "Bag" label, 12px corners,
   Flint outline, Obsidian fill, Weathered Bone. Fades in with the header on Home. Hover (decided
   24 Oct): smoked glass like the bear – blur, 45% Dark Obsidian tint, Egret 25% edge, Egret text,
   only a tiny shadow (must stay inside the header, never reach the hero). Normal state unchanged.
@@ -200,7 +214,22 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - **Real** (bought and photographed by Dardan): hoodie, half-zip, beanie, rain jacket.
   **AI** (Gemini): T-shirt, buff.
 - Rain jacket = Dardan's own Carinthia jacket, Carinthia logo removed, Cave Wear logo added.
-- Some garments get an embroidered logo with visible stitch texture (OPEN: which ones).
+
+### Product concept (design intent, decided 24 Oct)
+
+- **Fit:** drop shoulder, longer body – worn loose or tucked in ("military tuck") for a sharper look.
+- **Chest logo:** the normal bear logo, standard size, on the wearer's left chest (right side in
+  the photo). Tone on tone: always a little darker than the fabric, matte, subtle.
+- **Sleeve:** "CAVE·WEAR" wordmark (with the centre dot, as in the stacked logo: bear on top,
+  wordmark, "Rugged. Functional. Refined.") near the end of the right sleeve. OPEN: exact
+  position – Dardan shows it; stacked logo file still to send (not in the repo).
+- **Decoration (vision):** T-shirt printed · hoodie embroidered · rain jacket thin silicone 3D
+  heat transfer (only slightly raised, so nothing can get pulled off; no embroidery – it would
+  pierce the waterproof fabric) · beanie in the style of a beanie Dardan loves (TAC VRK), picture
+  follows. OPEN: half-zip front logo (embroidered?), buff, what goes on the rain jacket's back.
+- **Neck labels:** pieces worn on bare skin (T-shirt, hoodie, half-zip) get a printed, tagless
+  label with only size · Cave Bear logo · cavewear.de (so people always know where to get one).
+  Dardan redoes the label file. Rain jacket: a normal sewn-in neck label, in black.
 - OPEN: names, prices, sizes, colourways, descriptions, donation amount – **ask Dardan**.
   Some real products still to order.
 - **Image recipe** (one shoot look): 4:5, front + back + side + 3–5 close-ups. Background soft

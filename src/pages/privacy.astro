@@ -4,6 +4,7 @@
 // add a section here BEFORE it goes live:
 //   - contact form (Netlify Forms)          - Reserve / bag (Netlify Forms + localStorage)
 //   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
+// Favorites (localStorage, src/scripts/favorites.js) are covered under "Data stored in your browser".
 // Keep the newsletter purpose in sync with the note in Footer.astro.
 import LegalLayout from "../layouts/LegalLayout.astro";
 import EmailLinks from "../components/EmailLinks.astro";
@@ -26,6 +27,7 @@ const missing = (label: string) => `[${label} – to be added]`;
       Data is only processed when you visit the site (technical server data) and when you sign up
       for the newsletter (your email address).
     </li>
+    <li>Favorites you save with the heart stay in your own browser – nothing is sent to us.</li>
   </ul>
 
   <h2>Who is responsible</h2>
@@ -71,7 +73,14 @@ const missing = (label: string) => `[${label} – to be added]`;
 
   <h2>Data stored in your browser</h2>
   <p>
-    This website itself stores nothing in your browser. Netlify shows a small "Netlify" badge on
+    When you click the heart on a product, this website remembers your favorites in your browser
+    (local storage) – only a short list of product names, e.g. "core-tee". It stays on your device
+    and is never sent to us or anyone else. You can remove a favorite by clicking the heart again,
+    or remove all of them by deleting this website's data in your browser settings. This is only
+    stored because you asked for it (§ 25 (2) no. 2 TDDDG).
+  </p>
+  <p>
+    Netlify shows a small "Netlify" badge on
     the page. If you close it, your browser remembers this for 7 days (local storage), so the badge
     stays hidden. This is only stored because you asked for it (§ 25 (2) no. 2 TDDDG); it contains
     no personal data and is not used for tracking.

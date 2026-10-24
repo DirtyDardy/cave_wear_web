@@ -101,7 +101,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 6. Pages & status
 
 - **Global header + footer** – built (see 7 and 8).
-- **Home** – hero built (see 9). Placeholder "Call to action" button under the hero → `/products`.
+- **Home** – hero built (see 9). Under it two buttons: "Discover the collection" (filled
+  → `/products`) + "Explore more ↓" (outline, smooth scroll to `#explore`); labels are placeholders.
+  Last section "Questions?" with FAQ (filled → `/contact#faq`) + "Write to us" (outline →
+  `/contact#contact-form`). `id="explore"` sits on it until the first real Home section exists.
   Planned: featured products, short conservation overview, journey teaser, weather strip.
 - **Products** – overview, detail pages, bag (see 10). Not built.
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
@@ -164,8 +167,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - Nav: Geist 500, 16px, uppercase, `--tracking-nav` 0.04em. Inactive Weathered Bone; active
   **bold Egret**, no layout shift, no marker; hover Wild Honey. "Products" active on `/products/*`.
 - Bag button: 44px high, 24px backpack icon (Dardan's drawing), "Bag" label, 12px corners,
-  Flint outline, Obsidian fill, Weathered Bone; hover Egret fill + Dark Obsidian. Fades in with
-  the header on Home. OPEN: Dardan to confirm the hover state.
+  Flint outline, Obsidian fill, Weathered Bone. Fades in with the header on Home. Hover (decided
+  24 Oct): smoked glass like the bear – blur, 45% Dark Obsidian tint, Egret 25% edge, Egret text,
+  only a tiny shadow (must stay inside the header, never reach the hero). Normal state unchanged.
 - **Brand submenu** (only submenu, chevron, disclosure pattern with `aria-expanded`, not
   `role="menu"`; hover opens on hover devices; Escape/click outside closes) + **jump links**
   (`/brand#…`, smooth scroll, `scroll-margin-top`, JS for cross-page jumps) – **postponed until
@@ -245,8 +249,9 @@ Nested: inner radius = outer − gap. No squircles/chamfers. OPEN: card radius.
 - `.button` + `.button-primary` (Wild Honey filled, hover Amber Gold – **one per section**) ·
   `.button-glass` (on photos, Egret text) · `.button-outline` (Wild Honey outline, on plain dark) ·
   `.text-link` (tertiary, "Learn more ›") · `.icon-button` (round, Flint border, `aria-label`).
-- Never outline on a photo, never glass on flat dark. Sentence case, 16px medium, 48px high;
-  `.button-compact` 40px / 14px. Pressed 97% (off with reduced motion). Reference: `/styleguide`.
+- Never outline on a photo, never glass on flat dark. Sentence case, **one size for every
+  button: 40px high, 14px medium** (decided 24 Oct). Bigger or smaller only where Dardan asks.
+  Pressed 97% (off with reduced motion). Reference: `/styleguide`.
 
 ### Cards & glass
 Every card = the hero bear's **smoked glass**: blur 12px, saturate 1.2, brightness 0.9 + Dark
@@ -306,5 +311,5 @@ then Dardan decides.
 - Home sections + final CTA; Brand page sections, then submenu + jump links.
 - Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
   strip/card. Glass comparison on `/styleguide` (see 11).
-- Hero at 1280px, mobile version, Safari check. Card radius. Bag hover check.
+- Hero at 1280px, mobile version, Safari check. Card radius.
 - Delete `/styleguide` before launch. DNSSEC at the very end.

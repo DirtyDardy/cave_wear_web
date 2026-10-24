@@ -86,6 +86,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   `npm run build`, publish `dist`, `NODE_VERSION=24`. Form detection on.
 - **Only what is in Git reaches Netlify.** Never import from git-ignored folders
   (e.g. `src/assets/test/`). Risky push → test with a fresh clone (`git clone`, `npm ci`, `npm run build`).
+- Replaced image with the same file name → hard reload (Ctrl + F5); the dev server caches images.
+- Claude settings: `.claude/settings.json` (allow/ask lists) + Stop hook `.claude/hooks/check-build.sh`
+  (test-builds the site when site files changed).
 - New Netlify form works only after a deploy (check: `data-netlify="true"` gone from live HTML).
 - **Domain https://cavewear.de** (netcup Webhosting 1000). Main address without www; `www` and
   `http://` redirect to it. DNS: netcup CCP → Domains → cavewear.de → CloudDNS. Netlify = web
@@ -160,7 +163,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   "Built for the wild. Made for anywhere." Soft dark gradient on top for header readability.
 - Height `min(45rem, 90svh)`; everything inside scales with it.
 - OPEN: text overlaps the bear at 1280px; mobile/touch version; Safari (Mac) check; larger
-  downloads of the hero photos; final CTA text (direction "Discover the collection") + position –
+  downloads of the hero photos (then re-check header readability + top gradient over them); final CTA text (direction "Discover the collection") + position –
   always visible, never hover-only.
 
 ## 10. Products & product images

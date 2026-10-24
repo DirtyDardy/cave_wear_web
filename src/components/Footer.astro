@@ -226,11 +226,14 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
     cursor: wait;
   }
 
+  /* Same look as .footer-note on the left. The link keeps that look too –
+     only the underline marks it as a link (colour alone isn't enough, WCAG) */
   .newsletter-hint {
     color: var(--color-text-quiet);
 
     & a {
-      color: var(--color-text-secondary);
+      color: inherit;
+      font-weight: inherit; /* not semi-bold like other links in running text */
       text-decoration: underline;
       text-underline-offset: 2px;
 

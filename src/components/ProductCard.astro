@@ -1,0 +1,232 @@
+---
+// PRODUCT CARD (prototype, from my products sketch) – 4:5 photo, name,
+// short line, colour dots. Optional second photo that fades in on hover.
+// The heart saves the product as a favorite (src/scripts/favorites.js).
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import HeartIcon from "../assets/icons/heart.svg";
+
+interface Props {
+  id: string; // short, unique, never changes – e.g. "core-tee". Favorites are saved by it.
+  name: string;
+  tagline: string;
+  image: ImageMetadata;
+  alt: string;
+  hoverImage?: ImageMetadata; // shown on hover – leave out for no hover photo
+}
+
+const { id, name, tagline, image, alt, hoverImage } = Astro.props;
+
+// PLACEHOLDER colourways – the same three dots on every card for now.
+// "swatch" = the CSS class that gives each dot its colour.
+const colours = [
+  { label: "Black", swatch: "swatch-black" },
+  { label: "Olive", swatch: "swatch-olive" },
+  { label: "Egret", swatch: "swatch-egret" },
+];
+
+// One size list for both photos: the browser picks the smallest file that is
+// still sharp. "sizes" tells it how wide a card is: 1/3 of the screen on
+// desktop, 1/2 on tablets, full width on phones.
+const widths = [400, 800, 1200];
+const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
+---
+
+<article class="product-card" data-product-id={id}>
+  <div class="product-media">
+    <Image src={image} alt={alt} class="product-image" widths={widths} sizes={sizes} />
+    {hoverImage && <Image src={hoverImage} alt="" class="product-image product-image-hover" widths={widths} sizes={sizes} />}
+
+    <!-- Toggle button: aria-pressed tells screen readers if it's on ("true") or off ("false").
+         favorites.js switches it. -->
+    <button type="button" class="favorite-button" aria-label={`Favorite ${name}`} aria-pressed="false">
+      <HeartIcon class="favorite-icon" />
+    </button>
+  </div>
+
+  <div class="product-info">
+    <h3 class="product-name">{name}</h3>
+    <p class="small product-tagline">{tagline}</p>
+    <ul class="swatches" role="list" aria-label="Colours">
+      {
+        colours.map((colour) => (
+          <li class={`swatch ${colour.swatch}`}>
+            <span class="visually-hidden">{colour.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</article>
+
+<style>
+  /* Dark Obsidian, like the page (decided 24 Oct), sharp corners (card radius
+     is still open). The 1px Charcoal line around it – the same line as under
+     the collection titles – is what shows the card's edge. */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%; /* all cards in a row are equally tall */
+    border: 1px solid var(--color-line);
+    background-color: var(--color-bg);
+  }
+
+  /* --- Photo ------------------------------------------------------------- */
+
+  /* 8px of Dark Obsidian around the photo (top and sides) – a frame, as in the sketch */
+  .product-media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    margin: var(--space-2) var(--space-2) 0;
+    overflow: hidden;
+  }
+
+  .product-image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Second photo lies on top of the first, invisible until hover */
+  .product-image-hover {
+    opacity: 0;
+    transition: opacity 0.4s ease; /* same speed as the hero */
+  }
+
+  /* Only on devices with a real mouse – on phones a tap would leave it stuck.
+     :focus-within = also when the heart button has keyboard focus. */
+  @media (hover: hover) {
+    .product-card:hover .product-image-hover {
+      opacity: 1;
+    }
+  }
+
+  .product-card:focus-within .product-image-hover {
+    opacity: 1;
+  }
+
+  /* --- Favorite button ----------------------------------------------------- */
+
+  /* Smoked glass, same look as the Bag button on hover (Header.astro):
+     blur behind, 45% dark tint, faint Egret edge, tiny shadow.
+     Round, 40px – the height of every button. */
+  .favorite-button {
+    position: absolute;
+    inset-block-start: var(--space-3); /* 12px from the photo edge */
+    inset-inline-end: var(--space-3);
+    display: grid;
+    place-items: center;
+    inline-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+    block-size: calc(var(--space-8) + var(--space-2));
+    padding: 0;
+    border: 0.5px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+    border-radius: var(--radius-full); /* a real circle */
+    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    color: var(--color-text);
+    box-shadow:
+      0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
+      0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
+    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      scale 0.1s ease;
+
+    /* Hover: a little darker, edge a little brighter – like .button-glass */
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+      border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    }
+
+    /* Pressed: 97%, like every button */
+    &:active {
+      scale: 0.97;
+    }
+
+    /* Saved as favorite: Wild Honey heart */
+    &[aria-pressed="true"] {
+      color: var(--color-accent);
+    }
+  }
+
+  /* Without JavaScript the heart can't do anything, so it's hidden */
+  :global(html:not([data-js])) .favorite-button {
+    display: none;
+  }
+
+  /* 20px wide heart in the 40px circle.
+     Moved 1px down: the two round lobes make the top look heavier, so a
+     mathematically centred heart looks too high (optical centring). */
+  .favorite-icon {
+    inline-size: 1.25rem;
+    block-size: auto;
+    translate: 0 1px;
+  }
+
+  /* --- Text ------------------------------------------------------------------ */
+
+  /* Centred, as in the sketch. 24px space around the text. */
+  .product-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-6);
+    text-align: center;
+  }
+
+  .product-name {
+    margin-block-end: var(--space-1); /* 4px – name and line belong together */
+  }
+
+  .product-tagline {
+    margin-block-end: var(--space-6); /* 24px to the colour dots */
+  }
+
+  /* --- Colour dots ---------------------------------------------------------- */
+
+  .swatches {
+    display: flex;
+    gap: var(--space-2); /* 8px */
+    margin: 0;
+    margin-block-start: auto; /* dots sit at the bottom, even with a longer text */
+    padding: 0;
+    list-style: none;
+  }
+
+  .swatch {
+    inline-size: var(--space-6); /* 24px */
+    block-size: var(--space-6);
+    border-radius: var(--radius-full);
+  }
+
+  /* Product colours, not UI colours – so the palette is used directly here.
+     Black gets a Flint ring, otherwise it vanishes on the dark card. */
+  .swatch-black {
+    background-color: var(--color-dark-obsidian);
+    box-shadow: inset 0 0 0 1px var(--color-flint);
+  }
+
+  .swatch-olive {
+    background-color: var(--color-irr-olive);
+  }
+
+  .swatch-egret {
+    background-color: var(--color-egret);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-image-hover,
+    .favorite-button {
+      transition: none;
+    }
+
+    .favorite-button:active {
+      scale: 1;
+    }
+  }
+</style>

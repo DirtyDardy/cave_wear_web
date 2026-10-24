@@ -1,9 +1,202 @@
 ---
+// PRODUCTS (prototype, from my products sketch): photo header, Base
+// Collection, Supporter Collection, Favorites. Names and texts are
+// placeholders. Later the products move to Markdown in src/content/products/.
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import heroImage from "../assets/products/products-hero.jpg";
+import placeholder from "../assets/products/placeholder.jpg";
+import coreTeeFront from "../assets/products/core-tee-front.webp";
+
+// The forest test photo lives in src/assets/test/ – Git ignores that folder,
+// so the photo never reaches Netlify. import.meta.glob "looks for" matching
+// files instead of demanding them: on my PC it finds the photo, on Netlify it
+// finds nothing and the card uses the placeholder. The build never breaks.
+const testPhotos = import.meta.glob<{ default: ImageMetadata }>("../assets/test/core-tee-forest.webp", {
+  eager: true,
+});
+const coreTeeForest = testPhotos["../assets/test/core-tee-forest.webp"]?.default ?? placeholder;
+
+const placeholderAlt = "Placeholder – product photo follows";
+const placeholderTagline = "Placeholder – one short line follows.";
+
+// PLACEHOLDER names and texts. "id" = short name that never changes –
+// favorites are saved by it, so renaming a product doesn't lose them.
+const baseCollection = [
+  {
+    id: "core-tee",
+    name: "The Core Tee",
+    tagline: "Everyday essentials. Nothing unnecessary.",
+    image: coreTeeForest,
+    alt: "A woman in a black top sits on a fallen tree in a dark forest",
+    hoverImage: coreTeeFront,
+  },
+  { id: "hoodie", name: "Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  { id: "half-zip", name: "Half-zip", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  { id: "rain-jacket", name: "Rain jacket", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  { id: "beanie", name: "Beanie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  { id: "buff", name: "Buff", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+];
+
+const supporterCollection = [
+  { id: "supporter-tee", name: "Supporter Tee", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  { id: "supporter-hoodie", name: "Supporter Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+];
 ---
 
 <BaseLayout title="Products">
-  <section class="container section">
-    <h1>Products</h1>
+  <!-- Photo header: trees in front of a city – the wild and anywhere in one picture.
+       top-fade: soft dark fade at the top for the header (global.css) -->
+  <section class="products-hero top-fade">
+    <Image
+      src={heroImage}
+      alt=""
+      class="products-hero-image"
+      widths={[640, 1024, 1600, 2000]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="container products-hero-inner">
+      <h1>Products</h1>
+    </div>
   </section>
+
+  <div class="container section collections">
+    <section class="collection" aria-labelledby="base-title">
+      <h2 id="base-title" class="label collection-title">Base Collection</h2>
+      <ul class="product-grid" role="list">
+        {
+          baseCollection.map((product) => (
+            <li>
+              <ProductCard {...product} />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="collection" aria-labelledby="supporter-title">
+      <h2 id="supporter-title" class="label collection-title">Supporter Collection</h2>
+      <ul class="product-grid" role="list">
+        {
+          supporterCollection.map((product) => (
+            <li>
+              <ProductCard {...product} />
+            </li>
+          ))
+        }
+        <!-- Text card in the third column. PLACEHOLDER text. -->
+        <li class="text-card">
+          <h3>Placeholder headline</h3>
+          <p class="small">Placeholder – what the Supporter Collection is and why it exists.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Filled by favorites.js: a copy of every card whose heart is on.
+         The list starts hidden; the text shows until there's a favorite. -->
+    <section aria-labelledby="favorites-title">
+      <h2 id="favorites-title" class="label collection-title">Favorites</h2>
+      <ul id="favorites-list" class="product-grid" role="list" hidden></ul>
+      <p id="favorites-empty" class="small favorites-empty">No favorites yet. Click the heart on a product to keep it here.</p>
+    </section>
+  </div>
 </BaseLayout>
+
+<script src="../scripts/favorites.js"></script>
+
+<style>
+  /* --- Photo header ------------------------------------------------------------
+     Same height as the Home hero (--hero-height, global.css), full width,
+     under the transparent header – like Home. */
+  .products-hero {
+    position: relative;
+    block-size: var(--hero-height);
+    margin-block-start: calc(-1 * var(--header-height) - 1px); /* under the transparent header */
+    overflow: hidden;
+  }
+
+  /* Vertical position 70% (50% = centre, 100% = bottom edge, decided 24 Oct):
+     the forest always stays in view, the skyline is cut away first on short
+     or narrow screens. */
+  .products-hero-image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: center 70%;
+  }
+
+  /* H1 centred near the bottom, over the trees (dark = readable).
+     z-index 2 = above the top fade. */
+  .products-hero-inner {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-block-end: var(--space-16); /* 64px */
+    text-align: center;
+  }
+
+  /* --- Collections ------------------------------------------------------------ */
+
+  /* 96px between the three collections (same as the space around a section) */
+  .collections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-space);
+  }
+
+  /* Small uppercase title with a line below, across the full width */
+  .collection-title {
+    margin-block-end: var(--space-6); /* 24px to the cards */
+    padding-block-end: var(--space-3); /* 12px to the line */
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  /* 1 column on phones, 2 on tablets, 3 on desktop */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6); /* 24px */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (width >= 40rem) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* "display: grid" above would beat the hidden attribute – this makes
+       hidden win again (used by the empty Favorites list) */
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  /* Same surface and line as a product card; text centred in the middle */
+  .text-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8); /* 32px */
+    border: 1px solid var(--color-line);
+    background-color: var(--color-bg);
+    text-align: center;
+  }
+
+  .favorites-empty {
+    color: var(--color-text-quiet);
+  }
+</style>

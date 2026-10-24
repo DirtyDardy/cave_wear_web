@@ -13,11 +13,14 @@ import HeroSplit from "../components/HeroSplit.astro";
     <a href="/products" class="button button-primary">Call to action</a>
   </div>
   <!-- Closing section: last thing before the footer. Points straight to the
-       contact form (the form on /contact needs id="contact-form"). -->
+       FAQ and the contact form (on /contact they need id="faq" and id="contact-form"). -->
   <section class="container section home-contact" aria-labelledby="home-contact-title">
     <h2 id="home-contact-title">Questions?</h2>
     <p>Read the FAQ or write to us.</p>
-    <a href="/contact#contact-form" class="button button-outline">Write to us</a>
+    <div class="home-contact-buttons">
+      <a href="/contact#faq" class="button button-primary">FAQ</a>
+      <a href="/contact#contact-form" class="button button-outline">Write to us</a>
+    </div>
   </section>
   <!-- The style guide is no longer linked from Home – open it directly: /styleguide -->
 </BaseLayout>
@@ -37,7 +40,15 @@ import HeroSplit from "../components/HeroSplit.astro";
 
     & p {
       margin-inline: auto;
-      margin-block-end: var(--space-6); /* 24px to the button */
+      margin-block-end: var(--space-6); /* 24px to the buttons */
     }
+  }
+
+  /* Both buttons side by side, centred; stacked if there's no room */
+  .home-contact-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4); /* 16px */
   }
 </style>

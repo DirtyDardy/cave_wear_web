@@ -123,12 +123,33 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Contact form** – Netlify Forms via fetch, client-side validation, clear feedback.
 - **Weather strip** ("Field conditions", Open-Meteo) – soft ask first: *"Show today's conditions
   for your location?"* [Use my location] [Show Regensburg]. Browser permission only after the
-  click; declined → Regensburg. Shows weather + a product suggestion (mapping OPEN).
+  click; declined → Regensburg. Shows weather + a product suggestion. Wanted, build later
+  (remind Dardan). Decided 24 Oct: ask first (no IP lookup). Shape: try strip and card side by
+  side, then Dardan picks. Place: Home recommended (on Products the visitor already sees all
+  six) – confirm when building. Draft mapping: rain/snow → rain jacket · below 5 °C → hoodie +
+  beanie + buff · 5–15 °C → half-zip · above 15 °C → T-shirt (final once products are defined).
 - **Follow the journey** – timeline of real milestones only (small data file) + social links.
   Main place Brand page, teaser on Home, one line near Reserve. Links only, no embedded feeds.
 - **Animations** basic only, always respecting `prefers-reduced-motion`.
 - **Scroll snap** CSS only, `proximity` never `mandatory`: hero, main CTA, max. one more.
   Also for the product gallery and the mobile product row.
+
+### Ideas – wanted, build later (remind Dardan when we work on that part)
+
+- **Page transitions** – site-wide soft fade (~200ms) with CSS cross-document view transitions
+  (`@view-transition`). Not Astro's `<ClientRouter />` (JS, would break the header and newsletter
+  scripts). Off with reduced motion. Could be done any time – Dardan picks when.
+- **Flying product photo** – the photo moves from the products overview into the detail page
+  (shared element, `view-transition-name`). Build together with the product pages. Demo moment.
+- **Logo story section** (sticky scroll) – left: short text blocks that explain the company,
+  scrolling normally. Right: the logo stays in place (`position: sticky`); the logo part the
+  current text talks about lights up, the rest dims (small JS, `IntersectionObserver`). After the
+  last block, normal scrolling. Only one such section on the site. OPEN: what each logo part
+  means (Dardan), bear only or bear + wordmark, Brand page or Home (teaser?). Needs the logo
+  split into separate shapes in Corel – today `logo-horizontal.svg` = 1 shape, `bear-light.svg` = 4.
+- Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
+  enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
+  category buttons).
 
 ## 8. Header & footer
 
@@ -231,6 +252,10 @@ Nested: inner radius = outer − gap. No squircles/chamfers. OPEN: card radius.
 Every card = the hero bear's **smoked glass**: blur 12px, saturate 1.2, brightness 0.9 + Dark
 Obsidian 45% tint + fading Egret edge + soft shadow. No coloured cards. Text must pass WCAG.
 Exception: a whole section may be Irr Olive (conservation); cards inside stay glass.
+PROPOSED (not decided): glass only where an image or content is behind it (hero, cards over
+photos, maybe the bag panel); flat Obsidian surface elsewhere – on flat Dark Obsidian the blur has
+nothing to blur. Next step: comparison on `/styleguide` (glass vs flat × on photo vs on flat dark),
+then Dardan decides.
 
 ### Typography
 - **Geist** (variable) – body, UI, nav. **Barlow Condensed Bold 700** – H1/display only,
@@ -279,5 +304,7 @@ Exception: a whole section may be Irr Olive (conservation); cards inside stay gl
 - Newsletter double opt-in + Reserve confirmation email (Netlify Function).
 - Product details, donation model, weather → product mapping.
 - Home sections + final CTA; Brand page sections, then submenu + jump links.
+- Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
+  strip/card. Glass comparison on `/styleguide` (see 11).
 - Hero at 1280px, mobile version, Safari check. Card radius. Bag hover check.
 - Delete `/styleguide` before launch. DNSSEC at the very end.

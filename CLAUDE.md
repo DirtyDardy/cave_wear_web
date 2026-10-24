@@ -111,7 +111,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
 - **Contact** – contact info, contact form, FAQ. Not built.
 - **Impressum, Privacy Policy** – built (see 13). **404** – not built.
-- **`/styleguide`** – hidden (no links, noindex), public by URL. **Delete before final launch.**
+- **`/styleguide`** – noindex, public by URL. Temporary "Style guide" link in the footer bottom
+  row (before Impressum) while building. **Delete page + link before final launch.**
 
 ## 7. Features
 
@@ -312,4 +313,4 @@ then Dardan decides.
 - Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
   strip/card. Glass comparison on `/styleguide` (see 11).
 - Hero at 1280px, mobile version, Safari check. Card radius.
-- Delete `/styleguide` before launch. DNSSEC at the very end.
+- Delete `/styleguide` and its footer link before launch. DNSSEC at the very end.

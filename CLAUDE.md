@@ -117,7 +117,11 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Products** – overview, detail pages, bag (see 10). Not built.
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
-- **Contact** – contact info, contact form, FAQ. Not built.
+- **Contact** – contact info, contact form, FAQ. Not built. The FAQ must have its own jump
+  target (`id`) on each question, at least **pricing** ("Learn more" next to the price) and
+  **size chart / fit** ("Size chart and fit guide" on the product page) – both links then point there.
+  **REMINDER (Dardan asked, 25 Oct): as soon as the FAQ is finished, remind Dardan and connect
+  both links** (`src/pages/products/[id].astro`, search for "TODO: link to").
 - **Impressum, Privacy Policy** – built (see 13). **404** – not built.
 - **`/styleguide`** – noindex, public by URL. Temporary "Style guide" link in the footer bottom
   row (before Impressum) while building. **Delete page + link before final launch.**
@@ -343,6 +347,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - Everything not colour-coded in the mockup is the same on every product page.
 - "Learn more" → later straight to the pricing question + answer in the FAQ on `/contact`.
   No target until the FAQ exists – remind Dardan (no dead links at launch).
+- **"Size chart and fit guide ›" (decided 25 Oct):** text link on the "SIZE:" line, right side
+  (adds no height). Later straight to the size chart / fit question + answer in the FAQ –
+  same as "Learn more": no target until the FAQ exists.
 - OPEN: grid order of shots 1–4 (mockup numbers vs. "2 = back"), photo file names, one-size
   products (beanie, buff), selected state of size/fit/colour (comparison versions).
 
@@ -441,6 +448,8 @@ then Dardan decides.
 ## 14. Still open (ask, don't assume)
 
 - **2FA on the Cave Wear Gmail and netcup** (most important).
+- **When the FAQ is finished:** remind Dardan, then link "Learn more" (pricing) and "Size chart
+  and fit guide" on the product page to their FAQ questions (see 6, Contact).
 - Netlify form notifications → info@cavewear.de.
 - Newsletter double opt-in + Reserve confirmation email (Netlify Function).
 - Product details, donation model, weather → product mapping.

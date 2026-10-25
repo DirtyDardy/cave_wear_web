@@ -112,8 +112,10 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
              and they work with the keyboard (arrow keys) without any JavaScript.
              The round dot of the radio button is hidden; the label is what you see. -->
         <div class="details-block options">
-          <fieldset>
+          <fieldset class="size-group">
             <legend class="label">Size:</legend>
+            <!-- TODO: link to the size chart / fit question in the FAQ (/contact#…) once it exists -->
+            <a class="text-link small size-guide">Size chart and fit guide <span aria-hidden="true">›</span></a>
             <div class="sizes">
               {
                 product.sizes.map((size) => (
@@ -390,6 +392,20 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   legend {
     margin-block-end: var(--space-2); /* 8px to the options */
     padding: 0;
+  }
+
+  /* "Size chart and fit guide ›" on the same line as "SIZE:", on the right –
+     so it adds no height to the column */
+  .size-group {
+    position: relative;
+  }
+
+  /* A fieldset's inner area starts below its legend ("SIZE:" = 20px line + 8px space),
+     so the link moves up by exactly that much to sit on the legend's line */
+  .size-guide {
+    position: absolute;
+    inset-block-start: calc(-1 * (var(--leading-small) + var(--space-2))); /* -28px */
+    inset-inline-end: 0;
   }
 
   /* Sizes: one row of joined boxes, sharp corners, Flint lines.

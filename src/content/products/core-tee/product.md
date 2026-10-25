@@ -34,6 +34,6 @@ The material selection will prioritize comfort, durability, and a suitable balan
 Shot 0: Shot of a woman wearing a t shirt
 Shot 1: Front
 Shot 2: Back
-Shot 3: Close-up of the printed neck label with the size and cavewear.de
-Shot 4: Close-up of the bear logo on the chest
-Shot 5: Close-up of the flatlock seam
+Shot 3: Close-up of the flatlock seam
+Shot 4: Close-up of the printed neck label with the size and cavewear.de
+Shot 5: Close-up of the bear logo on the chest

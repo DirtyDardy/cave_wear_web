@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 # test / placeholder pictures – never committed (Git would keep them forever)
 src/assets/test/
+# Core Tee shot 0 is a placeholder (another brand's logo) – delete this line when the real photo is in
+src/content/products/core-tee/shot_0_core-tee.webp

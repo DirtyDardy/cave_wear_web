@@ -15,6 +15,12 @@ Change something in the text file and the whole site follows – nothing is type
 5. Start the site (`npm run dev`). If something is missing or wrong, the terminal says
    which file and which field.
 
+**Drafts:** a folder whose name starts with `_` is skipped (e.g. `_field-hoodie`). Use this
+while a product is still being filled in – remove the `_` when it's ready to go online.
+
+**Photos:** keep your originals outside this project (e.g. `cave_wear_dis/products/<product>/`).
+Only the finished, converted photos go into the product folder.
+
 ## The text file
 
 **Top part** (between the two `---` lines): one short value per line, written after the colon.

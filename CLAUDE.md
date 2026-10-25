@@ -1,6 +1,6 @@
 # CLAUDE.md – Cave Wear
 
-Project memory for Claude. Read fully at the start of every session. Updated 24 Oct 2026.
+Project memory for Claude. Read fully at the start of every session. Updated 25 Oct 2026.
 If this file and the code disagree, say so and ask – don't guess which one is right.
 
 ## 1. Project
@@ -17,7 +17,7 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 - The **Cave Bear** is the symbol (strength, endurance, resilience) – use it with intent, never as
   decoration everywhere.
 - Tagline: **"Built for the wild. Made for anywhere."** Footer line: "Not released yet – follow the journey."
-- First collection: the **Basic Collection** – minimal essentials made to last. The idea: no
+- First collection: the **Base Collection** (not "Basic", decided 25 Oct) – minimal essentials made to last. The idea: no
   fast fashion, no loud graphics; you only need one or two pieces and they stay with you
   (longer life = better for the environment and cheaper in the long run). Brand-page material.
 - **Vision vs. fact:** production plans (material, print method, dyeing, where it's made) are
@@ -132,6 +132,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   purchase – no money, no commitment, said clearly. After reserving, items can be removed but
   not added. OPEN: how removing works later (link in the confirmation email?), whether a second
   reservation is allowed, whether a queue number is shown.
+  **Wording (decided 25 Oct):** product button "Add to pack" (the bag is a backpack), under it
+  "No payment – reserve your place for the launch." Header label "Pack".
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.
@@ -163,7 +165,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   means (Dardan), bear only or bear + wordmark, Brand page or Home (teaser?). Needs the logo
   split into separate shapes in Corel – today `logo-horizontal.svg` = 1 shape, `bear-light.svg` = 4.
 - **Pre-launch pieces** – one extra T-shirt and one extra hoodie, only reservable before the
-  launch, separate from the Basic Collection. Idea only – discuss before anything is built.
+  launch, separate from the Base Collection. Idea only – discuss before anything is built.
 - Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
   enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
   category buttons).
@@ -171,7 +173,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 8. Header & footer
 
 - Semantic `header` > `nav aria-label="Main navigation"` > `ul` > `li`. Nav: Products · Brand ·
-  Contact · Bag. Logo → Home.
+  Contact · Pack. Logo → Home.
 - Background Dark Obsidian, Charcoal bottom line. **Photo pages** (see next point): 5% → solid
   over the first 200px of scrolling (`--header-fade-distance`); only the background fades.
   Pages without a top photo: solid.
@@ -182,12 +184,13 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   centre and bottom, the forest always shows, the skyline is optional). The split screen stays Home only.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
-- **Product detail pages: never hide** (Bag stays visible) – decided, not built yet.
+- **Product detail pages: never hide** (Pack stays visible) – decided, not built yet.
 - Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
   sizes from the design file looked too big on real screens).
 - Nav: Geist 500, 16px, uppercase, `--tracking-nav` 0.04em. Inactive Weathered Bone; active
   **bold Egret**, no layout shift, no marker; hover Wild Honey. "Products" active on `/products/*`.
-- Bag button: 40px high, 24px backpack icon (Dardan's drawing), "Bag" label, 12px corners,
+- Bag button: 40px high, 24px backpack icon (Dardan's drawing), "Pack" label (was "Bag" until
+  25 Oct; the page is still `/bag`), 12px corners,
   Flint outline, Obsidian fill, Weathered Bone. Fades in with the header on Home. Hover (decided
   24 Oct): smoked glass like the bear – blur, 45% Dark Obsidian tint, Egret 25% edge, Egret text,
   only a tiny shadow (must stay inside the header, never reach the hero). Normal state unchanged.
@@ -215,7 +218,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 10. Products & product images
 
 Six products: **T-shirt · Hoodie · Half-zip (male + female version, same product) · Rain jacket
-· Beanie · Buff**. Products live as Markdown in `src/content/products/` (not built yet).
+· Beanie · Buff**. Products live in `src/content/products/` – see "Product folder system" below (not built yet).
 
 - **Real** (bought and photographed by Dardan): hoodie, half-zip, beanie, rain jacket.
   **AI** (Gemini): T-shirt, buff.
@@ -252,6 +255,62 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   reference – never on the site. Every AI logo is checked against the logo file; fix in Photoshop.
 - No image generation until Dardan writes "Start generating". OPEN: review Gemini's updated recipe.
 - Product sheet layout (views, detail strip, labels) = HTML/CSS with real text, not baked into images.
+
+### Product folder system (decided 25 Oct)
+
+- **Built 25 Oct (no page uses it yet):** `src/content/products/` with `README.md` (guide for
+  anyone adding a product), `_template/` (blank, skipped by the build) and `core-tee/` (example).
+  Rules + error messages in `src/content.config.ts`; colour list `src/data/product-colours.js`.
+  Photo names: `shot_0_<product>` and `shot_<1–5>_<product>_<colour>_<fit>` (proposed by Claude,
+  used in the README – Dardan to confirm). Dardan's originals stay outside the repo; Claude
+  crops them to exact 4:5 and converts to webp.
+
+- One folder per product: `src/content/products/<id>/` = one text file + the photos. Folder name =
+  web address (`/products/<id>`) + favorite id – never rename. Card, product page and breadcrumb
+  all read from this one file; nothing is typed twice. Presentation point: workflow for
+  repetitive maintenance (change a price in one file → the whole site follows).
+- Text file fields: name (typed normally – the product page shows it uppercase via CSS) ·
+  tagline · description · price (number only) · collection ("Base Collection" / "Supporter
+  Collection") · sizes · fits (unisex / female / male) · colours · shot descriptions shot 0–5
+  (alt texts; name, colour and fit are added automatically) · Design & Purpose · Fit &
+  Silhouette · Materials (Dardan always writes these as vision).
+- Photos, all 4:5: **shot 0** = real photoshoot picture, any one colour – never changes.
+  **Shots 1–5** = mock-ups, one set per colour (and per fit if the product has more than one):
+  1 always front, 2 always back, 3–5 close-ups (vary per product, described in the text file).
+- Product colours: one shared list (name → hex) in `src/data/`; text files use the names only.
+- Build safety net: missing field or unknown colour/collection → build stops and names the file.
+  Missing photo → placeholder + warning (photos are still being made).
+
+### Product card (decided 25 Oct)
+
+- The card stays exactly as it is. Only additions: **fit icons** top left – same smoked glass
+  as the heart but smaller and more subtle, **not clickable** (they only show which fits exist).
+  Default photo shot 0, hover photo always shot 1 (first colour). Clicking a colour dot opens the
+  product page with that colour selected.
+- Fit icons: Dardan's three SVGs (circle + symbol). Circle and colours via CSS; the symbol keeps
+  its place inside his circle's box, so the ring – not the whole symbol – is centred.
+
+### Product page (Dardan's "System Integration" mockup, decided 25 Oct, not built yet)
+
+- Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are
+  rough). Header never hides here (see 8). No photo header.
+- Breadcrumb: Products › collection › product name. Two columns.
+- Left: shot 0 big (heart top right), 2×2 grid of shots 1–4, shot 5 big. Front and back sit on the
+  **diagonal** – two shots that blend into the background never share a column.
+- Right column is **sticky** (stays while the photos scroll): name (stays the `<h1>` tag for
+  screen readers and Google, but looks like **Geist uppercase in the H2 size – not Barlow
+  Condensed**, decided 25 Oct: cleaner; weight OPEN – H2 look vs. the lighter mockup weight), tagline,
+  description · line · price, German format ("35,00€") + "Preliminary Price Estimate." +
+  "Learn more" · line · Size · Fit · Color · line · "Add to pack" (`.button-primary`, full width,
+  12px corners) + "No payment – reserve your place for the launch." · accordions Design &
+  Purpose, Fit & Silhouette, Materials – **all closed by default**.
+- Colour click swaps shots 1–5 (shot 0 stays). Female/male click swaps shots 1–5 the same way;
+  both combine (e.g. brown + female → the brown female shots).
+- Everything not colour-coded in the mockup is the same on every product page.
+- "Learn more" → later straight to the pricing question + answer in the FAQ on `/contact`.
+  No target until the FAQ exists – remind Dardan (no dead links at launch).
+- OPEN: grid order of shots 1–4 (mockup numbers vs. "2 = back"), photo file names, one-size
+  products (beanie, buff), selected state of size/fit/colour (comparison versions).
 
 ## 11. Design system
 
@@ -307,6 +366,7 @@ then Dardan decides.
 ### Typography
 - **Geist** (variable) – body, UI, nav. **Barlow Condensed Bold 700** – H1/display only,
   uppercase, line height 0.9, 48–128px `clamp`, max 12ch. Never another weight.
+  Exception: the product name on product pages is Geist (see 10, decided 25 Oct).
 - WOFF2 self-hosted in `public/fonts/` (no Google requests). Both SIL OFL.
 - Scale: H2 32/40→48/56 · Lead 24/32→32/40 · H3 24/32 · Body 16/24→18/28 · Small 14/20 ·
   Label 14/20 uppercase `--tracking-wide`; H4–H6 = Label. Headlines must never clip on mobile.

@@ -227,6 +227,8 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - **Chest logo:** the normal bear logo, standard size, on the wearer's left chest (right side in
   the photo). Tone on tone: a little lighter than the fabric (decided 24 Oct; on black a
   darker logo disappears), matte, subtle – you notice it, it doesn't shout.
+  **Hoodie exception (decided 25 Oct):** the bear sits centred on the chest, between the
+  drawstrings.
 - **Sleeve:** "CAVE·WEAR" wordmark (with the centre dot, as in the stacked logo: bear on top,
   wordmark, "Rugged. Functional. Refined.") near the end of the right sleeve. OPEN: exact
   position – Dardan shows it; stacked logo file still to send (not in the repo).

@@ -27,3 +27,5 @@ pnpm-debug.log*
 src/assets/test/
 # Core Tee shot 0 is a placeholder (another brand's logo) – delete this line when the real photo is in
 src/content/products/core-tee/shot_0_core-tee.webp
+# Field Hoodie shot 0 is a placeholder (source/licence unknown) – delete this line when the real photo is in
+src/content/products/field-hoodie/shot_0_field-hoodie.webp

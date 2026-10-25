@@ -312,11 +312,13 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     }
   }
 
-  /* My H1 – Geist in the H2 size, uppercase (the text file has it in normal writing) */
+  /* My H1 – Geist in the H2 size, uppercase (the text file has it in normal writing).
+     Medium (500) instead of the H2's 800 – the lighter weight from my mockup (decided 25 Oct). */
   .product-name {
     max-inline-size: none;
     margin-block-end: var(--space-3);
     font-family: var(--font-body);
+    font-weight: 500;
     text-transform: uppercase;
   }
 
@@ -433,17 +435,25 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     }
   }
 
-  /* TEMPORARY selected look – the real one will be picked from 2–3 versions */
+  /* Chosen option (decided 25 Oct, from 3 versions): Weathered Bone fill,
+     Egret outline, dark text/symbol – clear at a glance, still calm.
+     Colour dots keep their own colour and only get the Egret outline as a ring. */
   .size:has(:checked) {
-    border-color: var(--color-text);
-    color: var(--color-text);
     position: relative; /* lifts the Egret line above the Flint neighbours */
+    border-color: var(--color-text);
+    background-color: var(--color-text-secondary); /* Weathered Bone */
+    color: var(--color-bg);
+  }
+
+  .fit:has(:checked) {
+    background-color: var(--color-text-secondary);
+    color: var(--color-bg);
   }
 
   .fit:has(:checked),
   .colour:has(:checked) {
     outline: 1px solid var(--color-text);
-    outline-offset: 2px;
+    outline-offset: 2px; /* ring with a small gap, so it reads on every colour */
   }
 
   /* Keyboard focus: the hidden radio button has the focus, the label shows it */

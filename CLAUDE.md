@@ -303,7 +303,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   **Step 2 built 25 Oct:** colour/fit switching (`src/scripts/product-options.js`, reads
   `?colour=` / `?fit=` from the address). Products page cards now come from the folders
   (placeholders only for products without a folder, not clickable); card = stretched link.
-  **Next:** selected-state comparison, name weight comparison.
+- **Selected look (decided 25 Oct, from 3 versions):** chosen size and fit = Weathered Bone
+  fill + Egret outline + dark text/symbol; chosen colour dot = Egret ring (1px, 2px gap).
+  Not Wild Honey – that stays for actions, links and the focus ring.
 - **Sticky (final, 25 Oct):** the whole column always sticks 24px below the header – its top
   (the name) is never hidden. Replaces the "smart sticky" bottom mode and the separately sticky
   name (both tried and removed the same day).
@@ -322,7 +324,7 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   **diagonal** – two shots that blend into the background never share a column.
 - Right column is **sticky** (stays while the photos scroll): name (stays the `<h1>` tag for
   screen readers and Google, but looks like **Geist uppercase in the H2 size – not Barlow
-  Condensed**, decided 25 Oct: cleaner; weight OPEN – H2 look vs. the lighter mockup weight), tagline,
+  Condensed**, decided 25 Oct: cleaner; weight Medium 500 – the lighter mockup weight, decided 25 Oct), tagline,
   description · line · price, German format ("35,00€") + "Preliminary Price Estimate." +
   "Learn more" · line · Size · Fit · Color · line · "Add to pack" (`.button-primary`, full width,
   12px corners) + "No payment – reserve your place for the launch." · accordions Design &

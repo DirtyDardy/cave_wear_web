@@ -306,10 +306,11 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - **Selected look (decided 25 Oct, from 3 versions):** chosen size and fit = Weathered Bone
   fill + Egret outline + dark text/symbol; chosen colour dot = Egret ring (1px, 2px gap).
   Not Wild Honey – that stays for actions, links and the focus ring.
-- **Quantity (decided 25 Oct, version A of two):** [ − | number | + ] left of "Add to pack",
-  1–10 (`src/scripts/quantity.js`). Same look as the size boxes: − and + like an unchosen
-  size, the number like the chosen size; same 6-column grid, so − number + sit under XS S M
-  and the button takes the other half. Label "Quantity:" only for screen readers.
+- **Quantity (decided 25 Oct, version A of two):** compact [ − | number | + ] (3 × 38px) left
+  of "Add to pack", which fills the rest of the line; 1–10 (`src/scripts/quantity.js`).
+  − and + Weathered Bone, number Egret, no fill. Label "Quantity:" only for screen readers.
+  Lines exactly like the size boxes: Flint background through 1px gaps + 1px frame (each line
+  drawn once). A version on the size grid with the "chosen" fill was tried and rejected.
 - **Sticky (final, 25 Oct):** the whole column always sticks 24px below the header – its top
   (the name) is never hidden. Replaces the "smart sticky" bottom mode and the separately sticky
   name (both tried and removed the same day).

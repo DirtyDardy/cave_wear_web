@@ -383,25 +383,26 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     padding: 0;
   }
 
-  /* Sizes: one row of joined boxes, sharp corners, Flint lines */
+  /* Sizes: one row of joined boxes, sharp corners, Flint lines.
+     The lines are the Flint background showing through 1px gaps and a 1px frame,
+     so every line is drawn exactly once – the same as in the quantity selector.
+     (Before, two box borders lay on top of each other and looked thicker.) */
   .sizes {
     display: grid;
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
+    gap: 1px;
+    padding: 1px;
+    background-color: var(--color-input-border);
   }
 
   .size {
     display: grid;
     place-items: center;
-    block-size: calc(var(--space-8) + var(--space-2)); /* 40px – the height of every button */
-    border: 1px solid var(--color-input-border);
+    block-size: calc(var(--space-8) + var(--space-2) - 2px); /* 38px + 1px frame above and below = 40px */
+    background-color: var(--color-bg);
     color: var(--color-text-quiet);
     cursor: pointer;
-
-    /* Neighbours share one line instead of two */
-    & + & {
-      margin-inline-start: -1px;
-    }
 
     &:hover {
       color: var(--color-text);
@@ -452,10 +453,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
      Egret outline, dark text/symbol – clear at a glance, still calm.
      Colour dots keep their own colour and only get the Egret outline as a ring. */
   .size:has(:checked) {
-    position: relative; /* lifts the Egret line above the Flint neighbours */
-    border-color: var(--color-text);
+    position: relative; /* with z-index: lifts the Egret line above the neighbours */
+    z-index: 1;
     background-color: var(--color-text-secondary); /* Weathered Bone */
     color: var(--color-bg);
+    box-shadow: 0 0 0 1px var(--color-text); /* Egret line exactly on the Flint lines around it */
   }
 
   .fit:has(:checked) {
@@ -480,21 +482,15 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
   /* --- Quantity + Add to pack ------------------------------------------------------- */
 
-  /* Quantity on the left, "Add to pack" next to it (decided 25 Oct).
-     Six equal columns – the same grid as the six size boxes above, so − 1 +
-     sit exactly under XS S M and the button takes the other half. */
+  /* Quantity on the left, "Add to pack" fills the rest of the line (decided 25 Oct) */
   .pack-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .quantity {
-    grid-column: span 3;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-3); /* 12px */
   }
 
   .add-to-pack {
-    grid-column: span 3;
-    margin-inline-start: var(--space-3); /* 12px gap, without moving the grid */
+    flex: 1;
   }
 
   /* The "Quantity:" label is only for screen readers (same trick as .visually-hidden) –
@@ -508,20 +504,22 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     white-space: nowrap;
   }
 
-  /* [ − | 1 | + ] in the look of the size boxes (synced 25 Oct): each part is a
-     box with a Flint line, sharp corners, 40px high. − and + look like a size
-     that isn't chosen; the number looks like the chosen size. */
+  /* [ − | 1 | + ] – sharp corners, 40px high, and its lines made exactly like the
+     size boxes: Flint background through 1px gaps and a 1px frame (one line each) */
   .stepper {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, calc(var(--space-8) + var(--space-2) - 2px)); /* 3 × 38px */
+    gap: 1px;
     block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+    padding: 1px;
+    background-color: var(--color-input-border);
   }
 
   .stepper-button {
     padding: 0;
-    border: 1px solid var(--color-input-border);
-    background: none;
-    color: var(--color-text-quiet); /* Muted Stone, like the sizes */
+    border: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text-secondary);
     font: inherit;
     cursor: pointer;
 
@@ -541,20 +539,12 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     visibility: hidden;
   }
 
-  /* The number = the chosen size: Weathered Bone fill, Egret outline, dark text.
-     -1px on both sides: it lies on the lines of − and + (one shared line, like
-     the size boxes), and position + z-index keep its Egret line on top. */
   .stepper input {
-    position: relative;
-    z-index: 1;
-    inline-size: auto;
-    min-inline-size: 0;
-    margin-inline: -1px;
+    inline-size: 100%;
     padding: 0;
-    border: 1px solid var(--color-text);
-    border-radius: 0;
-    background-color: var(--color-text-secondary);
-    color: var(--color-bg);
+    border: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     font: inherit;
     text-align: center;
     appearance: textfield; /* hides the browser's own small arrows … */

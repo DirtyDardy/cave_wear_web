@@ -1,49 +1,65 @@
 ---
-// PRODUCTS (prototype, from my products sketch): photo header, Base
-// Collection, Supporter Collection, Favorites. Names and texts are
-// placeholders. Later the products move to Markdown in src/content/products/.
+// PRODUCTS (from my products sketch): photo header, Base Collection,
+// Supporter Collection, Favorites.
+// Every product folder in src/content/products/ becomes a card here by itself.
+// Products without a folder yet still show as PLACEHOLDER cards (not clickable).
 import { Image } from "astro:assets";
-import type { ImageMetadata } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProductCard from "../components/ProductCard.astro";
+import { getProducts, type Product } from "../data/products";
 import heroImage from "../assets/products/products-hero.jpg";
 import placeholder from "../assets/products/placeholder.jpg";
-import coreTeeFront from "../assets/products/core-tee-front.webp";
 
-// The forest test photo lives in src/assets/test/ – Git ignores that folder,
-// so the photo never reaches Netlify. import.meta.glob "looks for" matching
-// files instead of demanding them: on my PC it finds the photo, on Netlify it
-// finds nothing and the card uses the placeholder. The build never breaks.
-const testPhotos = import.meta.glob<{ default: ImageMetadata }>("../assets/test/core-tee-forest.webp", {
-  eager: true,
-});
-const coreTeeForest = testPhotos["../assets/test/core-tee-forest.webp"]?.default ?? placeholder;
+const products = await getProducts();
+
+// A product folder → what the card needs. Card photo = shot 0,
+// hover photo = shot 1 (front) in the first colour and fit.
+function toCard(product: Product) {
+  return {
+    id: product.id,
+    name: product.name,
+    tagline: product.tagline,
+    image: product.shot0.image,
+    alt: product.shot0.alt,
+    hoverImage: product.shotSets[0].shots[0].image,
+    href: `/products/${product.id}`,
+    colours: product.colours,
+    fits: product.fits,
+  };
+}
 
 const placeholderAlt = "Placeholder – product photo follows";
 const placeholderTagline = "Placeholder – one short line follows.";
 
-// PLACEHOLDER names and texts. "id" = short name that never changes –
-// favorites are saved by it, so renaming a product doesn't lose them.
-const baseCollection = [
-  {
-    id: "core-tee",
-    name: "The Core Tee",
-    tagline: "Everyday essentials. Nothing unnecessary.",
-    image: coreTeeForest,
-    alt: "A woman in a black top sits on a fallen tree in a dark forest",
-    hoverImage: coreTeeFront,
-  },
-  { id: "hoodie", name: "Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-  { id: "half-zip", name: "Half-zip", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-  { id: "rain-jacket", name: "Rain jacket", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-  { id: "beanie", name: "Beanie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-  { id: "buff", name: "Buff", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-];
+// PLACEHOLDER cards for products that have no folder yet. "id" = short name that
+// never changes – favorites are saved by it. A placeholder disappears by itself
+// as soon as a folder with the same id exists.
+const placeholders = {
+  "Base Collection": [
+    { id: "half-zip", name: "Half-zip", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "rain-jacket", name: "Rain jacket", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "beanie", name: "Beanie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "buff", name: "Buff", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  ],
+  "Supporter Collection": [
+    { id: "supporter-tee", name: "Supporter Tee", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "supporter-hoodie", name: "Supporter Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+  ],
+};
 
-const supporterCollection = [
-  { id: "supporter-tee", name: "Supporter Tee", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-  { id: "supporter-hoodie", name: "Supporter Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-];
+const folderIds = products.map((product) => product.id);
+
+// One collection's cards: first the products from folders, then the placeholders
+// that have no folder yet. "..." = put all items of that list in here.
+function cardsFor(collection: Product["collection"]) {
+  return [
+    ...products.filter((product) => product.collection === collection).map(toCard),
+    ...placeholders[collection].filter((card) => !folderIds.includes(card.id)),
+  ];
+}
+
+const baseCollection = cardsFor("Base Collection");
+const supporterCollection = cardsFor("Supporter Collection");
 ---
 
 <BaseLayout title="Products">

@@ -1,10 +1,18 @@
 ---
-// PRODUCT CARD (prototype, from my products sketch) – 4:5 photo, name,
-// short line, colour dots. Optional second photo that fades in on hover.
+// PRODUCT CARD (from my products sketch) – 4:5 photo, name, short line, colour
+// dots, fit icons. Optional second photo that fades in on hover.
 // The heart saves the product as a favorite (src/scripts/favorites.js).
+// Clicking (decided 25 Oct): the whole card opens the product page; a colour dot
+// or fit icon opens it with that colour / fit already chosen.
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { toColour } from "../data/products";
 import HeartIcon from "../assets/icons/heart.svg";
+import FitUnisexIcon from "../assets/icons/fit-unisex.svg";
+import FitFemaleIcon from "../assets/icons/fit-female.svg";
+import FitMaleIcon from "../assets/icons/fit-male.svg";
+
+type Fit = "unisex" | "female" | "male";
 
 interface Props {
   id: string; // short, unique, never changes – e.g. "core-tee". Favorites are saved by it.
@@ -13,17 +21,25 @@ interface Props {
   image: ImageMetadata;
   alt: string;
   hoverImage?: ImageMetadata; // shown on hover – leave out for no hover photo
+  href?: string; // the product page – leave out for placeholder cards (then nothing is clickable)
+  colours?: ReturnType<typeof toColour>[]; // leave out → the three placeholder dots
+  fits?: Fit[]; // leave out → no fit icons
 }
 
-const { id, name, tagline, image, alt, hoverImage } = Astro.props;
+const {
+  id,
+  name,
+  tagline,
+  image,
+  alt,
+  hoverImage,
+  href,
+  colours = ["Black", "Olive", "Egret"].map(toColour),
+  fits = [],
+} = Astro.props;
 
-// PLACEHOLDER colourways – the same three dots on every card for now.
-// "swatch" = the CSS class that gives each dot its colour.
-const colours = [
-  { label: "Black", swatch: "swatch-black" },
-  { label: "Olive", swatch: "swatch-olive" },
-  { label: "Egret", swatch: "swatch-egret" },
-];
+const fitIcons = { unisex: FitUnisexIcon, female: FitFemaleIcon, male: FitMaleIcon };
+const fitLabels = { unisex: "Unisex", female: "Female", male: "Male" };
 
 // One size list for both photos: the browser picks the smallest file that is
 // still sharp. "sizes" tells it how wide a card is: 1/3 of the screen on
@@ -37,6 +53,25 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
     <Image src={image} alt={alt} class="product-image" widths={widths} sizes={sizes} />
     {hoverImage && <Image src={hoverImage} alt="" class="product-image product-image-hover" widths={widths} sizes={sizes} />}
 
+    <!-- Fit icons, top left – each opens the product page with that fit chosen -->
+    {
+      href && fits.length > 0 && (
+        <ul class="fits" role="list" aria-label="Fits">
+          {fits.map((fit) => {
+            const FitIcon = fitIcons[fit];
+            return (
+              <li>
+                <a href={`${href}?fit=${fit}`} class="fit-link">
+                  <FitIcon class="fit-icon" />
+                  <span class="visually-hidden">{`${name}, ${fitLabels[fit]} fit`}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
+
     <!-- Toggle button: aria-pressed tells screen readers if it's on ("true") or off ("false").
          favorites.js switches it. -->
     <button type="button" class="favorite-button" aria-label={`Favorite ${name}`} aria-pressed="false">
@@ -45,13 +80,28 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
   </div>
 
   <div class="product-info">
-    <h3 class="product-name">{name}</h3>
+    <!-- The name link is stretched over the whole card (see CSS) – so a click
+         anywhere on the card opens the product page -->
+    <h3 class="product-name">{href ? <a href={href} class="card-link">{name}</a> : name}</h3>
     <p class="small product-tagline">{tagline}</p>
     <ul class="swatches" role="list" aria-label="Colours">
       {
         colours.map((colour) => (
-          <li class={`swatch ${colour.swatch}`}>
-            <span class="visually-hidden">{colour.label}</span>
+          <li>
+            {href ? (
+              <a
+                href={`${href}?colour=${colour.file}`}
+                class="swatch"
+                style={`--swatch: ${colour.hex}`}
+                data-very-dark={colour.veryDark ? "" : undefined}
+              >
+                <span class="visually-hidden">{`${name} in ${colour.name}`}</span>
+              </a>
+            ) : (
+              <span class="swatch" style={`--swatch: ${colour.hex}`} data-very-dark={colour.veryDark ? "" : undefined}>
+                <span class="visually-hidden">{colour.name}</span>
+              </span>
+            )}
           </li>
         ))
       }
@@ -64,11 +114,37 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
      is still open). The 1px Charcoal line around it – the same line as under
      the collection titles – is what shows the card's edge. */
   .product-card {
+    position: relative; /* the stretched link below covers exactly this box */
     display: flex;
     flex-direction: column;
     block-size: 100%; /* all cards in a row are equally tall */
     border: 1px solid var(--color-line);
     background-color: var(--color-bg);
+  }
+
+  /* --- Whole card clickable ("stretched link") ------------------------------
+     A link inside a link isn't allowed in HTML, so the card can't be one big
+     link around the dots. Instead the name link gets an invisible layer
+     (::after) that covers the whole card. The heart, fit icons and dots get
+     z-index: 1, so they lie above that layer and keep their own clicks. */
+  .card-link {
+    color: inherit; /* the name stays Egret, not link colour */
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Keyboard focus: ring around the whole card instead of only the name */
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .product-card:has(.card-link:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 
   /* --- Photo ------------------------------------------------------------- */
@@ -108,7 +184,50 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
   }
 
   /* The heart button (.favorite-button) is styled in global.css –
-     the product page uses the same one. */
+     the product page uses the same one. Here it only needs to lie above the
+     stretched link. */
+  .favorite-button {
+    z-index: 1;
+  }
+
+  /* --- Fit icons ---------------------------------------------------------------
+     Top left, same smoked glass as the heart but smaller (32px) and more subtle:
+     fainter edge, no shadow. Dardan's symbol fills the circle, so the ring is centred. */
+  .fits {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: var(--space-3); /* 12px from the photo edge, like the heart */
+    inset-inline-start: var(--space-3);
+    display: flex;
+    gap: var(--space-1); /* 4px */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fit-link {
+    display: grid;
+    place-items: center;
+    inline-size: var(--space-8); /* 32px */
+    block-size: var(--space-8);
+    border: 0.5px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+    border-radius: var(--radius-full);
+    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    color: var(--color-text);
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
+    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+      color: var(--color-text);
+    }
+  }
+
+  .fit-icon {
+    inline-size: 100%;
+    block-size: 100%;
+  }
 
   /* --- Text ------------------------------------------------------------------ */
 
@@ -141,29 +260,26 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
     list-style: none;
   }
 
+  /* Product colours from the shared list (src/data/product-colours.js).
+     As links they lie above the stretched link (z-index needs position). */
   .swatch {
+    position: relative;
+    z-index: 1;
+    display: block;
     inline-size: var(--space-6); /* 24px */
     block-size: var(--space-6);
     border-radius: var(--radius-full);
-  }
+    background-color: var(--swatch);
 
-  /* Product colours, not UI colours – so the palette is used directly here.
-     Black gets a Flint ring, otherwise it vanishes on the dark card. */
-  .swatch-black {
-    background-color: var(--color-dark-obsidian);
-    box-shadow: inset 0 0 0 1px var(--color-flint);
-  }
-
-  .swatch-olive {
-    background-color: var(--color-irr-olive);
-  }
-
-  .swatch-egret {
-    background-color: var(--color-egret);
+    /* Black and similar get a Flint ring, otherwise they vanish on the dark card */
+    &[data-very-dark] {
+      box-shadow: inset 0 0 0 1px var(--color-flint);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .product-image-hover {
+    .product-image-hover,
+    .fit-link {
       transition: none;
     }
   }

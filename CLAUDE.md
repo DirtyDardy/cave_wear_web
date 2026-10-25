@@ -324,8 +324,8 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   name (both tried and removed the same day).
 - **Compact column (version B of a comparison, decided 25 Oct):** blocks 16px, labels 8px,
   accordions 12px, description in Small (14/20), Fit and Color side by side under Size,
-  "Learn more ›" on the line of "Preliminary Price Estimate.". Column ~755px; "Add to pack"
-  ends ~640px from the top of the screen → visible on practically every laptop.
+  "Learn more ›" on its own line under "Preliminary Price Estimate." (changed back 25 Oct).
+  Column ~810px; "Add to pack" ends ~695px from the top of the screen → visible on normal laptops.
 - Breadcrumb: Muted Stone; the current page one step lighter (Weathered Bone) – decided 25 Oct.
 - Second product: `field-hoodie` (The Field Hoodie, black + egret). Its shot 0 is a placeholder
   without licence info → local only (`.gitignore`), like the Core Tee's.
@@ -347,8 +347,8 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - Everything not colour-coded in the mockup is the same on every product page.
 - "Learn more" → later straight to the pricing question + answer in the FAQ on `/contact`.
   No target until the FAQ exists – remind Dardan (no dead links at launch).
-- **"Size chart and fit guide ›" (decided 25 Oct):** text link on the "SIZE:" line, right side
-  (adds no height). Later straight to the size chart / fit question + answer in the FAQ –
+- **"Size chart and fit guide ›" (decided 25 Oct):** text link right under the size boxes
+  (left-aligned). Later straight to the size chart / fit question + answer in the FAQ –
   same as "Learn more": no target until the FAQ exists.
 - OPEN: grid order of shots 1–4 (mockup numbers vs. "2 = back"), photo file names, one-size
   products (beanie, buff), selected state of size/fit/colour (comparison versions).

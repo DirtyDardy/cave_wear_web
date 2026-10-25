@@ -68,6 +68,10 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 13. **Desktop first.** Mobile polish is a later phase.
 14. Claude can't generate images: Claude writes prompts and checks results; Dardan generates in
     Gemini and finishes in Photoshop.
+15. **Read change requests in the smallest sense** (learned 25 Oct): "sync the look" meant the
+    same line thickness and colour – not a redesign. If a request can mean a small or a big
+    change, do the small one or ask first. Comparisons work best as a temporary `?version=`
+    switch on localhost + screenshots; the switch is removed right after the decision.
 
 ## 4. Tech stack
 
@@ -95,6 +99,13 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Only what is in Git reaches Netlify.** Never import from git-ignored folders
   (e.g. `src/assets/test/`). Risky push → test with a fresh clone (`git clone`, `npm ci`, `npm run build`).
 - Replaced image with the same file name → hard reload (Ctrl + F5); the dev server caches images.
+- New page shows "not found" on localhost? An old background `astro dev` may still run
+  (`.astro/dev.json` shows when it started) → `npx astro dev stop`, then start again. In the
+  desktop app Claude starts servers from `.claude/launch.json`: `astro-dev` (4321) and
+  `astro-preview` (the built site, 4330).
+- **Product photos:** Dardan's originals live in `D:\project\cave_wear_dis\products\<id>\`
+  (outside the repo, never in Git). Claude crops them to exact 4:5, max 1600×2000, webp
+  quality 85 (sharp, comes with Astro) and saves them in the product folder.
 - Claude settings: `.claude/settings.json` (allow/ask lists) + Stop hook `.claude/hooks/check-build.sh`
   (test-builds the site when site files changed).
 - New Netlify form works only after a deploy (check: `data-netlify="true"` gone from live HTML).
@@ -114,7 +125,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   Last section "Questions?" with FAQ (filled → `/contact#faq`) + "Contact us" (outline →
   `/contact#contact-form`). `id="explore"` sits on it until the first real Home section exists.
   Planned: featured products, short conservation overview, journey teaser, weather strip.
-- **Products** – overview, detail pages, bag (see 10). Not built.
+- **Products** – overview + product pages built from the product folders (25 Oct, see 10).
+  Products so far: The Core Tee, The Field Hoodie. Bag not built.
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
 - **Contact** – contact info, contact form, FAQ. Not built. The FAQ must have its own jump
@@ -222,7 +234,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 10. Products & product images
 
 Six products: **T-shirt · Hoodie · Half-zip (male + female version, same product) · Rain jacket
-· Beanie · Buff**. Products live in `src/content/products/` – see "Product folder system" below (not built yet).
+· Beanie · Buff**. Products live in `src/content/products/` – see "Product folder system" below.
 
 - **Real** (bought and photographed by Dardan): hoodie, half-zip, beanie, rain jacket.
   **AI** (Gemini): T-shirt, buff.
@@ -274,12 +286,12 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 
 ### Product folder system (decided 25 Oct)
 
-- **Built 25 Oct (no page uses it yet):** `src/content/products/` with `README.md` (guide for
-  anyone adding a product), `_template/` (blank, skipped by the build) and `core-tee/` (example).
-  Rules + error messages in `src/content.config.ts`; colour list `src/data/product-colours.js`.
-  Photo names: `shot_0_<product>` and `shot_<1–5>_<product>_<colour>_<fit>` (proposed by Claude,
-  used in the README – Dardan to confirm). Dardan's originals stay outside the repo; Claude
-  crops them to exact 4:5 and converts to webp.
+- **Built 25 Oct, used by the Products page and every product page:** `src/content/products/`
+  with `README.md` (guide for anyone adding a product), `_template/` (blank, skipped – folders
+  starting with `_` are drafts), `core-tee/`, `field-hoodie/`. Rules + error messages in
+  `src/content.config.ts`; colour list `src/data/product-colours.js`; reader `src/data/products.ts`.
+  Photo names (in use): `shot_0_<product>` and `shot_<1–5>_<product>_<colour>_<fit>`.
+  Originals stay outside the repo (see 5); Claude crops them to exact 4:5 and converts to webp.
 
 - One folder per product: `src/content/products/<id>/` = one text file + the photos. Folder name =
   web address (`/products/<id>`) + favorite id – never rename. Card, product page and breadcrumb
@@ -315,7 +327,7 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - **Step 1 built 25 Oct:** `src/pages/products/[id].astro` (one page per folder) + reader
   `src/data/products.ts`. Layout, photos, texts, sticky column, heart (shared `.favorite-button`
   in `global.css`), header pinned (`data-pinned`). Gallery 1 front | 3 / 4 | 2 back, 5 big.
-  Content max 960px wide (as in the mockup). Selected states are TEMPORARY.
+  Content max 960px wide (as in the mockup).
   **Step 2 built 25 Oct:** colour/fit switching (`src/scripts/product-options.js`, reads
   `?colour=` / `?fit=` from the address). Products page cards now come from the folders
   (placeholders only for products without a folder, not clickable); card = stretched link.
@@ -371,8 +383,14 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - **"Size chart and fit guide ›" (decided 25 Oct):** text link right under the size boxes
   (left-aligned). Later straight to the size chart / fit question + answer in the FAQ –
   same as "Learn more": no target until the FAQ exists.
-- OPEN: grid order of shots 1–4 (mockup numbers vs. "2 = back"), photo file names, one-size
-  products (beanie, buff), selected state of size/fit/colour (comparison versions).
+- Settled 25 Oct: gallery order (1 front | 3 / 4 | 2 back, 5 big), photo file names, selected
+  look. One-size products (beanie, buff) show one "One size" box, already chosen – Dardan
+  hasn't confirmed this look yet, check when the first one-size product arrives.
+- **Photoshop fixes found 25 Oct (Core Tee mock-ups):** sleeve wordmark reads "CAVE-WEAR"
+  (hyphen) on the beige and olive fronts – should be the centre dot; olive and black backs show
+  no sleeve wordmark (beige does); the olive chest-logo close-up looks grey-brown; the black
+  neck label is bright, beige/olive are tone on tone (intended?); the logo on beige is darker
+  than the fabric (rule says a little lighter). Egret close-ups 3 + 4 are only 912px wide.
 
 ## 11. Design system
 
@@ -481,3 +499,10 @@ then Dardan decides.
   strip/card. Glass comparison on `/styleguide` (see 11).
 - Hero at 1280px, mobile version, Safari check. Card radius.
 - Delete `/styleguide` and its footer link before launch. DNSSEC at the very end.
+- Product pages (asked 25 Oct, not answered yet): rename `/bag` to `/pack` + page title
+  "Your pack"? Colour dots vs real fabric (the Egret dot is lighter than the beige shirt)?
+  A "Choose a size" hint while "Add to pack" is disabled? Always-visible underline on the
+  two FAQ links (Dardan's example was underlined)?
+- Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
+  pinch, card fit icons on touch.
+- Real shot 0 photos (Core Tee, Field Hoodie) – the placeholders are local only (`.gitignore`).

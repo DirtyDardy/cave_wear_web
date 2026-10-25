@@ -452,11 +452,12 @@ p a {
   }
 }
 
-/* Tertiary: text link with a small arrow */
+/* Tertiary: text link with a small arrow – written as "Learn more <span>›</span>".
+   inline-block, not flex: the normal space before the arrow makes the distance,
+   so the hover underline runs through to the end without a break
+   (with flex + gap, the line stopped in the gap before the arrow). */
 .text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
+  display: inline-block;
   color: var(--color-accent);
   font-weight: 500;
   text-decoration: none;

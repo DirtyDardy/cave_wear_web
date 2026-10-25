@@ -226,6 +226,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 
 - **Real** (bought and photographed by Dardan): hoodie, half-zip, beanie, rain jacket.
   **AI** (Gemini): T-shirt, buff.
+- **Status 25 Oct:** the mock-ups (shots 1–5) of T-shirt, hoodie and half-zip are AI for now,
+  with Dardan's logo added. Real photos of the pieces he buys and embroiders himself replace
+  them later – same file names, no code changes (presentation point).
 - Rain jacket = Dardan's own Carinthia jacket, Carinthia logo removed, Cave Wear logo added.
 
 ### Product concept (design intent, decided 24 Oct)
@@ -236,16 +239,25 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   darker logo disappears), matte, subtle – you notice it, it doesn't shout.
   **Hoodie exception (decided 25 Oct):** the bear sits centred on the chest, between the
   drawstrings.
+  **Half-zip exception (decided 25 Oct):** the bear sits on the wearer's right chest, on the
+  diagonal yoke seam next to the zip – the seam runs exactly through the cut between head and
+  body, the feet rest on the seam under the zip. The garment's construction becomes part of
+  the logo (presentation point). Embroidered, tone on tone.
+- **No back print (hoodie, decided 25 Oct):** one embroidered logo is enough to show the brand;
+  a back print adds cost, nobody sees it under a backpack, and it isn't a statement mark.
 - **Sleeve:** "CAVE·WEAR" wordmark (with the centre dot, as in the stacked logo: bear on top,
   wordmark, "Rugged. Functional. Refined.") near the end of the right sleeve. OPEN: exact
   position – Dardan shows it; stacked logo file still to send (not in the repo).
 - **Decoration (vision):** T-shirt printed · hoodie embroidered · rain jacket thin silicone 3D
   heat transfer (only slightly raised, so nothing can get pulled off; no embroidery – it would
   pierce the waterproof fabric) · beanie in the style of a beanie Dardan loves (TAC VRK), picture
-  follows. OPEN: half-zip front logo (embroidered?), buff, what goes on the rain jacket's back.
+  follows · half-zip embroidered (see Chest logo). OPEN: buff, what goes on the rain jacket's back.
 - **Seams (T-shirt, decided 24 Oct):** flatlock (flat band of zigzag stitching, from military base
   layers) on shoulder, armhole, side and underarm seams – the shoulders because backpack straps sit
   there. Black thread, tone on tone, only visible up close. Hem, sleeve ends, collar: normal clean stitch.
+- **Hoodie close-ups (decided 25 Oct):** embroidered bear (macro) · shoulder seam (flatlock like
+  the T-shirt) · folded hem corner showing the outside and a grid-fleece inside. The fold photo
+  is a concept picture – say so on the site; the grid fleece is vision, not a material fact.
 - **Neck labels:** pieces worn on bare skin (T-shirt, hoodie, half-zip) get a printed, tagless
   label with only size · Cave Bear logo · cavewear.de (so people always know where to get one).
   Dardan redoes the label file. Rain jacket: a normal sewn-in neck label, in black.
@@ -452,7 +464,9 @@ then Dardan decides.
 - Trademark check done 21 Oct (TMview, class 25): no hits in DE/EU. A website "CAVEWEAR –
   Underground Tech Fashion" exists (not registered). Real launch → register at DPMA.
 - OPEN: short disclaimer on product/Bag/Reserve; note that some product images are AI (+ which
-  tool, check its terms); Gewerbe/VAT question.
+  tool – Gemini and ChatGPT, check both terms); Gewerbe/VAT question.
+- **Photos of real people** (e.g. a friend wearing a piece for shot 0): written consent first
+  (a chat message is enough) – right to one's own image.
 
 ## 14. Still open (ask, don't assume)
 

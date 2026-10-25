@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getProducts, type Product } from "../../data/products";
 import HeartIcon from "../../assets/icons/heart.svg";
+import CloseIcon from "../../assets/icons/close.svg";
 import FitUnisexIcon from "../../assets/icons/fit-unisex.svg";
 import FitFemaleIcon from "../../assets/icons/fit-female.svg";
 import FitMaleIcon from "../../assets/icons/fit-male.svg";
@@ -61,16 +62,20 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
       <!-- LEFT: shot 0 big, then shots 1–4 as 2×2, then shot 5 big.
            One set of shots 1–5 per colour × fit – product-options.js shows the chosen one.
            Photos in hidden sets only load when their set is shown. -->
+      <!-- Every photo is a button: a click opens it big in the photo viewer
+           (photo-viewer.js). data-shot = its number, data-full = the full-size file. -->
       <div class="gallery">
         <div class="shot-0" data-product-id={product.id}>
-          <Image
-            src={product.shot0.image}
-            alt={product.shot0.alt}
-            widths={bigWidths}
-            sizes={bigSizes}
-            loading="eager"
-            fetchpriority="high"
-          />
+          <button type="button" class="photo-button" data-shot="0" data-full={product.shot0.image.src}>
+            <Image
+              src={product.shot0.image}
+              alt={product.shot0.alt}
+              widths={bigWidths}
+              sizes={bigSizes}
+              loading="eager"
+              fetchpriority="high"
+            />
+          </button>
           <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
             <HeartIcon class="favorite-icon" />
           </button>
@@ -80,13 +85,19 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
           product.shotSets.map((set, index) => (
             <div class="shot-set" data-colour={set.colour} data-fit={set.fit} hidden={index !== 0}>
               {set.shots.map((shot) => (
-                <Image
-                  src={shot.image}
-                  alt={shot.alt}
-                  class={`shot shot-${shot.number}`}
-                  widths={shot.number === 5 ? bigWidths : smallWidths}
-                  sizes={shot.number === 5 ? bigSizes : smallSizes}
-                />
+                <button
+                  type="button"
+                  class={`photo-button shot-${shot.number}`}
+                  data-shot={shot.number}
+                  data-full={shot.image.src}
+                >
+                  <Image
+                    src={shot.image}
+                    alt={shot.alt}
+                    widths={shot.number === 5 ? bigWidths : smallWidths}
+                    sizes={shot.number === 5 ? bigSizes : smallSizes}
+                  />
+                </button>
               ))}
             </div>
           ))
@@ -204,11 +215,31 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
       </div>
     </div>
   </div>
+
+  <!-- PHOTO VIEWER (from my mockup): a click on a gallery photo opens it big on a
+       Dark Obsidian layer, the neighbours left and right. <dialog> is built into the
+       browser: Escape closes it, the keyboard stays inside, the page behind is inert.
+       photo-viewer.js fills the stage with the photos of the chosen colour and fit. -->
+  <dialog class="viewer" aria-label={`${product.name} – photos`}>
+    <p class="label viewer-title">{product.name}</p>
+    <div class="viewer-stage">
+      <button type="button" class="viewer-arrow viewer-prev" aria-label="Previous photo">
+        <span aria-hidden="true">‹</span>
+      </button>
+      <button type="button" class="viewer-arrow viewer-next" aria-label="Next photo">
+        <span aria-hidden="true">›</span>
+      </button>
+    </div>
+    <button type="button" class="icon-button viewer-close" aria-label="Close photos">
+      <CloseIcon />
+    </button>
+  </dialog>
 </BaseLayout>
 
 <script src="../../scripts/favorites.js"></script>
 <script src="../../scripts/product-options.js"></script>
 <script src="../../scripts/quantity.js"></script>
+<script src="../../scripts/photo-viewer.js"></script>
 
 <style>
   /* Space below the header; the usual section space at the end */
@@ -285,6 +316,16 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   /* The heart sits on shot 0 (the heart's look is in global.css) */
   .shot-0 {
     position: relative;
+  }
+
+  /* Each photo is a button that opens the photo viewer – no button look of its own */
+  .photo-button {
+    display: block;
+    inline-size: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
   }
 
   /* Front and back on the diagonal – two shots that blend into the dark
@@ -619,5 +660,149 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
   .accordion-text {
     padding-block-end: var(--space-4);
+  }
+
+  /* --- Photo viewer ------------------------------------------------------------------
+     Full screen, Dark Obsidian. The big photo is 70% of the screen height (4:5),
+     the neighbours are 82% of it and slightly dimmed (as in my mockup). */
+
+  /* The page behind can't scroll while the viewer is open */
+  :global(html:has(.viewer[open])) {
+    overflow: hidden;
+  }
+
+  .viewer {
+    --viewer-h: min(70dvh, 56rem); /* height of the big photo */
+    --viewer-w: calc(var(--viewer-h) * 0.8); /* 4:5 */
+    position: fixed;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none; /* the browser's default dialog is a small box */
+    max-block-size: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    overflow: hidden;
+  }
+
+  /* Product name, small and centred, 16px above the big photo */
+  .viewer-title {
+    position: absolute;
+    z-index: 2;
+    inset-block-end: calc(50% + var(--viewer-h) / 2 + var(--space-4));
+    inset-inline: 0;
+    max-inline-size: none; /* paragraphs have a max line length (global.css) – not this one */
+    margin: 0;
+    text-align: center;
+  }
+
+  .viewer-stage {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Every photo lies in the middle of the screen; photo-viewer.js moves it
+     sideways with --shift (in photo widths). The big one is full size, the
+     others 82% and a tiny bit darker. */
+  .viewer :global(.viewer-slide) {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: var(--viewer-w);
+    block-size: var(--viewer-h);
+    padding: 0;
+    border: 0;
+    background: none;
+    overflow: hidden; /* the zoom stays inside the photo */
+    cursor: pointer;
+    filter: brightness(0.9); /* slightly dimmed – just a tiny bit */
+    transform: translate(-50%, -50%) translateX(calc(var(--shift, 0) * var(--viewer-w))) scale(0.82);
+    transition:
+      transform 0.4s ease,
+      filter 0.4s ease;
+  }
+
+  .viewer :global(.viewer-slide.is-current) {
+    z-index: 1;
+    cursor: zoom-in;
+    filter: none;
+    transform: translate(-50%, -50%) translateX(0) scale(1);
+  }
+
+  .viewer :global(.viewer-slide.is-zoomed) {
+    cursor: zoom-out;
+  }
+
+  /* Going round in a circle: the photo that jumps from one end to the other
+     must not fly across the screen – it moves without animation */
+  .viewer :global(.viewer-slide.is-jumping) {
+    transition: none;
+  }
+
+  /* Zoom: the photo grows inside its own frame. --zoom is set by the script
+     (never more than the photo's real pixels allow), --zoom-x/-y follow the mouse. */
+  .viewer :global(.viewer-slide img) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transform: scale(var(--zoom, 1));
+    transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+    transition: transform 0.3s ease;
+  }
+
+  /* ‹ › – small smoked-glass tabs on the left and right edge of the big photo */
+  .viewer-arrow {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: 50%;
+    display: grid;
+    place-items: center;
+    inline-size: var(--space-6); /* 24px */
+    block-size: var(--space-12); /* 48px */
+    padding: 0;
+    border: 0.5px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+    border-radius: var(--radius-sm);
+    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+    color: var(--color-text);
+    font: inherit;
+    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
+    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+    cursor: pointer;
+    translate: -50% -50%;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
+    }
+  }
+
+  .viewer-prev {
+    inset-inline-start: calc(50% - var(--viewer-w) / 2);
+  }
+
+  .viewer-next {
+    inset-inline-start: calc(50% + var(--viewer-w) / 2);
+  }
+
+  /* Close: the round icon button from the style guide, centred on the bottom
+     edge of the big photo (as in my mockup) */
+  .viewer-close {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: calc(50% + var(--viewer-h) / 2);
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .viewer :global(.viewer-slide),
+    .viewer :global(.viewer-slide img),
+    .viewer-arrow {
+      transition: none;
+    }
   }
 </style>

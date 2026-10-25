@@ -315,6 +315,15 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   − and + Weathered Bone, number Egret, no fill. Label "Quantity:" only for screen readers.
   Lines exactly like the size boxes: Flint background through 1px gaps + 1px frame (each line
   drawn once). A version on the size grid with the "chosen" fill was tried and rejected.
+- **Photo viewer (Dardan's mockup, built 25 Oct, untested by Dardan):** click any gallery
+  photo → full-screen `<dialog>`, Dark Obsidian; product name on top; big photo 70% of the
+  screen height, neighbours 82% and a tiny bit dimmed (brightness 0.9), peeking in at the
+  edges; ‹ › glass tabs on the photo edges; close = style-guide `.icon-button` on the bottom
+  edge. Shows shot 0 + shots 1–5 of the chosen colour/fit, loops. ← → keys, Escape, click on
+  the dark area closes. **Zoom:** click the big photo → zooms inside its frame only, mouse
+  looks around, click again zooms out; max zoom = photo's real width ÷ shown width, never
+  above 2.5× and not at all below 1.25× → never visible pixels. Browser zoom is not blocked
+  (accessibility). `src/scripts/photo-viewer.js`. Mobile/touch (swipe, pinch) = later phase.
 - **"Add to pack" disabled until everything is chosen (decided 25 Oct):** starts with the
   standard disabled look (50%, not-allowed cursor); `product-options.js` switches it on once
   size, fit and colour are chosen. Fit/colour default to the first option, so in practice it

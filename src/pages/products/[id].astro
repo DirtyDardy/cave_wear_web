@@ -160,8 +160,20 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
         </div>
 
         <div class="details-block">
-          <!-- Does nothing yet – it gets its job when the Pack (bag) is built -->
-          <button type="button" class="button button-primary add-to-pack">Add to pack</button>
+          <div class="pack-row">
+            <!-- Quantity: − and + change the number (quantity.js); typing works too -->
+            <div class="quantity">
+              <label for="quantity" class="label quantity-label">Quantity:</label>
+              <div class="stepper">
+                <button type="button" class="stepper-button" data-step="-1" aria-label="One less">−</button>
+                <input id="quantity" name="quantity" type="number" inputmode="numeric" min="1" max="10" value="1" />
+                <button type="button" class="stepper-button" data-step="1" aria-label="One more">+</button>
+              </div>
+            </div>
+
+            <!-- Does nothing yet – it gets its job when the Pack (bag) is built -->
+            <button type="button" class="button button-primary add-to-pack">Add to pack</button>
+          </div>
           <p class="small note">No payment – reserve your place for the launch.</p>
         </div>
 
@@ -185,6 +197,7 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
 <script src="../../scripts/favorites.js"></script>
 <script src="../../scripts/product-options.js"></script>
+<script src="../../scripts/quantity.js"></script>
 
 <style>
   /* Space below the header; the usual section space at the end */
@@ -465,10 +478,92 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     position: relative;
   }
 
-  /* --- Add to pack ----------------------------------------------------------------- */
+  /* --- Quantity + Add to pack ------------------------------------------------------- */
+
+  /* Quantity on the left, "Add to pack" next to it (decided 25 Oct).
+     Six equal columns – the same grid as the six size boxes above, so − 1 +
+     sit exactly under XS S M and the button takes the other half. */
+  .pack-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .quantity {
+    grid-column: span 3;
+  }
 
   .add-to-pack {
-    inline-size: 100%;
+    grid-column: span 3;
+    margin-inline-start: var(--space-3); /* 12px gap, without moving the grid */
+  }
+
+  /* The "Quantity:" label is only for screen readers (same trick as .visually-hidden) –
+     the stepper next to the button explains itself */
+  .quantity-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* [ − | 1 | + ] in the look of the size boxes (synced 25 Oct): each part is a
+     box with a Flint line, sharp corners, 40px high. − and + look like a size
+     that isn't chosen; the number looks like the chosen size. */
+  .stepper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+  }
+
+  .stepper-button {
+    padding: 0;
+    border: 1px solid var(--color-input-border);
+    background: none;
+    color: var(--color-text-quiet); /* Muted Stone, like the sizes */
+    font: inherit;
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      color: var(--color-text);
+    }
+
+    /* At 1 (or 10) the button that can't go further is switched off */
+    &:disabled {
+      color: var(--color-flint);
+      cursor: not-allowed;
+    }
+  }
+
+  /* Without JavaScript the buttons can't do anything – the number can still be typed */
+  :global(html:not([data-js])) .stepper-button {
+    visibility: hidden;
+  }
+
+  /* The number = the chosen size: Weathered Bone fill, Egret outline, dark text.
+     -1px on both sides: it lies on the lines of − and + (one shared line, like
+     the size boxes), and position + z-index keep its Egret line on top. */
+  .stepper input {
+    position: relative;
+    z-index: 1;
+    inline-size: auto;
+    min-inline-size: 0;
+    margin-inline: -1px;
+    padding: 0;
+    border: 1px solid var(--color-text);
+    border-radius: 0;
+    background-color: var(--color-text-secondary);
+    color: var(--color-bg);
+    font: inherit;
+    text-align: center;
+    appearance: textfield; /* hides the browser's own small arrows … */
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      appearance: none; /* … also in Chrome and Safari */
+      margin: 0;
+    }
   }
 
   .note {

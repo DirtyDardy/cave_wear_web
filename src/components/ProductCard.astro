@@ -107,65 +107,8 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
     opacity: 1;
   }
 
-  /* --- Favorite button ----------------------------------------------------- */
-
-  /* Smoked glass, same look as the Bag button on hover (Header.astro):
-     blur behind, 45% dark tint, faint Egret edge, tiny shadow.
-     Round, 40px – the height of every button. */
-  .favorite-button {
-    position: absolute;
-    inset-block-start: var(--space-3); /* 12px from the photo edge */
-    inset-inline-end: var(--space-3);
-    display: grid;
-    place-items: center;
-    inline-size: calc(var(--space-8) + var(--space-2)); /* 40px */
-    block-size: calc(var(--space-8) + var(--space-2));
-    padding: 0;
-    border: 0.5px solid color-mix(in srgb, var(--color-text) 25%, transparent);
-    border-radius: var(--radius-full); /* a real circle */
-    background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
-    color: var(--color-text);
-    box-shadow:
-      0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
-      0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent);
-    -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
-    backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease,
-      border-color 0.2s ease,
-      scale 0.1s ease;
-
-    /* Hover: a little darker, edge a little brighter – like .button-glass */
-    &:hover {
-      background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
-      border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
-    }
-
-    /* Pressed: 97%, like every button */
-    &:active {
-      scale: 0.97;
-    }
-
-    /* Saved as favorite: Wild Honey heart */
-    &[aria-pressed="true"] {
-      color: var(--color-accent);
-    }
-  }
-
-  /* Without JavaScript the heart can't do anything, so it's hidden */
-  :global(html:not([data-js])) .favorite-button {
-    display: none;
-  }
-
-  /* 20px wide heart in the 40px circle.
-     Moved 1px down: the two round lobes make the top look heavier, so a
-     mathematically centred heart looks too high (optical centring). */
-  .favorite-icon {
-    inline-size: 1.25rem;
-    block-size: auto;
-    translate: 0 1px;
-  }
+  /* The heart button (.favorite-button) is styled in global.css –
+     the product page uses the same one. */
 
   /* --- Text ------------------------------------------------------------------ */
 
@@ -220,13 +163,8 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .product-image-hover,
-    .favorite-button {
+    .product-image-hover {
       transition: none;
-    }
-
-    .favorite-button:active {
-      scale: 1;
     }
   }
 </style>

@@ -26,6 +26,9 @@ function getCurrent(href: string) {
 // (the photo shows through) and turns solid on scroll. Add new pages here.
 const photoHeaderPages = ["/", "/products"];
 const isTransparent = photoHeaderPages.includes(currentPath);
+
+// Product pages (/products/core-tee …): the header never hides, so Pack stays in reach
+const isPinned = currentPath.startsWith("/products/");
 ---
 
 <!-- Fallback for browsers without scroll-driven animations: invisible marker
@@ -33,7 +36,7 @@ const isTransparent = photoHeaderPages.includes(currentPath);
      (see header-scroll.js). -->
 <div class="scroll-sentinel" aria-hidden="true"></div>
 
-<header class="site-header" data-transparent={isTransparent ? "" : undefined}>
+<header class="site-header" data-transparent={isTransparent ? "" : undefined} data-pinned={isPinned ? "" : undefined}>
   <div class="container header-inner">
     <a href="/" class="logo" aria-label="Cave Wear – Home">
       <Logo aria-hidden="true" />

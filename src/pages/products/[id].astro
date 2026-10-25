@@ -1,0 +1,495 @@
+---
+// PRODUCT PAGE (from my "System Integration" mockup) – one page per product folder
+// in src/content/products/. Everything shown comes from that folder: the text file
+// and the photos. Nothing here is typed per product.
+// Step 1: layout, photos and texts. Switching colour and fit comes next.
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getProducts, type Product } from "../../data/products";
+import HeartIcon from "../../assets/icons/heart.svg";
+import FitUnisexIcon from "../../assets/icons/fit-unisex.svg";
+import FitFemaleIcon from "../../assets/icons/fit-female.svg";
+import FitMaleIcon from "../../assets/icons/fit-male.svg";
+
+// Astro builds one page for every product folder: /products/core-tee, /products/hoodie …
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({ params: { id: product.id }, props: { product } }));
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+// Where each collection sits on the Products page (breadcrumb link)
+const collectionLinks = {
+  "Base Collection": "/products#base-title",
+  "Supporter Collection": "/products#supporter-title",
+};
+
+const fitIcons = { unisex: FitUnisexIcon, female: FitFemaleIcon, male: FitMaleIcon };
+const fitLabels = { unisex: "Unisex", female: "Female", male: "Male" };
+
+// The three closed sections at the bottom. A section without text is left out.
+const accordions = [
+  { title: "Design & Purpose", paragraphs: product.designPurpose },
+  { title: "Fit & Silhouette", paragraphs: product.fitSilhouette },
+  { title: "Materials", paragraphs: product.materials },
+].filter((section) => section.paragraphs.length > 0);
+
+// Photo sizes: the browser picks the smallest file that is still sharp.
+// Big shots are about half the page, the 2×2 shots about a quarter.
+const bigWidths = [480, 960, 1440];
+const bigSizes = "(width >= 64rem) 30rem, 100vw";
+const smallWidths = [240, 480, 720];
+const smallSizes = "(width >= 64rem) 15rem, 50vw";
+---
+
+<BaseLayout title={product.name} description={`${product.name} – ${product.tagline}`}>
+  <div class="container product-page">
+    <nav class="breadcrumb label" aria-label="Breadcrumb">
+      <ol role="list">
+        <li><a href="/products">Products</a></li>
+        <li><a href={collectionLinks[product.collection]}>{product.collection}</a></li>
+        <li><span aria-current="page">{product.name}</span></li>
+      </ol>
+    </nav>
+
+    <div class="product-layout">
+      <!-- LEFT: shot 0 big, then shots 1–4 as 2×2, then shot 5 big.
+           One set of shots 1–5 per colour × fit – only the first one is visible for now. -->
+      <div class="gallery">
+        <div class="shot-0" data-product-id={product.id}>
+          <Image
+            src={product.shot0.image}
+            alt={product.shot0.alt}
+            widths={bigWidths}
+            sizes={bigSizes}
+            loading="eager"
+            fetchpriority="high"
+          />
+          <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
+            <HeartIcon class="favorite-icon" />
+          </button>
+        </div>
+
+        {
+          product.shotSets.map((set, index) => (
+            <div class="shot-set" data-colour={set.colour} data-fit={set.fit} hidden={index !== 0}>
+              {set.shots.map((shot) => (
+                <Image
+                  src={shot.image}
+                  alt={shot.alt}
+                  class={`shot shot-${shot.number}`}
+                  widths={shot.number === 5 ? bigWidths : smallWidths}
+                  sizes={shot.number === 5 ? bigSizes : smallSizes}
+                />
+              ))}
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- RIGHT: stays in place while the photos scroll (sticky) -->
+      <div class="details">
+        <div class="details-block">
+          <h1 class="h2 product-name">{product.name}</h1>
+          <p class="tagline">{product.tagline}</p>
+          {product.description.map((paragraph) => <p class="description">{paragraph}</p>)}
+        </div>
+
+        <div class="details-block">
+          <p class="price">{product.priceText}</p>
+          <p class="small price-note">Preliminary Price Estimate.</p>
+          <!-- TODO: link to the pricing question in the FAQ (/contact#…) once it exists -->
+          <a class="text-link small">Learn more <span aria-hidden="true">›</span></a>
+        </div>
+
+        <!-- Size, fit and colour are radio buttons: only one per group can be chosen,
+             and they work with the keyboard (arrow keys) without any JavaScript.
+             The round dot of the radio button is hidden; the label is what you see. -->
+        <div class="details-block options">
+          <fieldset>
+            <legend class="label">Size:</legend>
+            <div class="sizes">
+              {
+                product.sizes.map((size) => (
+                  <label class="size">
+                    <input type="radio" name="size" value={size} class="visually-hidden" />
+                    {size}
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="label">Fit:</legend>
+            <div class="circles">
+              {
+                product.fits.map((fit, index) => {
+                  const FitIcon = fitIcons[fit];
+                  return (
+                    <label class="fit">
+                      <input type="radio" name="fit" value={fit} checked={index === 0} class="visually-hidden" />
+                      <FitIcon class="fit-icon" />
+                      <span class="visually-hidden">{fitLabels[fit]} fit</span>
+                    </label>
+                  );
+                })
+              }
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="label">Color:</legend>
+            <div class="circles">
+              {
+                product.colours.map((colour, index) => (
+                  <label class="colour" style={`--swatch: ${colour.hex}`}>
+                    <input type="radio" name="colour" value={colour.file} checked={index === 0} class="visually-hidden" />
+                    <span class="visually-hidden">{colour.name}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="details-block">
+          <!-- Does nothing yet – it gets its job when the Pack (bag) is built -->
+          <button type="button" class="button button-primary add-to-pack">Add to pack</button>
+          <p class="small note">No payment – reserve your place for the launch.</p>
+        </div>
+
+        <!-- <details> opens and closes without JavaScript. All closed when the page loads. -->
+        {
+          accordions.map((section) => (
+            <details class="accordion">
+              <summary>{section.title}</summary>
+              <div class="accordion-text">
+                {section.paragraphs.map((paragraph) => (
+                  <p class="small">{paragraph}</p>
+                ))}
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script src="../../scripts/favorites.js"></script>
+<script src="../../scripts/sticky-details.js"></script>
+
+<style>
+  /* Space below the header; the usual section space at the end */
+  .product-page {
+    padding-block: var(--space-12) var(--section-space); /* 48px · 96px */
+  }
+
+  /* --- Breadcrumb: Products > Base Collection > The Core Tee ------------------ */
+
+  .breadcrumb {
+    margin-block-end: var(--space-3); /* 12px to the photo */
+    color: var(--color-text-quiet);
+
+    & ol {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /* ">" between the items. The part after the "/" is what screen readers
+       read instead – nothing, the list already tells them it's a path. */
+    & li + li::before {
+      content: ">" / "";
+      margin-inline-end: var(--space-2);
+    }
+
+    & a {
+      color: inherit;
+
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  /* --- Two columns ------------------------------------------------------------
+     As in my mockup the page content is narrower than the site's full width
+     (about 950 of 1500px), so the photos don't fill the whole screen. */
+  .breadcrumb,
+  .product-layout {
+    max-inline-size: 60rem; /* 960px */
+    margin-inline: auto;
+  }
+
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6); /* 24px */
+
+    @media (width >= 64rem) {
+      grid-template-columns: 1fr 1fr;
+      align-items: start; /* the right column keeps its own height – needed for sticky */
+    }
+  }
+
+  /* --- Left: photos ------------------------------------------------------------ */
+
+  .gallery :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  /* The heart sits on shot 0 (the heart's look is in global.css) */
+  .shot-0 {
+    position: relative;
+  }
+
+  /* Front and back on the diagonal – two shots that blend into the dark
+     background never share a column:
+       1 front     | 3 close-up
+       4 close-up  | 2 back
+       5 big close-up            */
+  .shot-set {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "shot1 shot3"
+      "shot4 shot2"
+      "shot5 shot5";
+
+    /* "display: grid" would beat the hidden attribute – this makes hidden win again */
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .shot-set :global(.shot-1) { grid-area: shot1; }
+  .shot-set :global(.shot-2) { grid-area: shot2; }
+  .shot-set :global(.shot-3) { grid-area: shot3; }
+  .shot-set :global(.shot-4) { grid-area: shot4; }
+  .shot-set :global(.shot-5) { grid-area: shot5; }
+
+  /* --- Right: details ------------------------------------------------------------ */
+
+  /* Smart sticky – desktop only. The column scrolls normally, then stops while
+     the photos keep scrolling:
+     - fits on the screen → it stops 24px below the header
+     - taller than the screen → it stops when its bottom is 24px above the
+       screen edge, so "Add to pack" and the accordions are always reachable.
+     min() takes the smaller of the two positions. --details-height comes from
+     sticky-details.js; without JavaScript it's 0 and the column simply stops
+     below the header. */
+  .details {
+    @media (width >= 64rem) {
+      position: sticky;
+      inset-block-start: min(
+        calc(var(--header-height) + var(--space-6)),
+        calc(100dvh - var(--details-height, 0px) - var(--space-6))
+      );
+    }
+  }
+
+  /* Each block ends with a Charcoal line, like in the mockup */
+  .details-block {
+    padding-block: var(--space-6); /* 24px */
+    border-block-end: 1px solid var(--color-line);
+
+    &:first-child {
+      padding-block-start: 0;
+    }
+  }
+
+  /* My H1 – Geist in the H2 size, uppercase (the text file has it in normal writing) */
+  .product-name {
+    max-inline-size: none;
+    margin-block-end: var(--space-3);
+    font-family: var(--font-body);
+    text-transform: uppercase;
+  }
+
+  .tagline {
+    margin-block-end: var(--space-3);
+  }
+
+  .description {
+    color: var(--color-text-quiet);
+  }
+
+  .price {
+    margin-block-end: var(--space-1);
+    font-size: var(--text-lead); /* 24 → 32px */
+    line-height: var(--leading-lead);
+  }
+
+  /* "Learn more" belongs to this line – 4px instead of the usual paragraph space */
+  .price-note {
+    margin-block-end: var(--space-1);
+  }
+
+  /* --- Size, fit, colour ----------------------------------------------------------- */
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    padding: 0;
+  }
+
+  /* Sizes: one row of joined boxes, sharp corners, Flint lines */
+  .sizes {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+  }
+
+  .size {
+    display: grid;
+    place-items: center;
+    block-size: calc(var(--space-8) + var(--space-2)); /* 40px – the height of every button */
+    border: 1px solid var(--color-input-border);
+    color: var(--color-text-quiet);
+    cursor: pointer;
+
+    /* Neighbours share one line instead of two */
+    & + & {
+      margin-inline-start: -1px;
+    }
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  /* Fit icons and colour dots: a row of circles */
+  .circles {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  /* Fit: 32px Charcoal circle; Dardan's symbol fills it, so the ring is centred */
+  .fit {
+    display: grid;
+    place-items: center;
+    inline-size: var(--space-8);
+    block-size: var(--space-8);
+    border-radius: var(--radius-full);
+    background-color: var(--color-line);
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .fit-icon {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Colour dots: 40px, colour from the shared list (src/data/product-colours.js).
+     A faint Egret ring keeps a black dot visible on the dark page. */
+  .colour {
+    inline-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+    block-size: calc(var(--space-8) + var(--space-2));
+    border-radius: var(--radius-full);
+    background-color: var(--swatch);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 20%, transparent);
+    cursor: pointer;
+  }
+
+  /* TEMPORARY selected look – the real one will be picked from 2–3 versions */
+  .size:has(:checked) {
+    border-color: var(--color-text);
+    color: var(--color-text);
+    position: relative; /* lifts the Egret line above the Flint neighbours */
+  }
+
+  .fit:has(:checked),
+  .colour:has(:checked) {
+    outline: 1px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  /* Keyboard focus: the hidden radio button has the focus, the label shows it */
+  .size:has(:focus-visible),
+  .fit:has(:focus-visible),
+  .colour:has(:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    position: relative;
+  }
+
+  /* --- Add to pack ----------------------------------------------------------------- */
+
+  .add-to-pack {
+    inline-size: 100%;
+  }
+
+  .note {
+    margin-block-start: var(--space-2);
+    color: var(--color-text-quiet);
+  }
+
+  /* --- Accordions -------------------------------------------------------------------- */
+
+  .accordion {
+    border-block-end: 1px solid var(--color-line);
+  }
+
+  .accordion summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-4); /* 16px */
+    list-style: none; /* hides the browser's own triangle … */
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .accordion summary::-webkit-details-marker {
+    display: none; /* … also in Safari */
+  }
+
+  /* Small chevron, drawn as two borders of a turned square: points down when
+     closed, up when open */
+  .accordion summary::after {
+    content: "";
+    inline-size: 0.375rem;
+    block-size: 0.375rem;
+    border-block-end: 1.5px solid currentColor;
+    border-inline-end: 1.5px solid currentColor;
+    translate: 0 -2px;
+    rotate: 45deg;
+  }
+
+  .accordion[open] summary::after {
+    translate: 0 2px;
+    rotate: -135deg;
+  }
+
+  .accordion-text {
+    padding-block-end: var(--space-4);
+  }
+</style>

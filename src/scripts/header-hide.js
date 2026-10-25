@@ -36,13 +36,17 @@ function update() {
   ticking = false;
 }
 
-window.addEventListener(
-  "scroll",
-  () => {
-    if (!ticking) {
-      requestAnimationFrame(update);
-      ticking = true;
-    }
-  },
-  { passive: true },
-);
+// Product pages have data-pinned on the header (Header.astro): there the header
+// never hides, so we only listen for scrolling on all other pages.
+if (!header.hasAttribute("data-pinned")) {
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    },
+    { passive: true },
+  );
+}

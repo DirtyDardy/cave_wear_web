@@ -290,7 +290,17 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - Fit icons: Dardan's three SVGs (circle + symbol). Circle and colours via CSS; the symbol keeps
   its place inside his circle's box, so the ring – not the whole symbol – is centred.
 
-### Product page (Dardan's "System Integration" mockup, decided 25 Oct, not built yet)
+### Product page (Dardan's "System Integration" mockup, decided 25 Oct)
+
+- **Step 1 built 25 Oct:** `src/pages/products/[id].astro` (one page per folder) + reader
+  `src/data/products.ts`. Layout, photos, texts, sticky column, heart (shared `.favorite-button`
+  in `global.css`), header pinned (`data-pinned`). Gallery 1 front | 3 / 4 | 2 back, 5 big.
+  Content max 960px wide (as in the mockup). Selected states are TEMPORARY.
+  **Next (step 2):** colour/fit switching (+ `?colour=` from the card), selected-state
+  comparison, name weight comparison.
+- **Smart sticky (decided 25 Oct):** column fits → sticks 24px below the header; taller than
+  the screen → sticks when its bottom is 24px above the screen edge, so "Add to pack" and the
+  accordions are always reachable. `src/scripts/sticky-details.js` measures the height.
 
 - Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are
   rough). Header never hides here (see 8). No photo header.

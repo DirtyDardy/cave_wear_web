@@ -284,9 +284,13 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 ### Product card (decided 25 Oct)
 
 - The card stays exactly as it is. Only additions: **fit icons** top left – same smoked glass
-  as the heart but smaller and more subtle, **not clickable** (they only show which fits exist).
-  Default photo shot 0, hover photo always shot 1 (first colour). Clicking a colour dot opens the
-  product page with that colour selected.
+  as the heart but smaller and more subtle. Default photo shot 0, hover photo always shot 1
+  (first colour).
+- **Clicking (decided 25 Oct, replaces "fit icons not clickable"):** the **whole card** opens the
+  product page (default colour + fit). A **colour dot** opens it with that colour selected, a
+  **fit icon** with that fit selected. The heart stays a button (saves the favorite, no page change).
+  Built as a "stretched link" (the name link covers the card; dots, fit icons and heart sit above
+  it) – a link inside a link isn't allowed in HTML.
 - Fit icons: Dardan's three SVGs (circle + symbol). Circle and colours via CSS; the symbol keeps
   its place inside his circle's box, so the ring – not the whole symbol – is centred.
 
@@ -296,11 +300,18 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   `src/data/products.ts`. Layout, photos, texts, sticky column, heart (shared `.favorite-button`
   in `global.css`), header pinned (`data-pinned`). Gallery 1 front | 3 / 4 | 2 back, 5 big.
   Content max 960px wide (as in the mockup). Selected states are TEMPORARY.
-  **Next (step 2):** colour/fit switching (+ `?colour=` from the card), selected-state
-  comparison, name weight comparison.
-- **Smart sticky (decided 25 Oct):** column fits → sticks 24px below the header; taller than
-  the screen → sticks when its bottom is 24px above the screen edge, so "Add to pack" and the
-  accordions are always reachable. `src/scripts/sticky-details.js` measures the height.
+  **Step 2 built 25 Oct:** colour/fit switching (`src/scripts/product-options.js`, reads
+  `?colour=` / `?fit=` from the address). Products page cards now come from the folders
+  (placeholders only for products without a folder, not clickable); card = stretched link.
+  **Next:** selected-state comparison, name weight comparison.
+- **Sticky (final, 25 Oct):** the whole column always sticks 24px below the header – its top
+  (the name) is never hidden. Replaces the "smart sticky" bottom mode and the separately sticky
+  name (both tried and removed the same day). Known trade-off: on screens shorter than the
+  column (~1000px), its bottom (accordions) is reached only after the photos – OPEN: make the
+  column compact enough to fit a laptop screen?
+- Breadcrumb: Muted Stone; the current page one step lighter (Weathered Bone) – decided 25 Oct.
+- Second product: `field-hoodie` (The Field Hoodie, black + egret). Its shot 0 is a placeholder
+  without licence info → local only (`.gitignore`), like the Core Tee's.
 
 - Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are
   rough). Header never hides here (see 8). No photo header.

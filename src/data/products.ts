@@ -1,6 +1,6 @@
 // PRODUCT READER – turns every product folder (src/content/products/) into what the
 // pages need: the fields, the long texts split by their headings, and the photos found
-// by their file names. The product page uses it (the product card will too).
+// by their file names. The product page and the Products page use it.
 // Runs only while the site is built – nothing of this reaches the visitor's browser.
 import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
@@ -16,6 +16,15 @@ const photos = import.meta.glob<{ default: ImageMetadata }>("/src/content/produc
 // "Tobacco Brown" → "tobacco-brown" (how colours are written in file names)
 function toFileName(text: string) {
   return text.toLowerCase().replaceAll(" ", "-");
+}
+
+// A colour name from the text file → everything a colour dot needs.
+// veryDark: black and similar get a thin Flint ring, or the dot vanishes on the dark page.
+// (Average of red, green and blue below 40 out of 255.)
+export function toColour(name: string) {
+  const hex = productColours[name as keyof typeof productColours];
+  const [red, green, blue] = [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16));
+  return { name, file: toFileName(name), hex, veryDark: (red + green + blue) / 3 < 40 };
 }
 
 // Finds a photo by its name without the ending, e.g. "shot_1_core-tee_black_unisex".
@@ -65,11 +74,7 @@ export async function getProducts() {
     const sections = splitSections(body);
     const shotText = readShotDescriptions(sections["Shot descriptions"]);
 
-    const colours = data.colours.map((name) => ({
-      name,
-      file: toFileName(name),
-      hex: productColours[name as keyof typeof productColours],
-    }));
+    const colours = data.colours.map(toColour);
 
     // One set of shots 1–5 for every colour × fit, e.g. black + unisex.
     // Alt text = name, colour, fit + what the shot shows (written in the text file).

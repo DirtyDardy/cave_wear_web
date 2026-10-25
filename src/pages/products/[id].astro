@@ -2,7 +2,7 @@
 // PRODUCT PAGE (from my "System Integration" mockup) – one page per product folder
 // in src/content/products/. Everything shown comes from that folder: the text file
 // and the photos. Nothing here is typed per product.
-// Step 1: layout, photos and texts. Switching colour and fit comes next.
+// Choosing a colour or fit swaps shots 1–5 (src/scripts/product-options.js).
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getProducts, type Product } from "../../data/products";
@@ -59,7 +59,8 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
     <div class="product-layout">
       <!-- LEFT: shot 0 big, then shots 1–4 as 2×2, then shot 5 big.
-           One set of shots 1–5 per colour × fit – only the first one is visible for now. -->
+           One set of shots 1–5 per colour × fit – product-options.js shows the chosen one.
+           Photos in hidden sets only load when their set is shown. -->
       <div class="gallery">
         <div class="shot-0" data-product-id={product.id}>
           <Image
@@ -148,7 +149,7 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
             <div class="circles">
               {
                 product.colours.map((colour, index) => (
-                  <label class="colour" style={`--swatch: ${colour.hex}`}>
+                  <label class="colour" style={`--swatch: ${colour.hex}`} data-very-dark={colour.veryDark ? "" : undefined}>
                     <input type="radio" name="colour" value={colour.file} checked={index === 0} class="visually-hidden" />
                     <span class="visually-hidden">{colour.name}</span>
                   </label>
@@ -183,7 +184,7 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 </BaseLayout>
 
 <script src="../../scripts/favorites.js"></script>
-<script src="../../scripts/sticky-details.js"></script>
+<script src="../../scripts/product-options.js"></script>
 
 <style>
   /* Space below the header; the usual section space at the end */
@@ -219,6 +220,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
       &:hover {
         color: var(--color-accent);
       }
+    }
+
+    /* The page you're on: one step lighter (Weathered Bone), so you see where you are */
+    & [aria-current="page"] {
+      color: var(--color-text-secondary);
     }
   }
 
@@ -284,21 +290,13 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
   /* --- Right: details ------------------------------------------------------------ */
 
-  /* Smart sticky – desktop only. The column scrolls normally, then stops while
-     the photos keep scrolling:
-     - fits on the screen → it stops 24px below the header
-     - taller than the screen → it stops when its bottom is 24px above the
-       screen edge, so "Add to pack" and the accordions are always reachable.
-     min() takes the smaller of the two positions. --details-height comes from
-     sticky-details.js; without JavaScript it's 0 and the column simply stops
-     below the header. */
+  /* Sticky – desktop only. The whole column scrolls normally until its top is
+     24px below the header, then it stays there while the photos keep scrolling.
+     The name at the top is never hidden behind the header (decided 25 Oct). */
   .details {
     @media (width >= 64rem) {
       position: sticky;
-      inset-block-start: min(
-        calc(var(--header-height) + var(--space-6)),
-        calc(100dvh - var(--details-height, 0px) - var(--space-6))
-      );
+      inset-block-start: calc(var(--header-height) + var(--space-6));
     }
   }
 
@@ -406,14 +404,17 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   }
 
   /* Colour dots: 40px, colour from the shared list (src/data/product-colours.js).
-     A faint Egret ring keeps a black dot visible on the dark page. */
+     Very dark colours get a Flint ring, or they vanish on the dark page – same as the card. */
   .colour {
     inline-size: calc(var(--space-8) + var(--space-2)); /* 40px */
     block-size: calc(var(--space-8) + var(--space-2));
     border-radius: var(--radius-full);
     background-color: var(--swatch);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 20%, transparent);
     cursor: pointer;
+
+    &[data-very-dark] {
+      box-shadow: inset 0 0 0 1px var(--color-flint);
+    }
   }
 
   /* TEMPORARY selected look – the real one will be picked from 2–3 versions */

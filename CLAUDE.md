@@ -306,9 +306,11 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   **Next:** selected-state comparison, name weight comparison.
 - **Sticky (final, 25 Oct):** the whole column always sticks 24px below the header – its top
   (the name) is never hidden. Replaces the "smart sticky" bottom mode and the separately sticky
-  name (both tried and removed the same day). Known trade-off: on screens shorter than the
-  column (~1000px), its bottom (accordions) is reached only after the photos – OPEN: make the
-  column compact enough to fit a laptop screen?
+  name (both tried and removed the same day).
+- **Compact column (version B of a comparison, decided 25 Oct):** blocks 16px, labels 8px,
+  accordions 12px, description in Small (14/20), Fit and Color side by side under Size,
+  "Learn more ›" on the line of "Preliminary Price Estimate.". Column ~755px; "Add to pack"
+  ends ~640px from the top of the screen → visible on practically every laptop.
 - Breadcrumb: Muted Stone; the current page one step lighter (Weathered Bone) – decided 25 Oct.
 - Second product: `field-hoodie` (The Field Hoodie, black + egret). Its shot 0 is a placeholder
   without licence info → local only (`.gitignore`), like the Core Tee's.

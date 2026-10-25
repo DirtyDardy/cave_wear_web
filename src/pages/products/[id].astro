@@ -300,9 +300,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     }
   }
 
-  /* Each block ends with a Charcoal line, like in the mockup */
+  /* Each block ends with a Charcoal line, like in the mockup.
+     Compact (version B, decided 25 Oct): 16px instead of 24px, so the whole
+     column – with "Add to pack" – fits on a laptop screen. */
   .details-block {
-    padding-block: var(--space-6); /* 24px */
+    padding-block: var(--space-4); /* 16px */
     border-block-end: 1px solid var(--color-line);
 
     &:first-child {
@@ -322,8 +324,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     margin-block-end: var(--space-3);
   }
 
+  /* Small size, like the accordion texts – the tagline above is the main line */
   .description {
     color: var(--color-text-quiet);
+    font-size: var(--text-small); /* 14/20 */
+    line-height: var(--leading-small);
   }
 
   .price {
@@ -332,17 +337,24 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     line-height: var(--leading-lead);
   }
 
-  /* "Learn more" belongs to this line – 4px instead of the usual paragraph space */
+  /* "Preliminary Price Estimate." and "Learn more ›" on one line */
   .price-note {
-    margin-block-end: var(--space-1);
+    display: inline;
+    margin-inline-end: var(--space-2); /* 8px */
   }
 
   /* --- Size, fit, colour ----------------------------------------------------------- */
 
+  /* Size on its own row; Fit and Color next to each other below it –
+     both answer "which version?", so they share one line */
   .options {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-4) var(--space-12); /* 16px between rows, 48px between Fit and Color */
+  }
+
+  .options fieldset:first-child {
+    grid-column: 1 / -1; /* Size spans both columns */
   }
 
   fieldset {
@@ -352,6 +364,7 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   }
 
   legend {
+    margin-block-end: var(--space-2); /* 8px to the options */
     padding: 0;
   }
 
@@ -380,10 +393,13 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     }
   }
 
-  /* Fit icons and colour dots: a row of circles */
+  /* Fit icons and colour dots: a row of circles. 40px high and centred, so the
+     32px fit icons sit on the same line as the 40px colour dots. */
   .circles {
     display: flex;
+    align-items: center;
     gap: var(--space-2);
+    min-block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
   }
 
   /* Fit: 32px Charcoal circle; Dardan's symbol fills it, so the ring is centred */
@@ -460,7 +476,7 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding-block: var(--space-4); /* 16px */
+    padding-block: var(--space-3); /* 12px */
     list-style: none; /* hides the browser's own triangle … */
     cursor: pointer;
 

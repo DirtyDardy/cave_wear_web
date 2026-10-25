@@ -311,6 +311,10 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   − and + Weathered Bone, number Egret, no fill. Label "Quantity:" only for screen readers.
   Lines exactly like the size boxes: Flint background through 1px gaps + 1px frame (each line
   drawn once). A version on the size grid with the "chosen" fill was tried and rejected.
+- **"Add to pack" disabled until everything is chosen (decided 25 Oct):** starts with the
+  standard disabled look (50%, not-allowed cursor); `product-options.js` switches it on once
+  size, fit and colour are chosen. Fit/colour default to the first option, so in practice it
+  waits for the size. A product with only one size has it pre-chosen.
 - **Sticky (final, 25 Oct):** the whole column always sticks 24px below the header – its top
   (the name) is never hidden. Replaces the "smart sticky" bottom mode and the separately sticky
   name (both tried and removed the same day).

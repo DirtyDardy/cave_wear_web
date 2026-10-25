@@ -27,12 +27,26 @@ function showChosenSet() {
   }
 }
 
-// 3. Every time a colour or fit is chosen, show the matching set.
+// 3. "Add to pack" only works once size, fit and colour are all chosen.
+//    Fit and colour start with the first option; size has no default, so the
+//    button starts switched off (disabled in the HTML) until a size is picked.
+const packButton = document.querySelector(".add-to-pack");
+
+function updatePackButton() {
+  const allChosen = ["size", "fit", "colour"].every((group) =>
+    document.querySelector(`input[name="${group}"]:checked`),
+  );
+  packButton.disabled = !allChosen;
+}
+
+// 4. Every time an option is chosen: show the matching photos, check the button.
 //    "change" fires when a radio button gets chosen – by click or with the arrow keys.
 document.addEventListener("change", (event) => {
   if (event.target.name === "colour" || event.target.name === "fit") {
     showChosenSet();
   }
+  updatePackButton();
 });
 
 showChosenSet();
+updatePackButton();

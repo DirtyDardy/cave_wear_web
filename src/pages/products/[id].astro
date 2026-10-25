@@ -118,7 +118,14 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
               {
                 product.sizes.map((size) => (
                   <label class="size">
-                    <input type="radio" name="size" value={size} class="visually-hidden" />
+                    <!-- Only one size (e.g. "One size")? Then it's already chosen -->
+                    <input
+                      type="radio"
+                      name="size"
+                      value={size}
+                      checked={product.sizes.length === 1}
+                      class="visually-hidden"
+                    />
                     {size}
                   </label>
                 ))
@@ -171,8 +178,10 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
               </div>
             </div>
 
-            <!-- Does nothing yet – it gets its job when the Pack (bag) is built -->
-            <button type="button" class="button button-primary add-to-pack">Add to pack</button>
+            <!-- Starts switched off (disabled); product-options.js switches it on once
+                 size, fit and colour are chosen. Does nothing yet – it gets its job
+                 when the Pack (bag) is built. -->
+            <button type="button" class="button button-primary add-to-pack" disabled>Add to pack</button>
           </div>
           <p class="small note">No payment – reserve your place for the launch.</p>
         </div>

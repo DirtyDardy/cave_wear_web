@@ -121,11 +121,11 @@
      Mobile values here; larger values from 768px in the media query below. */
   --text-h1: clamp(3rem, 7vw + 1rem, 8rem); /* 48 → 128px, grows with the screen */
   --text-h2: 2rem; /* 32px */
-  --leading-h2: 2.5rem; /* 40px */
+  --leading-h2: 2rem; /* 32px – line height = font size, like Vercel (decided 26 Oct, version C) */
   --text-lead: 1.5rem; /* 24px */
   --leading-lead: 2rem; /* 32px */
   --text-h3: 1.5rem; /* 24px */
-  --leading-h3: 2rem; /* 32px */
+  --leading-h3: 1.75rem; /* 28px */
   --text-body: 1rem; /* 16px */
   --leading-body: 1.5rem; /* 24px */
   --text-small: 0.875rem; /* 14px */
@@ -133,10 +133,10 @@
 
   /* Letter spacing ("tracking") */
   --tracking-h1: 0;
-  --tracking-h2: -0.02em;
-  --tracking-h3: -0.01em;
-  --tracking-wide: 0.14em; /* labels, buttons – uppercase text */
-  --tracking-nav: 0.04em; /* header nav + Bag – tighter, more modern */
+  --tracking-h2: -0.05em;
+  --tracking-h3: -0.03em;
+  --tracking-wide: 0.08em; /* labels – uppercase text (was 0.14em, version C) */
+  --tracking-nav: 0; /* header nav + Pack – normal case, no extra spacing (version C) */
 
   /* Maximum line lengths ("measure"), in characters */
   --measure-h1: 12ch;
@@ -178,11 +178,9 @@
 @media (width >= 48rem) {
   :root {
     --text-h2: 3rem; /* 48px */
-    --leading-h2: 3.5rem; /* 56px */
+    --leading-h2: 3rem; /* 48px – line height = font size */
     --text-lead: 2rem; /* 32px */
     --leading-lead: 2.5rem; /* 40px */
-    --text-body: 1.125rem; /* 18px */
-    --leading-body: 1.75rem; /* 28px */
     --section-space: var(--space-24); /* 96px */
   }
 }
@@ -201,8 +199,9 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: var(--text-body); /* 16/24 → 18/28 */
+  font-size: var(--text-body); /* 16/24 on all screens (decided 26 Oct – 18px looked less refined) */
   line-height: var(--leading-body);
+  letter-spacing: -0.01em; /* a touch tighter – Geist looks more refined this way (version C) */
   -webkit-font-smoothing: antialiased; /* light text on dark looks less heavy */
 
   /* Footer stays at the bottom, even on short pages */
@@ -245,11 +244,13 @@ h1,
   text-wrap: balance;
 }
 
+/* H2 and H3: weight 450 (like Vercel), not ExtraBold 800 – light headings with tight spacing are
+   what makes Linear and Vercel look premium (decided 26 Oct, version C of three) */
 h2,
 .h2 {
   margin-block-end: var(--space-6);
   font-size: var(--text-h2);
-  font-weight: 800;
+  font-weight: 450;
   line-height: var(--leading-h2);
   letter-spacing: var(--tracking-h2);
   text-wrap: balance;
@@ -259,7 +260,7 @@ h3,
 .h3 {
   margin-block-end: var(--space-4);
   font-size: var(--text-h3);
-  font-weight: 800;
+  font-weight: 450;
   line-height: var(--leading-h3);
   letter-spacing: var(--tracking-h3);
   text-wrap: balance;
@@ -276,8 +277,9 @@ p {
   margin-block-end: var(--space-6);
   color: var(--color-text-secondary);
   font-size: var(--text-lead);
-  font-weight: 300;
+  font-weight: 450; /* was Light 300 (version C) */
   line-height: var(--leading-lead);
+  letter-spacing: -0.03em;
 }
 
 .small {

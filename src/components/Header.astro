@@ -251,8 +251,8 @@ const isPinned = currentPath.startsWith("/products/");
     }
   }
 
-  /* Nav links and Bag – uppercase, Medium weight, tight letter-spacing:
-     modern instead of the wide "tactical label" look.
+  /* Nav links and Pack – normal case, Regular weight, no extra letter-spacing:
+     quiet like Linear and Vercel (decided 26 Oct, type version C; was uppercase 500).
      12px + 24px line + 12px = 48px high */
   .nav-link {
     display: inline-flex;
@@ -261,10 +261,9 @@ const isPinned = currentPath.startsWith("/products/");
     padding-block: var(--space-3);
     color: var(--color-text-secondary);
     font-size: 1rem; /* 16px */
-    font-weight: 500;
+    font-weight: 400;
     line-height: var(--space-6); /* 24px */
     letter-spacing: var(--tracking-nav);
-    text-transform: uppercase;
     transition: color 0.2s ease;
 
     &:hover {

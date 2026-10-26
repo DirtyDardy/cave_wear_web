@@ -36,32 +36,32 @@ const typeRows = [
     text: "Ursus spelaeus",
   },
   {
-    name: "H2 – Geist ExtraBold 800",
+    name: "H2 – Geist 450",
     tag: "h2", className: "",
-    sizes: "32/40px → 48/56px",
-    extra: "letter-spacing −0.02em",
+    sizes: "32/32px → 48/48px",
+    extra: "letter-spacing −0.05em",
     token: "h2 · --text-h2 · --leading-h2 · --tracking-h2",
-    css: "font-size: var(--text-h2);\nline-height: var(--leading-h2);\nfont-weight: 800;",
+    css: "font-size: var(--text-h2);\nline-height: var(--leading-h2);\nfont-weight: 450;",
     used: "Starts a section.",
     text: "The bear of the caves",
   },
   {
-    name: "Lead – Geist Light 300",
+    name: "Lead – Geist 450",
     tag: "p", className: "lead",
     sizes: "24/32px → 32/40px",
     extra: "Weathered Bone · max 40ch",
     token: ".lead · --text-lead · --leading-lead · --measure-lead",
-    css: '<p class="lead">…</p>\nfont-size: var(--text-lead);\nfont-weight: 300;',
+    css: '<p class="lead">…</p>\nfont-size: var(--text-lead);\nfont-weight: 450;\nletter-spacing: -0.03em;',
     used: "Introduces a section, right below the H2.",
     text: "Long before us, a giant bear roamed the cold valleys of Europe and Asia.",
   },
   {
-    name: "H3 – Geist ExtraBold 800",
+    name: "H3 – Geist 450",
     tag: "h3", className: "",
-    sizes: "24/32px (all screens)",
-    extra: "letter-spacing −0.01em",
+    sizes: "24/28px (all screens)",
+    extra: "letter-spacing −0.03em",
     token: "h3 · --text-h3 · --leading-h3 · --tracking-h3",
-    css: "font-size: var(--text-h3);\nline-height: var(--leading-h3);\nfont-weight: 800;",
+    css: "font-size: var(--text-h3);\nline-height: var(--leading-h3);\nfont-weight: 450;",
     used: "Cards, product names, sub-parts of a section.",
     text: "Almost entirely herbivorous",
   },
@@ -69,7 +69,7 @@ const typeRows = [
     name: "H4 – Label style",
     tag: "h4", className: "",
     sizes: "14/20px (all screens)",
-    extra: "uppercase · letter-spacing 0.14em",
+    extra: "uppercase · letter-spacing 0.08em",
     token: "h4 · same as .label",
     css: "/* no own size – uses the Label style */",
     used: "Small headings, e.g. footer columns or inside cards.",
@@ -79,7 +79,7 @@ const typeRows = [
     name: "H5 – Label style",
     tag: "h5", className: "",
     sizes: "14/20px (all screens)",
-    extra: "uppercase · letter-spacing 0.14em",
+    extra: "uppercase · letter-spacing 0.08em",
     token: "h5 · same as .label",
     css: "/* no own size – uses the Label style */",
     used: "Same look as H4 – use rarely.",
@@ -89,7 +89,7 @@ const typeRows = [
     name: "H6 – Label style",
     tag: "h6", className: "",
     sizes: "14/20px (all screens)",
-    extra: "uppercase · letter-spacing 0.14em",
+    extra: "uppercase · letter-spacing 0.08em",
     token: "h6 · same as .label",
     css: "/* no own size – uses the Label style */",
     used: "Same look as H4 – use rarely.",
@@ -98,8 +98,8 @@ const typeRows = [
   {
     name: "Body – Geist Regular 400",
     tag: "p", className: "",
-    sizes: "16/24px → 18/28px",
-    extra: "max 65ch",
+    sizes: "16/24px (all screens)",
+    extra: "letter-spacing −0.01em · max 65ch",
     token: "p · --text-body · --leading-body · --measure-body",
     css: "font-size: var(--text-body);\nline-height: var(--leading-body);\nmax-inline-size: var(--measure-body);",
     used: "All reading text.",
@@ -119,19 +119,19 @@ const typeRows = [
     name: "Label – Geist Medium 500",
     tag: "p", className: "label",
     sizes: "14/20px (all screens)",
-    extra: "uppercase · letter-spacing 0.14em",
+    extra: "uppercase · letter-spacing 0.08em",
     token: ".label · --text-small · --tracking-wide",
     css: '<p class="label">…</p>\nletter-spacing: var(--tracking-wide);\ntext-transform: uppercase;',
     used: "Small titles above headings, footer labels, tags.",
     text: "Pleistocene · Europe and Asia",
   },
   {
-    name: "Nav link – Geist Medium 500 (active: Bold 700)",
+    name: "Nav link – Geist Regular 400 (active: Bold 700)",
     tag: "span", className: "sample-nav",
     sizes: "16/24px (all screens) · 48px touch area",
-    extra: "uppercase · letter-spacing 0.04em",
+    extra: "normal case · letter-spacing 0",
     token: ".nav-link (Header.astro) · --tracking-nav",
-    css: "font-size: 1rem;\nfont-weight: 500;\nline-height: var(--space-6);\nletter-spacing: var(--tracking-nav);",
+    css: "font-size: 1rem;\nfont-weight: 400;\nline-height: var(--space-6);\nletter-spacing: var(--tracking-nav);",
     used: "Header navigation. Active page: bold + Egret.",
     text: "Products",
   },
@@ -481,10 +481,9 @@ const radii = [
     display: inline-block;
     color: var(--color-text-secondary);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
     line-height: var(--space-6);
     letter-spacing: var(--tracking-nav);
-    text-transform: uppercase;
   }
 
   .sample-button-text {

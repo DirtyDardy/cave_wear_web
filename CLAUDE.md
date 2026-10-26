@@ -96,6 +96,13 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - `npm run dev` → http://localhost:4321. Git: one branch **`main`**, repo `DirtyDardy/cave_wear_web` (public).
 - Netlify project `cave-wear-concept`; every push to `main` goes live (~1 min). Build
   `npm run build`, publish `dist`, `NODE_VERSION=24`. Form detection on.
+- **Pushes are limited (26 Oct):** every push = one Netlify deploy, and deploys cost credits –
+  5 left this week, Dardan buys more later. So: commit locally all day, **push once at the end
+  of a work day**, never for a single small fix. Netlify settings (forms, notifications) don't
+  cost a push. Before each push: fresh-clone build test (see next point).
+- **Several chats can work in this folder at the same time.** Commit only your own lines: check
+  `git diff` per file; if a file also has another chat's changes, stage only your part (never
+  their uncommitted work). Their work stays uncommitted for them.
 - **Only what is in Git reaches Netlify.** Never import from git-ignored folders
   (e.g. `src/assets/test/`). Risky push → test with a fresh clone (`git clone`, `npm ci`, `npm run build`).
 - Replaced image with the same file name → hard reload (Ctrl + F5); the dev server caches images.
@@ -136,8 +143,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   Romania – 140 cave bear skeletons) · H1 "Contact" · one line + email + "Write to us ↓" ·
   **FAQ** (`#faq`, "01 / Questions") · "02 / Write to us" + 01–03 steps + the form
   (`#contact-form`). A dashed **trail** (CSS scroll animation, off with reduced motion, only from
-  1200px) runs from the coordinates to the "02" marker. Name stays "Contact"; Impressum stays its
-  own page (not repeated here).
+  1200px) runs from the coordinates to the "02" marker; its dashes slide down while scrolling
+  ("momentum"). FAQ → "Write to us" gap 192px (`--write-gap`, the trail uses the same value).
+  Name stays "Contact"; Impressum stays its own page (not repeated here).
 - **FAQ** – 14 questions in 3 groups (The brand · The products · Launch & Pack), all in
   `src/content/faq.yaml` (reader `src/data/faq.ts`, rules in `content.config.ts`). Every
   question is a jump target that opens itself (`src/scripts/faq-open.js`), lands in the middle of
@@ -508,6 +516,9 @@ then Dardan decides.
 - Mobile, tablet, desktop, ultrawide. No horizontal overflow.
 - Keyboard accessible, visible focus (`a:focus-visible`). Icon-only links/buttons need `aria-label`.
   Meaningful `alt` texts. Respect `prefers-reduced-motion`. Forms give clear feedback.
+- Something that shows on hover and also for keyboard users uses `:focus-visible`
+  (`:has(:focus-visible)`), never plain focus / `:focus-within` – a mouse click also gives
+  focus (learned 26 Oct: the card's second photo stuck after going back).
 - All links work, no placeholder links in the final site.
 - Optimised images (Astro image handling), no oversized assets or unneeded scripts. Video: short
   loop, no audio, small, poster. Product images 4:5, wide images 16:9.
@@ -535,10 +546,21 @@ then Dardan decides.
 
 ## 14. Still open (ask, don't assume)
 
+- **⚠ REMIND DARDAN AT THE START OF EVERY SESSION, EVERY DAY, UNTIL IT'S DONE (asked 26 Oct):
+  bring the slight military influence back – this week, by Sun 1 Nov 2026.** Type version C
+  (light headings, normal-case nav, labels 0.08em) made the site more premium but less
+  "military" (brand language: subtle military influence, see 1). Find it again without losing
+  the premium look – e.g. uppercase labels / small technical details, coordinates-style text,
+  the nav, number labels like "01 / …". Show comparison versions first (rule 5); Dardan decides.
+  Remove this reminder only when Dardan says it's done.
 - **Contact page (26 Oct):** Dardan reads the new Privacy section once (netcup → Gmail, "deleted
   once answered" – true for how he works?). The contact form only reaches Netlify after a deploy
   (check: `data-netlify="true"` gone from the live HTML). Mobile layout = mobile phase.
-- Netlify form notifications → info@cavewear.de.
+- **Form notifications done (26 Oct):** Netlify → Forms → Submission notifications → email to
+  info@cavewear.de for any form (contact + newsletter), forwarded to Gmail; reply goes straight to
+  the visitor (Reply-to). Gmail put the first one in spam → "Kein Spam" + filter "never spam" for
+  formresponses@netlify.com. Netlify's spam filter can catch repeated test messages (no email then).
+  OPEN: Privacy Policy – add "IP address" to what Netlify Forms records; delete the test submissions.
 - Newsletter double opt-in + Reserve confirmation email (Netlify Function).
 - Product details, donation model, weather → product mapping.
 - Home sections + final CTA; Brand page sections, then submenu + jump links.
@@ -556,3 +578,5 @@ then Dardan decides.
 - Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
   pinch, card fit icons on touch.
 - Real shot 0 photos (Core Tee, Field Hoodie) – the placeholders are local only (`.gitignore`).
+- **Type version C leftovers (ask Dardan):** the legal headings (`LegalLayout.astro`) and the
+  product name on product pages are still weight 500 – change them to 450 like every H2?

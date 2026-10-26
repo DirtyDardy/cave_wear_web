@@ -438,6 +438,9 @@ Nested: inner radius = outer − gap. No squircles/chamfers. OPEN: card radius.
 Every card = the hero bear's **smoked glass**: blur 12px, saturate 1.2, brightness 0.9 + Dark
 Obsidian 45% tint + fading Egret edge + soft shadow. No coloured cards. Text must pass WCAG.
 Exception: a whole section may be Irr Olive (conservation); cards inside stay glass.
+**Shared variables (26 Oct) – never write the values out again:** glass = `--glass-blur`,
+`--glass-tint`, `--glass-edge`, `--glass-shadow` (+ `-hover`, `--glass-edge-faint`); 40px =
+`--control-height`; focus = `--focus-ring` + `--focus-offset`. All in `global.css`.
 PROPOSED (not decided): glass only where an image or content is behind it (hero, cards over
 photos, maybe the bag panel); flat Obsidian surface elsewhere – on flat Dark Obsidian the blur has
 nothing to blur. Next step: comparison on `/styleguide` (glass vs flat × on photo vs on flat dark),
@@ -488,7 +491,6 @@ then Dardan decides.
 
 ## 14. Still open (ask, don't assume)
 
-- **2FA on the Cave Wear Gmail and netcup** (most important).
 - **When the FAQ is finished:** remind Dardan, then link "Learn more" (pricing) and "Size chart
   and fit guide" on the product page to their FAQ questions (see 6, Contact).
 - Netlify form notifications → info@cavewear.de.
@@ -499,6 +501,9 @@ then Dardan decides.
   strip/card. Glass comparison on `/styleguide` (see 11).
 - Hero at 1280px, mobile version, Safari check. Card radius.
 - Delete `/styleguide` and its footer link before launch. DNSSEC at the very end.
+- **Final steps before 11 Nov (Dardan, 26 Oct): 2FA on the Cave Wear Gmail and netcup** –
+  remind Dardan, guide click by click (he types passwords and scans codes himself).
+  Presentation point: domain + mailbox secured with 2FA, SPF, DKIM, DMARC (Linro = cybersecurity).
 - Product pages (asked 25 Oct, not answered yet): rename `/bag` to `/pack` + page title
   "Your pack"? Colour dots vs real fabric (the Egret dot is lighter than the beige shirt)?
   A "Choose a size" hint while "Add to pack" is disabled? Always-visible underline on the

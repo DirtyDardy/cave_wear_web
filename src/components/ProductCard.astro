@@ -166,15 +166,17 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
     transition: opacity 0.4s ease; /* same speed as the hero */
   }
 
-  /* Only on devices with a real mouse – on phones a tap would leave it stuck.
-     :focus-within = also when the heart button has keyboard focus. */
+  /* Only on devices with a real mouse – on phones a tap would leave it stuck. */
   @media (hover: hover) {
     .product-card:hover .product-image-hover {
       opacity: 1;
     }
   }
 
-  .product-card:focus-within .product-image-hover {
+  /* Keyboard users see it too, when anything in the card has keyboard focus.
+     :focus-visible, not :focus-within: a mouse click also gives focus, and after
+     going back from the product page the photo stayed until the next click (26 Oct). */
+  .product-card:has(:focus-visible) .product-image-hover {
     opacity: 1;
   }
 

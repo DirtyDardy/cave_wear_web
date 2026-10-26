@@ -95,9 +95,9 @@
   group: The products
   question: Are the product photos real?
   answer: >-
-    Not yet. Most product photos are concept mock-ups – some made with AI, some based on existing
-    garments and edited, with our logo added. Real photos will replace them once the pieces
-    exist.
+    Some are – real photos of prototypes. Most product photos are concept mock-ups: some made
+    with AI, some based on existing garments and edited, with our logo added. Real photos of the
+    finished pieces will replace them once they exist.
 
 - id: buying
   group: Launch & Pack

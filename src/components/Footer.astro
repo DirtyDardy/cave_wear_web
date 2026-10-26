@@ -171,8 +171,8 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
   .icon-link {
     display: grid;
     place-items: center;
-    inline-size: 2.5rem; /* 40px */
-    block-size: 2.5rem; /* 40px */
+    inline-size: var(--control-height); /* 40px */
+    block-size: var(--control-height);
     color: var(--color-text-quiet);
     transition: color 0.2s ease;
 
@@ -203,7 +203,7 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
   }
 
   .newsletter-input {
-    block-size: 2.5rem; /* 40px = 10 × 4, same as the button next to it */
+    block-size: var(--control-height); /* 40px, same as the button next to it */
     border-radius: var(--radius-sm); /* 4px – inputs */
     font: inherit;
     flex: 1;

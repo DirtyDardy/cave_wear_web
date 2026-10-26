@@ -191,11 +191,11 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
     inset-inline-start: calc(-1 * (50cqi - var(--bear-w) * 0.5161));
     inline-size: 100cqi;
     block-size: var(--hero-h);
-    filter: blur(12px) saturate(1.2) brightness(0.9);
+    filter: var(--glass-blur);
   }
 
   .bear-half path {
-    fill: color-mix(in srgb, var(--color-bg) 45%, transparent); /* the smoke tint */
+    fill: var(--glass-tint); /* the smoke tint */
     stroke: url(#bear-edge);
     stroke-width: 1.5px;
     vector-effect: non-scaling-stroke; /* line stays 1.5px, whatever the bear size */

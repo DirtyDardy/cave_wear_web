@@ -63,6 +63,7 @@
   --color-text: var(--color-egret);
   --color-text-secondary: var(--color-weathered-bone); /* prices, details */
   --color-text-quiet: var(--color-muted-stone); /* only on bg or surface */
+  --color-text-disabled: var(--color-flint); /* a control that can't be used right now */
 
   --color-accent: var(--color-wild-honey); /* everything clickable */
   --color-accent-hover: var(--color-amber-gold);
@@ -75,6 +76,23 @@
   --color-error: var(--color-terracotta);
 
   --color-logo-brown: var(--color-moule); /* 1.5:1 on dark – only on cream or large */
+
+  /* Smoked glass – the hero bear's look. Every glass element (buttons, heart,
+     fit icons, Pack button, viewer arrows, the bear) is built from these, so
+     changing the glass here changes it everywhere. */
+  --glass-blur: blur(12px) saturate(1.2) brightness(0.9); /* what's behind */
+  --glass-tint: color-mix(in srgb, var(--color-bg) 45%, transparent);
+  --glass-tint-hover: color-mix(in srgb, var(--color-bg) 60%, transparent); /* a little darker */
+  --glass-edge: color-mix(in srgb, var(--color-text) 25%, transparent);
+  --glass-edge-hover: color-mix(in srgb, var(--color-text) 40%, transparent); /* a little brighter */
+  --glass-edge-faint: color-mix(in srgb, var(--color-text) 15%, transparent); /* small, subtle: fit icons */
+  --glass-shadow:
+    0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
+    0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent); /* tiny – stays close */
+
+  /* Keyboard focus ring – Wild Honey, with a small gap */
+  --focus-ring: 2px solid var(--color-accent);
+  --focus-offset: 3px;
 
   /* Fonts */
   --font-body: "Geist", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -132,6 +150,9 @@
   --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
   --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
   --header-height: 4rem; /* 64px on all screens – compact */
+  /* 40px – the height of every button (decided 24 Oct) and of the other things
+     you click: size boxes, quantity, colour dots, the heart, inputs, social icons */
+  --control-height: 2.5rem;
   --header-fade-distance: 12.5rem; /* 200px of scrolling: photo-page header fades from 5% to solid */
   /* Photo header height on every page (Home hero, Products …): 720px, but never
      more than 90% of the screen height. min() takes the smaller value.
@@ -301,8 +322,8 @@ p a {
 
 /* Visible focus ring for keyboard users only (not on mouse click) */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* Centred content column – used by header, footer and page sections.
@@ -384,7 +405,7 @@ p a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  block-size: calc(var(--space-8) + var(--space-2)); /* 40px */
+  block-size: var(--control-height); /* 40px */
   padding-inline: var(--space-4); /* 16px */
   border: 1px solid transparent;
   border-radius: var(--radius-button); /* 12px */
@@ -438,16 +459,16 @@ p a {
 
 /* Same smoked glass as the hero bear: blur what's behind, dark tint, light edge */
 .button-glass {
-  background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
-  border-color: color-mix(in srgb, var(--color-text) 25%, transparent);
+  background-color: var(--glass-tint);
+  border-color: var(--glass-edge);
   color: var(--color-text);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
-  backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+  -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+  backdrop-filter: var(--glass-blur);
 
   /* Text colour repeated for the same reason as .button-primary */
   &:hover:not(:disabled) {
-    background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
-    border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    background-color: var(--glass-tint-hover);
+    border-color: var(--glass-edge-hover);
     color: var(--color-text);
   }
 }
@@ -513,18 +534,16 @@ p a {
   inset-inline-end: var(--space-3);
   display: grid;
   place-items: center;
-  inline-size: calc(var(--space-8) + var(--space-2)); /* 40px */
-  block-size: calc(var(--space-8) + var(--space-2));
+  inline-size: var(--control-height); /* 40px */
+  block-size: var(--control-height);
   padding: 0;
-  border: 0.5px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+  border: 0.5px solid var(--glass-edge);
   border-radius: var(--radius-full); /* a real circle */
-  background-color: color-mix(in srgb, var(--color-bg) 45%, transparent);
+  background-color: var(--glass-tint);
   color: var(--color-text);
-  box-shadow:
-    0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
-    0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2) brightness(0.9); /* older Safari */
-  backdrop-filter: blur(12px) saturate(1.2) brightness(0.9);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+  backdrop-filter: var(--glass-blur);
   cursor: pointer;
   transition:
     background-color 0.2s ease,
@@ -533,8 +552,8 @@ p a {
 
   /* Hover: a little darker, edge a little brighter – like .button-glass */
   &:hover {
-    background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
-    border-color: color-mix(in srgb, var(--color-text) 40%, transparent);
+    background-color: var(--glass-tint-hover);
+    border-color: var(--glass-edge-hover);
   }
 
   /* Pressed: 97%, like every button */

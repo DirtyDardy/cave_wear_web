@@ -192,6 +192,9 @@ const steps = [
      --trail-offset = how far left of the text the trail runs (80px). */
   .contact {
     --trail-offset: calc(var(--space-16) + var(--space-4));
+    /* Space between the FAQ and "Write to us" (192px – three times the old 64px,
+       26 Oct) – the trail reaches across it, so both use this one value */
+    --write-gap: calc(var(--space-16) * 3);
     max-inline-size: 60rem; /* 960px */
     margin-inline: auto;
   }
@@ -253,6 +256,36 @@ const steps = [
     justify-content: space-between;
   }
 
+  /* "Look here": a question you jumped to (/contact#pricing) gets a thin Wild Honey
+     frame and a faint tint, which fade out after about 3 seconds (decided 26 Oct).
+     faq-open.js adds "is-found" once the question is in the middle of the screen.
+     With reduced motion the frame simply stays, without fading. */
+  .faq-item.is-found {
+    border-radius: var(--radius-sm);
+    outline: 1px solid var(--color-accent);
+    outline-offset: var(--space-2); /* 8px around the question and answer */
+    background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+    box-shadow: 0 0 0 var(--space-2) color-mix(in srgb, var(--color-accent) 6%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .faq-item.is-found {
+      animation: faq-found 3s ease-out forwards;
+    }
+  }
+
+  @keyframes faq-found {
+    0%,
+    50% {
+      outline-color: var(--color-accent);
+    }
+    100% {
+      outline-color: transparent;
+      background-color: transparent;
+      box-shadow: 0 0 0 var(--space-2) transparent;
+    }
+  }
+
   /* A jump from the product page (/contact#pricing) lands 24px below the header */
   .faq-item {
     scroll-margin-block-start: var(--space-6); /* 24px – plus the header space from scroll-padding in global.css */
@@ -265,7 +298,7 @@ const steps = [
   .write {
     display: grid;
     gap: var(--space-12);
-    margin-block-start: var(--space-16); /* 64px */
+    margin-block-start: var(--write-gap); /* 192px */
     scroll-margin-block-start: var(--space-6); /* 24px – plus the header space from scroll-padding in global.css */
 
     @media (width >= 64rem) {
@@ -531,7 +564,7 @@ const steps = [
     .trail {
       display: block;
       position: absolute;
-      inset-block: 0 calc(-1 * var(--space-16)); /* down to "02 / Write to us" (64px below) */
+      inset-block: 0 calc(-1 * var(--write-gap)); /* down to "02 / Write to us" */
       inset-inline-start: calc(-1 * var(--trail-offset));
       inline-size: 1px;
       background-image: repeating-linear-gradient(

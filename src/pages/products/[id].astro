@@ -110,8 +110,8 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
         <div class="details-block">
           <p class="price">{product.priceText}</p>
           <p class="small price-note">Preliminary Price Estimate.</p>
-          <!-- TODO: link to the pricing question in the FAQ (/contact#…) once it exists -->
-          <a class="text-link small">Learn more <span aria-hidden="true">›</span></a>
+          <!-- Straight to the pricing question in the FAQ (src/content/faq.yaml, id: pricing) -->
+          <a href="/contact#pricing" class="text-link small">Learn more <span aria-hidden="true">›</span></a>
         </div>
 
         <!-- Size, fit and colour are radio buttons: only one per group can be chosen,
@@ -137,8 +137,8 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
                 ))
               }
             </div>
-            <!-- TODO: link to the size chart / fit question in the FAQ (/contact#…) once it exists -->
-            <a class="text-link small size-guide">Size chart and fit guide <span aria-hidden="true">›</span></a>
+            <!-- Straight to the fit / size chart question in the FAQ (id: size-and-fit) -->
+            <a href="/contact#size-and-fit" class="text-link small size-guide">Size chart and fit guide <span aria-hidden="true">›</span></a>
           </fieldset>
 
           <fieldset>
@@ -601,50 +601,6 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   .note {
     margin-block-start: var(--space-2);
     color: var(--color-text-quiet);
-  }
-
-  /* --- Accordions -------------------------------------------------------------------- */
-
-  .accordion {
-    border-block-end: 1px solid var(--color-line);
-  }
-
-  .accordion summary {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding-block: var(--space-3); /* 12px */
-    list-style: none; /* hides the browser's own triangle … */
-    cursor: pointer;
-
-    &:hover {
-      color: var(--color-accent);
-    }
-  }
-
-  .accordion summary::-webkit-details-marker {
-    display: none; /* … also in Safari */
-  }
-
-  /* Small chevron, drawn as two borders of a turned square: points down when
-     closed, up when open */
-  .accordion summary::after {
-    content: "";
-    inline-size: 0.375rem;
-    block-size: 0.375rem;
-    border-block-end: 1.5px solid currentColor;
-    border-inline-end: 1.5px solid currentColor;
-    translate: 0 -2px;
-    rotate: 45deg;
-  }
-
-  .accordion[open] summary::after {
-    translate: 0 2px;
-    rotate: -135deg;
-  }
-
-  .accordion-text {
-    padding-block-end: var(--space-4);
   }
 
   /* --- Photo viewer ------------------------------------------------------------------

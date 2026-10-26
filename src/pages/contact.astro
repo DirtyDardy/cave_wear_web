@@ -1,9 +1,582 @@
 ---
+// CONTACT PAGE (my version A sketch, sharp form box – decided 26 Oct).
+// Top to bottom: intro with the email · FAQ (01 / Questions) · "Write to us" with the form.
+// A dashed trail runs down the left side and ends at "Write to us" (CSS only, see below).
+// The FAQ comes from src/content/faq.yaml – every question has its own jump target,
+// e.g. /contact#pricing (the product pages link there).
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getFaqGroups } from "../data/faq";
+import { owner } from "../data/owner.js";
+
+const faqGroups = await getFaqGroups();
+const email = owner.emails[0];
+
+// Topic chips. "General" is chosen from the start (like fit and colour on the product
+// page); "Other" shows a field for your own subject.
+const topics = ["General", "Pack & reserve", "Feedback", "Collaboration", "Other"];
+
+// The three steps next to the form – only things I can really promise
+const steps = [
+  ["We read every message", "It's one person behind Cave Wear, so it can take a few days."],
+  ["You get a personal reply", "From info@cavewear.de – a real answer, never a newsletter."],
+  ["Your data stays here", "Only used to answer you. See the Privacy Policy."],
+];
 ---
 
-<BaseLayout title="Contact">
-  <section class="container section">
-    <h1>Contact</h1>
-  </section>
+<BaseLayout
+  title="Contact"
+  description="Questions about Cave Wear – answers to the most common ones, and a way to write to us."
+>
+  <div class="container contact-page">
+    <div class="contact">
+      <div class="contact-main">
+        <!-- The trail: one dashed line from the top to "Write to us". Only decoration,
+             so screen readers skip it (aria-hidden). -->
+        <div class="trail" aria-hidden="true"></div>
+
+        <h1>Contact</h1>
+        <p class="intro-text">Most answers are right below. If yours isn't, write to us.</p>
+        <p class="intro-links">
+          <a href={`mailto:${email}`}>{email}</a>
+          <a href="#contact-form" class="text-link">Write to us <span aria-hidden="true">↓</span></a>
+        </p>
+
+        <!-- FAQ. id="faq" = the jump target of the Home button "FAQ". -->
+        <section id="faq" class="faq" aria-labelledby="faq-title">
+          <h2 id="faq-title" class="label faq-title">01 / Questions</h2>
+          {
+            faqGroups.map((group) => (
+              <div class="faq-group">
+                <h3 class="label faq-group-title">{group.name}</h3>
+                {group.questions.map((item) => (
+                  <details class="accordion faq-item" id={item.id}>
+                    <summary>{item.question}</summary>
+                    <div class="accordion-text">
+                      {item.paragraphs.map((paragraph) => (
+                        <p class="small" set:html={paragraph} />
+                      ))}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            ))
+          }
+        </section>
+      </div>
+
+      <!-- WRITE TO US. id="contact-form" = the jump target of the Home button "Contact us". -->
+      <section id="contact-form" class="write" aria-labelledby="write-title">
+        <div class="write-text">
+          <h2 id="write-title" class="write-title">Write to us</h2>
+          <p class="write-intro">Your question wasn't here? We're happy to help.</p>
+
+          <p class="steps-title">What happens after you send</p>
+          <ol class="steps" role="list">
+            {
+              steps.map(([title, text], index) => (
+                <li>
+                  <span class="label step-number">{String(index + 1).padStart(2, "0")}</span>
+                  <p class="small step-title">{title}</p>
+                  <p class="small step-text">{text}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <!-- Sent to Netlify Forms with fetch (src/scripts/contact-form.js), like the newsletter.
+             novalidate: the script gives the feedback, not the browser's own pop-ups. -->
+        <form
+          class="contact-form"
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          novalidate
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <!-- Honeypot: hidden from people, spam bots fill it in and get ignored -->
+          <p hidden>
+            <label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+          </p>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="contact-name" class="label">Name</label>
+              <input id="contact-name" name="name" type="text" required autocomplete="name" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="contact-email" class="label">Email</label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+            </div>
+          </div>
+
+          <!-- Topic: radio buttons that look like chips (only one can be chosen) -->
+          <fieldset class="field">
+            <legend class="label">Topic</legend>
+            <div class="chips">
+              {
+                topics.map((topic, index) => (
+                  <label class="chip">
+                    <input
+                      type="radio"
+                      name="topic"
+                      value={topic}
+                      checked={index === 0}
+                      id={topic === "Other" ? "topic-other" : undefined}
+                      class="visually-hidden"
+                    />
+                    {topic}
+                  </label>
+                ))
+              }
+            </div>
+            <!-- Only visible when "Other" is chosen (CSS :has) -->
+            <div class="subject">
+              <label for="contact-subject" class="visually-hidden">Your subject</label>
+              <input id="contact-subject" name="subject" type="text" placeholder="Your subject" />
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="contact-message" class="label">Message</label>
+            <textarea id="contact-message" name="message" required rows="5"></textarea>
+          </div>
+
+          <p class="small form-note">
+            We only use your details to answer you. See our <a href="/privacy#contact-form">Privacy Policy</a>.
+          </p>
+
+          <div class="send">
+            <!-- contact-form.js switches the button off until everything is filled in,
+                 and writes what's still missing into the line under it -->
+            <button type="submit" class="button button-primary send-button" aria-describedby="contact-missing">
+              Send message
+            </button>
+            <p id="contact-missing" class="small form-missing" aria-live="polite"></p>
+          </div>
+
+          <!-- After sending, this replaces the button (role="status": screen readers read it out) -->
+          <div class="form-status" role="status"></div>
+        </form>
+      </section>
+    </div>
+  </div>
 </BaseLayout>
+
+<script src="../scripts/faq-open.js"></script>
+<script src="../scripts/contact-form.js"></script>
+
+<style>
+  /* Space below the header; the usual section space at the end */
+  .contact-page {
+    padding-block: var(--space-12) var(--section-space); /* 48px · 96px */
+  }
+
+  /* The whole page content is 960px wide, like the product page.
+     --trail-offset = how far left of the text the trail runs (80px). */
+  .contact {
+    --trail-offset: calc(var(--space-16) + var(--space-4));
+    max-inline-size: 60rem; /* 960px */
+    margin-inline: auto;
+  }
+
+  /* Intro and FAQ: one calm 640px column (my sketch) */
+  .contact-main {
+    position: relative; /* the trail is placed inside this box */
+    max-inline-size: 40rem; /* 640px */
+  }
+
+  /* --- Intro ----------------------------------------------------------------------- */
+
+  .intro-text {
+    color: var(--color-text-secondary);
+    margin-block-end: var(--space-2);
+  }
+
+  .intro-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6); /* 24px */
+  }
+
+  /* --- FAQ --------------------------------------------------------------------------- */
+
+  .faq {
+    margin-block-start: var(--space-16); /* 64px */
+  }
+
+  .faq-title {
+    position: relative; /* the trail's first stop sits next to it */
+    color: var(--color-text-secondary);
+  }
+
+  .faq-group {
+    margin-block-start: var(--space-8); /* 32px */
+
+    & + & {
+      margin-block-start: var(--space-12); /* 48px between the groups */
+    }
+  }
+
+  .faq-group-title {
+    margin-block-end: var(--space-2);
+    color: var(--color-text-quiet);
+  }
+
+  /* The look comes from the shared .accordion (global.css). Only here: a line above
+     the first question, and the chevron at the far right (my sketch) */
+  .faq-item:first-of-type {
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .faq-item summary {
+    justify-content: space-between;
+  }
+
+  /* A jump from the product page (/contact#pricing) lands 24px below the header */
+  .faq-item {
+    scroll-margin-block-start: var(--space-6); /* 24px – plus the header space from scroll-padding in global.css */
+  }
+
+  /* --- Write to us -------------------------------------------------------------------- */
+
+  /* Text and steps on the left, the form box on the right (576px – wide enough
+     for all five topic chips in one line) */
+  .write {
+    display: grid;
+    gap: var(--space-12);
+    margin-block-start: var(--space-16); /* 64px */
+    scroll-margin-block-start: var(--space-6); /* 24px – plus the header space from scroll-padding in global.css */
+
+    @media (width >= 64rem) {
+      grid-template-columns: 1fr 36rem;
+      gap: var(--space-16);
+      align-items: start;
+    }
+  }
+
+  .write-title {
+    position: relative; /* the trail's end marker sits next to it */
+    margin-block-end: var(--space-2);
+  }
+
+  .write-intro {
+    color: var(--color-text-secondary);
+  }
+
+  .steps-title {
+    margin-block: var(--space-8) var(--space-3); /* 32px above, 12px to the list */
+    font-size: var(--text-small);
+    font-weight: 500;
+    line-height: var(--leading-small);
+  }
+
+  /* 01 · 02 · 03 – number left, title and line right, thin Charcoal lines between */
+  .steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-block-end: 1px solid var(--color-line);
+
+    & li {
+      display: grid;
+      grid-template-columns: var(--space-12) 1fr; /* 48px for the number */
+      padding-block: var(--space-3);
+      border-block-start: 1px solid var(--color-line);
+    }
+  }
+
+  .step-number {
+    grid-row: span 2;
+    margin: 0;
+    color: var(--color-text-quiet);
+  }
+
+  .step-title {
+    margin: 0;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .step-text {
+    margin: 0;
+    color: var(--color-text-quiet);
+  }
+
+  /* --- The form -------------------------------------------------------------------------
+     Sharp box with a 1px Flint line – the same line as the size boxes and the quantity
+     on the product page (decided 26 Oct, sharp version). */
+
+  .contact-form {
+    display: grid;
+    gap: var(--space-6); /* 24px between the fields */
+    padding: var(--space-8); /* 32px */
+    border: 1px solid var(--color-input-border);
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    padding: 0;
+  }
+
+  .field .label {
+    display: block;
+    margin-block-end: var(--space-2);
+    color: var(--color-text-quiet);
+  }
+
+  /* Name, email, subject: only a line underneath (my sketch) */
+  .field input:not([type="radio"]),
+  .subject input {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--control-height); /* 40px */
+    padding: 0;
+    border: 0;
+    border-block-end: 1px solid var(--color-input-border);
+    border-radius: 0;
+    background-color: var(--color-bg); /* form fields only on Dark Obsidian / Obsidian */
+    color: var(--color-text);
+    font: inherit;
+  }
+
+  /* The message: a sharp box with the same Flint line */
+  textarea {
+    display: block;
+    inline-size: 100%;
+    min-block-size: calc(var(--space-24) + var(--space-6)); /* 120px */
+    padding: var(--space-3);
+    border: 1px solid var(--color-input-border);
+    border-radius: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+    resize: vertical; /* can be made taller, never wider */
+  }
+
+  /* What you type: Small (14px) – the same size as the chips and the button,
+     so the whole box speaks one size (decided 26 Oct; body size looked too big).
+     Comes after the rules above, because their "font: inherit" would reset it. */
+  .field input:not([type="radio"]),
+  .subject input,
+  textarea {
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+  }
+
+  input::placeholder {
+    color: var(--color-text-quiet);
+  }
+
+  /* A real problem (an email with a typo): Terracotta – only on the line, never on
+     text (CLAUDE.md rule). Set by contact-form.js when you leave the field. */
+  [aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+
+  /* Topic chips: the hidden radio button has the choice, the label shows it.
+     Chosen = the product page's selected look: Weathered Bone fill, Egret line, dark text. */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    block-size: var(--space-8); /* 32px */
+    padding-inline: var(--space-3); /* 12px */
+    border: 1px solid var(--color-input-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-secondary);
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-text);
+    }
+
+    &:has(:checked) {
+      border-color: var(--color-text);
+      background-color: var(--color-text-secondary);
+      color: var(--color-bg);
+    }
+
+    &:has(:focus-visible) {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-offset);
+    }
+  }
+
+  /* "Your subject" only appears when "Other" is chosen – CSS alone, no JavaScript */
+  .subject {
+    display: none;
+    margin-block-start: var(--space-3);
+  }
+
+  .contact-form:has(#topic-other:checked) .subject {
+    display: block;
+  }
+
+  /* Same look as the newsletter note in the footer: the link is only underlined */
+  .form-note {
+    margin: 0;
+    color: var(--color-text-quiet);
+
+    & a {
+      color: inherit;
+      font-weight: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  .send-button {
+    inline-size: 100%;
+  }
+
+  /* "Still missing: name · message" – grey, calm: you're not done yet, nothing is wrong */
+  .form-missing {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-quiet);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  /* After sending: the status replaces the button. Error = Terracotta left line,
+     text stays Egret (same rule as the newsletter). */
+  .form-status {
+    &:empty {
+      display: none;
+    }
+
+    & .label {
+      margin-block-end: var(--space-1);
+      color: var(--color-text-secondary);
+    }
+
+    & p {
+      margin: 0;
+    }
+
+    &[data-type="error"] {
+      padding-inline-start: var(--space-3);
+      border-inline-start: 2px solid var(--color-error);
+    }
+  }
+
+  .contact-form:has(.form-status[data-type="success"]) .send {
+    display: none;
+  }
+
+  /* --- The trail ----------------------------------------------------------------------------
+     A dashed line (8px dash, 8px gap) on the left of the text column, from the top of the
+     page down to a Wild Honey marker next to "Write to us", with a small stop at
+     "01 / Questions". Only on wide screens – on smaller ones there's no room beside the text. */
+
+  .trail,
+  .faq-title::before,
+  .write-title::before {
+    display: none;
+  }
+
+  @media (width >= 75rem) {
+    .trail {
+      display: block;
+      position: absolute;
+      inset-block: 0 calc(-1 * (var(--space-16) + var(--space-4))); /* down into "Write to us" */
+      inset-inline-start: calc(-1 * var(--trail-offset));
+      inline-size: 1px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        var(--color-input-border) 0 var(--space-2),
+        transparent var(--space-2) var(--space-4)
+      );
+    }
+
+    /* Small round stop next to "01 / Questions" */
+    .faq-title::before {
+      content: "";
+      display: block;
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: calc(-1 * var(--trail-offset));
+      inline-size: var(--space-2); /* 8px */
+      block-size: var(--space-2);
+      border: 1px solid var(--color-input-border);
+      border-radius: var(--radius-full);
+      background-color: var(--color-bg);
+      translate: -50% -50%;
+    }
+
+    /* The end: a Wild Honey ring with a dot – you've arrived */
+    .write-title::before {
+      content: "";
+      display: block;
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline-start: calc(-1 * var(--trail-offset));
+      inline-size: calc(var(--space-4) + 2px); /* 18px */
+      block-size: calc(var(--space-4) + 2px);
+      border: 1.5px solid var(--color-accent);
+      border-radius: var(--radius-full);
+      background: radial-gradient(circle, var(--color-accent) 3px, var(--color-bg) 3.5px);
+      translate: -50% -50%;
+    }
+  }
+
+  /* The trail draws itself while you scroll: its tip follows the middle of the screen.
+     view() = the timeline is the trail's own way through the screen; the range starts
+     when its top reaches the middle and ends when its bottom does.
+     Only in browsers that know scroll animations (others show the whole line) and
+     never for people who asked for less motion. */
+  @media (width >= 75rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose: the build would join a full "animation:"
+         line and view() into one, which some browsers can't read */
+      .trail {
+        animation-name: trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  @keyframes trail-draw {
+    from {
+      clip-path: inset(0 0 100% 0); /* nothing visible */
+    }
+    to {
+      clip-path: inset(0); /* the whole line */
+    }
+  }
+</style>

@@ -3,7 +3,7 @@
 // If a text file breaks a rule, the build stops and names the file and the field –
 // so a product with a missing price can never go live.
 import { defineCollection } from "astro:content";
-import { glob } from "astro/loaders";
+import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { productColours } from "./data/product-colours.js";
 
@@ -57,4 +57,17 @@ const products = defineCollection({
   }),
 });
 
-export const collections = { products };
+// FAQ: all questions in one file, src/content/faq.yaml (the Contact page shows them).
+// Every entry needs an id (the jump target), a group, a question and an answer.
+const faq = defineCollection({
+  loader: file("./src/content/faq.yaml"),
+  schema: z.object({
+    group: z.enum(["The brand", "The products", "Launch & Pack"], {
+      error: 'Write "The brand", "The products" or "Launch & Pack"',
+    }),
+    question: z.string({ error: "Question is missing" }),
+    answer: z.string({ error: "Answer is missing" }),
+  }),
+});
+
+export const collections = { products, faq };

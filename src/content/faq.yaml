@@ -1,0 +1,132 @@
+# FAQ on the Contact page (/contact#faq) – my questions and answers, decided 26 Oct 2026.
+# Order here = order on the page. Rules + error messages: src/content.config.ts.
+#
+# id:       the jump target – /contact#pricing opens and shows that question.
+#           Never rename an id that is linked from somewhere (pricing, size-and-fit:
+#           the product pages link to them).
+# group:    "The brand", "The products" or "Launch & Pack"
+# answer:   an empty line starts a new paragraph. A link is written [text](address).
+#
+# Production plans (materials, print, dyeing …) are always vision, never facts.
+
+- id: different
+  group: The brand
+  question: What makes Cave Wear different?
+  answer: >-
+    We make clothing for the wild and for everyday life alike. From a trail in the forest to a
+    dinner in the city, our pieces are designed to feel at home wherever you are – without ever
+    looking out of place.
+
+- id: cave-bear
+  group: The brand
+  question: Why the cave bear?
+  answer: |-
+    The cave bear lived through the Ice Age – it stands for what Cave Wear is about: strength,
+    endurance and resilience.
+
+    It's more than a symbol of ruggedness. It represents how we design: with purpose, character
+    and a reason behind every detail.
+
+- id: conservation
+  group: The brand
+  question: How does Cave Wear support bear conservation?
+  answer: |-
+    Nature is our biggest inspiration, and we believe that inspiration comes with a
+    responsibility to protect it.
+
+    Our plan is to donate a portion of our income to bear research and conservation.
+    Organisations like the International Association for Bear Research and Management
+    ([IBA, bearbiology.org](https://www.bearbiology.org/)) show what that work looks like.
+
+- id: sustainability
+  group: The brand
+  question: Is Cave Wear sustainable?
+  answer: >-
+    We aim to consider material choices, durability and environmental impact as the collection
+    develops. Specific sustainability claims will only follow once the materials, production and
+    evidence for the finished pieces are clear.
+
+- id: who-is-behind
+  group: The brand
+  question: Who is behind Cave Wear?
+  answer: |-
+    Cave Wear is a concept brand for a design portfolio. Products are concept mock-ups – some are
+    based on existing garments and edited. Nothing is for sale.
+
+    Behind it is one person, Dardan Ademi – what started as a portfolio project grew a little
+    bigger and more detailed than planned.
+
+- id: size-and-fit
+  group: The products
+  question: How do Cave Wear pieces fit? Is there a size chart?
+  answer: >-
+    Our pieces are designed with a drop shoulder and a slightly longer body – relaxed when worn
+    loose, sharper when tucked in. A detailed size chart will follow once the final pieces are
+    made.
+
+- id: materials
+  group: The products
+  question: What materials do you use?
+  answer: >-
+    Final materials haven't been chosen yet. We're exploring materials that balance comfort,
+    durability, appearance and environmental impact – each [product page](/products) shows our
+    current vision under "Materials".
+
+- id: lifespan
+  group: The products
+  question: How long are Cave Wear pieces made to last?
+  answer: |-
+    As long as possible. We don't believe in buying new clothes every season. Our focus is
+    timeless essentials that work with the basics already in your wardrobe – pieces you reach
+    for again and again.
+
+    That starts with deliberate decisions about materials, construction, printing and
+    finishing: every detail should serve a purpose, not just add decoration. Good design
+    shouldn't have an expiration date.
+
+- id: care
+  group: The products
+  question: How should I care for my Cave Wear pieces?
+  answer: >-
+    Care instructions depend on the final fabrics, prints and construction, and will come with
+    the finished products. Following them keeps the fit, look and quality for longer.
+
+- id: photos
+  group: The products
+  question: Are the product photos real?
+  answer: >-
+    Not yet. Most product photos are concept mock-ups – some made with AI, some based on existing
+    garments and edited, with our logo added. Real photos will replace them once the pieces
+    exist.
+
+- id: buying
+  group: Launch & Pack
+  question: Can I buy Cave Wear?
+  answer: >-
+    Not yet. Cave Wear is currently in the concept stage, and no launch date has been set. Sign
+    up for the newsletter to hear first if that changes.
+
+- id: pricing
+  group: Launch & Pack
+  question: How does the pricing work?
+  answer: >-
+    The prices shown are preliminary estimates and may change as we finalise materials and
+    production. Our aim is clothing made to last, at a fair price – the right balance between
+    quality, sustainability and affordability.
+
+- id: reserving
+  group: Launch & Pack
+  question: What happens when I reserve something?
+  answer: >-
+    Reserving saves your place in the queue for the launch – no payment, no commitment. When
+    Cave Wear launches, you get early access before everyone else: an email first, and the
+    chance to confirm your order before it's locked in. Until then, nothing is final. It also
+    shows us which designs people want most.
+
+- id: updates
+  group: Launch & Pack
+  question: How do I stay updated?
+  answer: >-
+    Sign up for the newsletter at the bottom of every page – we only email you when there's real
+    news: the launch, a vote on the next product or a big announcement. Or follow the journey on
+    Instagram, Threads and YouTube.

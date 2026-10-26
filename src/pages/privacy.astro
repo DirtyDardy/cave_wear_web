@@ -2,8 +2,9 @@
 // Privacy Policy – information according to Art. 13 GDPR.
 // Describes ONLY what the website really does today. When a new feature collects data,
 // add a section here BEFORE it goes live:
-//   - contact form (Netlify Forms)          - Reserve / bag (Netlify Forms + localStorage)
+//   - Reserve / bag (Netlify Forms + localStorage)
 //   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
+// The contact form (/contact) is covered under "Contact form" (added 26 Oct 2026).
 // Favorites (localStorage, src/scripts/favorites.js) are covered under "Data stored in your browser".
 // Keep the newsletter purpose in sync with the note in Footer.astro.
 import LegalLayout from "../layouts/LegalLayout.astro";
@@ -24,8 +25,8 @@ const missing = (label: string) => `[${label} – to be added]`;
     <li>No cookies – that's why there is no cookie banner.</li>
     <li>Fonts and images come from this website's own server, not from Google or others.</li>
     <li>
-      Data is only processed when you visit the site (technical server data) and when you sign up
-      for the newsletter (your email address).
+      Data is only processed when you visit the site (technical server data), when you sign up
+      for the newsletter (your email address) and when you write to us (your message).
     </li>
     <li>Favorites you save with the heart stay in your own browser – nothing is sent to us.</li>
   </ul>
@@ -69,6 +70,27 @@ const missing = (label: string) => `[${label} – to be added]`;
     Legal basis: your consent, Art. 6 (1) (a) GDPR. You can withdraw it at any time without giving
     a reason – a short email to the address above is enough. We then delete your address. Until
     then, we keep it as long as the newsletter exists.
+  </p>
+
+  <h2 id="contact-form">Contact form and email</h2>
+  <p>
+    If you write to us with the form on the Contact page, we receive your name, your email
+    address, the topic (and your own subject, if you choose "Other") and your message. The form
+    is sent via Netlify Forms (Netlify, see "Hosting"), which stores it, records technical data
+    such as date and time, and checks it automatically for spam. We only use your details to
+    answer you – never for the newsletter or anything else.
+  </p>
+  <p>
+    Our mailbox info@cavewear.de is hosted by netcup GmbH, Daimlerstraße 25, 76185 Karlsruhe,
+    Germany, and forwarded to a Gmail account of Google Ireland Limited, Gordon House, Barrow
+    Street, Dublin 4, Ireland. We answer from there. The same applies when you email us directly.
+    Google may transfer data to the USA; Google states that it complies with the EU-U.S. Data
+    Privacy Framework.
+  </p>
+  <p>
+    Legal basis: Art. 6 (1) (f) GDPR – our legitimate interest in answering your request. If your
+    message is about a reservation, Art. 6 (1) (b) GDPR. We delete your message once your
+    request is fully answered, unless the law requires us to keep it longer.
   </p>
 
   <h2>Data stored in your browser</h2>
@@ -123,7 +145,7 @@ const missing = (label: string) => `[${label} – to be added]`;
 
   <h2>Changes</h2>
   <p>
-    When the website gets new features that process data – for example the contact form or the
-    reservation – this Privacy Policy will be updated before they go live.
+    When the website gets new features that process data – for example the reservation – this
+    Privacy Policy will be updated before they go live.
   </p>
 </LegalLayout>

@@ -15,4 +15,4 @@ export const owner = {
 };
 
 // Date shown as "Last updated" on both legal pages. Change it whenever the texts change.
-export const legalUpdated = "23 October 2026";
+export const legalUpdated = "26 October 2026";

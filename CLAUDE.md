@@ -140,7 +140,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   own page (not repeated here).
 - **FAQ** – 14 questions in 3 groups (The brand · The products · Launch & Pack), all in
   `src/content/faq.yaml` (reader `src/data/faq.ts`, rules in `content.config.ts`). Every
-  question is a jump target that opens itself (`src/scripts/faq-open.js`). Linked: "Learn more" →
+  question is a jump target that opens itself (`src/scripts/faq-open.js`), lands in the middle of
+  the screen and gets a thin Wild Honey frame that fades out (~3 s, "look here"). Linked: "Learn more" →
   `#pricing`, "Size chart and fit guide" → `#size-and-fit` – never rename those ids. Shared
   `.accordion` look (global.css) with the product page. No shipping/returns questions (nothing
   can be bought). Launch answer without jokes ("probably never" dropped – humour stays out of
@@ -236,7 +237,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Product detail pages: never hide** (Pack stays visible) – decided, not built yet.
 - Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
   sizes from the design file looked too big on real screens).
-- Nav: Geist 500, 16px, uppercase, `--tracking-nav` 0.04em. Inactive Weathered Bone; active
+- Nav: Geist Regular 400, 16px, **normal case** (not uppercase), `--tracking-nav` 0 (changed
+  26 Oct with type version C – was 500, uppercase, 0.04em). Inactive Weathered Bone; active
   **bold Egret**, no layout shift, no marker; hover Wild Honey. "Products" active on `/products/*`.
 - Bag button: 40px high, 24px backpack icon (Dardan's drawing), "Pack" label (was "Bag" until
   25 Oct; the page is still `/bag`), 12px corners,
@@ -486,8 +488,12 @@ then Dardan decides.
   uppercase, line height 0.9, 48–128px `clamp`, max 12ch. Never another weight.
   Exception: the product name on product pages is Geist (see 10, decided 25 Oct).
 - WOFF2 self-hosted in `public/fonts/` (no Google requests). Both SIL OFL.
-- Scale: H2 32/40→48/56 · Lead 24/32→32/40 · H3 24/32 · Body 16/24→18/28 · Small 14/20 ·
+- Scale: H2 32/32→48/48 · Lead 24/32→32/40 · H3 24/28 · Body 16/24 (all screens) · Small 14/20 ·
   Label 14/20 uppercase `--tracking-wide`; H4–H6 = Label. Headlines must never clip on mobile.
+- **Type version C (decided 26 Oct, from 3 versions compared on localhost, after measuring
+  Linear and Vercel):** H2/H3 Geist **450** (was ExtraBold 800), tracking H2 −0.05em · H3 −0.03em,
+  H2 line height = font size; Lead 450, −0.03em (was Light 300); body −0.01em; labels 0.08em
+  (was 0.14em); nav normal case. Light headings + tight spacing = the premium look. Presentation point.
 
 ### Logo & icons
 - `src/assets/logo-horizontal.svg` (`currentColor`, inlined in header/footer) and

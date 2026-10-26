@@ -182,6 +182,18 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   split into separate shapes in Corel – today `logo-horizontal.svg` = 1 shape, `bear-light.svg` = 4.
 - **Pre-launch pieces** – one extra T-shirt and one extra hoodie, only reservable before the
   launch, separate from the Base Collection. Idea only – discuss before anything is built.
+- **Team section** (idea 26 Oct) – 4–5 photos of Dardan, each with a different job title that is
+  real work he did for the site (draft: Founder & Creative Director · Product Photography &
+  Retouching · Copy & Content · Web Design & Build · Operations & Security). The honest wink:
+  one person behind the whole concept brand. Humour only in the layout (same face, serious
+  titles), never in the copy; a one-line caption per title, one quiet closing line. Never next to
+  Pack/Reserve. **Animation reference:** familyindustrieslive.com, section "The Experience" – the
+  section is pinned, scrolling down moves a row of portrait photos sideways, each photo has one big
+  condensed uppercase word over its bottom edge (our Barlow Condensed). Reduced motion → a normal
+  row/grid. OPEN: place (recommended: Brand page `#team`, linked from the FAQ answer "Who is
+  behind it?"), real photos on a timer vs Gemini (recommended: real – it's about honesty), whether
+  the web title mentions the AI coding partner, 4 or 5 roles, photo brief (one shoot look, dark
+  background like the product recipe, each role in a different Cave Wear piece).
 - Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
   enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
   category buttons).

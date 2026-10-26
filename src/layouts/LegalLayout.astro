@@ -27,13 +27,30 @@ const { title, lead, description } = Astro.props;
 <style>
   /* :global() because the content comes from the page through <slot /> */
 
-  /* Space above each new topic, so long texts stay easy to scan */
+  /* Legal headings stay real H2/H3 (structure for screen readers and Google),
+     but look quieter: medium weight instead of extra-bold, one size smaller –
+     a page for legal things only, like the legal pages of Linear and Vercel
+     (decided 26 Oct; before, the H2s were 48px extra-bold).
+     The text under them is one step quieter (Weathered Bone). */
+  .legal :global(:is(h2, h3)) {
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
   .legal :global(h2) {
-    margin-block-start: var(--space-16); /* 64px */
+    margin-block: var(--space-12) var(--space-3); /* 48px above, 12px to its text */
+    font-size: var(--text-h3); /* 24px */
+    line-height: var(--leading-h3);
   }
 
   .legal :global(h3) {
-    margin-block-start: var(--space-8); /* 32px */
+    margin-block: var(--space-6) var(--space-1); /* 24px above, 4px to its text */
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+  }
+
+  .legal :global(:is(p:not(.lead, .small), li, address)) {
+    color: var(--color-text-secondary);
   }
 
   .legal :global(:is(ul, ol)) {

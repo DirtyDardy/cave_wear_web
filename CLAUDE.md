@@ -1,6 +1,6 @@
 # CLAUDE.md – Cave Wear
 
-Project memory for Claude. Read fully at the start of every session. Updated 25 Oct 2026.
+Project memory for Claude. Read fully at the start of every session. Updated 26 Oct 2026.
 If this file and the code disagree, say so and ask – don't guess which one is right.
 
 ## 1. Project
@@ -78,9 +78,9 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 | Choice | Reason |
 |---|---|
 | **Astro 7** (minimal) | Finished HTML at build time, zero JS by default, components. In Linro's tech list. |
-| **No React** | Interactive parts are small; plain JS is enough and is what Dardan is learning. |
+| **React where it's the right tool** (decided 26 Oct) | Use React only where it benefits the site and shows real understanding – not everywhere. First candidate: the **Pack** (lots of changing state: items, sizes, quantities, total). Not built yet. Astro runs it as an "island"; the header count, the product page and the Pack share one list (a small store, e.g. nanostores). Everything else stays plain JS. |
 | **Own CSS, no Tailwind** | Own design system (CSS variables) shows design craft. |
-| **Plain JavaScript** | Menu, bag, forms, weather – each explained. |
+| **Plain JavaScript** | Menu, forms, photo viewer, weather – each explained. |
 | **Netlify** + **Netlify Forms** | Free, HTTPS. Forms sent via `fetch` (no reload). |
 | **Open-Meteo** | Free weather API, no key. Covers fetch / REST / JSON. |
 | **English only** | Built so German could be added later. |
@@ -103,6 +103,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   (`.astro/dev.json` shows when it started) → `npx astro dev stop`, then start again. In the
   desktop app Claude starts servers from `.claude/launch.json`: `astro-dev` (4321) and
   `astro-preview` (the built site, 4330).
+- **New content file** (e.g. `src/content/faq.yaml`) or a change in `src/content.config.ts` →
+  restart the dev server; a running one doesn't see it (learned 26 Oct: the FAQ looked empty).
 - **Product photos:** Dardan's originals live in `D:\project\cave_wear_dis\products\<id>\`
   (outside the repo, never in Git). Claude crops them to exact 4:5, max 1600×2000, webp
   quality 85 (sharp, comes with Astro) and saves them in the product folder.
@@ -129,11 +131,20 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   Products so far: The Core Tee, The Field Hoodie. Bag not built.
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
-- **Contact** – contact info, contact form, FAQ. Not built. The FAQ must have its own jump
-  target (`id`) on each question, at least **pricing** ("Learn more" next to the price) and
-  **size chart / fit** ("Size chart and fit guide" on the product page) – both links then point there.
-  **REMINDER (Dardan asked, 25 Oct): as soon as the FAQ is finished, remind Dardan and connect
-  both links** (`src/pages/products/[id].astro`, search for "TODO: link to").
+- **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
+  header (a tool page, not a showcase). Top to bottom: Bears' Cave coordinates (Peștera Urșilor,
+  Romania – 140 cave bear skeletons) · H1 "Contact" · one line + email + "Write to us ↓" ·
+  **FAQ** (`#faq`, "01 / Questions") · "02 / Write to us" + 01–03 steps + the form
+  (`#contact-form`). A dashed **trail** (CSS scroll animation, off with reduced motion, only from
+  1200px) runs from the coordinates to the "02" marker. Name stays "Contact"; Impressum stays its
+  own page (not repeated here).
+- **FAQ** – 14 questions in 3 groups (The brand · The products · Launch & Pack), all in
+  `src/content/faq.yaml` (reader `src/data/faq.ts`, rules in `content.config.ts`). Every
+  question is a jump target that opens itself (`src/scripts/faq-open.js`). Linked: "Learn more" →
+  `#pricing`, "Size chart and fit guide" → `#size-and-fit` – never rename those ids. Shared
+  `.accordion` look (global.css) with the product page. No shipping/returns questions (nothing
+  can be bought). Launch answer without jokes ("probably never" dropped – humour stays out of
+  anything about trust).
 - **Impressum, Privacy Policy** – built (see 13). **404** – not built.
 - **`/styleguide`** – noindex, public by URL. Temporary "Style guide" link in the footer bottom
   row (before Impressum) while building. **Delete page + link before final launch.**
@@ -148,12 +159,22 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   purchase – no money, no commitment, said clearly. After reserving, items can be removed but
   not added. OPEN: how removing works later (link in the confirmation email?), whether a second
   reservation is allowed, whether a queue number is shown.
+  **At launch (decided 26 Oct, FAQ wording):** people with a reservation get early access – an
+  email first, then they confirm their order before it's locked in. Until then nothing is final.
+  **Backend (planned):** Netlify Forms stores the reservation, a Netlify Function sends the
+  confirmation email; Netlify Blobs only if removing items or a queue number needs storage.
   **Wording (decided 25 Oct):** product button "Add to pack" (the bag is a backpack), under it
   "No payment – reserve your place for the launch." Header label "Pack".
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.
-- **Contact form** – Netlify Forms via fetch, client-side validation, clear feedback.
+- **Contact form** – built 26 Oct (`src/scripts/contact-form.js`), Netlify Forms via fetch like
+  the newsletter. Name · email · topic chips (General · Pack & reserve · Feedback · Collaboration
+  · Other → own subject field, CSS `:has`) · message. "Send message" stays disabled until
+  everything is filled in; under it a **grey** (Muted Stone) line "Still missing: …" – no red
+  error messages. Terracotta only for a real problem (email typo, checked when leaving the
+  field; sending failed), on the line only. After sending: "MESSAGE RECEIVED · date · time"
+  replaces the button. Typed text 14px. Sharp form box, 1px Flint.
 - **Weather strip** ("Field conditions", Open-Meteo) – soft ask first: *"Show today's conditions
   for your location?"* [Use my location] [Show Regensburg]. Browser permission only after the
   click; declined → Regensburg. Shows weather + a product suggestion. Wanted, build later
@@ -437,6 +458,8 @@ Default **sharp (0)**. Rounding only where Dardan decides. Scale only: `--radius
 tags, style guide boxes) · `--radius-md` 8 · `--radius-button` 12 (**every button**) ·
 `--radius-lg` 16 · `--radius-full` (real circles only). Same element type = same radius.
 Nested: inner radius = outer − gap. No squircles/chamfers. OPEN: card radius.
+Contact form (decided 26 Oct): topic chips 12px (choice buttons = button radius, looks almost
+like a pill), message field 4px (input), the form box itself sharp.
 
 ### Buttons (shared classes in `src/styles/global.css` – never restyle per component)
 - `.button` + `.button-primary` (Wild Honey filled, hover Amber Gold – **one per section**) ·
@@ -487,12 +510,15 @@ then Dardan decides.
 ## 13. Legal
 
 - **Impressum** + **Privacy Policy** built (English), details in `src/data/owner.js`, layout
-  `src/layouts/LegalLayout.astro`. Two emails, no phone, no contact form yet.
+  `src/layouts/LegalLayout.astro`. Two emails, no phone; the Impressum points to the contact form.
+  Legal headings are quiet (decided 26 Oct, like Linear/Vercel): H2 24px medium, H3 18px,
+  text Weathered Bone. Keep the name "Impressum" (the word German law looks for).
 - Impressum has the concept disclaimer and "Photo credits +" (`<details>`): forest = chickenbunny
   (Pexels), alley = Andreas Rasmussen (Unsplash). Every new stock photo gets a line.
 - Privacy: no cookies/tracking, Netlify hosting, newsletter (consent), social links, GDPR rights.
-  **Extend before** contact form, bag/Reserve (localStorage), weather (location → Open-Meteo) or
-  confirmation emails go live.
+  Contact form added 26 Oct ("Contact form and email": Netlify Forms, netcup mailbox → Gmail,
+  Art. 6 (1) (f), deleted once answered). **Extend before** bag/Reserve (localStorage), weather
+  (location → Open-Meteo) or confirmation emails go live.
 - netcup AVV agreed (PDF with home address stays outside the repo). OPEN: check Netlify's DPA.
 - Trademark check done 21 Oct (TMview, class 25): no hits in DE/EU. A website "CAVEWEAR –
   Underground Tech Fashion" exists (not registered). Real launch → register at DPMA.
@@ -503,8 +529,9 @@ then Dardan decides.
 
 ## 14. Still open (ask, don't assume)
 
-- **When the FAQ is finished:** remind Dardan, then link "Learn more" (pricing) and "Size chart
-  and fit guide" on the product page to their FAQ questions (see 6, Contact).
+- **Contact page (26 Oct):** Dardan reads the new Privacy section once (netcup → Gmail, "deleted
+  once answered" – true for how he works?). The contact form only reaches Netlify after a deploy
+  (check: `data-netlify="true"` gone from the live HTML). Mobile layout = mobile phase.
 - Netlify form notifications → info@cavewear.de.
 - Newsletter double opt-in + Reserve confirmation email (Netlify Function).
 - Product details, donation model, weather → product mapping.

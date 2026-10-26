@@ -685,7 +685,10 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     border: 0;
     background-color: var(--color-bg);
     color: var(--color-text);
-    overflow: hidden;
+    /* clip, not hidden: with hidden the browser can still scroll the box sideways
+       when it focuses a photo that lies beyond the screen edge – then the big photo
+       sits on the left instead of in the middle */
+    overflow: clip;
   }
 
   /* Product name, small and centred, 16px above the big photo */

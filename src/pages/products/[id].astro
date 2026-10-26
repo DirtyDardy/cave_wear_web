@@ -6,11 +6,9 @@
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getProducts, type Product } from "../../data/products";
+import { productFits } from "../../data/product-fits.js";
 import HeartIcon from "../../assets/icons/heart.svg";
 import CloseIcon from "../../assets/icons/close.svg";
-import FitUnisexIcon from "../../assets/icons/fit-unisex.svg";
-import FitFemaleIcon from "../../assets/icons/fit-female.svg";
-import FitMaleIcon from "../../assets/icons/fit-male.svg";
 
 // Astro builds one page for every product folder: /products/core-tee, /products/hoodie …
 export async function getStaticPaths() {
@@ -29,9 +27,6 @@ const collectionLinks = {
   "Base Collection": "/products#base-title",
   "Supporter Collection": "/products#supporter-title",
 };
-
-const fitIcons = { unisex: FitUnisexIcon, female: FitFemaleIcon, male: FitMaleIcon };
-const fitLabels = { unisex: "Unisex", female: "Female", male: "Male" };
 
 // The three closed sections at the bottom. A section without text is left out.
 const accordions = [
@@ -151,12 +146,12 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
             <div class="circles">
               {
                 product.fits.map((fit, index) => {
-                  const FitIcon = fitIcons[fit];
+                  const { icon: FitIcon, label } = productFits[fit];
                   return (
                     <label class="fit">
                       <input type="radio" name="fit" value={fit} checked={index === 0} class="visually-hidden" />
                       <FitIcon class="fit-icon" />
-                      <span class="visually-hidden">{fitLabels[fit]} fit</span>
+                      <span class="visually-hidden">{label} fit</span>
                     </label>
                   );
                 })
@@ -181,9 +176,10 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
         <div class="details-block">
           <div class="pack-row">
-            <!-- Quantity: − and + change the number (quantity.js); typing works too -->
+            <!-- Quantity: − and + change the number (quantity.js); typing works too.
+                 The "Quantity:" label is only for screen readers – the stepper explains itself. -->
             <div>
-              <label for="quantity" class="label quantity-label">Quantity:</label>
+              <label for="quantity" class="visually-hidden">Quantity:</label>
               <div class="stepper">
                 <button type="button" class="stepper-button" data-step="-1" aria-label="One less">−</button>
                 <input id="quantity" name="quantity" type="number" inputmode="numeric" min="1" max="10" value="1" />
@@ -548,17 +544,6 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
   .add-to-pack {
     flex: 1;
-  }
-
-  /* The "Quantity:" label is only for screen readers (same trick as .visually-hidden) –
-     the stepper next to the button explains itself */
-  .quantity-label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   /* [ − | 1 | + ] – sharp corners, 40px high, and its lines made exactly like the

@@ -34,6 +34,12 @@ const steps = [
              so screen readers skip it (aria-hidden). -->
         <div class="trail" aria-hidden="true"></div>
 
+        <!-- Coordinates of Bears' Cave (Peștera Urșilor, Romania), where 140 cave bear
+             skeletons were found – the start of the trail (decided 26 Oct).
+             Screen readers also hear the place's name. -->
+        <p class="label coords">
+          <span class="visually-hidden">Bears' Cave, Romania: </span>N 46° 33′ 14″ · E 22° 34′ 09″
+        </p>
         <h1>Contact</h1>
         <p class="intro-text">Most answers are right below. If yours isn't, write to us.</p>
         <p class="intro-links">
@@ -67,6 +73,8 @@ const steps = [
       <!-- WRITE TO US. id="contact-form" = the jump target of the Home button "Contact us". -->
       <section id="contact-form" class="write" aria-labelledby="write-title">
         <div class="write-text">
+          <!-- The trail's second stop (01 = Questions) – the end marker sits next to it -->
+          <p class="label write-step">02 / Write to us</p>
           <h2 id="write-title" class="write-title">Write to us</h2>
           <p class="write-intro">Your question wasn't here? We're happy to help.</p>
 
@@ -196,6 +204,10 @@ const steps = [
 
   /* --- Intro ----------------------------------------------------------------------- */
 
+  .coords {
+    color: var(--color-text-quiet);
+  }
+
   .intro-text {
     color: var(--color-text-secondary);
     margin-block-end: var(--space-2);
@@ -263,8 +275,13 @@ const steps = [
     }
   }
 
-  .write-title {
+  /* "02 / Write to us" – looks like "01 / Questions" */
+  .write-step {
     position: relative; /* the trail's end marker sits next to it */
+    color: var(--color-text-secondary);
+  }
+
+  .write-title {
     margin-block-end: var(--space-2);
   }
 
@@ -359,14 +376,15 @@ const steps = [
     font: inherit;
   }
 
-  /* The message: a sharp box with the same Flint line */
+  /* The message: a box with the same Flint line, 4px corners like every input
+     (the newsletter field too) */
   textarea {
     display: block;
     inline-size: 100%;
     min-block-size: calc(var(--space-24) + var(--space-6)); /* 120px */
     padding: var(--space-3);
     border: 1px solid var(--color-input-border);
-    border-radius: 0;
+    border-radius: var(--radius-sm); /* 4px */
     background-color: var(--color-bg);
     color: var(--color-text);
     font: inherit;
@@ -394,7 +412,9 @@ const steps = [
   }
 
   /* Topic chips: the hidden radio button has the choice, the label shows it.
-     Chosen = the product page's selected look: Weathered Bone fill, Egret line, dark text. */
+     Chosen = the product page's selected look: Weathered Bone fill, Egret line, dark text.
+     12px corners: chips are buttons you click to choose, and every button has 12px –
+     on a 32px chip that looks almost like the pill of my sketch (decided 26 Oct). */
   .chips {
     display: flex;
     flex-wrap: wrap;
@@ -407,7 +427,7 @@ const steps = [
     block-size: var(--space-8); /* 32px */
     padding-inline: var(--space-3); /* 12px */
     border: 1px solid var(--color-input-border);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-button); /* 12px */
     color: var(--color-text-secondary);
     font-size: var(--text-small);
     line-height: var(--leading-small);
@@ -498,12 +518,12 @@ const steps = [
 
   /* --- The trail ----------------------------------------------------------------------------
      A dashed line (8px dash, 8px gap) on the left of the text column, from the top of the
-     page down to a Wild Honey marker next to "Write to us", with a small stop at
+     page down to a Wild Honey marker next to "02 / Write to us", with a small stop at
      "01 / Questions". Only on wide screens – on smaller ones there's no room beside the text. */
 
   .trail,
   .faq-title::before,
-  .write-title::before {
+  .write-step::before {
     display: none;
   }
 
@@ -511,7 +531,7 @@ const steps = [
     .trail {
       display: block;
       position: absolute;
-      inset-block: 0 calc(-1 * (var(--space-16) + var(--space-4))); /* down into "Write to us" */
+      inset-block: 0 calc(-1 * var(--space-16)); /* down to "02 / Write to us" (64px below) */
       inset-inline-start: calc(-1 * var(--trail-offset));
       inline-size: 1px;
       background-image: repeating-linear-gradient(
@@ -537,7 +557,7 @@ const steps = [
     }
 
     /* The end: a Wild Honey ring with a dot – you've arrived */
-    .write-title::before {
+    .write-step::before {
       content: "";
       display: block;
       position: absolute;
@@ -571,12 +591,16 @@ const steps = [
     }
   }
 
+  /* Momentum (decided 26 Oct): while the line grows, its dashes also slide down along it,
+     a little faster than you scroll – like footsteps leading you to the form */
   @keyframes trail-draw {
     from {
       clip-path: inset(0 0 100% 0); /* nothing visible */
+      background-position-y: 0;
     }
     to {
       clip-path: inset(0); /* the whole line */
+      background-position-y: 30rem; /* the dashes have walked 480px further down */
     }
   }
 </style>

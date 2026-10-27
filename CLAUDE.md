@@ -65,7 +65,12 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 11. When replacing something, remove the old version. Project-wide cleanups only when asked.
 12. Hosting/DNS/accounts: click-by-click numbered steps. Dardan sends a screenshot before every
     final confirm button; Claude checks it first. Claude never handles passwords.
-13. **Desktop first.** Mobile polish is a later phase.
+13. **Desktop first.** Mobile polish is a later phase. **But always mobile-minded (27 Oct):** plan
+    every new part so it can also look good on phones (no widths that break, check it at 375px).
+    Why: learn the fundamentals on desktop first, then build a satisfying switch between phone
+    and desktop where both look good. **The Pack's CSS is written mobile first** (27 Oct, Linro
+    lists "mobile first"): base styles = phone, `@media (width >= …)` adds desktop – like
+    `global.css`. Designing and testing stay desktop first. One direction per component, never both.
 14. Claude can't generate images: Claude writes prompts and checks results; Dardan generates in
     Gemini and finishes in Photoshop.
 15. **Read change requests in the smallest sense** (learned 25 Oct): "sync the look" meant the
@@ -78,7 +83,7 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 | Choice | Reason |
 |---|---|
 | **Astro 7** (minimal) | Finished HTML at build time, zero JS by default, components. In Linro's tech list. |
-| **React where it's the right tool** (decided 26 Oct) | Use React only where it benefits the site and shows real understanding – not everywhere. First candidate: the **Pack** (lots of changing state: items, sizes, quantities, total). Not built yet. Astro runs it as an "island"; the header count, the product page and the Pack share one list (a small store, e.g. nanostores). Everything else stays plain JS. |
+| **React where it's the right tool** (decided 26 Oct) | Use React only where it benefits the site and shows real understanding – not everywhere. First candidate: the **Pack** (lots of changing state: items, sizes, quantities, total). Not built yet. Astro runs it as an "island"; the header count, the product page and the Pack share one list (a small store, e.g. nanostores). Everything else stays plain JS. **Wanted (27 Oct): a second React feature**, so the Pack isn't the only one – a feature where React really helps, or an existing idea reshaped so it does (never React just to have it). Candidate: the weather strip (many states: ask → loading → result / declined → Regensburg / error). OPEN – Dardan decides. |
 | **Own CSS, no Tailwind** | Own design system (CSS variables) shows design craft. |
 | **Plain JavaScript** | Menu, forms, photo viewer, weather – each explained. |
 | **Netlify** + **Netlify Forms** | Free, HTTPS. Forms sent via `fetch` (no reload). |
@@ -93,7 +98,11 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 5. Workflow, deployment, domain, email
 
 - Project `D:\project\cave_wear_web`. Design files outside the repo in `cave-wear-design/`.
-- `npm run dev` → http://localhost:4321. Git: one branch **`main`**, repo `DirtyDardy/cave_wear_web` (public).
+- `npm run dev` → http://localhost:4321. Repo `DirtyDardy/cave_wear_web` (public).
+- **Git branches (27 Oct):** `main` = the live site. A bigger feature gets its own branch
+  `feature/<name>` in its own folder (a Git worktree), merged into `main` together with Dardan,
+  step by step. Never "claude" or "ai" in branch names or the site's own files and folders
+  (`CLAUDE.md` and `.claude/` are the tool's own files and need those names).
 - Netlify project `cave-wear-concept`; every push to `main` goes live (~1 min). Build
   `npm run build`, publish `dist`, `NODE_VERSION=24`. Form detection on.
 - **Pushes are limited (26 Oct):** every push = one Netlify deploy, and deploys cost credits –
@@ -225,6 +234,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   behind it?"), real photos on a timer vs Gemini (recommended: real – it's about honesty), whether
   the web title mentions the AI coding partner, 4 or 5 roles, photo brief (one shoot look, dark
   background like the product recipe, each role in a different Cave Wear piece).
+- **Big orders** (idea 27 Oct) – above a rough limit (e.g. more than 10 of one item, or a very
+  big Pack), the Pack shows a quiet line like "Planning a big order? Contact us ›" (contact form,
+  topic Pack & reserve). Maybe a special price or something free for big orders – OPEN, think it
+  through first; never promise a discount on the site before it's decided. Quick and easy to build.
 - Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
   enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
   category buttons).

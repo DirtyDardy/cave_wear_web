@@ -1,6 +1,6 @@
 ---
 import Logo from "../assets/logo-horizontal.svg";
-import BagIcon from "../assets/icons/backpack.svg";
+import PackIcon from "../assets/icons/backpack.svg";
 import MenuIcon from "../assets/icons/menu.svg";
 import CloseIcon from "../assets/icons/close.svg";
 
@@ -69,10 +69,18 @@ const isPinned = currentPath.startsWith("/products/");
         }
       </ul>
 
-      <a href="/bag" class="nav-link bag-link" aria-current={getCurrent("/bag")}>
-        <BagIcon class="bag-icon" />
-        <span class="link-label" data-label="Pack">Pack</span>
-      </a>
+      <!-- Opens the Pack drawer (no page of its own). It needs JavaScript, so without
+           it the button stays hidden. pack-button.js fills in the number of pieces;
+           an empty Pack shows no number. Screen readers skip the bare number and
+           hear the words instead: "Pack, 2 items". -->
+      <button type="button" class="nav-link pack-button" aria-haspopup="dialog" aria-controls="pack-drawer">
+        <PackIcon class="pack-icon" />
+        <span>Pack</span>
+        <span class="pack-count" hidden>
+          <span class="pack-count-number" aria-hidden="true"></span>
+          <span class="visually-hidden pack-count-label"></span>
+        </span>
+      </button>
     </nav>
   </div>
 </header>
@@ -80,6 +88,7 @@ const isPinned = currentPath.startsWith("/products/");
 <script src="../scripts/mobile-menu.js"></script>
 <script src="../scripts/header-scroll.js"></script>
 <script src="../scripts/header-hide.js"></script>
+<script src="../scripts/pack-button.js"></script>
 
 <style>
   .scroll-sentinel {
@@ -117,9 +126,9 @@ const isPinned = currentPath.startsWith("/products/");
     }
   }
 
-  /* The Bag button fades with the header: fill and outline appear together
+  /* The Pack button fades with the header: fill and outline appear together
      with the background (5% Obsidian, no outline → solid Obsidian, Flint) */
-  @keyframes bag-fill {
+  @keyframes pack-fill {
     from {
       background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
       border-color: transparent;
@@ -141,7 +150,7 @@ const isPinned = currentPath.startsWith("/products/");
       border-block-end-color: transparent;
     }
 
-    .site-header[data-transparent]:not(:has(.menu-button[aria-expanded="true"])) .bag-link:not(:hover) {
+    .site-header[data-transparent]:not(:has(.menu-button[aria-expanded="true"])) .pack-button:not(:hover) {
       background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
       border-color: transparent;
     }
@@ -162,8 +171,8 @@ const isPinned = currentPath.startsWith("/products/");
     }
 
     /* Same scroll timeline as the header */
-    .site-header[data-transparent] .bag-link {
-      animation-name: bag-fill;
+    .site-header[data-transparent] .pack-button {
+      animation-name: pack-fill;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root);
@@ -172,8 +181,8 @@ const isPinned = currentPath.startsWith("/products/");
 
     /* An animation beats normal styles – so it is switched off on hover
        (Egret box shows) and while the mobile menu is open (solid) */
-    .site-header[data-transparent] .bag-link:hover,
-    .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) .bag-link {
+    .site-header[data-transparent] .pack-button:hover,
+    .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) .pack-button {
       animation-name: none;
     }
   }
@@ -187,7 +196,7 @@ const isPinned = currentPath.startsWith("/products/");
       border-block-end-color: transparent;
     }
 
-    :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) .bag-link:not(:hover) {
+    :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) .pack-button:not(:hover) {
       background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
       border-color: transparent;
     }
@@ -294,10 +303,13 @@ const isPinned = currentPath.startsWith("/products/");
     }
   }
 
-  /* Bag button – the one action in the nav, so it gets a box.
+  /* Pack button – the one action in the nav, so it gets a box.
      40px high, 24px icon centred inside, 12px at the sides. */
-  .bag-link {
+  .pack-button {
+    position: relative; /* the number badge is placed on its corner */
     block-size: var(--control-height); /* 40px – 12px space above and below in the 64px header */
+    font-family: inherit; /* buttons don't take the page font by themselves */
+    cursor: pointer;
     gap: 0.375rem; /* 6px */
     padding-block: 0;
     padding-inline: var(--space-3); /* 12px */
@@ -325,9 +337,37 @@ const isPinned = currentPath.startsWith("/products/");
   }
 
   /* 24px – about 1.5 × the 16px text, so icon and word look balanced */
-  .bag-icon {
+  .pack-icon {
     inline-size: var(--space-6);
     block-size: var(--space-6);
+  }
+
+  /* The Pack opens with JavaScript only – without it, the button would do nothing */
+  :global(html:not([data-js])) .pack-button {
+    display: none;
+  }
+
+  /* Number of pieces – a small round Wild Honey badge on the button's top right corner,
+     a little outside the edge (decided 27 Oct from 4 places; bottom right = maybe later).
+     It sits on top of the button, so the button never changes width. */
+  .pack-count {
+    position: absolute;
+    inset-block-start: calc(-1 * var(--space-1)); /* 4px above the edge */
+    /* Centred on the button's right edge – its middle sits on the line. One digit or
+       two, it grows the same amount to both sides. 100% = the button's width,
+       -50% = half the badge's own width back to the left. */
+    inset-inline-start: 100%;
+    translate: -50% 0;
+    min-inline-size: var(--space-4); /* 16px – a circle, wider for 10+ */
+    padding-inline: var(--space-1);
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    font-variant-numeric: tabular-nums; /* every digit equally wide */
+    line-height: var(--space-4); /* 16px */
+    text-align: center;
   }
 
   /* Menu button – hidden on desktop and when JavaScript is off */
@@ -391,8 +431,8 @@ const isPinned = currentPath.startsWith("/products/");
         display: grid;
       }
 
-      /* Bag sits left of the menu button */
-      & .bag-link {
+      /* Pack sits left of the menu button */
+      & .pack-button {
         order: -1;
       }
 
@@ -459,7 +499,7 @@ const isPinned = currentPath.startsWith("/products/");
     .menu-button,
     .menu-icon,
     .nav-list,
-    .bag-link {
+    .pack-button {
       transition: none !important;
     }
   }

@@ -3,6 +3,33 @@ import Logo from "../assets/logo-horizontal.svg";
 import PackIcon from "../assets/icons/backpack.svg";
 import MenuIcon from "../assets/icons/menu.svg";
 import CloseIcon from "../assets/icons/close.svg";
+import { getImage } from "astro:assets";
+import { getProducts } from "../data/products";
+import { productFits } from "../data/product-fits.js";
+import PackDrawer, { type PackProduct } from "./PackDrawer";
+import "../styles/pack-drawer.css";
+
+// What the Pack drawer needs to know about every product – collected once here, from
+// the product folders, while the site is built. A new product folder = in the Pack too.
+// Photo: shot 1 (the front) of every colour × fit, as a small 128px-wide file
+// (shown at 64px – twice as many pixels stay sharp on high-resolution screens).
+const catalog: Record<string, PackProduct> = {};
+
+for (const product of await getProducts()) {
+  const photos: Record<string, string> = {};
+  for (const set of product.shotSets) {
+    const front = await getImage({ src: set.shots[0].image, width: 128, format: "webp" });
+    photos[`${set.colour}_${set.fit}`] = front.src;
+  }
+
+  catalog[product.id] = {
+    name: product.name,
+    price: product.price,
+    colours: Object.fromEntries(product.colours.map((colour) => [colour.file, colour.name])),
+    fits: Object.fromEntries(product.fits.map((fit) => [fit, productFits[fit].label])),
+    photos,
+  };
+}
 
 // The main links. To add or rename a page, change only this list.
 const navLinks = [
@@ -84,6 +111,10 @@ const isPinned = currentPath.startsWith("/products/");
     </nav>
   </div>
 </header>
+
+<!-- The Pack drawer (React). client:only = drawn only in the browser, because only
+     the browser knows what's in the visitor's Pack. -->
+<PackDrawer client:only="react" catalog={catalog} />
 
 <script src="../scripts/mobile-menu.js"></script>
 <script src="../scripts/header-scroll.js"></script>

@@ -96,6 +96,15 @@ Add new questions here as they come up.
 
 - Product page: one column, no sticky column, photo viewer with swipe + pinch, maybe a
   fixed "Add to pack" bar at the bottom.
+- **Product page gallery as a swipe row (Dardan, 27 Oct, idea):** today on a phone all photos
+  stack, so name, sizes and "Add to pack" sit far down. Idea: one photo row – shot 0 first,
+  an indicator that you can swipe left/right through all shots; for people who don't swipe,
+  it moves on by itself. Then name, price, sizes come right after the photo.
+  Claude's notes for the Q&A: swipe row = CSS scroll snap (already planned in CLAUDE.md 7 for
+  the product gallery). Auto-moving needs a pause button (WCAG 2.2.2), stops for good once the
+  visitor touches it, off with reduced motion. Alternative to compare: no auto-move, the next
+  photo peeks in at the edge (shows "there's more") + dots or "1 / 6".
+  Question: auto-move or peek only? How fast? Loop or stop at the last photo?
 - Products: card fit icons on touch (no hover photo).
 - Contact & FAQ: mobile layout; the trail is already desktop only.
 - Home sections: written mobile first from the start (video tiles already have a mobile idea

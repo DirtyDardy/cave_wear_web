@@ -524,6 +524,66 @@ p a {
   }
 }
 
+/* Quantity [ − | 1 | + ] – used on the product page and in the Pack.
+   Sharp corners, 40px high, and its lines made exactly like the size boxes:
+   Flint background through 1px gaps and a 1px frame (one line each).
+   The middle is a typing field (product page) or a plain number (.stepper-value, Pack). */
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(3, calc(var(--control-height) - 2px)); /* 3 × 38px */
+  gap: 1px;
+  block-size: var(--control-height); /* 40px */
+  padding: 1px;
+  background-color: var(--color-input-border);
+
+  & input,
+  & .stepper-value {
+    inline-size: 100%;
+    padding: 0;
+    border: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+    text-align: center;
+  }
+
+  & .stepper-value {
+    display: grid;
+    place-items: center; /* the number in the middle of its box */
+  }
+
+  & input {
+    appearance: textfield; /* hides the browser's own small arrows … */
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      appearance: none; /* … also in Chrome and Safari */
+      margin: 0;
+    }
+  }
+}
+
+.stepper-button {
+  padding: 0;
+  border: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+
+  &:hover:not(:disabled, [aria-disabled="true"]) {
+    color: var(--color-text);
+  }
+
+  /* At 1 (or 10) the button that can't go further is switched off.
+     aria-disabled (Pack) looks the same but keeps the keyboard focus in place. */
+  &:disabled,
+  &[aria-disabled="true"] {
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
 /* Heart on a product photo – saves the product as a favorite (favorites.js).
    Used on the product card and the product page; the photo around it needs
    position: relative.

@@ -5,6 +5,7 @@
 import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
 import { productColours } from "./product-colours.js";
+import { formatPrice } from "./price";
 import placeholder from "../assets/products/placeholder.jpg";
 
 // Every photo in every product folder. import.meta.glob = "find all files that
@@ -95,7 +96,7 @@ export async function getProducts() {
       name: data.name,
       tagline: data.tagline,
       price: data.price,
-      priceText: data.price.toFixed(2).replace(".", ",") + "€", // 34.9 → "34,90€"
+      priceText: formatPrice(data.price), // 34.9 → "34,90€" (src/data/price.ts)
       collection: data.collection,
       sizes: data.sizes,
       fits: data.fits,

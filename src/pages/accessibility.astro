@@ -1,0 +1,75 @@
+---
+// Accessibility statement (Barrierefreiheit). Built 26 Oct 2026 after a check of every page:
+// keyboard only, 200% and 400% zoom, reduced motion, text spacing, and checks of headings,
+// labels, text alternatives, target sizes and colour contrast.
+// ONLY write here what is really true today. When a limitation below is fixed, remove it;
+// when something new is checked (e.g. the screen reader test with NVDA), add it.
+import LegalLayout from "../layouts/LegalLayout.astro";
+import { owner } from "../data/owner.js";
+
+const email = owner.emails[0];
+---
+
+<LegalLayout
+  title="Accessibility"
+  lead="Cave Wear should work for everyone – with a mouse, a keyboard or a screen reader. Our aim is the Web Content Accessibility Guidelines (WCAG) 2.2, level AA."
+  description="How the Cave Wear website is built to be accessible, what we check and where it isn't there yet."
+>
+  <h2>What we do</h2>
+  <ul>
+    <li>Everything can be used with the keyboard alone. A visible ring shows where you are.</li>
+    <li>A "Skip to content" link at the start of every page jumps past the navigation.</li>
+    <li>
+      Every page has a clear structure: headings in order and landmarks for the header,
+      navigation, main content and footer.
+    </li>
+    <li>Product photos have text descriptions. Decorative graphics are hidden from screen readers.</li>
+    <li>Form fields have labels, and form messages are read out by screen readers.</li>
+    <li>If your system asks for reduced motion, animations and smooth scrolling are switched off.</li>
+    <li>The site stays usable at 200% zoom and with larger letter and line spacing.</li>
+    <li>No pop-ups, no time limits, no cookies.</li>
+  </ul>
+
+  <h2>How we check it</h2>
+  <p>
+    Every page is tested with the keyboard only, at 200% and 400% zoom, with reduced motion and
+    with larger text spacing. Headings, labels, text descriptions, the size of clickable areas and
+    colour contrast are checked as well.
+  </p>
+
+  <h2>Known limitations</h2>
+  <ul>
+    <!-- Remove when the mobile phase is done -->
+    <li>
+      The site is designed for desktop first. On phones and at 400% zoom, the header doesn't fit
+      the screen yet – the mobile layout is still being finished.
+    </li>
+    <!-- Remove when the header contrast over the top photos is fixed -->
+    <li>
+      On the photos at the top of the Home and Products pages, the navigation is hard to read until
+      you scroll down a little.
+    </li>
+    <!-- Remove when the hero text can also be shown without a mouse -->
+    <li>
+      The short texts on the Home photo appear when you move the mouse over it. Screen readers read
+      them, but with the keyboard alone they can't be seen yet.
+    </li>
+    <!-- Remove when the product page explains why "Add to pack" is switched off -->
+    <li>
+      On product pages, "Add to pack" stays switched off until you choose a size. There is no note
+      yet that says so.
+    </li>
+    <!-- Remove when the photo viewer can be moved with the keyboard and by touch -->
+    <li>
+      In the photo viewer, a zoomed photo can only be moved around with a mouse. Swiping and
+      pinching on touch screens will come with the mobile version.
+    </li>
+  </ul>
+
+  <h2>Feedback</h2>
+  <p>
+    Did something not work for you? Write to <a href={`mailto:${email}`}>{email}</a> or use the{" "}
+    <a href="/contact#contact-form">contact form</a>. We'll answer, and if you need it, we'll send
+    you the content in a form that works for you.
+  </p>
+</LegalLayout>

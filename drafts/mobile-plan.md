@@ -105,6 +105,23 @@ Add new questions here as they come up.
   visitor touches it, off with reduced motion. Alternative to compare: no auto-move, the next
   photo peeks in at the edge (shows "there's more") + dots or "1 / 6".
   Question: auto-move or peek only? How fast? Loop or stop at the last photo?
+  **Dardan leans to the alternative (27 Oct):** peek at the edge + small dots, no auto-move.
+- **Menu and Pack drawer as one system (Dardan, 27 Oct):** they open and close completely
+  differently. They may differ (two purposes), but should feel like one system. Dardan also
+  raises it in the Pack chat (step 1).
+  Today (checked in the code):
+  | | Mobile menu (`Header.astro`) | Pack drawer (`pack-drawer.css`, Pack branch) |
+  |---|---|---|
+  | Movement | fades in + moves 8px down | slides in from the right, full width |
+  | Speed | 0.2s | 0.3s |
+  | Background | Dark Obsidian | Obsidian |
+  | Page behind | hidden (panel fills the screen under the header) | dimmed 70% |
+  | Header | stays visible | covered |
+  Claude's idea for the Q&A: keep the direction different (menu = from the header, Pack =
+  from the right), but share everything else – one speed + easing token for both, the same
+  surface colour, the same close button (look + place), the same dimmed backdrop. Same
+  "grammar", different direction.
+  Question: same movement for both, or only the shared details?
 - Products: card fit icons on touch (no hover photo).
 - Contact & FAQ: mobile layout; the trail is already desktop only.
 - Home sections: written mobile first from the start (video tiles already have a mobile idea

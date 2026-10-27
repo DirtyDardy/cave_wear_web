@@ -58,10 +58,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
            One set of shots 1–5 per colour × fit – product-options.js shows the chosen one.
            Photos in hidden sets only load when their set is shown. -->
       <!-- Every photo is a button: a click opens it big in the photo viewer
-           (photo-viewer.js). data-shot = its number, data-full = the full-size file. -->
+           (photo-viewer.js). data-shot = its number, data-full = the full-size file.
+           aria-haspopup="dialog": screen readers say the button opens a window. -->
       <div class="gallery">
         <div class="shot-0" data-product-id={product.id}>
-          <button type="button" class="photo-button" data-shot="0" data-full={product.shot0.image.src}>
+          <button type="button" class="photo-button" data-shot="0" data-full={product.shot0.image.src} aria-haspopup="dialog">
             <Image
               src={product.shot0.image}
               alt={product.shot0.alt}
@@ -85,6 +86,7 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
                   class={`photo-button shot-${shot.number}`}
                   data-shot={shot.number}
                   data-full={shot.image.src}
+                  aria-haspopup="dialog"
                 >
                   <Image
                     src={shot.image}

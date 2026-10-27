@@ -34,7 +34,10 @@ function update() {
   const missing = missingFields();
   button.disabled = missing.length > 0;
   // .join(" · ") puts the words in one line: "name · message"
-  missingLine.textContent = missing.length > 0 ? `Still missing: ${missing.join(" · ")}` : "";
+  const text = missing.length > 0 ? `Still missing: ${missing.join(" · ")}` : "";
+  // Only write it when it really changed: the line is read out by screen readers
+  // (aria-live), and writing the same text again on every key press would repeat it
+  if (missingLine.textContent !== text) missingLine.textContent = text;
 
   // A wrong email that has just been fixed loses its Terracotta line right away
   if (emailInput.checkValidity()) emailInput.removeAttribute("aria-invalid");

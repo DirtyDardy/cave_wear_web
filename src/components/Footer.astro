@@ -207,6 +207,9 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
     border-radius: var(--radius-sm); /* 4px – inputs */
     font: inherit;
     flex: 1;
+    /* 100% + 0: the field gives up its built-in minimum width (about 220px), so the
+       footer never sticks out on very narrow screens (e.g. 400% zoom) */
+    inline-size: 100%;
     min-inline-size: 0;
     padding-inline: var(--space-3);
     border: 1px solid var(--color-input-border);

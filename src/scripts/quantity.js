@@ -23,6 +23,11 @@ function setQuantity(value) {
 for (const button of buttons) {
   button.addEventListener("click", () => {
     setQuantity(Number(input.value) + Number(button.dataset.step));
+
+    // A switched-off button can't keep the keyboard focus – the browser would drop it
+    // and keyboard users would lose their place. So focus moves to the number instead
+    // (a screen reader then reads the new number out).
+    if (button.disabled) input.focus();
   });
 }
 

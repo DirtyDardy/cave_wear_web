@@ -154,7 +154,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   `.accordion` look (global.css) with the product page. No shipping/returns questions (nothing
   can be bought). Launch answer without jokes ("probably never" dropped – humour stays out of
   anything about trust).
-- **Impressum, Privacy Policy** – built (see 13). **404** – not built.
+- **Impressum, Privacy Policy** – built (see 13). **Accessibility** – built 26 Oct (see 12).
+  **404** – not built.
 - **`/styleguide`** – noindex, public by URL. Temporary "Style guide" link in the footer bottom
   row (before Impressum) while building. **Delete page + link before final launch.**
 
@@ -519,6 +520,15 @@ then Dardan decides.
 - Something that shows on hover and also for keyboard users uses `:focus-visible`
   (`:has(:focus-visible)`), never plain focus / `:focus-within` – a mouse click also gives
   focus (learned 26 Oct: the card's second photo stuck after going back).
+- **Alt texts (decided 26 Oct): Claude writes them** – describe what is really in the picture,
+  short and plain; no need to ask Dardan about his vision. Decorative images get `alt=""`.
+  **Exception: product photos** – their alt texts come from the shot description fields in the
+  product's text file (Dardan's); never write product alt texts in the code. Before launch
+  (a few days before 11 Nov), go through all alt texts once with Dardan.
+- **Accessibility (checked 26 Oct, aim WCAG 2.2 AA):** page `/accessibility` (footer link). Its
+  "Known limitations" list must always be true – remove a line when it's fixed, add one when a
+  new gap appears. After every new feature: keyboard only, 200% zoom, reduced motion.
+  OPEN for Dardan: screen reader test with NVDA (Claude guides), colour/look fixes from the check.
 - All links work, no placeholder links in the final site.
 - Optimised images (Astro image handling), no oversized assets or unneeded scripts. Video: short
   loop, no audio, small, poster. Product images 4:5, wide images 16:9.

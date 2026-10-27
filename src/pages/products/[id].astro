@@ -190,10 +190,13 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
             </div>
 
             <!-- Starts switched off (disabled); product-options.js switches it on once
-                 size, fit and colour are chosen. Does nothing yet – it gets its job
-                 when the Pack (bag) is built. -->
-            <button type="button" class="button button-primary add-to-pack" disabled>Add to pack</button>
+                 size, fit and colour are chosen. A click puts the choice into the Pack
+                 (pack-store.ts) and opens the drawer. data-product = this product's folder. -->
+            <button type="button" class="button button-primary add-to-pack" data-product={product.id} disabled>Add to pack</button>
           </div>
+          <!-- Says why the button is off. Disappears once a size is chosen and the
+               line below moves up (no empty gap) – fit and colour always have one chosen. -->
+          <p class="small size-hint">Choose a size</p>
           <p class="small note">No payment – reserve your place for the launch.</p>
         </div>
 
@@ -600,9 +603,15 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     }
   }
 
-  .note {
+  .note,
+  .size-hint {
     margin-block-start: var(--space-2);
     color: var(--color-text-quiet);
+  }
+
+  /* 8px to the note below, the same as above it – the two quiet lines belong together */
+  .size-hint {
+    margin-block-end: 0;
   }
 
   /* --- Photo viewer ------------------------------------------------------------------

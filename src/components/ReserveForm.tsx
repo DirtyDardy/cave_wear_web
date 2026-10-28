@@ -118,7 +118,7 @@ export default function ReserveForm({ packText, totalText, onSent }: Props) {
 
       <p className="small drawer-form-note">
         We only use your first name and email for your reservation and the launch.{" "}
-        <a href="/privacy">Privacy Policy</a>
+        <a href="/privacy#reserve">Privacy Policy</a>
       </p>
 
       <div>

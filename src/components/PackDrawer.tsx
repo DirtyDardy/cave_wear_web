@@ -300,7 +300,16 @@ function PackRow({ item, product }: RowProps) {
           </button>
         </div>
 
-        {item.quantity === maxQuantity && <p className="drawer-max">Maximum {maxQuantity} per item</p>}
+        {/* At 10: the limit, and my big-order idea (27 Oct) – only a way to talk to me,
+            no promise of a special price */}
+        {item.quantity === maxQuantity && (
+          <p className="drawer-max">
+            Maximum {maxQuantity} per item. Planning a big order?{" "}
+            <a href="/contact#contact-form" className="text-link">
+              Contact us <span aria-hidden="true">›</span>
+            </a>
+          </p>
+        )}
       </div>
 
       <p className="drawer-price">{formatPrice(product.price * item.quantity)}</p>

@@ -509,18 +509,19 @@ const isPinned = currentPath.startsWith("/products/");
         block-size: calc(100dvh - var(--header-height));
         padding: var(--space-8) var(--gutter) var(--space-12);
         overflow-y: auto;
-        /* Smoked glass, but much darker than the normal glass (45%): 92% Dark Obsidian,
-           the page behind only shows as a hint (chosen 28 Oct from 75 / 85 / 92%) */
-        background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+        /* Smoked glass, much darker than the normal glass: 92% Dark Obsidian, the page
+           behind only shows as a hint – the same panel glass as the Pack (global.css) */
+        background-color: var(--glass-tint-panel);
         -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
         backdrop-filter: var(--glass-blur);
 
-        /* Closed: invisible and not reachable with Tab */
+        /* Closed: invisible and not reachable with Tab.
+           Speed and easing shared with the Pack (global.css), so both feel like one system. */
         visibility: hidden;
         opacity: 0;
         transition:
-          opacity 0.2s ease,
-          visibility 0s linear 0.2s;
+          opacity var(--motion-duration) var(--motion-ease),
+          visibility 0s linear var(--motion-duration);
       }
 
       & .nav-list {
@@ -535,8 +536,8 @@ const isPinned = currentPath.startsWith("/products/");
         opacity: 0;
         translate: 0 var(--space-2);
         transition:
-          opacity 0.3s ease,
-          translate 0.3s ease;
+          opacity var(--motion-duration) var(--motion-ease),
+          translate var(--motion-duration) var(--motion-ease);
       }
 
       /* Light and a little tight, like the H3 (Geist 450, −0.03em).
@@ -563,7 +564,7 @@ const isPinned = currentPath.startsWith("/products/");
         display: grid;
         gap: var(--space-2);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity var(--motion-duration) var(--motion-ease);
       }
 
       & .menu-tagline {
@@ -582,7 +583,7 @@ const isPinned = currentPath.startsWith("/products/");
         visibility: visible;
         opacity: 1;
         transition:
-          opacity 0.2s ease,
+          opacity var(--motion-duration) var(--motion-ease),
           visibility 0s;
       }
 

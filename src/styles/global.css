@@ -89,6 +89,14 @@
   --glass-shadow:
     0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
     0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent); /* tiny – stays close */
+  /* Large panels (mobile menu, Pack): much darker than the normal glass – the page
+     behind only shows as a hint (chosen 28 Oct from 75 / 85 / 92%) */
+  --glass-tint-panel: color-mix(in srgb, var(--color-bg) 92%, transparent);
+
+  /* Opening and closing – the mobile menu and the Pack share one speed and one easing,
+     so they feel like one system (chosen 28 Oct from today / same / slow) */
+  --motion-duration: 0.3s;
+  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1); /* starts quick, lands softly */
 
   /* Keyboard focus ring – Wild Honey, with a small gap */
   --focus-ring: 2px solid var(--color-accent);

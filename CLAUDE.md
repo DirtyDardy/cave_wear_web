@@ -235,9 +235,13 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   section is pinned, scrolling down moves a row of portrait photos sideways, each photo has one big
   condensed uppercase word over its bottom edge (our Barlow Condensed). Reduced motion → a normal
   row/grid. **Place: Brand page `#team` (decided 27 Oct)**, linked from the FAQ answer "Who is
-  behind it?". OPEN: real photos on a timer vs Gemini (recommended: real – it's about honesty), whether
-  the web title mentions the AI coding partner, 4 or 5 roles, photo brief (one shoot look, dark
-  background like the product recipe, each role in a different Cave Wear piece).
+  behind it?". **Web role (Dardan's idea, 28 Oct):** not a photo – his pixel art of himself
+  next to a pixel Claude, "the programming team". Honest (Linro knows he built it with Claude
+  Code) and the one open joke of the section. OPEN: how Claude looks – no Anthropic/Claude logo
+  copied (trademark), a neutral character instead; whether the pixel style breaks the shoot look
+  on purpose. OPEN: real photos on a timer vs Gemini (recommended: real – it's about honesty),
+  4 or 5 roles, photo brief (one shoot look, dark background like the product recipe, each role
+  in a different Cave Wear piece).
 - Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
   enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
   category buttons).

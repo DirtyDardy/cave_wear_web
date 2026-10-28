@@ -65,7 +65,12 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 11. When replacing something, remove the old version. Project-wide cleanups only when asked.
 12. Hosting/DNS/accounts: click-by-click numbered steps. Dardan sends a screenshot before every
     final confirm button; Claude checks it first. Claude never handles passwords.
-13. **Desktop first.** Mobile polish is a later phase.
+13. **Desktop first.** Mobile polish is a later phase. **But always mobile-minded (27 Oct):** plan
+    every new part so it can also look good on phones (no widths that break, check it at 375px).
+    Why: learn the fundamentals on desktop first, then build a satisfying switch between phone
+    and desktop where both look good. **The Pack's CSS is written mobile first** (27 Oct, Linro
+    lists "mobile first"): base styles = phone, `@media (width >= …)` adds desktop – like
+    `global.css`. Designing and testing stay desktop first. One direction per component, never both.
 14. Claude can't generate images: Claude writes prompts and checks results; Dardan generates in
     Gemini and finishes in Photoshop.
 15. **Read change requests in the smallest sense** (learned 25 Oct): "sync the look" meant the
@@ -78,7 +83,7 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 | Choice | Reason |
 |---|---|
 | **Astro 7** (minimal) | Finished HTML at build time, zero JS by default, components. In Linro's tech list. |
-| **React where it's the right tool** (decided 26 Oct) | Use React only where it benefits the site and shows real understanding – not everywhere. First candidate: the **Pack** (lots of changing state: items, sizes, quantities, total). Not built yet. Astro runs it as an "island"; the header count, the product page and the Pack share one list (a small store, e.g. nanostores). Everything else stays plain JS. |
+| **React where it's the right tool** (decided 26 Oct) | Use React only where it benefits the site and shows real understanding – not everywhere. The **Pack** (lots of changing state: items, sizes, quantities, total) – **built 27–28 Oct** (`PackDrawer.tsx`, `ReserveForm.tsx`, see 7). Astro runs it as an "island"; the header count, the product page and the Pack share one list (a small store, e.g. nanostores). Everything else stays plain JS. **Wanted (27 Oct): a second React feature**, so the Pack isn't the only one – a feature where React really helps, or an existing idea reshaped so it does (never React just to have it). Candidate: the weather strip (many states: ask → loading → result / declined → Regensburg / error). OPEN – Dardan decides. |
 | **Own CSS, no Tailwind** | Own design system (CSS variables) shows design craft. |
 | **Plain JavaScript** | Menu, forms, photo viewer, weather – each explained. |
 | **Netlify** + **Netlify Forms** | Free, HTTPS. Forms sent via `fetch` (no reload). |
@@ -93,7 +98,11 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 5. Workflow, deployment, domain, email
 
 - Project `D:\project\cave_wear_web`. Design files outside the repo in `cave-wear-design/`.
-- `npm run dev` → http://localhost:4321. Git: one branch **`main`**, repo `DirtyDardy/cave_wear_web` (public).
+- `npm run dev` → http://localhost:4321. Repo `DirtyDardy/cave_wear_web` (public).
+- **Git branches (27 Oct):** `main` = the live site. A bigger feature gets its own branch
+  `feature/<name>` in its own folder (a Git worktree), merged into `main` together with Dardan,
+  step by step. Never "claude" or "ai" in branch names or the site's own files and folders
+  (`CLAUDE.md` and `.claude/` are the tool's own files and need those names).
 - Netlify project `cave-wear-concept`; every push to `main` goes live (~1 min). Build
   `npm run build`, publish `dist`, `NODE_VERSION=24`. Form detection on.
 - **Pushes are limited (26 Oct):** every push = one Netlify deploy, and deploys cost credits –
@@ -123,8 +132,13 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   host only; netcup = domain, DNS, email. Don't use Netlify DNS.
 - **Mailbox info@cavewear.de** → forwarded to info.cave.wear@gmail.com (copy kept), spam filter,
   virus scan. Gmail "Send mail as" via `mx2f26.netcup.net`, 465, SSL. SPF, DKIM, DMARC `p=quarantine`.
-- Planned: confirmation emails via a **Netlify Function** through this mailbox (password only as a
-  Netlify environment variable, never in code).
+- **Reservation confirmation email – built 28 Oct:** `netlify/functions/submission-created.mjs`.
+  Netlify starts it by itself after every form submission that passed its spam check; it only
+  acts on the `reserve` form and sends a plain-text email with nodemailer through this mailbox
+  (`mx2f26.netcup.net`, 465, SSL, as info@cavewear.de). Password only as the Netlify environment
+  variable **`SMTP_PASSWORD`** – Dardan types it in himself, never in code. Safety: anyone can
+  fake a submission, so the email only goes out when every Pack line has exactly the site's
+  format (no dots, slashes or @ in names → no links can be smuggled into a mail from info@).
 
 ## 6. Pages & status
 
@@ -135,7 +149,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   `/contact#contact-form`). `id="explore"` sits on it until the first real Home section exists.
   Planned: featured products, short conservation overview, journey teaser, weather strip.
 - **Products** – overview + product pages built from the product folders (25 Oct, see 10).
-  Products so far: The Core Tee, The Field Hoodie. Bag not built.
+  Products so far: The Core Tee, The Field Hoodie. The Pack is a drawer, not a page (see 7).
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
@@ -164,19 +178,38 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 7. Features
 
 - **Mobile menu** – built. Brand submenu becomes an accordion inside it.
-- **Shopping bag** – add/remove, quantities, total, optional planned donation, saved in
-  localStorage. Ends in **Reserve** (name + email + bag via Netlify Forms), confirmation:
-  *"Your items are reserved. No payment now. We'll notify you at launch."* Honest: no payment.
-  **Concept (decided 24 Oct):** Reserve = saving your place in the queue for the launch, not a
-  purchase – no money, no commitment, said clearly. After reserving, items can be removed but
-  not added. OPEN: how removing works later (link in the confirmation email?), whether a second
-  reservation is allowed, whether a queue number is shown.
-  **At launch (decided 26 Oct, FAQ wording):** people with a reservation get early access – an
-  email first, then they confirm their order before it's locked in. Until then nothing is final.
-  **Backend (planned):** Netlify Forms stores the reservation, a Netlify Function sends the
-  confirmation email; Netlify Blobs only if removing items or a queue number needs storage.
-  **Wording (decided 25 Oct):** product button "Add to pack" (the bag is a backpack), under it
-  "No payment – reserve your place for the launch." Header label "Pack".
+- **Pack** (was "Shopping bag") – **built 27–28 Oct** on `feature/pack-drawer`, merged 28 Oct.
+  **Concept (24 Oct, still true):** Reserve = saving your place in the queue for the launch, not
+  a purchase – no money, no commitment, said clearly. **At launch (26 Oct, FAQ wording):** an
+  email first, then people confirm their order before it's locked in. **Wording (25 Oct):**
+  "Add to pack", under it "No payment – reserve your place for the launch." Header label "Pack".
+  - **Drawer from the right** (`<dialog>`, React island `src/components/PackDrawer.tsx`,
+    `client:only`), opened by the header's Pack button; `/bag` deleted – no page. One shared
+    store `src/scripts/pack-store.ts` (nanostores) for the header badge, "Add to pack" and the
+    drawer; saved in localStorage (`cave-wear-pack`, `cave-wear-reservations`). Name, price and
+    photo always come fresh from the product folders.
+  - **Rows:** shot 1 of the chosen colour/fit, name → product page with `?colour=&fit=`,
+    size · fit · colour, `[ − n + ]` (shared `.stepper`), quiet "Remove", row total. Same item =
+    one row (newest on top), max 10; at 10: "Maximum 10 per item. Planning a big order? Contact
+    us ›". "Estimated total" + "Preliminary prices. No payment now." Empty: "Your pack is empty.
+    Packing light is good – but not that light." + "Discover the collection".
+  - **Reserve (decided 28 Oct, 9 questions):** "Reserve my place" → step 2 in the same drawer
+    (summary, **First name** + email, short privacy line → `/privacy#reserve`, no checkbox,
+    "Send reservation"), behaves like the contact form (`src/components/ReserveForm.tsx`, Netlify
+    form `reserve`, hidden copy in `Header.astro`). After sending: a read-only toggle "RESERVED ·
+    date · time" under "Your reservations" (closed by default, the one just sent opens once with
+    the confirmation text); the Pack is free again. **Up to 3 per browser**, each with its own time
+    (= its own place in the queue); at 3 "Add to pack" and "Reserve my place" step aside with a
+    quiet line. No editing in the Pack, no queue number – changes by replying to the email or the
+    contact form. Confirmation email: see 5 (plain text, "planned first run" line + disclaimer).
+  - **Look:** the menu's panel glass, opens in 0.5s / closes in 0.3s (shared tokens, see 11),
+    phone full width with a top bar at header height + the header's X, desktop 480px. Placeholder
+    backpack icon next to "Your pack" until Dardan's open backpack exists. Product page: quiet
+    "Choose a size" under "Add to pack" while it's off; choices stay after adding.
+  - **OPEN:** planned donation (later) · the Pack's desktop top bar/X · open backpack icon ·
+    email text fine-tuning ("best of both worlds") · at 375px with 3-digit prices "Remove" wraps
+    under the stepper (mobile phase) · a reservation link without accounts = **not before
+    11 Nov** (presentation part "What I still want to learn").
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.
@@ -242,6 +275,11 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   on purpose. OPEN: real photos on a timer vs Gemini (recommended: real – it's about honesty),
   4 or 5 roles, photo brief (one shoot look, dark background like the product recipe, each role
   in a different Cave Wear piece).
+- **Big orders** (idea 27 Oct) – above a rough limit (e.g. more than 10 of one item, or a very
+  big Pack), the Pack shows a quiet line like "Planning a big order? Contact us ›" (contact form,
+  topic Pack & reserve). Maybe a special price or something free for big orders – OPEN, think it
+  through first; never promise a discount on the site before it's decided. **Built 28 Oct as a
+  link only** (at 10 pieces, see Pack) – a special price or something free is still OPEN.
 - Discussed 24 Oct, not planned: ripple on button press (Material/Google look; the 97% press is
   enough), search bar and filter on Products (only 6 products; a filter maybe later as 2–3
   category buttons).
@@ -261,13 +299,22 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
 - **Product detail pages: never hide** (Pack stays visible) – decided, not built yet.
+- **Mobile panels = one system (rule, 28 Oct):** everything that opens over the page on phones
+  (menu, Pack) uses the same panel glass (`--glass-tint-panel`), the same speed and easing
+  (`--motion-duration`, `--motion-ease`), a top bar exactly the header's height (64px + the
+  1px line) and the header's subtle X (no circle, no frame) in the same spot as the header's X.
+  Each keeps its own direction (menu from the header, Pack from the right). Tapping Pack closes
+  the menu first. OPEN: the Pack's top bar and X on desktop (Dardan looks at it separately).
 - Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
   sizes from the design file looked too big on real screens).
 - Nav: Geist Regular 400, 16px, **normal case** (not uppercase), `--tracking-nav` 0 (changed
   26 Oct with type version C – was 500, uppercase, 0.04em). Inactive Weathered Bone; active
   **bold Egret**, no layout shift, no marker; hover Wild Honey. "Products" active on `/products/*`.
-- Bag button: 40px high, 24px backpack icon (Dardan's drawing), "Pack" label (was "Bag" until
-  25 Oct; the page is still `/bag`), 12px corners,
+- **Pack button** (a `<button>` since 27 Oct – opens the drawer, `/bag` is gone; hidden without
+  JavaScript): 40px high, 24px backpack icon (Dardan's drawing), "Pack" label, 12px corners.
+  **Count badge (27 Oct, from 4 places):** small Wild Honey circle, top right, its middle on the
+  button's right edge – grows evenly, "99+" above 99, never changes the header width; hidden
+  when the Pack is empty. Screen readers hear "Pack, 2 items". The button itself:
   Flint outline, Obsidian fill, Weathered Bone. Fades in with the header on Home. Hover (decided
   24 Oct): smoked glass like the bear – blur, 45% Dark Obsidian tint, Egret 25% edge, Egret text,
   only a tiny shadow (must stay inside the header, never reach the hero). Normal state unchanged.
@@ -355,7 +402,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   Originals stay outside the repo (see 5); Claude crops them to exact 4:5 and converts to webp.
 
 - One folder per product: `src/content/products/<id>/` = one text file + the photos. Folder name =
-  web address (`/products/<id>`) + favorite id – never rename. Card, product page and breadcrumb
+  web address (`/products/<id>`) + favorite id – never rename (saved Packs use it too; colour
+  names as well). Product names: only letters, digits, spaces, `-` and `'` – the confirmation
+  email's safety check (another character → add it in `submission-created.mjs`). Card, product page and breadcrumb
   all read from this one file; nothing is typed twice. Presentation point: workflow for
   repetitive maintenance (change a price in one file → the whole site follows).
 - Text file fields: name (typed normally – the product page shows it uppercase via CSS) ·
@@ -504,6 +553,10 @@ Exception: a whole section may be Irr Olive (conservation); cards inside stay gl
 **Shared variables (26 Oct) – never write the values out again:** glass = `--glass-blur`,
 `--glass-tint`, `--glass-edge`, `--glass-shadow` (+ `-hover`, `--glass-edge-faint`); 40px =
 `--control-height`; focus = `--focus-ring` + `--focus-offset`. All in `global.css`.
+Added 28 Oct: `--glass-tint-panel` (92% Dark Obsidian – large panels: mobile menu, Pack) and
+`--motion-duration` 0.3s + `--motion-ease` (calm start, soft landing – made calmer the same day,
+the first curve jumped in) for everything that opens and closes; `--motion-duration-slide` 0.5s
+for the Pack coming in (closing stays 0.3s).
 PROPOSED (not decided): glass only where an image or content is behind it (hero, cards over
 photos, maybe the bag panel); flat Obsidian surface elsewhere – on flat Dark Obsidian the blur has
 nothing to blur. Next step: comparison on `/styleguide` (glass vs flat × on photo vs on flat dark),
@@ -561,8 +614,10 @@ then Dardan decides.
   (Pexels), alley = Andreas Rasmussen (Unsplash). Every new stock photo gets a line.
 - Privacy: no cookies/tracking, Netlify hosting, newsletter (consent), social links, GDPR rights.
   Contact form added 26 Oct ("Contact form and email": Netlify Forms, netcup mailbox → Gmail,
-  Art. 6 (1) (f), deleted once answered). **Extend before** bag/Reserve (localStorage), weather
-  (location → Open-Meteo) or confirmation emails go live.
+  Art. 6 (1) (f), deleted once answered). The Pack (localStorage) and Reserve + its confirmation
+  email added 28 Oct ("Reservations", `#reserve`: Art. 6 (1) (b), deleted after the launch, at
+  the latest 12 months after reserving). **Extend before** the weather (location → Open-Meteo)
+  goes live.
 - netcup AVV agreed (PDF with home address stays outside the repo). OPEN: check Netlify's DPA.
 - Trademark check done 21 Oct (TMview, class 25): no hits in DE/EU. A website "CAVEWEAR –
   Underground Tech Fashion" exists (not registered). Real launch → register at DPMA.
@@ -588,10 +643,11 @@ then Dardan decides.
      sections are written mobile first from now on** (base CSS for small screens, `width >=`
      queries add desktop – `global.css` tokens already work that way), and Dardan explains the
      choice.
-  2. **Git branches** – only `main` so far → the Pack gets its own branch, merged at the end.
+  2. **Git branches** – done: `feature/mobile` and `feature/pack-drawer`, both merged into `main` (28 Oct).
   3. **A real README** – still the Astro starter text → what, why, stack, how to run.
-  4. **TypeScript, "a first look"** – the Pack is written in TypeScript (`.tsx`).
-  5. **React for an interactive part** – the Pack (planned).
+  4. **TypeScript, "a first look"** – done: the Pack (`pack-store.ts`, `PackDrawer.tsx`,
+     `ReserveForm.tsx`), and `astro check` runs before every build (a wrong type stops it).
+  5. **React for an interactive part** – done: the Pack drawer (React island).
   6. **One external REST API with JSON** – the weather / Field conditions (Netlify Forms already counts as a form backend).
   7. **"Reviewing and understanding generated code"** – a code walkthrough rehearsal before 11 Nov.
   Already covered: semantic HTML, CSS, Grid/Flexbox, JS/DOM/events/fetch, Astro, Markdown
@@ -606,9 +662,10 @@ then Dardan decides.
   Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
   of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:
   `drafts/site-ideas.md`. Remove this line once answered.
-- **Pack: started 27 Oct** in its own chat and git branch (worktree, branch `feature/pack-drawer`) –
-  React drawer from the right, TypeScript, mobile first. Reserve = step 2. Merge into `main`
-  only together with Dardan.
+- **Pack: built 27–28 Oct, merged into `main` 28 Oct – NOT pushed yet.** Next, in the Pack chat
+  (29 Oct): Dardan sets `SMTP_PASSWORD` in Netlify (click by click, screenshot before the last
+  button) · fresh-clone build test · ONE push (it also brings the mobile menu live) · live test:
+  a reservation reaches Netlify, the email arrives, `data-netlify` is gone from the live HTML.
 - **Contact page (26 Oct):** Dardan reads the new Privacy section once (netcup → Gmail, "deleted
   once answered" – true for how he works?). The contact form only reaches Netlify after a deploy
   (check: `data-netlify="true"` gone from the live HTML). Mobile layout = mobile phase.
@@ -617,7 +674,7 @@ then Dardan decides.
   the visitor (Reply-to). Gmail put the first one in spam → "Kein Spam" + filter "never spam" for
   formresponses@netlify.com. Netlify's spam filter can catch repeated test messages (no email then).
   OPEN: Privacy Policy – add "IP address" to what Netlify Forms records; delete the test submissions.
-- Newsletter double opt-in + Reserve confirmation email (Netlify Function).
+- Newsletter double opt-in (the Reserve confirmation email is built, see 5).
 - Product details, donation model, weather → product mapping.
 - Home sections + final CTA; Brand page sections, then submenu + jump links.
 - Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
@@ -633,12 +690,12 @@ then Dardan decides.
   and learn more about, and how he plans to do it. Context: Linro talked about hiring him around
   Dec / Jan / Feb (Dardan thinks January–February is realistic). Collect candidates during the
   project (e.g. React/TypeScript depth, mobile first from the start, testing) – ask him, don't decide.
+  Confirmed (28 Oct): a reservation link without accounts – backend storage he wants to learn first.
 - **3–4 days before 11 Nov (Dardan, 27 Oct): phone + Safari check and fixes.** Linro uses
   iMacs/MacBooks → they will likely open the site in Safari, maybe on a phone. Plan time for it.
 - **Mood board + page structure draft + Dardan's section ideas:** `drafts/site-ideas.md` (27 Oct).
-- **Decided 27 Oct – to build (small tasks):** rename `/bag` → `/pack`, page title "Your pack"
-  · quiet Muted Stone hint "Choose a size" under "Add to pack" while it's disabled, gone once a
-  size is picked (same idea as the contact form's "Still missing") · "Learn more ›" and "Size
+- **Decided 27 Oct – to build (small tasks):** ("rename `/bag` → `/pack`" became no page at all
+  and the "Choose a size" hint is built – both done in the Pack, 27 Oct) · "Learn more ›" and "Size
   chart and fit guide ›" on the product page always underlined (only these two) · legal
   headings + product name weight 500 → 450 · Privacy Policy: add that Netlify Forms records the
   IP address · Impressum, under Photo credits: one line that some product images are

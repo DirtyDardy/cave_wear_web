@@ -1,0 +1,547 @@
+/* THE PACK DRAWER (src/components/PackDrawer.tsx)
+   Written mobile first: the base styles are the phone (full width), the
+   @media (width >= 48rem) block at the end adds the desktop panel.
+   A normal (global) stylesheet: React's HTML doesn't get Astro's scoped styles,
+   so every class here starts with "drawer" to never clash with other parts. */
+
+/* --- The drawer ------------------------------------------------------------------
+   The <dialog> itself is the panel. Browsers give a dialog a frame, padding and a
+   centred position – all reset here; it sits on the right, full height. */
+.drawer {
+  inset-block: 0;
+  inset-inline: auto 0; /* stuck to the right edge */
+  inline-size: 100%; /* phone: full width */
+  max-inline-size: none;
+  block-size: 100dvh;
+  max-block-size: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* The same smoked glass as the mobile menu, so both feel like one system (28 Oct) */
+  background-color: var(--glass-tint-panel);
+  -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+  backdrop-filter: var(--glass-blur);
+  color: var(--color-text);
+
+  /* Closed = moved one full width to the right, out of view. Open = in place.
+     overlay + display "allow-discrete": the dialog stays visible while it slides out.
+     Easing shared with the mobile menu (global.css). The transition written on a state
+     is used when going INTO it: closing = quick (--motion-duration, 0.3s) … */
+  translate: 100% 0;
+  transition:
+    translate var(--motion-duration) var(--motion-ease),
+    overlay var(--motion-duration) var(--motion-ease) allow-discrete,
+    display var(--motion-duration) var(--motion-ease) allow-discrete;
+
+  /* … opening = calm (--motion-duration-slide, 0.5s): it glides in instead of jumping */
+  &[open] {
+    translate: 0 0;
+    transition-duration: var(--motion-duration-slide);
+  }
+
+  /* The page behind: dimmed, fades in with the slide */
+  &::backdrop {
+    background-color: color-mix(in srgb, var(--color-bg) 70%, transparent);
+    opacity: 0;
+    transition:
+      opacity var(--motion-duration) var(--motion-ease),
+      overlay var(--motion-duration) var(--motion-ease) allow-discrete,
+      display var(--motion-duration) var(--motion-ease) allow-discrete;
+  }
+
+  &[open]::backdrop {
+    opacity: 1;
+    transition-duration: var(--motion-duration-slide); /* dims as calmly as the panel comes in */
+  }
+}
+
+/* Where the slide starts at the moment it opens */
+@starting-style {
+  .drawer[open] {
+    translate: 100% 0;
+  }
+
+  .drawer[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+/* While the Pack is open, the page behind doesn't scroll – the same way the mobile
+   menu does it (Header.astro) */
+html:has(.drawer[open]) {
+  overflow: hidden;
+}
+
+/* Title on top, list in the middle (scrolls when long), total at the bottom */
+.drawer-panel {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+}
+
+/* Phone: exactly the header's height – 64px + the same 1px line (rule for mobile panels,
+   28 Oct), with the X where the header's menu X was. content-box = the 64px don't
+   include the line, just like in the header. */
+.drawer-head {
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  block-size: var(--header-height);
+  padding-inline: var(--gutter); /* the page's side space */
+  border-block-end: 1px solid var(--color-line);
+}
+
+/* 24px – the same size as on the header button. Its colour follows the title. */
+.drawer-title-icon {
+  display: grid;
+
+  & svg {
+    inline-size: var(--space-6);
+    block-size: var(--space-6);
+  }
+}
+
+/* The close X – the same subtle look as the header's menu X: no circle, no frame,
+   48px to tap, the 24px icon in the middle */
+.drawer-close {
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-12); /* 48px */
+  block-size: var(--space-12);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  & svg {
+    inline-size: var(--space-6); /* 24px */
+    block-size: var(--space-6);
+  }
+
+  /* Only where a mouse can hover – on phones the colour would stick after a tap */
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+}
+
+/* Backpack icon + "Your pack" side by side */
+.drawer-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2); /* 8px */
+  margin-block-end: 0;
+
+  /* Focus only lands here after Remove (from the code) – no ring on a heading */
+  &:focus {
+    outline: none;
+  }
+}
+
+/* --- The list --------------------------------------------------------------------- */
+
+/* The Pack and "Your reservations" share one scroll area – it takes all free height,
+   the total stays at the bottom */
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drawer-list {
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+
+/* 64px photo · name and controls · row total */
+.drawer-item {
+  display: grid;
+  grid-template-columns: var(--space-16) 1fr auto;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+
+  & + & {
+    border-block-start: 1px solid var(--color-line);
+  }
+}
+
+/* 64 × 80px – the 4:5 of every product photo */
+.drawer-photo img {
+  display: block;
+  inline-size: var(--space-16);
+  block-size: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.drawer-name {
+  color: var(--color-text);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-accent);
+  }
+}
+
+.drawer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-block-start: var(--space-3);
+}
+
+/* "Remove" – a quiet word, Wild Honey only on hover (an action, but a small one) */
+.drawer-remove {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-quiet);
+  font: inherit;
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+.drawer-max {
+  margin-block-start: var(--space-2);
+  color: var(--color-text-quiet);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+}
+
+.drawer-price {
+  font-variant-numeric: tabular-nums; /* digits line up from row to row */
+}
+
+/* --- Total and empty Pack ------------------------------------------------------------ */
+
+.drawer-total {
+  padding: var(--space-4) var(--gutter) var(--space-6);
+  border-block-start: 1px solid var(--color-line);
+
+  & .small {
+    color: var(--color-text-quiet);
+  }
+}
+
+.drawer-total-line {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block-end: var(--space-1);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.drawer-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--gutter);
+
+  & p {
+    max-inline-size: 32ch;
+    color: var(--color-text-secondary);
+  }
+}
+
+/* "Reserve my place" – the one main action of the Pack, full width under the total */
+.drawer-reserve {
+  inline-size: 100%;
+  margin-block-start: var(--space-4);
+}
+
+/* At 3 reservations: a quiet line instead of the button */
+.drawer-limit {
+  margin-block-start: var(--space-4);
+  color: var(--color-text-quiet);
+}
+
+/* --- "Your reservations" – read-only, newest first ----------------------------------
+   Quiet on purpose: no controls, only what was reserved and when. A thin Charcoal frame
+   per reservation, sharp corners (the default). */
+
+.drawer-reservations {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--gutter);
+  border-block-start: 1px solid var(--color-line);
+}
+
+.drawer-reservations-title {
+  margin: 0;
+  color: var(--color-text-quiet);
+}
+
+.drawer-reservation-list {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drawer-reservation {
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-line);
+
+  /* Focus lands here from the code right after sending – no ring on a record */
+  &:focus {
+    outline: none;
+  }
+}
+
+/* The toggle: my accordion (global.css), with the chevron on the right and without its
+   own bottom line – the thin frame around it is enough */
+.drawer-reservation-toggle {
+  border-block-end: 0;
+
+  & summary {
+    justify-content: space-between;
+  }
+}
+
+.drawer-reservation-content {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-end: var(--space-4);
+}
+
+/* "RESERVED · 28.10.2026 · 19:58" */
+.drawer-reservation-time {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.drawer-reservation-note {
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+}
+
+/* "1 × The Core Tee" with "M · Unisex · Olive" under it, the price on the right */
+.drawer-reservation-lines {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+
+  & li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.drawer-reservation-details {
+  display: block;
+  color: var(--color-text-quiet);
+}
+
+.drawer-reservation-total {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-line);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* "Want to change something? …" – the link only underlined */
+.drawer-change {
+  color: var(--color-text-quiet);
+
+  & a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+/* --- Step 2: the Reserve form (ReserveForm.tsx) -----------------------------------------
+   The same look as my contact form (contact.astro): fields with only a Flint line
+   underneath, quiet labels, a grey "Still missing" line, the status in place of the button. */
+
+.drawer-step {
+  flex: 1; /* the free height under the title, scrolls when needed */
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--gutter) var(--space-6);
+}
+
+/* "‹ Back to your pack" – a quiet text button, Wild Honey only on hover */
+.drawer-back {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-quiet);
+  font: inherit;
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+}
+
+.drawer-step-title {
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-quiet);
+
+  /* Focus only lands here from the code, when the step opens – no ring on a title */
+  &:focus {
+    outline: none;
+  }
+}
+
+/* "2 items · 104,80€" */
+.drawer-summary {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.drawer-form {
+  display: grid;
+  gap: var(--space-6); /* 24px between the fields, like the contact form */
+  margin-block-start: var(--space-2);
+}
+
+.drawer-field {
+  & .label {
+    display: block;
+    margin-block-end: var(--space-2);
+    color: var(--color-text-quiet);
+  }
+
+  & input {
+    display: block;
+    inline-size: 100%;
+    block-size: var(--control-height); /* 40px */
+    padding: 0;
+    border: 0;
+    border-block-end: 1px solid var(--color-input-border);
+    border-radius: 0;
+    background-color: var(--color-bg); /* form fields only on Dark Obsidian */
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--text-small); /* typed text 14px, like the contact form */
+    line-height: var(--leading-small);
+
+    &::placeholder {
+      color: var(--color-text-quiet);
+    }
+
+    /* A real problem (an email typo): Terracotta – only on the line, never on text */
+    &[aria-invalid="true"] {
+      border-color: var(--color-error);
+    }
+  }
+}
+
+/* "We only use your first name and email …" – the link only underlined */
+.drawer-form-note {
+  color: var(--color-text-quiet);
+
+  & a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+}
+
+/* "Still missing: first name · email" – grey and calm: not done yet, nothing is wrong */
+.drawer-form-missing {
+  margin-block-start: var(--space-2);
+  color: var(--color-text-quiet);
+
+  &:empty {
+    display: none;
+  }
+}
+
+/* After sending: "RESERVED · 28.10.2026 · 19:40" + the text. Error = Terracotta left line,
+   the text stays Egret (same rule as the contact form and the newsletter). */
+.drawer-status {
+  /* Focus lands here from the code after sending – no ring on a message */
+  &:focus {
+    outline: none;
+  }
+
+  & .label {
+    margin-block-end: var(--space-1);
+    color: var(--color-text-secondary);
+  }
+
+  &[data-type="error"] {
+    padding-inline-start: var(--space-3);
+    border-inline-start: 2px solid var(--color-error);
+  }
+}
+
+/* --- Desktop: a 480px panel instead of the full width -------------------------------- */
+
+@media (width >= 48rem) {
+  .drawer {
+    inline-size: 30rem; /* 480px */
+    border-inline-start: 1px solid var(--color-line);
+  }
+
+  /* 24px inside the panel – the page's side space would be too wide here */
+  .drawer-head,
+  .drawer-list,
+  .drawer-total,
+  .drawer-empty,
+  .drawer-step,
+  .drawer-reservations {
+    padding-inline: var(--space-6);
+  }
+
+  /* Desktop top bar as before (16px above and below) – the header-height rule is for
+     phones; desktop gets looked at separately */
+  .drawer-head {
+    box-sizing: border-box;
+    block-size: auto;
+    padding-block: var(--space-4);
+  }
+}
+
+/* No slide and no fade – the drawer is simply there */
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .drawer::backdrop,
+  .drawer-name,
+  .drawer-remove,
+  .drawer-close,
+  .drawer-back {
+    transition: none;
+  }
+}

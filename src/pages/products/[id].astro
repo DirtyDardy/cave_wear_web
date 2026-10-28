@@ -190,10 +190,13 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
             </div>
 
             <!-- Starts switched off (disabled); product-options.js switches it on once
-                 size, fit and colour are chosen. Does nothing yet – it gets its job
-                 when the Pack (bag) is built. -->
-            <button type="button" class="button button-primary add-to-pack" disabled>Add to pack</button>
+                 size, fit and colour are chosen. A click puts the choice into the Pack
+                 (pack-store.ts) and opens the drawer. data-product = this product's folder. -->
+            <button type="button" class="button button-primary add-to-pack" data-product={product.id} disabled>Add to pack</button>
           </div>
+          <!-- Says why the button is off. Disappears once a size is chosen and the
+               line below moves up (no empty gap) – fit and colour always have one chosen. -->
+          <p class="small size-hint">Choose a size</p>
           <p class="small note">No payment – reserve your place for the launch.</p>
         </div>
 
@@ -548,61 +551,22 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     flex: 1;
   }
 
-  /* [ − | 1 | + ] – sharp corners, 40px high, and its lines made exactly like the
-     size boxes: Flint background through 1px gaps and a 1px frame (one line each) */
-  .stepper {
-    display: grid;
-    grid-template-columns: repeat(3, calc(var(--control-height) - 2px)); /* 3 × 38px */
-    gap: 1px;
-    block-size: var(--control-height); /* 40px */
-    padding: 1px;
-    background-color: var(--color-input-border);
-  }
-
-  .stepper-button {
-    padding: 0;
-    border: 0;
-    background-color: var(--color-bg);
-    color: var(--color-text-secondary);
-    font: inherit;
-    cursor: pointer;
-
-    &:hover:not(:disabled) {
-      color: var(--color-text);
-    }
-
-    /* At 1 (or 10) the button that can't go further is switched off */
-    &:disabled {
-      color: var(--color-text-disabled);
-      cursor: not-allowed;
-    }
-  }
+  /* The [ − | 1 | + ] look is shared with the Pack: .stepper in global.css */
 
   /* Without JavaScript the buttons can't do anything – the number can still be typed */
   :global(html:not([data-js])) .stepper-button {
     visibility: hidden;
   }
 
-  .stepper input {
-    inline-size: 100%;
-    padding: 0;
-    border: 0;
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font: inherit;
-    text-align: center;
-    appearance: textfield; /* hides the browser's own small arrows … */
-
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-      appearance: none; /* … also in Chrome and Safari */
-      margin: 0;
-    }
-  }
-
-  .note {
+  .note,
+  .size-hint {
     margin-block-start: var(--space-2);
     color: var(--color-text-quiet);
+  }
+
+  /* 8px to the note below, the same as above it – the two quiet lines belong together */
+  .size-hint {
+    margin-block-end: 0;
   }
 
   /* --- Photo viewer ------------------------------------------------------------------

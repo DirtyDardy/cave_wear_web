@@ -89,6 +89,18 @@
   --glass-shadow:
     0 0 1px color-mix(in srgb, var(--color-text) 40%, transparent),
     0 2px 4px color-mix(in srgb, var(--color-bg) 40%, transparent); /* tiny – stays close */
+  /* Large panels (mobile menu, Pack): much darker than the normal glass – the page
+     behind only shows as a hint (chosen 28 Oct from 75 / 85 / 92%) */
+  --glass-tint-panel: color-mix(in srgb, var(--color-bg) 92%, transparent);
+
+  /* Opening and closing – the mobile menu and the Pack share one speed and one easing,
+     so they feel like one system (chosen 28 Oct from today / same / slow).
+     The easing was made calmer the same day: the first one jumped in too fast. */
+  --motion-duration: 0.3s;
+  --motion-ease: cubic-bezier(0.32, 0.72, 0, 1); /* calm start, soft landing */
+  /* A panel that travels across the whole screen (the Pack) takes longer to come in,
+     so it glides instead of jumping; closing stays at --motion-duration (quick) */
+  --motion-duration-slide: 0.5s;
 
   /* Keyboard focus ring – Wild Honey, with a small gap */
   --focus-ring: 2px solid var(--color-accent);
@@ -521,6 +533,66 @@ p a {
 
   &:active {
     scale: 0.97;
+  }
+}
+
+/* Quantity [ − | 1 | + ] – used on the product page and in the Pack.
+   Sharp corners, 40px high, and its lines made exactly like the size boxes:
+   Flint background through 1px gaps and a 1px frame (one line each).
+   The middle is a typing field (product page) or a plain number (.stepper-value, Pack). */
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(3, calc(var(--control-height) - 2px)); /* 3 × 38px */
+  gap: 1px;
+  block-size: var(--control-height); /* 40px */
+  padding: 1px;
+  background-color: var(--color-input-border);
+
+  & input,
+  & .stepper-value {
+    inline-size: 100%;
+    padding: 0;
+    border: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+    text-align: center;
+  }
+
+  & .stepper-value {
+    display: grid;
+    place-items: center; /* the number in the middle of its box */
+  }
+
+  & input {
+    appearance: textfield; /* hides the browser's own small arrows … */
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      appearance: none; /* … also in Chrome and Safari */
+      margin: 0;
+    }
+  }
+}
+
+.stepper-button {
+  padding: 0;
+  border: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+
+  &:hover:not(:disabled, [aria-disabled="true"]) {
+    color: var(--color-text);
+  }
+
+  /* At 1 (or 10) the button that can't go further is switched off.
+     aria-disabled (Pack) looks the same but keeps the keyboard focus in place. */
+  &:disabled,
+  &[aria-disabled="true"] {
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
   }
 }
 

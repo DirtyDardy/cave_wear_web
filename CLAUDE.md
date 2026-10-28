@@ -268,9 +268,13 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   section is pinned, scrolling down moves a row of portrait photos sideways, each photo has one big
   condensed uppercase word over its bottom edge (our Barlow Condensed). Reduced motion → a normal
   row/grid. **Place: Brand page `#team` (decided 27 Oct)**, linked from the FAQ answer "Who is
-  behind it?". OPEN: real photos on a timer vs Gemini (recommended: real – it's about honesty), whether
-  the web title mentions the AI coding partner, 4 or 5 roles, photo brief (one shoot look, dark
-  background like the product recipe, each role in a different Cave Wear piece).
+  behind it?". **Web role (Dardan's idea, 28 Oct):** not a photo – his pixel art of himself
+  next to a pixel Claude, "the programming team". Honest (Linro knows he built it with Claude
+  Code) and the one open joke of the section. OPEN: how Claude looks – no Anthropic/Claude logo
+  copied (trademark), a neutral character instead; whether the pixel style breaks the shoot look
+  on purpose. OPEN: real photos on a timer vs Gemini (recommended: real – it's about honesty),
+  4 or 5 roles, photo brief (one shoot look, dark background like the product recipe, each role
+  in a different Cave Wear piece).
 - **Big orders** (idea 27 Oct) – above a rough limit (e.g. more than 10 of one item, or a very
   big Pack), the Pack shows a quiet line like "Planning a big order? Contact us ›" (contact form,
   topic Pack & reserve). Maybe a special price or something free for big orders – OPEN, think it

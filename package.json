@@ -19,6 +19,7 @@
     "@types/react-dom": "^19.3.0",
     "astro": "^7.4.0",
     "nanostores": "^1.5.5",
+    "nodemailer": "^10.2.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

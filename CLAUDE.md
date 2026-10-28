@@ -270,6 +270,12 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
 - **Product detail pages: never hide** (Pack stays visible) – decided, not built yet.
+- **Mobile panels = one system (rule, 28 Oct):** everything that opens over the page on phones
+  (menu, Pack) uses the same panel glass (`--glass-tint-panel`), the same speed and easing
+  (`--motion-duration`, `--motion-ease`), a top bar exactly the header's height (64px + the
+  1px line) and the header's subtle X (no circle, no frame) in the same spot as the header's X.
+  Each keeps its own direction (menu from the header, Pack from the right). Tapping Pack closes
+  the menu first. OPEN: the Pack's top bar and X on desktop (Dardan looks at it separately).
 - Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
   sizes from the design file looked too big on real screens).
 - Nav: Geist Regular 400, 16px, **normal case** (not uppercase), `--tracking-nav` 0 (changed
@@ -513,6 +519,8 @@ Exception: a whole section may be Irr Olive (conservation); cards inside stay gl
 **Shared variables (26 Oct) – never write the values out again:** glass = `--glass-blur`,
 `--glass-tint`, `--glass-edge`, `--glass-shadow` (+ `-hover`, `--glass-edge-faint`); 40px =
 `--control-height`; focus = `--focus-ring` + `--focus-offset`. All in `global.css`.
+Added 28 Oct: `--glass-tint-panel` (92% Dark Obsidian – large panels: mobile menu, Pack) and
+`--motion-duration` 0.3s + `--motion-ease` (soft ease-out) for everything that opens and closes.
 PROPOSED (not decided): glass only where an image or content is behind it (hero, cards over
 photos, maybe the bag panel); flat Obsidian surface elsewhere – on flat Dark Obsidian the blur has
 nothing to blur. Next step: comparison on `/styleguide` (glass vs flat × on photo vs on flat dark),

@@ -94,9 +94,13 @@
   --glass-tint-panel: color-mix(in srgb, var(--color-bg) 92%, transparent);
 
   /* Opening and closing – the mobile menu and the Pack share one speed and one easing,
-     so they feel like one system (chosen 28 Oct from today / same / slow) */
+     so they feel like one system (chosen 28 Oct from today / same / slow).
+     The easing was made calmer the same day: the first one jumped in too fast. */
   --motion-duration: 0.3s;
-  --motion-ease: cubic-bezier(0.2, 0.8, 0.2, 1); /* starts quick, lands softly */
+  --motion-ease: cubic-bezier(0.32, 0.72, 0, 1); /* calm start, soft landing */
+  /* A panel that travels across the whole screen (the Pack) takes longer to come in,
+     so it glides instead of jumping; closing stays at --motion-duration (quick) */
+  --motion-duration-slide: 0.5s;
 
   /* Keyboard focus ring – Wild Honey, with a small gap */
   --focus-ring: 2px solid var(--color-accent);

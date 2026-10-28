@@ -348,8 +348,10 @@ type ReservationsProps = {
 function Reservations({ list, justReserved, newestRef }: ReservationsProps) {
   return (
     <section className="drawer-reservations" aria-labelledby="reservations-title">
+      {/* No "1 of 3" here (decided 28 Oct) – it read like a warning. The limit only
+          shows up when someone actually reaches it. */}
       <h3 id="reservations-title" className="label drawer-reservations-title">
-        Your reservations · {list.length} of {maxReservations}
+        Your reservations
       </h3>
 
       <ol className="drawer-reservation-list" role="list">
@@ -361,33 +363,42 @@ function Reservations({ list, justReserved, newestRef }: ReservationsProps) {
             tabIndex={index === 0 ? -1 : undefined}
             className="drawer-reservation"
           >
-            <p className="label drawer-reservation-time">Reserved · {formatTime(reservation.sentAt)}</p>
+            {/* A toggle like my accordions (decided 28 Oct): closed by default, so the
+                reservations don't distract from the Pack. Only the one just sent opens
+                once, so its confirmation is seen. */}
+            <details className="accordion drawer-reservation-toggle" open={reservation.sentAt === justReserved}>
+              <summary>
+                <span className="label drawer-reservation-time">Reserved · {formatTime(reservation.sentAt)}</span>
+              </summary>
 
-            {/* Only right after sending – role="status": screen readers read it out */}
-            {reservation.sentAt === justReserved && (
-              <p className="drawer-reservation-note" role="status">
-                {import.meta.env.DEV
-                  ? "Test mode – nothing was sent (works after deploying to Netlify)."
-                  : "Your items are reserved. No payment now. We'll notify you at launch."}
-              </p>
-            )}
+              <div className="drawer-reservation-content">
+                {/* Only right after sending – role="status": screen readers read it out */}
+                {reservation.sentAt === justReserved && (
+                  <p className="drawer-reservation-note" role="status">
+                    {import.meta.env.DEV
+                      ? "Test mode – nothing was sent (works after deploying to Netlify)."
+                      : "Your items are reserved. No payment now. We'll notify you at launch."}
+                  </p>
+                )}
 
-            <ul className="drawer-reservation-lines" role="list">
-              {reservation.lines.map((line) => (
-                <li key={`${line.name} ${line.details}`}>
-                  <span>
-                    {line.quantity} × {line.name}
-                    <span className="drawer-reservation-details">{line.details}</span>
-                  </span>
-                  <span>{formatPrice(line.price)}</span>
-                </li>
-              ))}
-            </ul>
+                <ul className="drawer-reservation-lines" role="list">
+                  {reservation.lines.map((line) => (
+                    <li key={`${line.name} ${line.details}`}>
+                      <span>
+                        {line.quantity} × {line.name}
+                        <span className="drawer-reservation-details">{line.details}</span>
+                      </span>
+                      <span>{formatPrice(line.price)}</span>
+                    </li>
+                  ))}
+                </ul>
 
-            <p className="drawer-reservation-total">
-              <span>Estimated total</span>
-              <span>{formatPrice(reservation.total)}</span>
-            </p>
+                <p className="drawer-reservation-total">
+                  <span>Estimated total</span>
+                  <span>{formatPrice(reservation.total)}</span>
+                </p>
+              </div>
+            </details>
           </li>
         ))}
       </ol>

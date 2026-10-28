@@ -152,6 +152,22 @@ Add new questions here as they come up.
   photo peeks in at the edge (shows "there's more") + dots or "1 / 6".
   Question: auto-move or peek only? How fast? Loop or stop at the last photo?
   **Dardan leans to the alternative (27 Oct):** peek at the edge + small dots, no auto-move.
+  **Dardan's fuller idea (28 Oct):** on a phone only the first photo shows – all photos in one
+  swipe row, never stacked on the page. It must be obvious at once that you can swipe
+  (peek + the dots from 27 Oct). Two ways in: swipe right on the page, or **tap → the photo
+  viewer**, where you swipe too. The viewer looks very similar to the page row, plus **zoom**
+  (pinch) – but only as far as we allow: never visible pixels (same rule as the desktop viewer:
+  max = photo's real width ÷ shown width, never above 2.5×). The win: right under the one photo
+  sits the product name ("The Traveler's Half-Zip" …), price, sizes – the luxury look of a
+  short page.
+  Claude's notes for the Q&A: the zoom limit is for our own photo zoom only – the browser's
+  page zoom stays free (accessibility, like on desktop). The dots must be big enough to see but
+  are not the only way (swipe + a "1 / 6" for screen readers). Pinch + swipe = small JS in
+  `photo-viewer.js` (touch events), the page row itself = CSS scroll snap, no JS except the dots.
+  **Answers (Dardan, 28 Oct):** colour/fit switch swaps the photos in the row – yes, like
+  desktop (already a rule, CLAUDE.md 10). Dots: on the page **under** the photo; tap → the
+  photo goes **full screen**, clearly swipeable, dots **inside** the picture. Exact look of the
+  dots: decide when building. OPEN: tablet – row or desktop grid, decide when building.
 - **Menu and Pack drawer as one system (Dardan, 27 Oct):** they open and close completely
   differently. They may differ (two purposes), but should feel like one system. Dardan also
   raises it in the Pack chat (step 1).

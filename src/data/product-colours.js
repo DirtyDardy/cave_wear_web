@@ -8,4 +8,5 @@ export const productColours = {
   Black: "#0D0D0E", // Dark Obsidian
   Olive: "#4B573E", // Irr Olive
   Egret: "#F3EBE0", // Egret
+  "Alpine Oak": "#AE946B", // Alpine Oak
 };

@@ -14,7 +14,12 @@ import {
   removeItem,
   itemKey,
   maxQuantity,
+  reservations,
+  canReserve,
+  addReservation,
+  maxReservations,
   type PackItem,
+  type Reservation,
 } from "../scripts/pack-store";
 import { formatPrice } from "../data/price";
 // ?raw = the SVG file as text, so the drawer shows my own icons (the same files)
@@ -40,10 +45,15 @@ export default function PackDrawer({ catalog }: Props) {
   // useStore = "read this store, and draw the drawer again every time it changes"
   const items = useStore(packItems);
   const open = useStore(isPackOpen);
+  const reservedList = useStore(reservations);
+  const roomForMore = useStore(canReserve);
 
   // Which step the drawer shows: the Pack itself, or the Reserve form (step 2).
   // useState = React's memory for it; setStep changes it and draws the drawer again.
   const [step, setStep] = useState<"pack" | "reserve">("pack");
+
+  // The time of the reservation that was just sent – that one shows the confirmation text
+  const [justReserved, setJustReserved] = useState<string | null>(null);
 
   // useRef = a handle on the real <dialog> element, to use its own open and close
   const dialog = useRef<HTMLDialogElement>(null);
@@ -57,16 +67,23 @@ export default function PackDrawer({ catalog }: Props) {
     if (!element) return;
     if (open && !element.open) element.showModal();
     if (!open && element.open) element.close();
-    if (!open) setStep("pack"); // closed = next time it opens with the Pack again
+    // Closed = next time it opens with the Pack again, without the "just sent" text
+    if (!open) {
+      setStep("pack");
+      setJustReserved(null);
+    }
   }, [open]);
 
-  // Keyboard focus follows the step: into the form's title, or back to "Reserve my place"
+  // Keyboard focus follows the step: into the form's title, back to "Reserve my place",
+  // or – after sending – onto the new reservation
   const stepTitle = useRef<HTMLParagraphElement>(null);
   const reserveButton = useRef<HTMLButtonElement>(null);
-  const focusNext = useRef<"form" | "button" | null>(null);
+  const newestReservation = useRef<HTMLLIElement>(null);
+  const focusNext = useRef<"form" | "button" | "reservation" | null>(null);
   useEffect(() => {
     if (focusNext.current === "form") stepTitle.current?.focus();
     if (focusNext.current === "button") reserveButton.current?.focus();
+    if (focusNext.current === "reservation") newestReservation.current?.focus();
     focusNext.current = null;
   }, [step]);
 
@@ -89,6 +106,24 @@ export default function PackDrawer({ catalog }: Props) {
       return `${item.quantity} × ${product.name} – ${details} – ${formatPrice(product.price * item.quantity)}`;
     })
     .join("\n");
+
+  // After a successful "Send reservation": keep a frozen copy with its time (the store
+  // also empties the Pack), then show the Pack step with the new reservation in focus
+  function reserved(sentAt: string) {
+    const lines = rows.map((item) => {
+      const product = catalog[item.id];
+      return {
+        name: product.name,
+        details: `${item.size} · ${product.fits[item.fit]} · ${product.colours[item.colour]}`,
+        quantity: item.quantity,
+        price: product.price * item.quantity,
+      };
+    });
+    addReservation({ sentAt, lines, total });
+    setJustReserved(sentAt);
+    focusNext.current = "reservation";
+    setStep("pack");
+  }
 
   return (
     // Escape closes a dialog by itself – onCancel (fires right at the key press) and
@@ -126,35 +161,50 @@ export default function PackDrawer({ catalog }: Props) {
           />
         </div>
 
-        {rows.length === 0 ? (
-          <EmptyPack />
-        ) : step === "pack" ? (
+        {step === "pack" || rows.length === 0 ? (
           <>
-            <ul className="drawer-list" role="list">
-              {/* key = a name React uses to tell the rows apart when the list changes */}
-              {rows.map((item) => (
-                <PackRow key={itemKey(item)} item={item} product={catalog[item.id]} />
-              ))}
-            </ul>
+            {/* One scroll area: the current Pack, then my reservations under it */}
+            <div className="drawer-body">
+              {rows.length === 0 ? (
+                <EmptyPack />
+              ) : (
+                <ul className="drawer-list" role="list">
+                  {/* key = a name React uses to tell the rows apart when the list changes */}
+                  {rows.map((item) => (
+                    <PackRow key={itemKey(item)} item={item} product={catalog[item.id]} />
+                  ))}
+                </ul>
+              )}
 
-            <div className="drawer-total">
-              <p className="drawer-total-line">
-                <span>Estimated total</span>
-                <span>{formatPrice(total)}</span>
-              </p>
-              <p className="small">Preliminary prices. No payment now.</p>
-              <button
-                ref={reserveButton}
-                type="button"
-                className="button button-primary drawer-reserve"
-                onClick={() => {
-                  focusNext.current = "form";
-                  setStep("reserve");
-                }}
-              >
-                Reserve my place
-              </button>
+              {reservedList.length > 0 && (
+                <Reservations list={reservedList} justReserved={justReserved} newestRef={newestReservation} />
+              )}
             </div>
+
+            {rows.length > 0 && (
+              <div className="drawer-total">
+                <p className="drawer-total-line">
+                  <span>Estimated total</span>
+                  <span>{formatPrice(total)}</span>
+                </p>
+                <p className="small">Preliminary prices. No payment now.</p>
+                {roomForMore ? (
+                  <button
+                    ref={reserveButton}
+                    type="button"
+                    className="button button-primary drawer-reserve"
+                    onClick={() => {
+                      focusNext.current = "form";
+                      setStep("reserve");
+                    }}
+                  >
+                    Reserve my place
+                  </button>
+                ) : (
+                  <p className="small drawer-limit">You've reached the limit of {maxReservations} reservations.</p>
+                )}
+              </div>
+            )}
           </>
         ) : (
           // STEP 2: the Reserve form, in the same drawer (decided 28 Oct)
@@ -176,7 +226,7 @@ export default function PackDrawer({ catalog }: Props) {
             <p className="drawer-summary">
               {pieces} {pieces === 1 ? "item" : "items"} · {formatPrice(total)}
             </p>
-            <ReserveForm packText={packText} totalText={formatPrice(total)} />
+            <ReserveForm packText={packText} totalText={formatPrice(total)} onSent={reserved} />
           </div>
         )}
       </div>
@@ -267,5 +317,76 @@ function EmptyPack() {
         Discover the collection
       </a>
     </div>
+  );
+}
+
+// "2026-10-28T18:58:00.000Z" → "28.10.2026 · 19:58" (German format, the visitor's own time zone)
+function formatTime(sentAt: string) {
+  const date = new Date(sentAt);
+  const day = date.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+  const time = date.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+  return `${day} · ${time}`;
+}
+
+type ReservationsProps = {
+  list: Reservation[];
+  justReserved: string | null;
+  newestRef: React.RefObject<HTMLLIElement | null>;
+};
+
+// "Your reservations" – read-only, newest first, each with the time it was sent
+// (= its place in the queue). Changes go through me (decided 28 Oct).
+function Reservations({ list, justReserved, newestRef }: ReservationsProps) {
+  return (
+    <section className="drawer-reservations" aria-labelledby="reservations-title">
+      <h3 id="reservations-title" className="label drawer-reservations-title">
+        Your reservations · {list.length} of {maxReservations}
+      </h3>
+
+      <ol className="drawer-reservation-list" role="list">
+        {list.map((reservation, index) => (
+          // The newest one can take the focus right after sending (tabIndex -1)
+          <li
+            key={reservation.sentAt}
+            ref={index === 0 ? newestRef : undefined}
+            tabIndex={index === 0 ? -1 : undefined}
+            className="drawer-reservation"
+          >
+            <p className="label drawer-reservation-time">Reserved · {formatTime(reservation.sentAt)}</p>
+
+            {/* Only right after sending – role="status": screen readers read it out */}
+            {reservation.sentAt === justReserved && (
+              <p className="drawer-reservation-note" role="status">
+                {import.meta.env.DEV
+                  ? "Test mode – nothing was sent (works after deploying to Netlify)."
+                  : "Your items are reserved. No payment now. We'll notify you at launch."}
+              </p>
+            )}
+
+            <ul className="drawer-reservation-lines" role="list">
+              {reservation.lines.map((line) => (
+                <li key={`${line.name} ${line.details}`}>
+                  <span>
+                    {line.quantity} × {line.name}
+                    <span className="drawer-reservation-details">{line.details}</span>
+                  </span>
+                  <span>{formatPrice(line.price)}</span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="drawer-reservation-total">
+              <span>Estimated total</span>
+              <span>{formatPrice(reservation.total)}</span>
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      <p className="small drawer-change">
+        Want to change something? Reply to your confirmation email or{" "}
+        <a href="/contact#contact-form">write to us</a>.
+      </p>
+    </section>
   );
 }

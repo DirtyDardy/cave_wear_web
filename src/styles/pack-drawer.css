@@ -141,9 +141,14 @@ html:has(.drawer[open]) {
 
 /* --- The list --------------------------------------------------------------------- */
 
-.drawer-list {
-  flex: 1; /* takes all free height – the total stays at the bottom */
+/* The Pack and "Your reservations" share one scroll area – it takes all free height,
+   the total stays at the bottom */
+.drawer-body {
+  flex: 1;
   overflow-y: auto;
+}
+
+.drawer-list {
   margin: 0;
   padding: 0 var(--gutter);
   list-style: none;
@@ -256,6 +261,105 @@ html:has(.drawer[open]) {
 .drawer-reserve {
   inline-size: 100%;
   margin-block-start: var(--space-4);
+}
+
+/* At 3 reservations: a quiet line instead of the button */
+.drawer-limit {
+  margin-block-start: var(--space-4);
+  color: var(--color-text-quiet);
+}
+
+/* --- "Your reservations" – read-only, newest first ----------------------------------
+   Quiet on purpose: no controls, only what was reserved and when. A thin Charcoal frame
+   per reservation, sharp corners (the default). */
+
+.drawer-reservations {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--gutter);
+  border-block-start: 1px solid var(--color-line);
+}
+
+.drawer-reservations-title {
+  margin: 0;
+  color: var(--color-text-quiet);
+}
+
+.drawer-reservation-list {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drawer-reservation {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-line);
+
+  /* Focus lands here from the code right after sending – no ring on a record */
+  &:focus {
+    outline: none;
+  }
+}
+
+/* "RESERVED · 28.10.2026 · 19:58" */
+.drawer-reservation-time {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.drawer-reservation-note {
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+}
+
+/* "1 × The Core Tee" with "M · Unisex · Olive" under it, the price on the right */
+.drawer-reservation-lines {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+
+  & li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.drawer-reservation-details {
+  display: block;
+  color: var(--color-text-quiet);
+}
+
+.drawer-reservation-total {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-line);
+  font-size: var(--text-small);
+  line-height: var(--leading-small);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* "Want to change something? …" – the link only underlined */
+.drawer-change {
+  color: var(--color-text-quiet);
+
+  & a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
 }
 
 /* --- Step 2: the Reserve form (ReserveForm.tsx) -----------------------------------------
@@ -398,7 +502,8 @@ html:has(.drawer[open]) {
   .drawer-list,
   .drawer-total,
   .drawer-empty,
-  .drawer-step {
+  .drawer-step,
+  .drawer-reservations {
     padding-inline: var(--space-6);
   }
 

@@ -3,7 +3,7 @@
 // It also reads the address: /products/core-tee?colour=olive opens the page with
 // olive already chosen – that's what the colour dots on the Products page link to.
 // And it runs "Add to pack": the choice goes into the shared Pack list (pack-store.ts).
-import { addItem, openPack } from "./pack-store";
+import { addItem, openPack, canReserve, maxReservations } from "./pack-store";
 
 const sets = document.querySelectorAll(".shot-set");
 
@@ -42,11 +42,18 @@ function showChosenSet() {
 const packButton = document.querySelector(".add-to-pack");
 const sizeHint = document.querySelector(".size-hint");
 
+//    After 3 reservations (the limit) the button stays off for good, and the same quiet
+//    line says why instead.
 function updatePackButton() {
   const allChosen = ["size", "fit", "colour"].every((group) => chosen(group));
-  packButton.disabled = !allChosen;
-  sizeHint.hidden = allChosen; // gone once all are chosen – the lines below move up
+  const roomForMore = canReserve.get();
+  packButton.disabled = !allChosen || !roomForMore;
+  sizeHint.textContent = roomForMore ? "Choose a size" : `You've reached the limit of ${maxReservations} reservations.`;
+  sizeHint.hidden = allChosen && roomForMore; // gone when nothing is in the way – the lines below move up
 }
+
+// A reservation sent from the drawer (on this page) updates the button right away
+canReserve.subscribe(updatePackButton);
 
 // 4. The click: the chosen product + size + fit + colour + quantity go into the Pack,
 //    then the drawer opens and shows it. The choices stay as they are (decided 27 Oct),

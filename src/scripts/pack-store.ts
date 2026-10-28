@@ -17,32 +17,34 @@ export type PackItem = {
 
 export const maxQuantity = 10; // same limit as the product page
 
-const storageKey = "cave-wear-pack";
-
-// Reads the saved list. try/catch: some browsers block storage (private mode) or the
-// saved text is broken – then the Pack simply starts empty.
-function loadPack(): PackItem[] {
+// Reads a saved list. try/catch: some browsers block storage (private mode) or the
+// saved text is broken – then the list simply starts empty.
+// <T> = "works for any kind of list": Pack items here, reservations further down.
+function loadList<T>(key: string): T[] {
   try {
-    const saved = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
+    const saved = JSON.parse(localStorage.getItem(key) ?? "[]");
     return Array.isArray(saved) ? saved : [];
   } catch {
     return [];
   }
 }
 
+// readonly = this function only reads the list, never changes it (the stores hand it over that way)
+function saveList(key: string, list: readonly unknown[]) {
+  try {
+    localStorage.setItem(key, JSON.stringify(list));
+  } catch {
+    // Storage blocked: everything still works until the page is closed
+  }
+}
+
 // atom = a box that holds one value and tells everyone who listens when it changes.
 // <PackItem[]> = this box always holds a list of Pack items.
-export const packItems = atom<PackItem[]>(loadPack());
+export const packItems = atom<PackItem[]>(loadList("cave-wear-pack"));
 export const isPackOpen = atom(false);
 
 // Every change is saved right away
-packItems.subscribe((items) => {
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(items));
-  } catch {
-    // Storage blocked: the Pack still works until the page is closed
-  }
-});
+packItems.subscribe((items) => saveList("cave-wear-pack", items));
 
 // computed = a value worked out from another store; it updates by itself.
 // The header shows pieces, not rows: 2 × tee + 1 × hoodie = 3.
@@ -90,4 +92,40 @@ export function openPack() {
 
 export function closePack() {
   isPackOpen.set(false);
+}
+
+// --- RESERVATIONS (decided 28 Oct) -----------------------------------------------------
+// A copy of what was reserved plus the moment it was sent – that moment is its place in
+// the queue. Up to 3 per browser; each one keeps its own time, so a later reservation
+// simply joins the queue later. Read-only: changes go through me (reply to the email or
+// the contact form). Saved in this browser too, so the visitor still sees them tomorrow.
+
+// One reserved row, frozen as it was sent – unlike the Pack, the name and price are
+// saved here, because the reservation is a record of that moment
+export type ReservedLine = {
+  name: string; // "The Core Tee"
+  details: string; // "M · Unisex · Olive"
+  quantity: number;
+  price: number; // the row total when it was reserved
+};
+
+export type Reservation = {
+  sentAt: string; // when it was sent, e.g. "2026-10-28T18:58:00.000Z"
+  lines: ReservedLine[];
+  total: number;
+};
+
+export const maxReservations = 3;
+
+export const reservations = atom<Reservation[]>(loadList("cave-wear-reservations"));
+reservations.subscribe((list) => saveList("cave-wear-reservations", list));
+
+// true while there is room for another reservation
+export const canReserve = computed(reservations, (list) => list.length < maxReservations);
+
+// After a successful "Send reservation": keep the copy (newest first) and empty the Pack,
+// so it's free for the next one
+export function addReservation(reservation: Reservation) {
+  reservations.set([reservation, ...reservations.get()]);
+  packItems.set([]);
 }

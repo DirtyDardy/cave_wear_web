@@ -593,6 +593,11 @@ then Dardan decides.
   Already covered: semantic HTML, CSS, Grid/Flexbox, JS/DOM/events/fetch, Astro, Markdown
   content, contact form, basic animations, Netlify, custom domain, HTTPS, Claude Code. Tailwind:
   not used on purpose (own design system) – explain it.
+- **⚠ REMIND DARDAN EVERY DAY (asked 27 Oct): make product pictures for one new product.**
+  Gemini has a daily image limit, so a little every day. Takes time → not late at night.
+  Status 27 Oct: **Half-Zip, male version – front (shot 1) + back (shot 2) done**; still missing
+  close-ups (shots 3–5), shot 0, and the female version. Then the next product (rain jacket,
+  beanie, buff). Method: memory "Gemini image method". Remove when all six products have photos.
 - **⚠ START OF THE 28 OCT SESSION, BEFORE ANYTHING ELSE (Dardan asked):** he thinks about three
   Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
   of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:

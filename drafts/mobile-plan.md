@@ -53,8 +53,35 @@ work happens on the branch `feature/mobile`.
   first screen is a common mistake (agency guides, directional only).
 - **Tech:** CSS scroll-driven animations work in Chrome and Safari 26+; older browsers just
   show the still version.
-- **Video to check:** "The Secret to Mobile Web Conversion" – Malewicz (YouTube). Claude
-  can't watch it → Dardan writes down his 3–5 main points, then we compare.
+- **Malewicz, "The Secret to Mobile Web Conversion" (YouTube, transcript from Dardan, 27 Oct).**
+  Dardan likes many of his points. His view is SaaS conversion ("try for free"); we are a
+  brand portfolio where nothing is sold – so read it as direction, not law. His numbers
+  ("90% mobile") are his claims. Points and what they mean for us:
+  1. **Don't cram:** less white space on mobile = weaker hierarchy, the brain gets tired and
+     leaves. → fewer elements per screen, not smaller ones.
+  2. **Animations, scroll hijacks, decorations annoy on mobile.** → speaks **against hero B**
+     (scroll story) and C (auto switch); for A or something calmer. Small, quick UI motion
+     (menu fade) is a different thing – but keep it short.
+  3. **Tap sizes:** CTA on desktop 48–52px, on mobile above 52 but under 64 (too big = looks
+     like an ad, "banner blindness"). Checkboxes at least 32×32. → our 40px buttons are below
+     even his desktop range; rule 3 (44px on touch) is the minimum, he'd go 52–60px for the
+     main CTA. Small "social proof" icons that can't be read → drop on mobile.
+  4. **No phone inside a phone** (screenshots of apps) – not relevant for us.
+  5. **Rewrite copy for mobile:** bigger text, shorter copy, written separately; "tap" not
+     "click"; a CTA with less friction. → **conflicts with rule proposal 4** ("never a second
+     text"). Decide in the Q&A: shorter mobile versions of the same text (in the same content
+     file), or one text that's short enough for both.
+  6. **Bonus – sticky things:** don't let logo/menu take space while scrolling on mobile;
+     people scroll back up. → our header already hides on scroll down. But the idea of a fixed
+     "Add to pack" bar on the product page goes against this – discuss.
+  7. **Forms on mobile:** as short as possible, ideally 2 fields max; ask the rest later;
+     avoid toggles. → Reserve = name + email = exactly 2. Newsletter = 1. Contact form has
+     more (it's a contact form, OK – but make the fields big).
+  8. **"Micro visuals":** on mobile, headline + button at the top, skip the big hero image
+     (by the time people scroll to it, the headline is gone). → a radical option for our hero:
+     on the phone the split photo becomes small (or a strip), headline + button lead.
+     Worth a comparison.
+  9. **Test on real phones:** at night, in bright sunlight, Android and iOS. → add to rule 8.
 
 ---
 
@@ -71,7 +98,11 @@ Today: on a phone the split becomes two thin strips, and the texts never appear 
 - **C – Auto switch:** forest and city swap every few seconds, pause button. Fits the video
   tiles idea, but two auto-switching parts close together may feel busy.
 
-Build as `?version=` comparison on `feature/mobile`, Dardan picks.
+- **D – Micro visual (from Malewicz):** headline + button lead the first screen, the split
+  photo + bear shrink to a small visual. Most "conversion", least "brand moment".
+
+After the Malewicz video Claude's favourite moves from B to **A** (or D): calm, no scroll
+hijack, both lines readable. Build as `?version=` comparison on `feature/mobile`, Dardan picks.
 
 ---
 
@@ -91,6 +122,21 @@ Build as `?version=` comparison on `feature/mobile`, Dardan picks.
 Add new questions here as they come up.
 
 ---
+
+## Built on feature/mobile
+
+- **Mobile menu (27 Oct, not merged yet):** links 24px (H3 size, Geist 450, −0.03em), rows
+  52px (above Google's 48px minimum), active page bold Egret like the desktop nav, links fade
+  in one after another (50ms apart), tagline + social icons at the bottom in the thumb zone.
+  Hover colours only on hover devices (the X stayed Wild Honey after a tap). Social icons are
+  now one shared component (`SocialLinks.astro`) for footer + menu.
+  Tried and dropped the same day: 32px + "01 / 02 / 03" numbers (too big, Dardan didn't like
+  the numbers); 20px vs 24px compared → **24px chosen** (already in the type scale).
+  Learned: the old menu's size wasn't the "cheap" part – loose 64px rows and the empty
+  screen were.
+  Panel (28 Oct, from 75 / 85 / 92%): smoked glass, **92% Dark Obsidian** + the normal glass
+  blur – the page behind only shows as a hint. Much darker than the normal glass (45%).
+  OPEN: should the Pack drawer use the same surface – one system?
 
 ## Later – other pages (collect ideas here)
 

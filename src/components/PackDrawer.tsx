@@ -3,8 +3,9 @@
 // and only this piece runs React in the browser.
 // The list comes from the shared Pack store (src/scripts/pack-store.ts). Names, prices
 // and photos come from the product folders – Header.astro passes them in as "catalog".
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "@nanostores/react";
+import ReserveForm from "./ReserveForm";
 import {
   packItems,
   isPackOpen,
@@ -40,6 +41,10 @@ export default function PackDrawer({ catalog }: Props) {
   const items = useStore(packItems);
   const open = useStore(isPackOpen);
 
+  // Which step the drawer shows: the Pack itself, or the Reserve form (step 2).
+  // useState = React's memory for it; setStep changes it and draws the drawer again.
+  const [step, setStep] = useState<"pack" | "reserve">("pack");
+
   // useRef = a handle on the real <dialog> element, to use its own open and close
   const dialog = useRef<HTMLDialogElement>(null);
 
@@ -52,13 +57,38 @@ export default function PackDrawer({ catalog }: Props) {
     if (!element) return;
     if (open && !element.open) element.showModal();
     if (!open && element.open) element.close();
+    if (!open) setStep("pack"); // closed = next time it opens with the Pack again
   }, [open]);
+
+  // Keyboard focus follows the step: into the form's title, or back to "Reserve my place"
+  const stepTitle = useRef<HTMLParagraphElement>(null);
+  const reserveButton = useRef<HTMLButtonElement>(null);
+  const focusNext = useRef<"form" | "button" | null>(null);
+  useEffect(() => {
+    if (focusNext.current === "form") stepTitle.current?.focus();
+    if (focusNext.current === "button") reserveButton.current?.focus();
+    focusNext.current = null;
+  }, [step]);
 
   // A row whose product folder no longer exists (renamed or deleted) is skipped quietly
   const rows = items.filter((item) => catalog[item.id]);
 
   let total = 0;
-  for (const item of rows) total += catalog[item.id].price * item.quantity;
+  let pieces = 0;
+  for (const item of rows) {
+    total += catalog[item.id].price * item.quantity;
+    pieces += item.quantity;
+  }
+
+  // The Pack as text for the reservation – one line per row, e.g.
+  // "2 × The Core Tee – M · Unisex · Olive – 69,80€" (Netlify shows it to me like that)
+  const packText = rows
+    .map((item) => {
+      const product = catalog[item.id];
+      const details = `${item.size} · ${product.fits[item.fit]} · ${product.colours[item.colour]}`;
+      return `${item.quantity} × ${product.name} – ${details} – ${formatPrice(product.price * item.quantity)}`;
+    })
+    .join("\n");
 
   return (
     // Escape closes a dialog by itself – onCancel (fires right at the key press) and
@@ -98,7 +128,7 @@ export default function PackDrawer({ catalog }: Props) {
 
         {rows.length === 0 ? (
           <EmptyPack />
-        ) : (
+        ) : step === "pack" ? (
           <>
             <ul className="drawer-list" role="list">
               {/* key = a name React uses to tell the rows apart when the list changes */}
@@ -113,8 +143,41 @@ export default function PackDrawer({ catalog }: Props) {
                 <span>{formatPrice(total)}</span>
               </p>
               <p className="small">Preliminary prices. No payment now.</p>
+              <button
+                ref={reserveButton}
+                type="button"
+                className="button button-primary drawer-reserve"
+                onClick={() => {
+                  focusNext.current = "form";
+                  setStep("reserve");
+                }}
+              >
+                Reserve my place
+              </button>
             </div>
           </>
+        ) : (
+          // STEP 2: the Reserve form, in the same drawer (decided 28 Oct)
+          <div className="drawer-step">
+            <button
+              type="button"
+              className="drawer-back small"
+              onClick={() => {
+                focusNext.current = "button";
+                setStep("pack");
+              }}
+            >
+              <span aria-hidden="true">‹</span> Back to your pack
+            </button>
+            {/* tabIndex -1: focus lands here when the step opens, so screen readers hear it */}
+            <p ref={stepTitle} className="label drawer-step-title" tabIndex={-1}>
+              Reserve your place
+            </p>
+            <p className="drawer-summary">
+              {pieces} {pieces === 1 ? "item" : "items"} · {formatPrice(total)}
+            </p>
+            <ReserveForm packText={packText} totalText={formatPrice(total)} />
+          </div>
         )}
       </div>
     </dialog>

@@ -127,6 +127,18 @@ const isPinned = currentPath.startsWith("/products/");
      the browser knows what's in the visitor's Pack. -->
 <PackDrawer client:only="react" catalog={catalog} />
 
+<!-- Netlify Forms only knows a form that exists in the built HTML. The real Reserve form
+     is drawn by React in the browser (ReserveForm.tsx), so this hidden copy tells Netlify
+     its name and fields. Never shown, never sent. -->
+<form name="reserve" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="reserve" />
+  <input name="first-name" />
+  <input name="email" />
+  <textarea name="pack"></textarea>
+  <input name="total" />
+  <input name="bot-field" />
+</form>
+
 <script src="../scripts/mobile-menu.js"></script>
 <script src="../scripts/header-scroll.js"></script>
 <script src="../scripts/header-hide.js"></script>

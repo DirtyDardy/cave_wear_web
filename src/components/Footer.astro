@@ -1,14 +1,9 @@
 ---
 import Logo from "../assets/logo-horizontal.svg";
-import InstagramIcon from "../assets/icons/instagram.svg";
-import ThreadsIcon from "../assets/icons/threads.svg";
-import YouTubeIcon from "../assets/icons/youtube.svg";
+import SocialLinks from "./SocialLinks.astro";
 
 // Set once at build time, so the year is always current
 const year = new Date().getFullYear();
-
-// YouTube channel. If this is ever emptied, the icon still shows but is not a link.
-const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
 ---
 
 <footer class="site-footer">
@@ -20,31 +15,9 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
       <p class="footer-tagline">Built for the wild. Made for anywhere.</p>
       <p class="footer-note">Not released yet – follow the journey.</p>
 
-      <ul class="social" role="list">
-        <li>
-          <a href="https://www.instagram.com/info.cave.wear/" class="icon-link" aria-label="Cave Wear on Instagram">
-            <InstagramIcon />
-          </a>
-        </li>
-        <li>
-          <a href="https://www.threads.com/@info.cave.wear" class="icon-link" aria-label="Cave Wear on Threads">
-            <ThreadsIcon />
-          </a>
-        </li>
-        <li>
-          {
-            youtubeUrl ? (
-              <a href={youtubeUrl} class="icon-link" aria-label="Cave Wear on YouTube">
-                <YouTubeIcon />
-              </a>
-            ) : (
-              <span class="icon-link" title="YouTube – coming soon">
-                <YouTubeIcon />
-              </span>
-            )
-          }
-        </li>
-      </ul>
+      <div class="footer-social">
+        <SocialLinks />
+      </div>
     </div>
 
     <!-- Newsletter: Netlify Forms reads this form from the built HTML when the site is deployed.
@@ -159,32 +132,9 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
     color: var(--color-text-quiet);
   }
 
-  /* Social icons: 40px area, 20px icon, first icon lines up with the text */
-  .social {
-    display: flex;
-    gap: var(--space-1);
-    margin: var(--space-2) 0 0;
-    margin-inline-start: -0.625rem; /* (40px area − 20px icon) ÷ 2 = 10px – icon edge lines up with the text */
-    padding: 0;
-    list-style: none;
-  }
-
-  .icon-link {
-    display: grid;
-    place-items: center;
-    inline-size: var(--control-height); /* 40px */
-    block-size: var(--control-height);
-    color: var(--color-text-quiet);
-    transition: color 0.2s ease;
-
-    & svg {
-      inline-size: 1.25rem; /* 20px */
-      block-size: 1.25rem;
-    }
-  }
-
-  a.icon-link:hover {
-    color: var(--color-accent);
+  /* Social icons (look in SocialLinks.astro) – 8px more space above them */
+  .footer-social {
+    margin-block-start: var(--space-2);
   }
 
   /* Newsletter */
@@ -312,7 +262,6 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
 
   @media (prefers-reduced-motion: reduce) {
     .footer-logo,
-    .icon-link,
     .legal a {
       transition: none;
     }

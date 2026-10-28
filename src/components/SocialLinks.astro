@@ -1,0 +1,75 @@
+---
+// Social icons – used in the footer and in the mobile menu.
+// To change a link, change it only here.
+import InstagramIcon from "../assets/icons/instagram.svg";
+import ThreadsIcon from "../assets/icons/threads.svg";
+import YouTubeIcon from "../assets/icons/youtube.svg";
+
+// YouTube channel. If this is ever emptied, the icon still shows but is not a link.
+const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
+---
+
+<ul class="social" role="list">
+  <li>
+    <a href="https://www.instagram.com/info.cave.wear/" class="icon-link" aria-label="Cave Wear on Instagram">
+      <InstagramIcon />
+    </a>
+  </li>
+  <li>
+    <a href="https://www.threads.com/@info.cave.wear" class="icon-link" aria-label="Cave Wear on Threads">
+      <ThreadsIcon />
+    </a>
+  </li>
+  <li>
+    {
+      youtubeUrl ? (
+        <a href={youtubeUrl} class="icon-link" aria-label="Cave Wear on YouTube">
+          <YouTubeIcon />
+        </a>
+      ) : (
+        <span class="icon-link" title="YouTube – coming soon">
+          <YouTubeIcon />
+        </span>
+      )
+    }
+  </li>
+</ul>
+
+<style>
+  /* 40px area, 20px icon, first icon lines up with the text above */
+  .social {
+    display: flex;
+    gap: var(--space-1);
+    margin: 0;
+    margin-inline-start: -0.625rem; /* (40px area − 20px icon) ÷ 2 = 10px – icon edge lines up with the text */
+    padding: 0;
+    list-style: none;
+  }
+
+  .icon-link {
+    display: grid;
+    place-items: center;
+    inline-size: var(--control-height); /* 40px */
+    block-size: var(--control-height);
+    color: var(--color-text-quiet);
+    transition: color 0.2s ease;
+
+    & svg {
+      inline-size: 1.25rem; /* 20px */
+      block-size: 1.25rem;
+    }
+  }
+
+  /* Hover only where a mouse can hover – on touch screens the colour would stick after a tap */
+  @media (hover: hover) {
+    a.icon-link:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .icon-link {
+      transition: none;
+    }
+  }
+</style>

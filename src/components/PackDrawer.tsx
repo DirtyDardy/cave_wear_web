@@ -84,7 +84,7 @@ export default function PackDrawer({ catalog }: Props) {
               own SVG file, never text typed by a visitor, so it's safe */}
           <button
             type="button"
-            className="icon-button"
+            className="drawer-close"
             aria-label="Close pack"
             onClick={closePack}
             dangerouslySetInnerHTML={{ __html: closeIcon }}

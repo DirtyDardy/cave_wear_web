@@ -2,10 +2,11 @@
 // Privacy Policy – information according to Art. 13 GDPR.
 // Describes ONLY what the website really does today. When a new feature collects data,
 // add a section here BEFORE it goes live:
-//   - Reserve / bag (Netlify Forms + localStorage)
+//   - Reserve (Netlify Forms – then the Pack IS sent: extend "Data stored in your browser")
 //   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
 // The contact form (/contact) is covered under "Contact form" (added 26 Oct 2026).
-// Favorites (localStorage, src/scripts/favorites.js) are covered under "Data stored in your browser".
+// Favorites (localStorage, src/scripts/favorites.js) and the Pack (localStorage,
+// src/scripts/pack-store.ts, added 28 Oct 2026) are covered under "Data stored in your browser".
 // Keep the newsletter purpose in sync with the note in Footer.astro.
 import LegalLayout from "../layouts/LegalLayout.astro";
 import EmailLinks from "../components/EmailLinks.astro";
@@ -28,7 +29,10 @@ const missing = (label: string) => `[${label} – to be added]`;
       Data is only processed when you visit the site (technical server data), when you sign up
       for the newsletter (your email address) and when you write to us (your message).
     </li>
-    <li>Favorites you save with the heart stay in your own browser – nothing is sent to us.</li>
+    <li>
+      Favorites you save with the heart and what you put in your Pack stay in your own browser –
+      nothing is sent to us.
+    </li>
   </ul>
 
   <h2>Who is responsible</h2>
@@ -99,6 +103,13 @@ const missing = (label: string) => `[${label} – to be added]`;
     (local storage) – only a short list of product names, e.g. "core-tee". It stays on your device
     and is never sent to us or anyone else. You can remove a favorite by clicking the heart again,
     or remove all of them by deleting this website's data in your browser settings. This is only
+    stored because you asked for it (§ 25 (2) no. 2 TDDDG).
+  </p>
+  <p>
+    When you add something to your Pack, this website remembers it in your browser (local
+    storage) – only which product, size, fit, colour and how many, e.g. "core-tee, M, unisex,
+    olive, 1". It stays on your device and is not sent to us. You can remove items in the Pack,
+    or remove everything by deleting this website's data in your browser settings. This is only
     stored because you asked for it (§ 25 (2) no. 2 TDDDG).
   </p>
   <p>

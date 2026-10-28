@@ -16,8 +16,10 @@ import {
   type PackItem,
 } from "../scripts/pack-store";
 import { formatPrice } from "../data/price";
-// ?raw = the SVG file as text, so the drawer shows my own close icon (the same file)
+// ?raw = the SVG file as text, so the drawer shows my own icons (the same files)
 import closeIcon from "../assets/icons/close.svg?raw";
+// PLACEHOLDER: the closed backpack from the header – swap for my open backpack once drawn
+import packIcon from "../assets/icons/backpack.svg?raw";
 
 // What the drawer needs to know about one product (filled in by Header.astro)
 export type PackProduct = {
@@ -78,6 +80,9 @@ export default function PackDrawer({ catalog }: Props) {
         <div className="drawer-head">
           {/* tabIndex -1: not a Tab stop, but focus can be put here (after Remove) */}
           <h2 id="drawer-title" className="h3 drawer-title" tabIndex={-1}>
+            {/* The same symbol as on the header button (decided 28 Oct) – screen readers
+                skip it (aria-hidden in the SVG file) and only hear "Your pack" */}
+            <span className="drawer-title-icon" dangerouslySetInnerHTML={{ __html: packIcon }} />
             Your pack
           </h2>
           {/* "dangerously" because inserting HTML text can be unsafe – here it's my

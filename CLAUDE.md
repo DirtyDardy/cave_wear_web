@@ -147,6 +147,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   Products so far: The Core Tee, The Field Hoodie. Bag not built.
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
+  **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
+  discuss) – use them when building the page. Not part of the site build.
 - **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
   header (a tool page, not a showcase). Top to bottom: Bears' Cave coordinates (Peștera Urșilor,
   Romania – 140 cave bear skeletons) · H1 "Contact" · one line + email + "Write to us ↓" ·
@@ -218,10 +220,21 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   scrolling normally. Right: the logo stays in place (`position: sticky`); the logo part the
   current text talks about lights up, the rest dims (small JS, `IntersectionObserver`). After the
   last block, normal scrolling. Only one such section on the site. OPEN: what each logo part
-  means (Dardan), bear only or bear + wordmark, Brand page or Home (teaser?). Needs the logo
+  means (Dardan), bear only or bear + wordmark. **Place: Brand page (decided 27 Oct).** Needs the logo
   split into separate shapes in Corel – today `logo-horizontal.svg` = 1 shape, `bear-light.svg` = 4.
 - **Pre-launch pieces** – one extra T-shirt and one extra hoodie, only reservable before the
   launch, separate from the Base Collection. Idea only – discuss before anything is built.
+- **"Dyed for wash 10" (Dardan's idea, 27 Oct – from his Ausbildung)** – colours are planned a
+  little darker than the target on purpose (beige fabric darker than Egret, the black shirt
+  blacker than Dark Obsidian). Colour fades with wearing and washing: after ~5–7 washes it nears
+  the target, around 8–12 it's exactly there, then it stays right for a long time (Dardan's
+  estimate: ~40 more washes) before it fades past it. The first day looks a little less
+  "perfect" – but the shirt looks the way it's meant to for longer than other brands'. That's
+  why the colour dots keep the brand hex (the target), while the photos show the darker fabric.
+  Always **vision** ("what I plan", "my experience"), never a tested fact – the wash numbers are
+  Dardan's experience, not measured. Wanted as a section/story – OPEN where: Brand page (fits the
+  Base Collection "made to last" idea), the FAQ answer on how long garments last, or the
+  product page's Materials accordion. Strong presentation point (print/production background).
 - **Team section** (idea 26 Oct) – 4–5 photos of Dardan, each with a different job title that is
   real work he did for the site (draft: Founder & Creative Director · Product Photography &
   Retouching · Copy & Content · Web Design & Build · Operations & Security). The honest wink:
@@ -230,8 +243,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   Pack/Reserve. **Animation reference:** familyindustrieslive.com, section "The Experience" – the
   section is pinned, scrolling down moves a row of portrait photos sideways, each photo has one big
   condensed uppercase word over its bottom edge (our Barlow Condensed). Reduced motion → a normal
-  row/grid. OPEN: place (recommended: Brand page `#team`, linked from the FAQ answer "Who is
-  behind it?"), real photos on a timer vs Gemini (recommended: real – it's about honesty), whether
+  row/grid. **Place: Brand page `#team` (decided 27 Oct)**, linked from the FAQ answer "Who is
+  behind it?". OPEN: real photos on a timer vs Gemini (recommended: real – it's about honesty), whether
   the web title mentions the AI coding partner, 4 or 5 roles, photo brief (one shoot look, dark
   background like the product recipe, each role in a different Cave Wear piece).
 - **Big orders** (idea 27 Oct) – above a rough limit (e.g. more than 10 of one item, or a very
@@ -576,6 +589,35 @@ then Dardan decides.
   the premium look – e.g. uppercase labels / small technical details, coordinates-style text,
   the nav, number labels like "01 / …". Show comparison versions first (rule 5); Dardan decides.
   Remove this reminder only when Dardan says it's done.
+- **🔴 LINRO MUST-HAVES – HIGH PRIORITY (Dardan, 27 Oct): never cut these. Other things get cut
+  first.** From Linro's development plan (`C:\Users\Dardan\Desktop\cave-wear-ai\
+  Development_Plan_Brand_Content_Designer_Linro.pdf`). Not "do first" – "can't leave out":
+  1. **Mobile / responsive** – Linro lists "responsive design, mobile first". The site is desktop
+     first on purpose (rule 13), so: every page must work well on phones before 11 Nov, **new
+     sections are written mobile first from now on** (base CSS for small screens, `width >=`
+     queries add desktop – `global.css` tokens already work that way), and Dardan explains the
+     choice.
+  2. **Git branches** – only `main` so far → the Pack gets its own branch, merged at the end.
+  3. **A real README** – still the Astro starter text → what, why, stack, how to run.
+  4. **TypeScript, "a first look"** – the Pack is written in TypeScript (`.tsx`).
+  5. **React for an interactive part** – the Pack (planned).
+  6. **One external REST API with JSON** – the weather / Field conditions (Netlify Forms already counts as a form backend).
+  7. **"Reviewing and understanding generated code"** – a code walkthrough rehearsal before 11 Nov.
+  Already covered: semantic HTML, CSS, Grid/Flexbox, JS/DOM/events/fetch, Astro, Markdown
+  content, contact form, basic animations, Netlify, custom domain, HTTPS, Claude Code. Tailwind:
+  not used on purpose (own design system) – explain it.
+- **⚠ REMIND DARDAN EVERY DAY (asked 27 Oct): make product pictures for one new product.**
+  Gemini has a daily image limit, so a little every day. Takes time → not late at night.
+  Status 27 Oct: **Half-Zip, male version – front (shot 1) + back (shot 2) done**; still missing
+  close-ups (shots 3–5), shot 0, and the female version. Then the next product (rain jacket,
+  beanie, buff). Method: memory "Gemini image method". Remove when all six products have photos.
+- **⚠ START OF THE 28 OCT SESSION, BEFORE ANYTHING ELSE (Dardan asked):** he thinks about three
+  Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
+  of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:
+  `drafts/site-ideas.md`. Remove this line once answered.
+- **Pack: started 27 Oct** in its own chat and git branch (worktree, branch `feature/pack-drawer`) –
+  React drawer from the right, TypeScript, mobile first. Reserve = step 2. Merge into `main`
+  only together with Dardan.
 - **Contact page (26 Oct):** Dardan reads the new Privacy section once (netcup → Gmail, "deleted
   once answered" – true for how he works?). The contact form only reaches Netlify after a deploy
   (check: `data-netlify="true"` gone from the live HTML). Mobile layout = mobile phase.
@@ -594,12 +636,30 @@ then Dardan decides.
 - **Final steps before 11 Nov (Dardan, 26 Oct): 2FA on the Cave Wear Gmail and netcup** –
   remind Dardan, guide click by click (he types passwords and scans codes himself).
   Presentation point: domain + mailbox secured with 2FA, SPF, DKIM, DMARC (Linro = cybersecurity).
-- Product pages (asked 25 Oct, not answered yet): rename `/bag` to `/pack` + page title
-  "Your pack"? Colour dots vs real fabric (the Egret dot is lighter than the beige shirt)?
-  A "Choose a size" hint while "Add to pack" is disabled? Always-visible underline on the
-  two FAQ links (Dardan's example was underlined)?
+- **⚠ DON'T FORGET – presentation part "What I still want to learn" (Dardan, 27 Oct, "a fucking
+  good idea"):** once the site is live and done (the week before 11 Nov – only photo swaps after
+  that), build a part of the presentation that names honestly what Dardan knows he must improve
+  and learn more about, and how he plans to do it. Context: Linro talked about hiring him around
+  Dec / Jan / Feb (Dardan thinks January–February is realistic). Collect candidates during the
+  project (e.g. React/TypeScript depth, mobile first from the start, testing) – ask him, don't decide.
+- **3–4 days before 11 Nov (Dardan, 27 Oct): phone + Safari check and fixes.** Linro uses
+  iMacs/MacBooks → they will likely open the site in Safari, maybe on a phone. Plan time for it.
+- **Mood board + page structure draft + Dardan's section ideas:** `drafts/site-ideas.md` (27 Oct).
+- **Decided 27 Oct – to build (small tasks):** rename `/bag` → `/pack`, page title "Your pack"
+  · quiet Muted Stone hint "Choose a size" under "Add to pack" while it's disabled, gone once a
+  size is picked (same idea as the contact form's "Still missing") · "Learn more ›" and "Size
+  chart and fit guide ›" on the product page always underlined (only these two) · legal
+  headings + product name weight 500 → 450 · Privacy Policy: add that Netlify Forms records the
+  IP address · Impressum, under Photo credits: one line that some product images are
+  AI-generated (Gemini) and edited.
+- **Decided 27 Oct – no change:** colour dots keep the brand hex (Egret dot stays `#F3EBE0`
+  = the target colour; the darker fabric in the photos is intended – see "Dyed for wash 10" in 7) · the black Core Tee's bright neck label is intended · product
+  cards stay sharp (card radius closed) · Egret shots 3 + 4 (912px) stay until the real photos.
+- **Photo system first (Dardan, 27 Oct):** before the Core Tee Photoshop fixes, a simple
+  workflow – Dardan edits or replaces a file in his originals folder, cropping to 4:5 + webp
+  happens without Claude. Then he does the fixes on a full free day (not after a shift).
+  Stacked logo file + sleeve position: needed for those fixes, not urgent.
+- OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
   pinch, card fit icons on touch.
 - Real shot 0 photos (Core Tee, Field Hoodie) – the placeholders are local only (`.gitignore`).
-- **Type version C leftovers (ask Dardan):** the legal headings (`LegalLayout.astro`) and the
-  product name on product pages are still weight 500 – change them to 450 like every H2?

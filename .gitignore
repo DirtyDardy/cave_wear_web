@@ -29,3 +29,6 @@ src/assets/test/
 src/content/products/core-tee/shot_0_core-tee.webp
 # Field Hoodie shot 0 is a placeholder (source/licence unknown) – delete this line when the real photo is in
 src/content/products/field-hoodie/shot_0_field-hoodie.webp
+
+# my planning PDFs – contain placeholder photos without a licence
+drafts/*.pdf

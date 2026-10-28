@@ -3,6 +3,7 @@ import Logo from "../assets/logo-horizontal.svg";
 import PackIcon from "../assets/icons/backpack.svg";
 import MenuIcon from "../assets/icons/menu.svg";
 import CloseIcon from "../assets/icons/close.svg";
+import SocialLinks from "./SocialLinks.astro";
 import { getImage } from "astro:assets";
 import { getProducts } from "../data/products";
 import { productFits } from "../data/product-fits.js";
@@ -82,19 +83,29 @@ const isPinned = currentPath.startsWith("/products/");
         <CloseIcon class="menu-icon menu-icon-close" />
       </button>
 
-      <ul id="main-menu" class="nav-list" role="list">
-        {
-          navLinks.map((link) => (
-            <li>
-              <a href={link.href} class="nav-link" aria-current={getCurrent(link.href)}>
-                <span class="link-label" data-label={link.label}>
-                  {link.label}
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <!-- On desktop the panel is invisible as a box (display: contents) –
+           only the link list shows. On mobile it is the full-screen menu. -->
+      <div id="main-menu" class="menu-panel">
+        <ul class="nav-list" role="list">
+          {
+            navLinks.map((link, index) => (
+              <li style={`--i: ${index}`}>
+                <a href={link.href} class="nav-link" aria-current={getCurrent(link.href)}>
+                  <span class="link-label" data-label={link.label}>
+                    {link.label}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Bottom of the mobile menu, in reach of the thumb -->
+        <div class="menu-footer">
+          <p class="menu-tagline">Built for the wild. Made for anywhere.</p>
+          <SocialLinks />
+        </div>
+      </div>
 
       <!-- Opens the Pack drawer (no page of its own). It needs JavaScript, so without
            it the button stays hidden. pack-button.js fills in the number of pieces;
@@ -306,8 +317,11 @@ const isPinned = currentPath.startsWith("/products/");
     letter-spacing: var(--tracking-nav);
     transition: color 0.2s ease;
 
-    &:hover {
-      color: var(--color-accent);
+    /* Hover only where a mouse can hover – on touch screens the colour would stick after a tap */
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-accent);
+      }
     }
 
     /* Active: current page ("page") or a page inside this section ("true") */
@@ -357,13 +371,15 @@ const isPinned = currentPath.startsWith("/products/");
     /* Hover: smoked glass like the hero bear – blur behind, 45% dark tint,
        faint light edge, Egret text. The shadow is kept tiny: it must stay
        inside the header (12px below the button) and not reach the hero. */
-    &:hover {
-      border-color: var(--glass-edge);
-      background-color: var(--glass-tint);
-      color: var(--color-text);
-      box-shadow: var(--glass-shadow);
-      -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
-      backdrop-filter: var(--glass-blur);
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--glass-edge);
+        background-color: var(--glass-tint);
+        color: var(--color-text);
+        box-shadow: var(--glass-shadow);
+        -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+        backdrop-filter: var(--glass-blur);
+      }
     }
   }
 
@@ -414,9 +430,22 @@ const isPinned = currentPath.startsWith("/products/");
     cursor: pointer;
     transition: color 0.2s ease;
 
-    &:hover {
-      color: var(--color-accent);
+    /* Without this, the close icon stayed Wild Honey after a tap on phones */
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-accent);
+      }
     }
+  }
+
+  /* Desktop: the panel is no box of its own – the link list sits in the nav as before.
+     The menu footer only exists in the mobile menu. */
+  .menu-panel {
+    display: contents;
+  }
+
+  .menu-footer {
+    display: none;
   }
 
   /* Both icons sit on top of each other; one is visible at a time */
@@ -467,43 +496,81 @@ const isPinned = currentPath.startsWith("/products/");
         order: -1;
       }
 
-      /* The link list becomes a full-screen panel below the header */
-      & .nav-list {
+      /* The panel becomes a full-screen menu below the header:
+         links at the top, tagline + socials at the bottom (thumb zone) */
+      & .menu-panel {
         position: fixed;
         inset-block-start: var(--header-height);
         inset-inline: 0;
-        block-size: calc(100dvh - var(--header-height));
+        display: flex;
         flex-direction: column;
-        flex-wrap: nowrap;
-        gap: 0;
-        padding: var(--space-8) var(--gutter);
+        justify-content: space-between;
+        gap: var(--space-12);
+        block-size: calc(100dvh - var(--header-height));
+        padding: var(--space-8) var(--gutter) var(--space-12);
         overflow-y: auto;
-        background-color: var(--color-bg);
+        /* Smoked glass, but much darker than the normal glass (45%): 92% Dark Obsidian,
+           the page behind only shows as a hint (chosen 28 Oct from 75 / 85 / 92%) */
+        background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+        -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+        backdrop-filter: var(--glass-blur);
 
         /* Closed: invisible and not reachable with Tab */
         visibility: hidden;
         opacity: 0;
-        transform: translateY(calc(-1 * var(--space-2)));
         transition:
           opacity 0.2s ease,
-          transform 0.2s ease,
           visibility 0s linear 0.2s;
       }
 
-      & .nav-list li + li {
-        border-block-start: 1px solid var(--color-line);
+      & .nav-list {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 0;
       }
 
-      /* 16px + 32px line + 16px = 64px high */
+      /* Each link comes in a little after the one above it (--i = 0, 1, 2 from the list) */
+      & .nav-list li {
+        border-block-end: 1px solid var(--color-line);
+        opacity: 0;
+        translate: 0 var(--space-2);
+        transition:
+          opacity 0.3s ease,
+          translate 0.3s ease;
+      }
+
+      /* Light and a little tight, like the H3 (Geist 450, −0.03em).
+         Active = bold Egret, the same as the desktop nav.
+         12px + 28px line + 12px = 52px high – comfortable for the thumb (Google: 48) */
       & .nav-list .nav-link {
         display: flex;
-        padding-block: var(--space-4);
-        font-size: 1.5rem;
-        line-height: var(--space-8);
+        padding-block: var(--space-3);
+        font-size: var(--text-h3); /* 24px – chosen 27 Oct from 20px vs 24px */
+        font-weight: 450;
+        line-height: var(--leading-h3); /* 28px */
+        letter-spacing: var(--tracking-h3);
+
+        &[aria-current] {
+          font-weight: 700;
+        }
       }
 
       & .nav-list .link-label {
         align-items: flex-start;
+      }
+
+      & .menu-footer {
+        display: grid;
+        gap: var(--space-2);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      & .menu-tagline {
+        margin: 0;
+        color: var(--color-text-quiet);
+        font-size: var(--text-small);
+        line-height: var(--leading-small);
       }
     }
 
@@ -511,14 +578,24 @@ const isPinned = currentPath.startsWith("/products/");
     :global(html[data-js]:has(.menu-button[aria-expanded="true"])) {
       overflow: hidden;
 
-      & .nav-list {
+      & .menu-panel {
         visibility: visible;
         opacity: 1;
-        transform: none;
         transition:
           opacity 0.2s ease,
-          transform 0.2s ease,
           visibility 0s;
+      }
+
+      /* Links one after another, 50ms apart; the footer last */
+      & .nav-list li {
+        opacity: 1;
+        translate: 0 0;
+        transition-delay: calc(0.05s + var(--i) * 0.05s);
+      }
+
+      & .menu-footer {
+        opacity: 1;
+        transition-delay: 0.25s;
       }
     }
   }
@@ -529,7 +606,9 @@ const isPinned = currentPath.startsWith("/products/");
     .nav-link,
     .menu-button,
     .menu-icon,
-    .nav-list,
+    .menu-panel,
+    .nav-list li,
+    .menu-footer,
     .pack-button {
       transition: none !important;
     }

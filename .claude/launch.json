@@ -8,6 +8,12 @@
       "port": 4321
     },
     {
+      "name": "astro-dev-mobile",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", ".claude/worktrees/mobile", "run", "dev", "--", "--port", "4322"],
+      "port": 4322
+    },
+    {
       "name": "astro-preview",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["astro", "preview", "--port", "4330"],

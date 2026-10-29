@@ -28,7 +28,6 @@ function chosen(group) {
 // Colours that only exist in some fits (text file: "Alpine Oak (male)").
 // Each colour dot carries its fits in data-fits, e.g. "male" or "female male".
 const colourInputs = [...document.querySelectorAll('input[name="colour"]')];
-const colourHint = document.querySelector(".colour-hint");
 
 // The fits of one colour button: "female male" → ["female", "male"]
 function fitsOf(input) {
@@ -42,17 +41,16 @@ if (!fitsOf(startColour).includes(chosen("fit"))) {
   document.querySelector(`input[name="fit"][value="${fitsOf(startColour)[0]}"]`).checked = true;
 }
 
-// Switches off every colour that doesn't exist in the chosen fit, and says why
-// in the quiet line under the options. Was the chosen colour switched off?
-// Then the first colour that does exist gets chosen – otherwise "Add to pack"
-// would point at a product that doesn't exist.
+// Hides every colour that doesn't exist in the chosen fit (decided 29 Oct: away,
+// not dimmed). disabled as well, so the arrow keys skip it. Was the chosen colour
+// hidden? Then the first colour that does exist gets chosen – otherwise
+// "Add to pack" would point at a product that doesn't exist.
 function matchColoursToFit() {
   const fit = chosen("fit");
-  const missing = [];
 
   for (const input of colourInputs) {
     input.disabled = !fitsOf(input).includes(fit);
-    if (input.disabled) missing.push(input.closest(".colour").dataset.onlyText);
+    input.closest(".colour").hidden = input.disabled;
   }
 
   const chosenInput = colourInputs.find((input) => input.checked);
@@ -66,6 +64,11 @@ const shot0s = [...document.querySelectorAll(".shot-0 .photo-button")];
   colourHint.hidden = missing.length === 0;
 }
 
+  const fit = chosen("fit");
+
+  for (const set of sets) {
+    set.hidden = !(set.dataset.colour === colour && set.dataset.fit === fit);
+  }
 // 2. Show the set whose data-colour and data-fit match the chosen options, hide the rest
 function showChosenSet() {
   const colour = chosen("colour");
@@ -74,11 +77,6 @@ function showChosenSet() {
   const ownShot0 = shot0s.some((shot) => shot.dataset.fit === fit);
   for (const shot of shot0s) {
     shot.hidden = shot.dataset.fit !== (ownShot0 ? fit : "");
-  }
-  const fit = chosen("fit");
-
-  for (const set of sets) {
-    set.hidden = !(set.dataset.colour === colour && set.dataset.fit === fit);
   }
 }
 

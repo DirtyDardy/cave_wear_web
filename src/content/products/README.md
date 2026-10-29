@@ -57,7 +57,7 @@ colour of the dot. New colour: add it there first, then use it in the text file.
 
 **A colour only in some fits:** write the fit in brackets after it –
 `colours: Black, Alpine Oak (male), Tobacco Brown (female)`. No brackets = every fit;
-several: `(female / male)`. On the product page that colour is then switched off for the
+several: `(female / male)`. On the product page that colour is then hidden for the
 other fits, and only its own photos are needed (here no `…_alpine-oak_female` shots).
 
 ## Rules

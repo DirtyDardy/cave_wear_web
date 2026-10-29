@@ -479,8 +479,8 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   logo, unknown licence) were never in Git and now sit in the originals folder.
 - **Colours per fit (built 29 Oct):** a colour that exists only in some fits gets them in
   brackets in the text file – `colours: Black, Alpine Oak (male), Tobacco Brown (female)`.
-  The product page dims that dot for the other fit (version A of three, decided 29 Oct) with a
-  quiet line ("Tobacco Brown: female fit only."); the chosen colour jumps to one that exists;
+  The product page hides that dot for the other fit (decided 29 Oct – dimmed with a hint line
+  was built first, but every "not here" look felt off); the chosen colour jumps to one that exists;
   the card's dot opens the right fit. A fit in brackets not under `fits:` stops the build.
 
 - Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are

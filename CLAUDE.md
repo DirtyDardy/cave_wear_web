@@ -470,11 +470,18 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   "Learn more ›" on its own line under "Preliminary Price Estimate." (changed back 25 Oct).
   Column ~810px; "Add to pack" ends ~695px from the top of the screen → visible on normal laptops.
 - Breadcrumb: Muted Stone; the current page one step lighter (Weathered Bone) – decided 25 Oct.
-- Second product: `field-hoodie` (The Field Hoodie, black + egret). Its shot 0 is a placeholder
-  without licence info → local only (`.gitignore`), like the Core Tee's.
-- Third product: `traverse-half-zip` (The Traverse Half-Zip, black + Alpine Oak, male + female).
-  **Its shot 0 is AI (Gemini, Dardan 29 Oct)** – the person in it isn't real, so it's in Git and
-  goes live; a stand-in until a real photoshoot. Covered by the Impressum's AI line (see 13).
+- Second product: `field-hoodie` (The Field Hoodie, black + egret).
+- Third product: `traverse-half-zip` (The Traverse Half-Zip, male + female): Black for both,
+  Alpine Oak men's only, Tobacco Brown women's only (colours per fit, see below).
+- **Shot 0 of all three products is AI (Gemini, Dardan 29 Oct)** – the people in them aren't
+  real, so they're in Git and go live; stand-ins until a real photoshoot. Covered by the
+  Impressum's AI line (see 13). The old Core Tee / Field Hoodie placeholders (another brand's
+  logo, unknown licence) were never in Git and now sit in the originals folder.
+- **Colours per fit (built 29 Oct):** a colour that exists only in some fits gets them in
+  brackets in the text file – `colours: Black, Alpine Oak (male), Tobacco Brown (female)`.
+  The product page dims that dot for the other fit (version A of three, decided 29 Oct) with a
+  quiet line ("Tobacco Brown: female fit only."); the chosen colour jumps to one that exists;
+  the card's dot opens the right fit. A fit in brackets not under `fits:` stops the build.
 
 - Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are
   rough). Header never hides here (see 8). No photo header.
@@ -721,4 +728,4 @@ then Dardan decides.
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
   pinch, card fit icons on touch.
-- Real shot 0 photos (Core Tee, Field Hoodie) – the placeholders are local only (`.gitignore`).
+- Real shot 0 photos (Core Tee, Field Hoodie, Half-Zip) – the AI stand-ins are online until then.

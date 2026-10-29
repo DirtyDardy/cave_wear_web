@@ -164,7 +164,7 @@
   --header-height: 4rem; /* 64px on all screens – compact */
   /* 40px – the height of every button (decided 24 Oct) and of the other things
      you click: size boxes, quantity, colour dots, the heart, inputs, social icons */
-  --control-height: 2.5rem;
+  --control-height: 2.5rem; /* touch screens: 44px, see right after this block */
   --header-fade-distance: 12.5rem; /* 200px of scrolling: photo-page header fades from 5% to solid */
   /* Photo header height on every page (Home hero, Products …): 720px, but never
      more than 90% of the screen height. min() takes the smaller value.
@@ -176,6 +176,15 @@
 
   /* Jump links (skip link, #anchors) stop below the sticky header */
   scroll-padding-block-start: var(--header-height);
+}
+
+/* Touch screens (a finger, not a mouse): every control 44px – Apple's minimum,
+   chosen 29 Oct from 40 / 44 / 48px. Everything that uses --control-height
+   follows; with a mouse it stays 40px. */
+@media (pointer: coarse) {
+  :root {
+    --control-height: 2.75rem; /* 44px */
+  }
 }
 
 /* Jump links on the same page scroll smoothly – but only for people who

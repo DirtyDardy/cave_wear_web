@@ -37,11 +37,11 @@ const accordions = [
 
 // Photo sizes: the browser picks the smallest file that is still sharp.
 // Big shots are about half the page, the 2×2 shots about a quarter.
-// On a phone every photo is one slide of the swipe row, almost the full width (88%).
+// On a phone every photo is one full-width slide of the swipe row.
 const bigWidths = [480, 960, 1440];
-const bigSizes = "(width >= 64rem) 30rem, (width >= 48rem) 100vw, 88vw";
+const bigSizes = "(width >= 64rem) 30rem, 100vw";
 const smallWidths = [240, 480, 720, 960];
-const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 88vw";
+const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
 ---
 
 <BaseLayout title={product.name} description={`${product.name} – ${product.tagline}`}>
@@ -321,10 +321,10 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 88vw";
     object-fit: cover;
   }
 
-  /* Phone (mobile first): one swipe row. Each photo is 88% wide, so the next one
-     peeks in at the edge – you see at once that there's more. Scroll snap makes
-     every swipe stop exactly on a photo. The scrollbar is hidden – the dots show
-     where you are. */
+  /* Phone (mobile first): one swipe row, one full-width photo at a time. Scroll snap
+     makes every swipe stop exactly on a photo. The scrollbar is hidden – the dots
+     show that there's more and where you are (a peeking next photo was tried
+     29 Oct and dropped: it looked like a mistake). */
   .gallery {
     display: flex;
     gap: var(--space-2);
@@ -344,7 +344,7 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 88vw";
 
   .shot-0,
   .shot-set :global(.photo-button) {
-    flex: 0 0 88%;
+    flex: 0 0 100%;
     scroll-snap-align: start;
   }
 
@@ -576,6 +576,20 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 88vw";
   .fit-icon {
     inline-size: 100%;
     block-size: 100%;
+  }
+
+  /* Touch screens: the fit icon looks the same (32px), but an invisible area
+     around it is as big as the other controls (44px) */
+  @media (pointer: coarse) {
+    .fit {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: calc((var(--space-8) - var(--control-height)) / 2);
+      }
+    }
   }
 
   /* Colour dots: 40px, colour from the shared list (src/data/product-colours.js).

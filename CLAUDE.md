@@ -472,6 +472,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - Breadcrumb: Muted Stone; the current page one step lighter (Weathered Bone) – decided 25 Oct.
 - Second product: `field-hoodie` (The Field Hoodie, black + egret). Its shot 0 is a placeholder
   without licence info → local only (`.gitignore`), like the Core Tee's.
+- Third product: `traverse-half-zip` (The Traverse Half-Zip, black + Alpine Oak, male + female).
+  **Its shot 0 is AI (Gemini, Dardan 29 Oct)** – the person in it isn't real, so it's in Git and
+  goes live; a stand-in until a real photoshoot. Covered by the Impressum's AI line (see 13).
 
 - Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are
   rough). Header never hides here (see 8). No photo header.
@@ -612,6 +615,9 @@ then Dardan decides.
   text Weathered Bone. Keep the name "Impressum" (the word German law looks for).
 - Impressum has the concept disclaimer and "Photo credits +" (`<details>`): forest = chickenbunny
   (Pexels), alley = Andreas Rasmussen (Unsplash). Every new stock photo gets a line.
+  **AI line (29 Oct, version B):** "Product images: concept mock-ups made with Google Gemini (AI)
+  and edited by Dardan Ademi – logo added, retouched. The people shown in them are AI-generated."
+  Once real photos arrive, "concept mock-ups" becomes "some product images".
 - Privacy: no cookies/tracking, Netlify hosting, newsletter (consent), social links, GDPR rights.
   Contact form added 26 Oct ("Contact form and email": Netlify Forms, netcup mailbox → Gmail,
   Art. 6 (1) (f), deleted once answered). The Pack (localStorage) and Reserve + its confirmation
@@ -699,7 +705,7 @@ then Dardan decides.
   chart and fit guide ›" on the product page always underlined (only these two) · legal
   headings + product name weight 500 → 450 · Privacy Policy: add that Netlify Forms records the
   IP address · Impressum, under Photo credits: one line that some product images are
-  AI-generated (Gemini) and edited.
+  AI-generated (Gemini) and edited (**done 29 Oct**, version B – see 13).
 - **Decided 27 Oct – no change:** colour dots keep the brand hex (Egret dot stays `#F3EBE0`
   = the target colour; the darker fabric in the photos is intended – see "Dyed for wash 10" in 7) · the black Core Tee's bright neck label is intended · product
   cards stay sharp (card radius closed) · Egret shots 3 + 4 (912px) stay until the real photos.
@@ -707,6 +713,11 @@ then Dardan decides.
   workflow – Dardan edits or replaces a file in his originals folder, cropping to 4:5 + webp
   happens without Claude. Then he does the fixes on a full free day (not after a shift).
   Stacked logo file + sleeve position: needed for those fixes, not urgent.
+- **I maintain my products myself (Dardan, 29 Oct):** adding a *new* product can be done with
+  Claude, but changing existing ones (price, texts, photos) Dardan wants to do alone – not "he
+  puts something in and Claude does the work". Needs a clearer, more structured product system
+  (goes with "Photo system first"). Own chat, later – not the hub. (He tested a price change on
+  the Core Tee on 29 Oct; it worked.)
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
   pinch, card fit icons on touch.

@@ -3,7 +3,7 @@
 // and only this piece runs React in the browser.
 // The list comes from the shared Pack store (src/scripts/pack-store.ts). Names, prices
 // and photos come from the product folders – Header.astro passes them in as "catalog".
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useStore } from "@nanostores/react";
 import ReserveForm from "./ReserveForm";
 import {
@@ -26,6 +26,19 @@ import { formatPrice } from "../data/price";
 import closeIcon from "../assets/icons/close.svg?raw";
 // PLACEHOLDER: the closed backpack from the header – swap for my open backpack once drawn
 import packIcon from "../assets/icons/backpack.svg?raw";
+
+// A product name, but a word with a hyphen ("Half-Zip") never breaks in the middle:
+// on small phones the whole word moves to the next line instead of "Half-" / "Zip".
+// The name is cut at the spaces; each hyphen word gets white-space: nowrap.
+function ProductName({ name }: { name: string }) {
+  // The space stays outside the nowrap part – it's where the line may break
+  return name.split(" ").map((word, index) => (
+    <Fragment key={index}>
+      {index > 0 && " "}
+      <span style={word.includes("-") ? { whiteSpace: "nowrap" } : undefined}>{word}</span>
+    </Fragment>
+  ));
+}
 
 // What the drawer needs to know about one product (filled in by Header.astro)
 export type PackProduct = {
@@ -265,7 +278,7 @@ function PackRow({ item, product }: RowProps) {
             get the full width (with 3-digit prices "Remove" used to wrap on phones) */}
         <div className="drawer-item-top">
           <a href={link} className="drawer-name">
-            {product.name}
+            <ProductName name={product.name} />
           </a>
           <span className="drawer-price">{formatPrice(product.price * item.quantity)}</span>
         </div>
@@ -388,7 +401,7 @@ function Reservations({ list, justReserved, newestRef }: ReservationsProps) {
                   {reservation.lines.map((line) => (
                     <li key={`${line.name} ${line.details}`}>
                       <span>
-                        {line.quantity} × {line.name}
+                        {line.quantity} × <ProductName name={line.name} />
                         <span className="drawer-reservation-details">{line.details}</span>
                       </span>
                       <span>{formatPrice(line.price)}</span>

@@ -261,9 +261,14 @@ function PackRow({ item, product }: RowProps) {
       </a>
 
       <div>
-        <a href={link} className="drawer-name">
-          {product.name}
-        </a>
+        {/* Name left, row total right – on one line, so the stepper and "Remove" below
+            get the full width (with 3-digit prices "Remove" used to wrap on phones) */}
+        <div className="drawer-item-top">
+          <a href={link} className="drawer-name">
+            {product.name}
+          </a>
+          <span className="drawer-price">{formatPrice(product.price * item.quantity)}</span>
+        </div>
         <p className="small">
           {item.size} · {product.fits[item.fit]} · {product.colours[item.colour]}
         </p>
@@ -311,8 +316,6 @@ function PackRow({ item, product }: RowProps) {
           </p>
         )}
       </div>
-
-      <p className="drawer-price">{formatPrice(product.price * item.quantity)}</p>
     </li>
   );
 }

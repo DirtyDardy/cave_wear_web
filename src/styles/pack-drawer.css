@@ -79,9 +79,9 @@ html:has(.drawer[open]) {
   block-size: 100%;
 }
 
-/* Phone: exactly the header's height – 64px + the same 1px line (rule for mobile panels,
-   28 Oct), with the X where the header's menu X was. content-box = the 64px don't
-   include the line, just like in the header. */
+/* Exactly the header's height – 64px + the same 1px line – on phones (rule for mobile
+   panels, 28 Oct) and on desktop too (29 Oct: one system everywhere). On phones the X sits
+   where the header's menu X was. content-box = the 64px don't include the line, like the header. */
 .drawer-head {
   box-sizing: content-box;
   display: flex;
@@ -158,10 +158,10 @@ html:has(.drawer[open]) {
   list-style: none;
 }
 
-/* 64px photo · name and controls · row total */
+/* 64px photo · everything else (name + row total on top, then details and controls) */
 .drawer-item {
   display: grid;
-  grid-template-columns: var(--space-16) 1fr auto;
+  grid-template-columns: var(--space-16) 1fr;
   gap: var(--space-4);
   padding-block: var(--space-4);
 
@@ -224,7 +224,16 @@ html:has(.drawer[open]) {
   line-height: var(--leading-small);
 }
 
+/* Name on the left, row total on the right – the same place the price had before */
+.drawer-item-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
 .drawer-price {
+  flex-shrink: 0; /* a long name wraps, the price never does */
   font-variant-numeric: tabular-nums; /* digits line up from row to row */
 }
 
@@ -523,14 +532,6 @@ html:has(.drawer[open]) {
   .drawer-step,
   .drawer-reservations {
     padding-inline: var(--space-6);
-  }
-
-  /* Desktop top bar as before (16px above and below) – the header-height rule is for
-     phones; desktop gets looked at separately */
-  .drawer-head {
-    box-sizing: border-box;
-    block-size: auto;
-    padding-block: var(--space-4);
   }
 }
 

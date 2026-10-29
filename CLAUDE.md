@@ -207,13 +207,12 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
     quiet line. No editing in the Pack, no queue number – changes by replying to the email or the
     contact form. Confirmation email: see 5 (HTML + plain text, "planned first run" line + disclaimer).
   - **Look:** the menu's panel glass, opens in 0.5s / closes in 0.3s (shared tokens, see 11),
-    phone full width with a top bar at header height + the header's X, desktop 480px. Placeholder
-    backpack icon next to "Your pack" until Dardan's open backpack exists. Product page: quiet
-    "Choose a size" under "Add to pack" while it's off; choices stay after adding.
-  - **OPEN:** planned donation (later) · the Pack's desktop top bar/X · open backpack icon ·
-    at 375px with 3-digit prices "Remove" wraps under the stepper (mobile phase) · a
-    reservation link without accounts = **not before 11 Nov** (presentation part "What I
-    still want to learn").
+    top bar at header height with the header's subtle X everywhere (desktop too, 29 Oct), phone
+    full width, desktop 480px. Row: name + row total on one line, so "Remove" never wraps.
+    Placeholder backpack icon next to "Your pack" until Dardan's open backpack exists. Product
+    page: quiet "Choose a size" under "Add to pack" while it's off; choices stay after adding.
+  - **OPEN:** planned donation (later) · open backpack icon · a reservation link without
+    accounts = **not before 11 Nov** (presentation part "What I still want to learn").
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.
@@ -308,7 +307,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   (`--motion-duration`, `--motion-ease`), a top bar exactly the header's height (64px + the
   1px line) and the header's subtle X (no circle, no frame) in the same spot as the header's X.
   Each keeps its own direction (menu from the header, Pack from the right). Tapping Pack closes
-  the menu first. OPEN: the Pack's top bar and X on desktop (Dardan looks at it separately).
+  the menu first. The Pack's top bar has header height on desktop too (decided 29 Oct).
 - Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
   sizes from the design file looked too big on real screens).
 - Nav: Geist Regular 400, 16px, **normal case** (not uppercase), `--tracking-nav` 0 (changed

@@ -4,7 +4,7 @@
 
 name: The Core Tee
 tagline: Everyday essentials. Nothing unnecessary.
-price: 34,90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
+price: 29.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: XS, S, M, L, XL, XXL # e.g. XS, S, M, L, XL, XXL – or: One size
 fits: unisex # unisex, female, male – one or more, comma between

@@ -134,11 +134,15 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   virus scan. Gmail "Send mail as" via `mx2f26.netcup.net`, 465, SSL. SPF, DKIM, DMARC `p=quarantine`.
 - **Reservation confirmation email – built 28 Oct:** `netlify/functions/submission-created.mjs`.
   Netlify starts it by itself after every form submission that passed its spam check; it only
-  acts on the `reserve` form and sends a plain-text email with nodemailer through this mailbox
-  (`mx2f26.netcup.net`, 465, SSL, as info@cavewear.de). Password only as the Netlify environment
-  variable **`SMTP_PASSWORD`** – Dardan types it in himself, never in code. Safety: anyone can
+  acts on the `reserve` form and sends an email – simple HTML + a plain-text copy (approved
+  29 Oct) – with nodemailer (`mx2f26.netcup.net`, 465, SSL). **Least privilege (29 Oct):** it
+  sends from a separate sending-only mailbox **reservations@cavewear.de** with its own
+  password – never with the info@ password; Reply-To is info@cavewear.de. Password only as the
+  Netlify environment variable **`SMTP_PASSWORD`** (Production only, marked secret) – Dardan
+  types it in himself, never in code. Safety: anyone can
   fake a submission, so the email only goes out when every Pack line has exactly the site's
-  format (no dots, slashes or @ in names → no links can be smuggled into a mail from info@).
+  format (no dots, slashes or @ in names → no links can be smuggled into a mail from my
+  domain); the HTML version also escapes every value.
 
 ## 6. Pages & status
 
@@ -201,15 +205,15 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
     the confirmation text); the Pack is free again. **Up to 3 per browser**, each with its own time
     (= its own place in the queue); at 3 "Add to pack" and "Reserve my place" step aside with a
     quiet line. No editing in the Pack, no queue number – changes by replying to the email or the
-    contact form. Confirmation email: see 5 (plain text, "planned first run" line + disclaimer).
+    contact form. Confirmation email: see 5 (HTML + plain text, "planned first run" line + disclaimer).
   - **Look:** the menu's panel glass, opens in 0.5s / closes in 0.3s (shared tokens, see 11),
     phone full width with a top bar at header height + the header's X, desktop 480px. Placeholder
     backpack icon next to "Your pack" until Dardan's open backpack exists. Product page: quiet
     "Choose a size" under "Add to pack" while it's off; choices stay after adding.
   - **OPEN:** planned donation (later) · the Pack's desktop top bar/X · open backpack icon ·
-    email text fine-tuning ("best of both worlds") · at 375px with 3-digit prices "Remove" wraps
-    under the stepper (mobile phase) · a reservation link without accounts = **not before
-    11 Nov** (presentation part "What I still want to learn").
+    at 375px with 3-digit prices "Remove" wraps under the stepper (mobile phase) · a
+    reservation link without accounts = **not before 11 Nov** (presentation part "What I
+    still want to learn").
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.

@@ -45,16 +45,35 @@ const products = defineCollection({
       z.array(z.enum(["unisex", "female", "male"], { error: "Fits are unisex, female or male" })).min(1),
     ),
 
-    colours: commaList.pipe(
-      z
-        .array(
-          z.string().refine((name) => name in productColours, {
-            error: "Every colour must be listed in src/data/product-colours.js (same spelling)",
-          }),
-        )
-        .min(1),
-    ),
-  }),
+    // A colour that only exists in some fits gets them in brackets:
+    // "Black, Alpine Oak (male), Tobacco Brown (female)". No brackets = every fit.
+    // Several fits: "(female / male)". Each colour becomes { name, fits }.
+    colours: commaList
+      .transform((list): { name: string; fits?: string[] }[] =>
+        list.map((item) => {
+          const [, name, inBrackets] = item.match(/^(.*?)\s*(?:\((.*)\))?$/) ?? [];
+          const fits = inBrackets?.split("/").map((fit) => fit.trim().toLowerCase());
+          return { name, fits };
+        }),
+      )
+      .pipe(
+        z
+          .array(
+            z.object({
+              name: z.string().refine((name) => name in productColours, {
+                error: "Every colour must be listed in src/data/product-colours.js (same spelling)",
+              }),
+              fits: z.array(z.string()).optional(), // checked against "fits:" below
+            }),
+          )
+          .min(1),
+      ),
+  })
+    // A fit in brackets must also be under "fits:" – "Tobacco Brown (kids)" stops the build
+    .refine((product) => product.colours.every((colour) => (colour.fits ?? []).every((fit) => (product.fits as string[]).includes(fit))), {
+      error: 'A fit in brackets after a colour must also be listed under "fits:", e.g. Alpine Oak (male)',
+      path: ["colours"],
+    }),
 });
 
 // FAQ: all questions in one file, src/content/faq.yaml (the Contact page shows them).

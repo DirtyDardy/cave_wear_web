@@ -75,12 +75,17 @@ export async function getProducts() {
     const sections = splitSections(body);
     const shotText = readShotDescriptions(sections["Shot descriptions"]);
 
-    const colours = data.colours.map(toColour);
+    // Every colour knows its fits: the ones in brackets in the text file, otherwise all
+    // ("as": the build already checked that every fit in brackets is one under "fits:")
+    const colours = data.colours.map(({ name, fits }) => ({
+      ...toColour(name),
+      fits: (fits ?? data.fits) as typeof data.fits,
+    }));
 
-    // One set of shots 1–5 for every colour × fit, e.g. black + unisex.
+    // One set of shots 1–5 for every colour × fit that exists, e.g. black + unisex.
     // Alt text = name, colour, fit + what the shot shows (written in the text file).
     const shotSets = colours.flatMap((colour) =>
-      data.fits.map((fit) => ({
+      colour.fits.map((fit) => ({
         colour: colour.file,
         fit,
         shots: [1, 2, 3, 4, 5].map((number) => ({

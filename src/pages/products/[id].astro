@@ -163,10 +163,18 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 
           <fieldset>
             <legend class="label">Color:</legend>
+            <!-- data-fits: the fits a colour exists in. product-options.js switches the
+                 dot off for the other fits; data-only-text is the line that says why. -->
             <div class="circles">
               {
                 product.colours.map((colour, index) => (
-                  <label class="colour" style={`--swatch: ${colour.hex}`} data-very-dark={colour.veryDark ? "" : undefined}>
+                  <label
+                    class="colour"
+                    style={`--swatch: ${colour.hex}`}
+                    data-very-dark={colour.veryDark ? "" : undefined}
+                    data-fits={colour.fits.join(" ")}
+                    data-only-text={`${colour.name}: ${colour.fits.map((fit) => productFits[fit].label.toLowerCase()).join(" and ")} fit only.`}
+                  >
                     <input type="radio" name="colour" value={colour.file} checked={index === 0} class="visually-hidden" />
                     <span class="visually-hidden">{colour.name}</span>
                   </label>
@@ -174,6 +182,10 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
               }
             </div>
           </fieldset>
+
+          <!-- Says why a colour dot is switched off, e.g. "Tobacco Brown: female fit only."
+               Hidden while every colour exists in the chosen fit. -->
+          <p class="small colour-hint" aria-live="polite" hidden></p>
         </div>
 
         <div class="details-block">
@@ -527,6 +539,20 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   .colour:has(:checked) {
     outline: 1px solid var(--color-text);
     outline-offset: 2px; /* ring with a small gap, so it reads on every colour */
+  }
+
+  /* A colour that doesn't exist in the chosen fit (text file: "Alpine Oak (male)"):
+     dimmed (version A of three, decided 29 Oct) – the quiet line below says why */
+  .colour:has(:disabled) {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Under Fit and Color, across both columns, quiet like "Choose a size" */
+  .colour-hint {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--color-text-quiet);
   }
 
   /* Keyboard focus: the hidden radio button has the focus, the label shows it */

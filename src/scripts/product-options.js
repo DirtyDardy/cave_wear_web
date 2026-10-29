@@ -25,6 +25,45 @@ function chosen(group) {
   return document.querySelector(`input[name="${group}"]:checked`)?.value;
 }
 
+// Colours that only exist in some fits (text file: "Alpine Oak (male)").
+// Each colour dot carries its fits in data-fits, e.g. "male" or "female male".
+const colourInputs = [...document.querySelectorAll('input[name="colour"]')];
+const colourHint = document.querySelector(".colour-hint");
+
+// The fits of one colour button: "female male" → ["female", "male"]
+function fitsOf(input) {
+  return input.closest(".colour").dataset.fits.split(" ");
+}
+
+// If the address asked for a colour that isn't in the chosen fit (e.g. the card's
+// Tobacco Brown dot), the colour wins: the fit switches to the colour's first fit.
+const startColour = colourInputs.find((input) => input.checked);
+if (!fitsOf(startColour).includes(chosen("fit"))) {
+  document.querySelector(`input[name="fit"][value="${fitsOf(startColour)[0]}"]`).checked = true;
+}
+
+// Switches off every colour that doesn't exist in the chosen fit, and says why
+// in the quiet line under the options. Was the chosen colour switched off?
+// Then the first colour that does exist gets chosen – otherwise "Add to pack"
+// would point at a product that doesn't exist.
+function matchColoursToFit() {
+  const fit = chosen("fit");
+  const missing = [];
+
+  for (const input of colourInputs) {
+    input.disabled = !fitsOf(input).includes(fit);
+    if (input.disabled) missing.push(input.closest(".colour").dataset.onlyText);
+  }
+
+  const chosenInput = colourInputs.find((input) => input.checked);
+  if (chosenInput.disabled) {
+    colourInputs.find((input) => !input.disabled).checked = true;
+  }
+
+  colourHint.textContent = missing.join(" ");
+  colourHint.hidden = missing.length === 0;
+}
+
 // 2. Show the set whose data-colour and data-fit match the chosen options, hide the rest
 function showChosenSet() {
   const colour = chosen("colour");
@@ -71,12 +110,17 @@ packButton.addEventListener("click", () => {
 
 // 5. Every time an option is chosen: show the matching photos, check the button.
 //    "change" fires when a radio button gets chosen – by click or with the arrow keys.
+//    A new fit first checks which colours exist in it.
 document.addEventListener("change", (event) => {
+  if (event.target.name === "fit") {
+    matchColoursToFit();
+  }
   if (event.target.name === "colour" || event.target.name === "fit") {
     showChosenSet();
   }
   updatePackButton();
 });
 
+matchColoursToFit();
 showChosenSet();
 updatePackButton();

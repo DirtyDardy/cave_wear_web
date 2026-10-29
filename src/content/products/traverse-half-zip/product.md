@@ -8,7 +8,7 @@ price: 79.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: XS, S, M, L, XL, XXL # e.g. XS, S, M, L, XL, XXL – or: One size
 fits: male, female # unisex, female, male – one or more, comma between
-colours: Black, Alpine Oak # names from src/data/product-colours.js, comma between – the first one is shown first
+colours: Black, Alpine Oak (male), Tobacco Brown (female) # names from src/data/product-colours.js, comma between – the first one is shown first. Only in some fits? Fit in brackets: Alpine Oak (male)
 ---
 
 ## Description

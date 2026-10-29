@@ -11,6 +11,7 @@ import { productFits } from "../data/product-fits.js";
 import HeartIcon from "../assets/icons/heart.svg";
 
 type Fit = keyof typeof productFits; // "unisex" | "female" | "male"
+type CardColour = ReturnType<typeof toColour> & { fits?: Fit[] }; // fits: the fits it exists in (leave out = all)
 
 interface Props {
   id: string; // short, unique, never changes – e.g. "core-tee". Favorites are saved by it.
@@ -20,7 +21,7 @@ interface Props {
   alt: string;
   hoverImage?: ImageMetadata; // shown on hover – leave out for no hover photo
   href?: string; // the product page – leave out for placeholder cards (then nothing is clickable)
-  colours?: ReturnType<typeof toColour>[]; // leave out → the three placeholder dots
+  colours?: CardColour[]; // leave out → the three placeholder dots
   fits?: Fit[]; // leave out → no fit icons
 }
 
@@ -35,6 +36,13 @@ const {
   colours = ["Black", "Olive", "Egret"].map(toColour),
   fits = [],
 } = Astro.props;
+
+// A colour dot's link. A colour that only exists in some fits (e.g. Tobacco Brown,
+// female only) also chooses its first fit – so the page opens on a version that exists.
+function colourLink(colour: CardColour) {
+  const onlySomeFits = colour.fits && colour.fits.length < fits.length;
+  return `${href}?colour=${colour.file}${onlySomeFits ? `&fit=${colour.fits![0]}` : ""}`;
+}
 
 // One size list for both photos: the browser picks the smallest file that is
 // still sharp. "sizes" tells it how wide a card is: 1/3 of the screen on
@@ -85,7 +93,7 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
           <li>
             {href ? (
               <a
-                href={`${href}?colour=${colour.file}`}
+                href={colourLink(colour)}
                 class="swatch"
                 style={`--swatch: ${colour.hex}`}
                 data-very-dark={colour.veryDark ? "" : undefined}

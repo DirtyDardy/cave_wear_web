@@ -180,7 +180,9 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
           </fieldset>
 
           <fieldset>
-            <legend class="label">Color:</legend>
+            <!-- The chosen colour's name after "Color:", quiet – so Alpine Oak and Tobacco
+                 Brown can't be mixed up. product-options.js changes it with the dot. -->
+            <legend class="label">Color: <span class="chosen-colour">{product.colours[0].name}</span></legend>
             <!-- data-fits: the fits a colour exists in. product-options.js hides the
                  dot for the other fits. -->
             <div class="circles">
@@ -464,6 +466,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   legend {
     margin-block-end: var(--space-2); /* 8px to the options */
     padding: 0;
+  }
+
+  /* The chosen colour's name: same label style, one step quieter (Muted Stone) */
+  .chosen-colour {
+    color: var(--color-text-quiet);
   }
 
   /* "Size chart and fit guide ›" right under the size boxes */

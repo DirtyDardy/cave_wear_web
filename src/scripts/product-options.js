@@ -60,6 +60,8 @@ function matchColoursToFit() {
     colourInputs.find((input) => !input.disabled).checked = true;
   }
 
+const shot0s = [...document.querySelectorAll(".shot-0 .photo-button")];
+
   colourHint.textContent = missing.join(" ");
   colourHint.hidden = missing.length === 0;
 }
@@ -67,6 +69,12 @@ function matchColoursToFit() {
 // 2. Show the set whose data-colour and data-fit match the chosen options, hide the rest
 function showChosenSet() {
   const colour = chosen("colour");
+
+  // Shot 0: the chosen fit's own one if there is one, otherwise the normal one (data-fit="")
+  const ownShot0 = shot0s.some((shot) => shot.dataset.fit === fit);
+  for (const shot of shot0s) {
+    shot.hidden = shot.dataset.fit !== (ownShot0 ? fit : "");
+  }
   const fit = chosen("fit");
 
   for (const set of sets) {

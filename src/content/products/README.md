@@ -41,6 +41,7 @@ All photos **4:5** (e.g. 1600 × 2000 px) – jpg, png or webp. File names: lowe
 | File | What it shows |
 |---|---|
 | `shot_0_core-tee.webp` | Real photoshoot picture, any colour. Stays the same when the visitor changes colour or fit. |
+| `shot_0_core-tee_female.webp` | Optional: an own shot 0 for one fit – shown while that fit is chosen. Its description: `Shot 0 female:` |
 | `shot_1_core-tee_black_unisex.webp` | Front |
 | `shot_2_core-tee_black_unisex.webp` | Back |
 | `shot_3_…` to `shot_5_…` | Close-ups – what they show goes under "Shot descriptions" |

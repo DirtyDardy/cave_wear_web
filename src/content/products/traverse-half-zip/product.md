@@ -34,6 +34,7 @@ The material selection will focus on comfort, shape retention, and versatility. 
 <!-- For screen readers. Describe only what the picture shows – name, colour and fit are added automatically. -->
 
 Shot 0: a man standing in the forest wearing the half zip
+Shot 0 female:
 Shot 1: Front
 Shot 2: Back
 Shot 3: closeup logo

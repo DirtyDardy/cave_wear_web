@@ -61,8 +61,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
            (photo-viewer.js). data-shot = its number, data-full = the full-size file.
            aria-haspopup="dialog": screen readers say the button opens a window. -->
       <div class="gallery">
+        <!-- Shot 0: the normal one, plus an own one for a fit if its photo exists
+             (e.g. shot_0_traverse-half-zip_female). product-options.js shows the one
+             that belongs to the chosen fit – data-fit="" is the normal one. -->
         <div class="shot-0" data-product-id={product.id}>
-          <button type="button" class="photo-button" data-shot="0" data-full={product.shot0.image.src} aria-haspopup="dialog">
+          <button type="button" class="photo-button" data-shot="0" data-fit="" data-full={product.shot0.image.src} aria-haspopup="dialog">
             <Image
               src={product.shot0.image}
               alt={product.shot0.alt}
@@ -72,6 +75,21 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
               fetchpriority="high"
             />
           </button>
+          {
+            product.shot0ByFit.map((shot) => (
+              <button
+                type="button"
+                class="photo-button"
+                data-shot="0"
+                data-fit={shot.fit}
+                data-full={shot.image.src}
+                aria-haspopup="dialog"
+                hidden
+              >
+                <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
+              </button>
+            ))
+          }
           <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
             <HeartIcon class="favorite-icon" />
           </button>
@@ -334,6 +352,11 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   /* Each photo is a button that opens the photo viewer – no button look of its own */
   .photo-button {
     display: block;
+
+    /* "display: block" would beat the hidden attribute (a shot 0 for another fit) */
+    &[hidden] {
+      display: none;
+    }
     inline-size: 100%;
     padding: 0;
     border: 0;

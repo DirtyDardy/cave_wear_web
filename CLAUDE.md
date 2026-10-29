@@ -671,6 +671,12 @@ then Dardan decides.
   Status 27 Oct: **Half-Zip, male version – front (shot 1) + back (shot 2) done**; still missing
   close-ups (shots 3–5), shot 0, and the female version. Then the next product (rain jacket,
   beanie, buff). Method: memory "Gemini image method". Remove when all six products have photos.
+- **⚠ BEFORE 11 NOV (Dardan, 29 Oct): colour-grade the product pictures right.** Every product,
+  every colour, so the colours look right and the shots fit together as one shoot. Photoshop
+  work (rule 9) – Dardan grades, Claude can put the shots side by side and point out
+  differences. Keep "Dyed for wash 10" in mind (see 7): the fabric in the photos is meant to look
+  a little darker than the colour dot. Same file names → swapped without code changes. Needs a
+  full free day. Remind Dardan until he says it's done.
 - **⚠ START OF THE 28 OCT SESSION, BEFORE ANYTHING ELSE (Dardan asked):** he thinks about three
   Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
   of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:

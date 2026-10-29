@@ -294,6 +294,42 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
       margin-inline-end: var(--space-2);
     }
 
+    /* Phone first: the full path, but on one line and smaller (12px) – good to
+       have, though hardly anyone uses it, so it shouldn't take much space
+       (decided 29 Oct). A product name that doesn't fit is cut with "…".
+       From 768px: the normal label size, as before. */
+    font-size: 0.75rem;
+    line-height: var(--space-4);
+
+    & ol {
+      flex-wrap: nowrap;
+    }
+
+    & li {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    & li:last-child {
+      flex-shrink: 1;
+      min-inline-size: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (width >= 48rem) {
+      font-size: var(--text-small);
+      line-height: var(--leading-small);
+
+      & ol {
+        flex-wrap: wrap;
+      }
+
+      & li {
+        white-space: normal;
+      }
+    }
+
     & a {
       color: inherit;
 

@@ -24,8 +24,8 @@ import {
 import { formatPrice } from "../data/price";
 // ?raw = the SVG file as text, so the drawer shows my own icons (the same files)
 import closeIcon from "../assets/icons/close.svg?raw";
-// PLACEHOLDER: the closed backpack from the header – swap for my open backpack once drawn
-import packIcon from "../assets/icons/backpack.svg?raw";
+// My open backpack: the header shows it closed, the drawer shows the Pack opened
+import packIcon from "../assets/icons/backpack-open.svg?raw";
 
 // A product name, but a word with a hyphen ("Half-Zip") never breaks in the middle:
 // on small phones the whole word moves to the next line instead of "Half-" / "Zip".

@@ -209,10 +209,11 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   - **Look:** the menu's panel glass, opens in 0.5s / closes in 0.3s (shared tokens, see 11),
     top bar at header height with the header's subtle X everywhere (desktop too, 29 Oct), phone
     full width, desktop 480px. Row: name + row total on one line, so "Remove" never wraps.
-    Placeholder backpack icon next to "Your pack" until Dardan's open backpack exists. Product
-    page: quiet "Choose a size" under "Add to pack" while it's off; choices stay after adding.
-  - **OPEN:** planned donation (later) · open backpack icon · a reservation link without
-    accounts = **not before 11 Nov** (presentation part "What I still want to learn").
+    Dardan's open backpack (`backpack-open.svg`, 29 Oct) next to "Your pack" – the header shows
+    it closed, the drawer open. Product page: quiet "Choose a size" under "Add to pack" while
+    it's off; choices stay after adding.
+  - **OPEN:** planned donation (later) · a reservation link without accounts = **not before
+    11 Nov** (presentation part "What I still want to learn").
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
   vote on the next product or a big announcement. No spam." Privacy Policy states the same purpose – keep in sync.

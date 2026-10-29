@@ -347,16 +347,16 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   /* Each photo is a button that opens the photo viewer – no button look of its own */
   .photo-button {
     display: block;
-
-    /* "display: block" would beat the hidden attribute (a shot 0 for another fit) */
-    &[hidden] {
-      display: none;
-    }
     inline-size: 100%;
     padding: 0;
     border: 0;
     background: none;
     cursor: zoom-in;
+
+    /* "display: block" would beat the hidden attribute (a shot 0 for another fit) */
+    &[hidden] {
+      display: none;
+    }
   }
 
   /* Front and back on the diagonal – two shots that blend into the dark

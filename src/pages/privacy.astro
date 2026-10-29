@@ -2,10 +2,12 @@
 // Privacy Policy – information according to Art. 13 GDPR.
 // Describes ONLY what the website really does today. When a new feature collects data,
 // add a section here BEFORE it goes live:
-//   - Reserve / bag (Netlify Forms + localStorage)
 //   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
 // The contact form (/contact) is covered under "Contact form" (added 26 Oct 2026).
-// Favorites (localStorage, src/scripts/favorites.js) are covered under "Data stored in your browser".
+// Reserve (Netlify Forms + the confirmation email via a Netlify Function) is covered under
+// "Reservations" (#reserve, added 28 Oct 2026) – the Reserve form links there.
+// Favorites (localStorage, src/scripts/favorites.js) and the Pack (localStorage,
+// src/scripts/pack-store.ts, added 28 Oct 2026) are covered under "Data stored in your browser".
 // Keep the newsletter purpose in sync with the note in Footer.astro.
 import LegalLayout from "../layouts/LegalLayout.astro";
 import EmailLinks from "../components/EmailLinks.astro";
@@ -26,9 +28,13 @@ const missing = (label: string) => `[${label} – to be added]`;
     <li>Fonts and images come from this website's own server, not from Google or others.</li>
     <li>
       Data is only processed when you visit the site (technical server data), when you sign up
-      for the newsletter (your email address) and when you write to us (your message).
+      for the newsletter (your email address), when you write to us (your message) and when you
+      reserve your place (your first name, email and Pack).
     </li>
-    <li>Favorites you save with the heart stay in your own browser – nothing is sent to us.</li>
+    <li>
+      Favorites you save with the heart and what you put in your Pack stay in your own browser.
+      Your Pack is only sent to us when you reserve it.
+    </li>
   </ul>
 
   <h2>Who is responsible</h2>
@@ -93,6 +99,28 @@ const missing = (label: string) => `[${label} – to be added]`;
     request is fully answered, unless the law requires us to keep it longer.
   </p>
 
+  <h2 id="reserve">Reservations</h2>
+  <p>
+    When you reserve your place in the Pack, we receive your first name, your email address and
+    what is in your Pack – products, sizes, fits, colours, quantities and the estimated total –
+    together with the date and time. The reservation is sent via Netlify Forms (Netlify, see
+    "Hosting"), which stores it, records technical data such as date and time, and checks it
+    automatically for spam. Nothing is bought and no payment is taken.
+  </p>
+  <p>
+    We use your details only for your reservation: to send you a confirmation email, to keep your
+    place for the launch, and to write to you before the launch so you can confirm or change your
+    order – never for the newsletter or anything else. The confirmation email is sent from our
+    mailbox info@cavewear.de (netcup, see "Contact form and email") through a small Netlify
+    function.
+  </p>
+  <p>
+    Legal basis: Art. 6 (1) (b) GDPR – steps you ask for before a possible contract. We delete
+    your reservation once the launch is over and your order is confirmed or declined – at the
+    latest 12 months after you reserved. You can cancel it at any time by replying to the
+    confirmation email or writing to us.
+  </p>
+
   <h2>Data stored in your browser</h2>
   <p>
     When you click the heart on a product, this website remembers your favorites in your browser
@@ -100,6 +128,19 @@ const missing = (label: string) => `[${label} – to be added]`;
     and is never sent to us or anyone else. You can remove a favorite by clicking the heart again,
     or remove all of them by deleting this website's data in your browser settings. This is only
     stored because you asked for it (§ 25 (2) no. 2 TDDDG).
+  </p>
+  <p>
+    When you add something to your Pack, this website remembers it in your browser (local
+    storage) – only which product, size, fit, colour and how many, e.g. "core-tee, M, unisex,
+    olive, 1". It stays on your device and is only sent to us when you reserve it (see
+    "Reservations"). You can remove items in the Pack, or remove everything by deleting this
+    website's data in your browser settings. This is only stored because you asked for it
+    (§ 25 (2) no. 2 TDDDG).
+  </p>
+  <p>
+    After you reserve, your browser also keeps a copy of your reservations – what you reserved and
+    when, not your name or email – so you can still see them later. Deleting this website's data
+    in your browser removes this copy, but it does not cancel the reservation itself.
   </p>
   <p>
     Netlify shows a small "Netlify" badge on

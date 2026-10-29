@@ -1,9 +1,36 @@
 ---
 import Logo from "../assets/logo-horizontal.svg";
-import BagIcon from "../assets/icons/backpack.svg";
+import PackIcon from "../assets/icons/backpack.svg";
 import MenuIcon from "../assets/icons/menu.svg";
 import CloseIcon from "../assets/icons/close.svg";
 import SocialLinks from "./SocialLinks.astro";
+import { getImage } from "astro:assets";
+import { getProducts } from "../data/products";
+import { productFits } from "../data/product-fits.js";
+import PackDrawer, { type PackProduct } from "./PackDrawer";
+import "../styles/pack-drawer.css";
+
+// What the Pack drawer needs to know about every product – collected once here, from
+// the product folders, while the site is built. A new product folder = in the Pack too.
+// Photo: shot 1 (the front) of every colour × fit, as a small 128px-wide file
+// (shown at 64px – twice as many pixels stay sharp on high-resolution screens).
+const catalog: Record<string, PackProduct> = {};
+
+for (const product of await getProducts()) {
+  const photos: Record<string, string> = {};
+  for (const set of product.shotSets) {
+    const front = await getImage({ src: set.shots[0].image, width: 128, format: "webp" });
+    photos[`${set.colour}_${set.fit}`] = front.src;
+  }
+
+  catalog[product.id] = {
+    name: product.name,
+    price: product.price,
+    colours: Object.fromEntries(product.colours.map((colour) => [colour.file, colour.name])),
+    fits: Object.fromEntries(product.fits.map((fit) => [fit, productFits[fit].label])),
+    photos,
+  };
+}
 
 // The main links. To add or rename a page, change only this list.
 const navLinks = [
@@ -80,17 +107,42 @@ const isPinned = currentPath.startsWith("/products/");
         </div>
       </div>
 
-      <a href="/bag" class="nav-link bag-link" aria-current={getCurrent("/bag")}>
-        <BagIcon class="bag-icon" />
-        <span class="link-label" data-label="Pack">Pack</span>
-      </a>
+      <!-- Opens the Pack drawer (no page of its own). It needs JavaScript, so without
+           it the button stays hidden. pack-button.js fills in the number of pieces;
+           an empty Pack shows no number. Screen readers skip the bare number and
+           hear the words instead: "Pack, 2 items". -->
+      <button type="button" class="nav-link pack-button" aria-haspopup="dialog" aria-controls="pack-drawer">
+        <PackIcon class="pack-icon" />
+        <span>Pack</span>
+        <span class="pack-count" hidden>
+          <span class="pack-count-number" aria-hidden="true"></span>
+          <span class="visually-hidden pack-count-label"></span>
+        </span>
+      </button>
     </nav>
   </div>
 </header>
 
+<!-- The Pack drawer (React). client:only = drawn only in the browser, because only
+     the browser knows what's in the visitor's Pack. -->
+<PackDrawer client:only="react" catalog={catalog} />
+
+<!-- Netlify Forms only knows a form that exists in the built HTML. The real Reserve form
+     is drawn by React in the browser (ReserveForm.tsx), so this hidden copy tells Netlify
+     its name and fields. Never shown, never sent. -->
+<form name="reserve" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="reserve" />
+  <input name="first-name" />
+  <input name="email" />
+  <textarea name="pack"></textarea>
+  <input name="total" />
+  <input name="bot-field" />
+</form>
+
 <script src="../scripts/mobile-menu.js"></script>
 <script src="../scripts/header-scroll.js"></script>
 <script src="../scripts/header-hide.js"></script>
+<script src="../scripts/pack-button.js"></script>
 
 <style>
   .scroll-sentinel {
@@ -128,9 +180,9 @@ const isPinned = currentPath.startsWith("/products/");
     }
   }
 
-  /* The Bag button fades with the header: fill and outline appear together
+  /* The Pack button fades with the header: fill and outline appear together
      with the background (5% Obsidian, no outline → solid Obsidian, Flint) */
-  @keyframes bag-fill {
+  @keyframes pack-fill {
     from {
       background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
       border-color: transparent;
@@ -152,7 +204,7 @@ const isPinned = currentPath.startsWith("/products/");
       border-block-end-color: transparent;
     }
 
-    .site-header[data-transparent]:not(:has(.menu-button[aria-expanded="true"])) .bag-link:not(:hover) {
+    .site-header[data-transparent]:not(:has(.menu-button[aria-expanded="true"])) .pack-button:not(:hover) {
       background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
       border-color: transparent;
     }
@@ -173,8 +225,8 @@ const isPinned = currentPath.startsWith("/products/");
     }
 
     /* Same scroll timeline as the header */
-    .site-header[data-transparent] .bag-link {
-      animation-name: bag-fill;
+    .site-header[data-transparent] .pack-button {
+      animation-name: pack-fill;
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: scroll(root);
@@ -183,8 +235,8 @@ const isPinned = currentPath.startsWith("/products/");
 
     /* An animation beats normal styles – so it is switched off on hover
        (Egret box shows) and while the mobile menu is open (solid) */
-    .site-header[data-transparent] .bag-link:hover,
-    .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) .bag-link {
+    .site-header[data-transparent] .pack-button:hover,
+    .site-header[data-transparent]:has(.menu-button[aria-expanded="true"]) .pack-button {
       animation-name: none;
     }
   }
@@ -198,7 +250,7 @@ const isPinned = currentPath.startsWith("/products/");
       border-block-end-color: transparent;
     }
 
-    :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) .bag-link:not(:hover) {
+    :global(html[data-js]) .site-header[data-transparent]:not([data-scrolled]):not(:has(.menu-button[aria-expanded="true"])) .pack-button:not(:hover) {
       background-color: color-mix(in srgb, var(--color-surface) 5%, transparent);
       border-color: transparent;
     }
@@ -308,10 +360,13 @@ const isPinned = currentPath.startsWith("/products/");
     }
   }
 
-  /* Bag button – the one action in the nav, so it gets a box.
+  /* Pack button – the one action in the nav, so it gets a box.
      40px high, 24px icon centred inside, 12px at the sides. */
-  .bag-link {
+  .pack-button {
+    position: relative; /* the number badge is placed on its corner */
     block-size: var(--control-height); /* 40px – 12px space above and below in the 64px header */
+    font-family: inherit; /* buttons don't take the page font by themselves */
+    cursor: pointer;
     gap: 0.375rem; /* 6px */
     padding-block: 0;
     padding-inline: var(--space-3); /* 12px */
@@ -341,9 +396,37 @@ const isPinned = currentPath.startsWith("/products/");
   }
 
   /* 24px – about 1.5 × the 16px text, so icon and word look balanced */
-  .bag-icon {
+  .pack-icon {
     inline-size: var(--space-6);
     block-size: var(--space-6);
+  }
+
+  /* The Pack opens with JavaScript only – without it, the button would do nothing */
+  :global(html:not([data-js])) .pack-button {
+    display: none;
+  }
+
+  /* Number of pieces – a small round Wild Honey badge on the button's top right corner,
+     a little outside the edge (decided 27 Oct from 4 places; bottom right = maybe later).
+     It sits on top of the button, so the button never changes width. */
+  .pack-count {
+    position: absolute;
+    inset-block-start: calc(-1 * var(--space-1)); /* 4px above the edge */
+    /* Centred on the button's right edge – its middle sits on the line. One digit or
+       two, it grows the same amount to both sides. 100% = the button's width,
+       -50% = half the badge's own width back to the left. */
+    inset-inline-start: 100%;
+    translate: -50% 0;
+    min-inline-size: var(--space-4); /* 16px – a circle, wider for 10+ */
+    padding-inline: var(--space-1);
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    font-variant-numeric: tabular-nums; /* every digit equally wide */
+    line-height: var(--space-4); /* 16px */
+    text-align: center;
   }
 
   /* Menu button – hidden on desktop and when JavaScript is off */
@@ -420,8 +503,8 @@ const isPinned = currentPath.startsWith("/products/");
         display: grid;
       }
 
-      /* Bag sits left of the menu button */
-      & .bag-link {
+      /* Pack sits left of the menu button */
+      & .pack-button {
         order: -1;
       }
 
@@ -438,18 +521,19 @@ const isPinned = currentPath.startsWith("/products/");
         block-size: calc(100dvh - var(--header-height));
         padding: var(--space-8) var(--gutter) var(--space-12);
         overflow-y: auto;
-        /* Smoked glass, but much darker than the normal glass (45%): 92% Dark Obsidian,
-           the page behind only shows as a hint (chosen 28 Oct from 75 / 85 / 92%) */
-        background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+        /* Smoked glass, much darker than the normal glass: 92% Dark Obsidian, the page
+           behind only shows as a hint – the same panel glass as the Pack (global.css) */
+        background-color: var(--glass-tint-panel);
         -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
         backdrop-filter: var(--glass-blur);
 
-        /* Closed: invisible and not reachable with Tab */
+        /* Closed: invisible and not reachable with Tab.
+           Speed and easing shared with the Pack (global.css), so both feel like one system. */
         visibility: hidden;
         opacity: 0;
         transition:
-          opacity 0.2s ease,
-          visibility 0s linear 0.2s;
+          opacity var(--motion-duration) var(--motion-ease),
+          visibility 0s linear var(--motion-duration);
       }
 
       & .nav-list {
@@ -464,8 +548,8 @@ const isPinned = currentPath.startsWith("/products/");
         opacity: 0;
         translate: 0 var(--space-2);
         transition:
-          opacity 0.3s ease,
-          translate 0.3s ease;
+          opacity var(--motion-duration) var(--motion-ease),
+          translate var(--motion-duration) var(--motion-ease);
       }
 
       /* Light and a little tight, like the H3 (Geist 450, −0.03em).
@@ -492,7 +576,7 @@ const isPinned = currentPath.startsWith("/products/");
         display: grid;
         gap: var(--space-2);
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity var(--motion-duration) var(--motion-ease);
       }
 
       & .menu-tagline {
@@ -511,7 +595,7 @@ const isPinned = currentPath.startsWith("/products/");
         visibility: visible;
         opacity: 1;
         transition:
-          opacity 0.2s ease,
+          opacity var(--motion-duration) var(--motion-ease),
           visibility 0s;
       }
 
@@ -538,7 +622,7 @@ const isPinned = currentPath.startsWith("/products/");
     .menu-panel,
     .nav-list li,
     .menu-footer,
-    .bag-link {
+    .pack-button {
       transition: none !important;
     }
   }

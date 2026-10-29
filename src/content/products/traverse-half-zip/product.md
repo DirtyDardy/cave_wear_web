@@ -36,6 +36,6 @@ The material selection will focus on comfort, shape retention, and versatility. 
 Shot 0: a man standing in the forest wearing the half zip
 Shot 1: Front
 Shot 2: Back
-Shot 3: closeup material
-Shot 4: closeup logo
+Shot 3: closeup logo
+Shot 4: closeup material
 Shot 5: closeup zip

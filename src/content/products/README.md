@@ -60,12 +60,40 @@ Colours in file names: lowercase, spaces become hyphens (`Tobacco Brown` → `to
 ## Colours
 
 Every colour name must be listed in `src/data/product-colours.js` – that list also holds the
-colour of the dot. New colour: add it there first, then use it in the text file.
+colour of the dot and the colour code (see below). New colour: add it there first, then use
+it in the text file.
 
 **A colour only in some fits:** write the fit in brackets after it –
 `colours: Black, Alpine Oak (male), Tobacco Brown (female)`. No brackets = every fit;
 several: `(female / male)`. On the product page that colour is then hidden for the
 other fits, and only its own photos are needed (here no `…_alpine-oak_female` shots).
+
+## The product code
+
+Every product configuration has a code that looks like a military tag but is a real stock
+code – an order can be read in one look:
+
+```
+CW · THZ01 · 2-32
+│    │  │    │ └─ colour code (2 digits)
+│    │  │    └─── fit code (1 digit)
+│    │  └──────── design version (2 digits)
+│    └─────────── product (3 capital letters)
+└──────────────── brand, always CW
+```
+
+- **Product + design version** – the `code:` line in the text file, e.g. `code: THZ01`.
+  Exactly 3 capital letters + 2 digits. The 3 letters belong to this product only and
+  never change (like the folder name). The version starts at 01 and only goes up by one
+  when the design really changes.
+- **Fit code** – fixed in `src/data/product-fits.js`: 0 unisex · 1 male · 2 female.
+  One-size products (beanie, buff) are unisex → 0.
+- **Colour code** – fixed in `src/data/product-colours.js`. The first digit is the colour
+  family (0 blacks · 1 stones · 2 greens · 3 browns · 4 golds · 5 reds). A new colour goes
+  at the end of its family (a new green = 24), a new family takes the next free digit.
+- The size is not part of the code.
+- **Never change a code once it's set.** The build stops if a code has the wrong format,
+  if two products share the same 3 letters, or if a colour code is used twice.
 
 ## Rules
 

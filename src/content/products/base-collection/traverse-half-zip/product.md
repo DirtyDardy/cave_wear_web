@@ -3,6 +3,7 @@
 # Full guide: src/content/products/README.md
 
 name: The Traverse Half-Zip
+code: THZ01 # 3 capital letters (the product) + 2 digits (design version, starts at 01). Set once, never change.
 tagline: Adaptable by design. Understated by nature.
 price: 79.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection

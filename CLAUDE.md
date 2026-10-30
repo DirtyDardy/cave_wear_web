@@ -424,16 +424,38 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   all read from this one file; nothing is typed twice. Presentation point: workflow for
   repetitive maintenance (change a price in one file → the whole site follows).
 - Text file fields: name (typed normally – the product page shows it uppercase via CSS) ·
-  tagline · description · price (number only) · collection ("Base Collection" / "Supporter
+  code (see "Cave Wear code system" below) · tagline · description · price (number only) · collection ("Base Collection" / "Supporter
   Collection") · sizes · fits (unisex / female / male) · colours · shot descriptions shot 0–5
   (alt texts; name, colour and fit are added automatically) · Design & Purpose · Fit &
   Silhouette · Materials (Dardan always writes these as vision).
 - Photos, all 4:5: **shot 0** = real photoshoot picture, any one colour – never changes.
   **Shots 1–5** = mock-ups, one set per colour (and per fit if the product has more than one):
   1 always front, 2 always back, 3–5 close-ups (vary per product, described in the text file).
-- Product colours: one shared list (name → hex) in `src/data/`; text files use the names only.
+- Product colours: one shared list (name → hex + code) in `src/data/product-colours.js` – all
+  17 colours of the colour sheet (see 11); text files use the names only.
 - Build safety net: missing field or unknown colour/collection → build stops and names the file.
   Missing photo → placeholder + warning (photos are still being made).
+- **Cave Wear code system (decided 30 Oct in the military-touch chat; data side built 30 Oct):**
+  every product configuration gets a code that looks like a military tag but is a real stock
+  code: `CW · THZ01 · 2-32` = brand (always CW) · product (3 capital letters) + design version
+  (2 digits) · fit code (1 digit) - colour code (2 digits). Exactly this format: "CW", space,
+  middle dot, space … Size is not part of it.
+  - **Product code** = the `code:` line right under `name:` in every product.md (and the
+    template): Core Tee `CTE01` · Field Hoodie `FHD01` · Traverse Half-Zip `THZ01`. 3 capital
+    letters + 2 digits; the letters are unique and never change (like the folder name); the
+    version starts at 01 and only goes +1 when the design really changes.
+  - **Fit codes** (`src/data/product-fits.js`): 0 unisex · 1 male · 2 female (1 + 2 follow
+    ISO/IEC 5218; one-size products are unisex → 0).
+  - **Colour codes** (`src/data/product-colours.js`): first digit = family (0 blacks · 1 stones
+    · 2 greens · 3 browns · 4 golds · 5 reds), darkest first in today's list. A code never
+    changes; a new colour goes at the END of its family (a new green = 24), a new family takes
+    the next free digit (6, 7 …). Most colours have no product yet.
+  - Build stops: wrong code format (`src/content.config.ts`) · two products with the same 3
+    letters (`src/data/products.ts` – the content rules only see one file at a time) · a colour
+    code that isn't 2 digits or is used twice (`src/content.config.ts`).
+  - `productCode(product, fit, colourName)` in `src/data/products.ts` builds the code –
+    nothing calls it yet. Showing it on the product page (place, style, update on colour/fit
+    click) is built in the military-touch chat.
 
 ### Product card (decided 25 Oct)
 
@@ -532,21 +554,27 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 
 ### Colours (final – only these, via CSS variables; components use role variables)
 
-| Role | Name | Hex |
-|---|---|---|
-| Background | Dark Obsidian | `#0D0D0E` |
-| Surface (header, footer, bag) | Obsidian | `#131314` |
-| Line / divider | Charcoal | `#1E1E1E` |
-| Input border | Flint | `#6B655E` |
-| Main text | Egret | `#F3EBE0` |
-| Secondary text | Weathered Bone | `#C4B9AC` |
-| Quiet text (only on Dark Obsidian/Obsidian) | Muted Stone | `#8C857B` |
-| Accent (main action, links, focus, bag count) | Wild Honey | `#C39132` |
-| Accent hover | Amber Gold | `#D4A54A` |
-| Brand support (large surfaces only) | Irr Olive | `#4B573E` |
-| Success / Error (icon or border only) | Forest Fern / Terracotta | `#5B7553` / `#B86B43` |
-| Logo dark brown | Moule | `#382D2B` |
-| Reserve (no role yet) | Tobacco Brown / Alpine Oak / Mossy Elm | `#9A7354` / `#AE946B` / `#5E6D4E` |
+| Role | Name | Hex | Code |
+|---|---|---|---|
+| Background | Dark Obsidian | `#0D0D0E` | 01 |
+| Surface (header, footer, bag) | Obsidian | `#131314` | 02 |
+| Line / divider | Charcoal | `#1E1E1E` | 03 |
+| Input border | Flint | `#6B655E` | 11 |
+| Main text | Egret | `#F3EBE0` | 14 |
+| Secondary text | Weathered Bone | `#C4B9AC` | 13 |
+| Quiet text (only on Dark Obsidian/Obsidian) | Muted Stone | `#8C857B` | 12 |
+| Accent (main action, links, focus, bag count) | Wild Honey | `#C39132` | 41 |
+| Accent hover | Amber Gold | `#D4A54A` | 42 |
+| Brand support (large surfaces only) | Irr Olive | `#4B573E` | 21 |
+| Success / Error (icon or border only) | Forest Fern / Terracotta | `#5B7553` / `#B86B43` | 23 / 51 |
+| Logo dark brown | Moule | `#382D2B` | 31 |
+| Reserve (no role yet) | Tobacco Brown / Alpine Oak / Mossy Elm | `#9A7354` / `#AE946B` / `#5E6D4E` | 32 / 33 / 22 |
+| Product colour only (new 30 Oct, no product yet) | White | `#FFFFFF` | 15 |
+
+- **Code** = the colour code in the product code (see 10, decided 30 Oct). Every colour here
+  is also a product colour in `src/data/product-colours.js`, under its colour sheet name –
+  except two: **Dark Obsidian is called "Black"** and **Irr Olive is called "Olive"** on the
+  site (easier for people).
 
 - Status messages: colour only on icon/left border; text Egret. On Irr Olive: Egret text only.
 - Form fields on Dark Obsidian or Obsidian, never on Charcoal. Text on accent: Dark Obsidian.

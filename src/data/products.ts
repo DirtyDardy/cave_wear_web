@@ -5,6 +5,7 @@
 import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
 import { productColours } from "./product-colours.js";
+import { productFits } from "./product-fits.js";
 import { formatPrice } from "./price";
 import placeholder from "../assets/products/placeholder.jpg";
 
@@ -39,9 +40,24 @@ function checkCollectionFolder(id: string, collection: string, filePath = "") {
 // veryDark: black and similar get a thin Flint ring, or the dot vanishes on the dark page.
 // (Average of red, green and blue below 40 out of 255.)
 export function toColour(name: string) {
-  const hex = productColours[name as keyof typeof productColours];
+  const { hex } = productColours[name as keyof typeof productColours];
   const [red, green, blue] = [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16));
   return { name, file: toFileName(name), hex, veryDark: (red + green + blue) / 3 < 40 };
+}
+
+// The 3 letters of a product code belong to one product only (CTE = the Core Tee).
+// The content rules see one file at a time, so this looks at all products together:
+// two products with the same letters stop the build.
+function checkCodesUnique(entries: { id: string; data: { code: string } }[]) {
+  const owners = new Map<string, string>(); // letters → product, e.g. "CTE" → "core-tee"
+  for (const { id, data } of entries) {
+    const letters = data.code.slice(0, 3);
+    const owner = owners.get(letters);
+    if (owner) {
+      throw new Error(`[products] ${owner} and ${id} both use the code letters ${letters} – every product needs its own 3 letters.`);
+    }
+    owners.set(letters, id);
+  }
 }
 
 // Finds a photo in a product folder by its name without the ending,
@@ -95,6 +111,7 @@ function readShotDescriptions(text = "") {
 
 export async function getProducts() {
   const entries = await getCollection("products");
+  checkCodesUnique(entries);
 
   return entries.map(({ id, data, body = "", filePath }) => {
     const folder = checkCollectionFolder(id, data.collection, filePath);
@@ -125,6 +142,7 @@ export async function getProducts() {
     return {
       id,
       name: data.name,
+      code: data.code, // e.g. "THZ01" – the full code comes from productCode() below
       tagline: data.tagline,
       price: data.price,
       priceText: formatPrice(data.price), // 34.9 → "34,90€" (src/data/price.ts)
@@ -153,3 +171,13 @@ export async function getProducts() {
 
 // The shape of one product, for the pages ("type" = a description for TypeScript)
 export type Product = Awaited<ReturnType<typeof getProducts>>[number];
+
+// The Cave Wear code of one product configuration – looks like a military tag, but is a
+// real stock code: brand · product + design version · fit-colour.
+// productCode(product, "female", "Tobacco Brown") → "CW · THZ01 · 2-32"
+// The size isn't part of it (the size boxes already show it).
+export function productCode(product: Pick<Product, "code">, fit: keyof typeof productFits, colourName: string) {
+  const fitCode = productFits[fit].code;
+  const colourCode = productColours[colourName as keyof typeof productColours].code;
+  return `CW · ${product.code} · ${fitCode}-${colourCode}`;
+}

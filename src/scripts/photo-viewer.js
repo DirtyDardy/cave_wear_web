@@ -123,7 +123,7 @@ function toggleZoom(slide, event) {
 // fit (the set that's visible), in number order – then opens on the clicked photo.
 function open(clickedButton) {
   const buttons = [
-    document.querySelector(".shot-0 .photo-button"),
+    document.querySelector(".shot-0 .photo-button:not([hidden])"), // the shot 0 of the chosen fit
     ...document.querySelectorAll(".shot-set:not([hidden]) .photo-button"),
   ].sort((a, b) => Number(a.dataset.shot) - Number(b.dataset.shot));
 

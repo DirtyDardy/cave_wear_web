@@ -38,6 +38,13 @@ function findPhoto(id: string, name: string): ImageMetadata {
   return placeholder;
 }
 
+// The same, but for photos that are allowed to be missing (e.g. a women's shot 0):
+// no placeholder, no warning – just nothing.
+function findOptionalPhoto(id: string, name: string): ImageMetadata | undefined {
+  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${id}/${name}.`));
+  return path ? photos[path].default : undefined;
+}
+
 // Splits the text under the "## Heading" lines: { "Materials": "…", "Description": "…" }.
 // Notes between <!-- and --> are removed first.
 function splitSections(body: string) {
@@ -59,11 +66,12 @@ function toParagraphs(text = "") {
     .filter((paragraph) => paragraph !== "");
 }
 
-// "Shot 3: Close-up of the seam" lines → { 3: "Close-up of the seam" }
+// "Shot 3: Close-up of the seam" lines → { "3": "Close-up of the seam" }
+// A shot 0 for one fit has the fit after the number: "Shot 0 female: …" → { "0 female": "…" }
 function readShotDescriptions(text = "") {
-  const descriptions: Record<number, string> = {};
-  for (const match of text.matchAll(/^Shot (\d):[ \t]*(.*)$/gm)) {
-    descriptions[Number(match[1])] = match[2].trim();
+  const descriptions: Record<string, string> = {};
+  for (const match of text.matchAll(/^Shot (\d(?: \w+)?):[ \t]*(.*)$/gm)) {
+    descriptions[match[1].toLowerCase()] = match[2].trim();
   }
   return descriptions;
 }
@@ -75,12 +83,17 @@ export async function getProducts() {
     const sections = splitSections(body);
     const shotText = readShotDescriptions(sections["Shot descriptions"]);
 
-    const colours = data.colours.map(toColour);
+    // Every colour knows its fits: the ones in brackets in the text file, otherwise all
+    // ("as": the build already checked that every fit in brackets is one under "fits:")
+    const colours = data.colours.map(({ name, fits }) => ({
+      ...toColour(name),
+      fits: (fits ?? data.fits) as typeof data.fits,
+    }));
 
-    // One set of shots 1–5 for every colour × fit, e.g. black + unisex.
+    // One set of shots 1–5 for every colour × fit that exists, e.g. black + unisex.
     // Alt text = name, colour, fit + what the shot shows (written in the text file).
     const shotSets = colours.flatMap((colour) =>
-      data.fits.map((fit) => ({
+      colour.fits.map((fit) => ({
         colour: colour.file,
         fit,
         shots: [1, 2, 3, 4, 5].map((number) => ({
@@ -109,6 +122,12 @@ export async function getProducts() {
         image: findPhoto(id, `shot_0_${id}`),
         alt: [data.name, shotText[0]].filter(Boolean).join(" – "),
       },
+      // Optional: an own shot 0 for one fit, e.g. shot_0_traverse-half-zip_female.
+      // The product page shows it while that fit is chosen; otherwise the normal shot 0.
+      shot0ByFit: data.fits.flatMap((fit) => {
+        const image = findOptionalPhoto(id, `shot_0_${id}_${fit}`);
+        return image ? [{ fit, image, alt: [data.name, shotText[`0 ${fit}`]].filter(Boolean).join(" – ") }] : [];
+      }),
       shotSets,
     };
   });

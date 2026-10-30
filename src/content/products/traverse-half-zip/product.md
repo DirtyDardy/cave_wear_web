@@ -8,7 +8,7 @@ price: 79.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: XS, S, M, L, XL, XXL # e.g. XS, S, M, L, XL, XXL – or: One size
 fits: male, female # unisex, female, male – one or more, comma between
-colours: Black, Alpine Oak # names from src/data/product-colours.js, comma between – the first one is shown first
+colours: Black, Alpine Oak (male), Tobacco Brown (female) # names from src/data/product-colours.js, comma between – the first one is shown first. Only in some fits? Fit in brackets: Alpine Oak (male)
 ---
 
 ## Description
@@ -34,6 +34,7 @@ The material selection will focus on comfort, shape retention, and versatility. 
 <!-- For screen readers. Describe only what the picture shows – name, colour and fit are added automatically. -->
 
 Shot 0: a man standing in the forest wearing the half zip
+Shot 0 female:
 Shot 1: Front
 Shot 2: Back
 Shot 3: closeup logo

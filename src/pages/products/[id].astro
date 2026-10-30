@@ -65,8 +65,11 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
            (gallery-dots.js fills in the dots). From 768px: the grid as before. -->
       <div class="gallery-column">
         <div class="gallery">
+          <!-- Shot 0: the normal one, plus an own one for a fit if its photo exists
+               (e.g. shot_0_traverse-half-zip_female). product-options.js shows the one
+               that belongs to the chosen fit – data-fit="" is the normal one. -->
           <div class="shot-0" data-product-id={product.id}>
-            <button type="button" class="photo-button" data-shot="0" data-full={product.shot0.image.src} aria-haspopup="dialog">
+            <button type="button" class="photo-button" data-shot="0" data-fit="" data-full={product.shot0.image.src} aria-haspopup="dialog">
               <Image
                 src={product.shot0.image}
                 alt={product.shot0.alt}
@@ -76,6 +79,21 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
                 fetchpriority="high"
               />
             </button>
+            {
+              product.shot0ByFit.map((shot) => (
+                <button
+                  type="button"
+                  class="photo-button"
+                  data-shot="0"
+                  data-fit={shot.fit}
+                  data-full={shot.image.src}
+                  aria-haspopup="dialog"
+                  hidden
+                >
+                  <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
+                </button>
+              ))
+            }
             <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
               <HeartIcon class="favorite-icon" />
             </button>
@@ -184,11 +202,20 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
           </fieldset>
 
           <fieldset>
-            <legend class="label">Color:</legend>
+            <!-- The chosen colour's name after "Color:", quiet – so Alpine Oak and Tobacco
+                 Brown can't be mixed up. product-options.js changes it with the dot. -->
+            <legend class="label">Color: <span class="chosen-colour">{product.colours[0].name}</span></legend>
+            <!-- data-fits: the fits a colour exists in. product-options.js hides the
+                 dot for the other fits. -->
             <div class="circles">
               {
                 product.colours.map((colour, index) => (
-                  <label class="colour" style={`--swatch: ${colour.hex}`} data-very-dark={colour.veryDark ? "" : undefined}>
+                  <label
+                    class="colour"
+                    style={`--swatch: ${colour.hex}`}
+                    data-very-dark={colour.veryDark ? "" : undefined}
+                    data-fits={colour.fits.join(" ")}
+                  >
                     <input type="radio" name="colour" value={colour.file} checked={index === 0} class="visually-hidden" />
                     <span class="visually-hidden">{colour.name}</span>
                   </label>
@@ -463,6 +490,11 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     border: 0;
     background: none;
     cursor: zoom-in;
+
+    /* "display: block" would beat the hidden attribute (a shot 0 for another fit) */
+    &[hidden] {
+      display: none;
+    }
   }
 
   /* Front and back on the diagonal – two shots that blend into the dark
@@ -656,6 +688,13 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
   legend {
     margin-block-end: var(--space-2); /* 8px to the options */
     padding: 0;
+  }
+
+  /* The chosen colour's name: same label style, one step quieter (Muted Stone)
+     and one step thinner – Regular 400 instead of the label's Medium 500 */
+  .chosen-colour {
+    color: var(--color-text-quiet);
+    font-weight: 400;
   }
 
   /* "Size chart and fit guide ›" right under the size boxes */

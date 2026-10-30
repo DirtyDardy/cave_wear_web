@@ -134,11 +134,15 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   virus scan. Gmail "Send mail as" via `mx2f26.netcup.net`, 465, SSL. SPF, DKIM, DMARC `p=quarantine`.
 - **Reservation confirmation email – built 28 Oct:** `netlify/functions/submission-created.mjs`.
   Netlify starts it by itself after every form submission that passed its spam check; it only
-  acts on the `reserve` form and sends a plain-text email with nodemailer through this mailbox
-  (`mx2f26.netcup.net`, 465, SSL, as info@cavewear.de). Password only as the Netlify environment
-  variable **`SMTP_PASSWORD`** – Dardan types it in himself, never in code. Safety: anyone can
+  acts on the `reserve` form and sends an email – simple HTML + a plain-text copy (approved
+  29 Oct) – with nodemailer (`mx2f26.netcup.net`, 465, SSL). **Least privilege (29 Oct):** it
+  sends from a separate sending-only mailbox **reservations@cavewear.de** with its own
+  password – never with the info@ password; Reply-To is info@cavewear.de. Password only as the
+  Netlify environment variable **`SMTP_PASSWORD`** (Production only, marked secret) – Dardan
+  types it in himself, never in code. Safety: anyone can
   fake a submission, so the email only goes out when every Pack line has exactly the site's
-  format (no dots, slashes or @ in names → no links can be smuggled into a mail from info@).
+  format (no dots, slashes or @ in names → no links can be smuggled into a mail from my
+  domain); the HTML version also escapes every value.
 
 ## 6. Pages & status
 
@@ -201,14 +205,14 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
     the confirmation text); the Pack is free again. **Up to 3 per browser**, each with its own time
     (= its own place in the queue); at 3 "Add to pack" and "Reserve my place" step aside with a
     quiet line. No editing in the Pack, no queue number – changes by replying to the email or the
-    contact form. Confirmation email: see 5 (plain text, "planned first run" line + disclaimer).
+    contact form. Confirmation email: see 5 (HTML + plain text, "planned first run" line + disclaimer).
   - **Look:** the menu's panel glass, opens in 0.5s / closes in 0.3s (shared tokens, see 11),
-    phone full width with a top bar at header height + the header's X, desktop 480px. Placeholder
-    backpack icon next to "Your pack" until Dardan's open backpack exists. Product page: quiet
-    "Choose a size" under "Add to pack" while it's off; choices stay after adding.
-  - **OPEN:** planned donation (later) · the Pack's desktop top bar/X · open backpack icon ·
-    email text fine-tuning ("best of both worlds") · at 375px with 3-digit prices "Remove" wraps
-    under the stepper (mobile phase) · a reservation link without accounts = **not before
+    top bar at header height with the header's subtle X everywhere (desktop too, 29 Oct), phone
+    full width, desktop 480px. Row: name + row total on one line, so "Remove" never wraps.
+    Dardan's open backpack (`backpack-open.svg`, 29 Oct) next to "Your pack" – the header shows
+    it closed, the drawer open. Product page: quiet "Choose a size" under "Add to pack" while
+    it's off; choices stay after adding.
+  - **OPEN:** planned donation (later) · a reservation link without accounts = **not before
     11 Nov** (presentation part "What I still want to learn").
 - **Newsletter** – built (footer): email only, Netlify Forms via fetch (`src/scripts/newsletter.js`),
   test-mode message locally. Note: "We'll only email you when there's real news – the launch, a
@@ -304,7 +308,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   (`--motion-duration`, `--motion-ease`), a top bar exactly the header's height (64px + the
   1px line) and the header's subtle X (no circle, no frame) in the same spot as the header's X.
   Each keeps its own direction (menu from the header, Pack from the right). Tapping Pack closes
-  the menu first. OPEN: the Pack's top bar and X on desktop (Dardan looks at it separately).
+  the menu first. The Pack's top bar has header height on desktop too (decided 29 Oct).
 - Height 64px on all screens, logo 32px (decided 24 Oct – the code is the standard; the larger
   sizes from the design file looked too big on real screens).
 - Nav: Geist Regular 400, 16px, **normal case** (not uppercase), `--tracking-nav` 0 (changed
@@ -470,11 +474,18 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   "Learn more ›" on its own line under "Preliminary Price Estimate." (changed back 25 Oct).
   Column ~810px; "Add to pack" ends ~695px from the top of the screen → visible on normal laptops.
 - Breadcrumb: Muted Stone; the current page one step lighter (Weathered Bone) – decided 25 Oct.
-- Second product: `field-hoodie` (The Field Hoodie, black + egret). Its shot 0 is a placeholder
-  without licence info → local only (`.gitignore`), like the Core Tee's.
-- Third product: `traverse-half-zip` (The Traverse Half-Zip, black + Alpine Oak, male + female).
-  **Its shot 0 is AI (Gemini, Dardan 29 Oct)** – the person in it isn't real, so it's in Git and
-  goes live; a stand-in until a real photoshoot. Covered by the Impressum's AI line (see 13).
+- Second product: `field-hoodie` (The Field Hoodie, black + egret).
+- Third product: `traverse-half-zip` (The Traverse Half-Zip, male + female): Black for both,
+  Alpine Oak men's only, Tobacco Brown women's only (colours per fit, see below).
+- **Shot 0 of all three products is AI (Gemini, Dardan 29 Oct)** – the people in them aren't
+  real, so they're in Git and go live; stand-ins until a real photoshoot. Covered by the
+  Impressum's AI line (see 13). The old Core Tee / Field Hoodie placeholders (another brand's
+  logo, unknown licence) were never in Git and now sit in the originals folder.
+- **Colours per fit (built 29 Oct):** a colour that exists only in some fits gets them in
+  brackets in the text file – `colours: Black, Alpine Oak (male), Tobacco Brown (female)`.
+  The product page hides that dot for the other fit (decided 29 Oct – dimmed with a hint line
+  was built first, but every "not here" look felt off); the chosen colour jumps to one that exists;
+  the card's dot opens the right fit. A fit in brackets not under `fits:` stops the build.
 
 - Copy the mockup's layout; all spacing, type and colours from the style guide (mockup sizes are
   rough). Header never hides here (see 8). No photo header.
@@ -664,6 +675,12 @@ then Dardan decides.
   Status 27 Oct: **Half-Zip, male version – front (shot 1) + back (shot 2) done**; still missing
   close-ups (shots 3–5), shot 0, and the female version. Then the next product (rain jacket,
   beanie, buff). Method: memory "Gemini image method". Remove when all six products have photos.
+- **⚠ BEFORE 11 NOV (Dardan, 29 Oct): colour-grade the product pictures right.** Every product,
+  every colour, so the colours look right and the shots fit together as one shoot. Photoshop
+  work (rule 9) – Dardan grades, Claude can put the shots side by side and point out
+  differences. Keep "Dyed for wash 10" in mind (see 7): the fabric in the photos is meant to look
+  a little darker than the colour dot. Same file names → swapped without code changes. Needs a
+  full free day. Remind Dardan until he says it's done.
 - **⚠ START OF THE 28 OCT SESSION, BEFORE ANYTHING ELSE (Dardan asked):** he thinks about three
   Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
   of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:
@@ -721,4 +738,4 @@ then Dardan decides.
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
   pinch, card fit icons on touch.
-- Real shot 0 photos (Core Tee, Field Hoodie) – the placeholders are local only (`.gitignore`).
+- Real shot 0 photos (Core Tee, Field Hoodie, Half-Zip) – the AI stand-ins are online until then.

@@ -25,13 +25,59 @@ function chosen(group) {
   return document.querySelector(`input[name="${group}"]:checked`)?.value;
 }
 
+// Colours that only exist in some fits (text file: "Alpine Oak (male)").
+// Each colour dot carries its fits in data-fits, e.g. "male" or "female male".
+const colourInputs = [...document.querySelectorAll('input[name="colour"]')];
+
+// The fits of one colour button: "female male" → ["female", "male"]
+function fitsOf(input) {
+  return input.closest(".colour").dataset.fits.split(" ");
+}
+
+// If the address asked for a colour that isn't in the chosen fit (e.g. the card's
+// Tobacco Brown dot), the colour wins: the fit switches to the colour's first fit.
+const startColour = colourInputs.find((input) => input.checked);
+if (!fitsOf(startColour).includes(chosen("fit"))) {
+  document.querySelector(`input[name="fit"][value="${fitsOf(startColour)[0]}"]`).checked = true;
+}
+
+// Hides every colour that doesn't exist in the chosen fit (decided 29 Oct: away,
+// not dimmed). disabled as well, so the arrow keys skip it. Was the chosen colour
+// hidden? Then the first colour that does exist gets chosen – otherwise
+// "Add to pack" would point at a product that doesn't exist.
+function matchColoursToFit() {
+  const fit = chosen("fit");
+
+  for (const input of colourInputs) {
+    input.disabled = !fitsOf(input).includes(fit);
+    input.closest(".colour").hidden = input.disabled;
+  }
+
+  const chosenInput = colourInputs.find((input) => input.checked);
+  if (chosenInput.disabled) {
+    colourInputs.find((input) => !input.disabled).checked = true;
+  }
+}
+
 // 2. Show the set whose data-colour and data-fit match the chosen options, hide the rest
+const shot0s = [...document.querySelectorAll(".shot-0 .photo-button")];
+
 function showChosenSet() {
   const colour = chosen("colour");
   const fit = chosen("fit");
 
   for (const set of sets) {
     set.hidden = !(set.dataset.colour === colour && set.dataset.fit === fit);
+  }
+
+  // The colour's name after "Color:" – read from the chosen dot's hidden label text
+  const chosenColour = colourInputs.find((input) => input.checked);
+  document.querySelector(".chosen-colour").textContent = chosenColour.nextElementSibling.textContent;
+
+  // Shot 0: the chosen fit's own one if there is one, otherwise the normal one (data-fit="")
+  const ownShot0 = shot0s.some((shot) => shot.dataset.fit === fit);
+  for (const shot of shot0s) {
+    shot.hidden = shot.dataset.fit !== (ownShot0 ? fit : "");
   }
 }
 
@@ -71,12 +117,17 @@ packButton.addEventListener("click", () => {
 
 // 5. Every time an option is chosen: show the matching photos, check the button.
 //    "change" fires when a radio button gets chosen – by click or with the arrow keys.
+//    A new fit first checks which colours exist in it.
 document.addEventListener("change", (event) => {
+  if (event.target.name === "fit") {
+    matchColoursToFit();
+  }
   if (event.target.name === "colour" || event.target.name === "fit") {
     showChosenSet();
   }
   updatePackButton();
 });
 
+matchColoursToFit();
 showChosenSet();
 updatePackButton();

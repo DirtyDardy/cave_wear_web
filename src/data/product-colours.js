@@ -9,4 +9,5 @@ export const productColours = {
   Olive: "#4B573E", // Irr Olive
   Egret: "#F3EBE0", // Egret
   "Alpine Oak": "#AE946B", // Alpine Oak
+  "Tobacco Brown": "#9A7354", // Tobacco Brown
 };

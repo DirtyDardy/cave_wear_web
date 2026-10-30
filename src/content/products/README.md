@@ -41,6 +41,7 @@ All photos **4:5** (e.g. 1600 × 2000 px) – jpg, png or webp. File names: lowe
 | File | What it shows |
 |---|---|
 | `shot_0_core-tee.webp` | Real photoshoot picture, any colour. Stays the same when the visitor changes colour or fit. |
+| `shot_0_core-tee_female.webp` | Optional: an own shot 0 for one fit – shown while that fit is chosen. Its description: `Shot 0 female:` |
 | `shot_1_core-tee_black_unisex.webp` | Front |
 | `shot_2_core-tee_black_unisex.webp` | Back |
 | `shot_3_…` to `shot_5_…` | Close-ups – what they show goes under "Shot descriptions" |
@@ -53,6 +54,11 @@ Colours in file names: lowercase, spaces become hyphens (`Tobacco Brown` → `to
 
 Every colour name must be listed in `src/data/product-colours.js` – that list also holds the
 colour of the dot. New colour: add it there first, then use it in the text file.
+
+**A colour only in some fits:** write the fit in brackets after it –
+`colours: Black, Alpine Oak (male), Tobacco Brown (female)`. No brackets = every fit;
+several: `(female / male)`. On the product page that colour is then hidden for the
+other fits, and only its own photos are needed (here no `…_alpine-oak_female` shots).
 
 ## Rules
 

@@ -1,11 +1,25 @@
 // CONTENT – tells Astro where my content lives and what every file must contain.
-// Products: one folder per product in src/content/products/ (guide: README.md there).
+// Products: one folder per product in src/content/products/<collection>/ (guide: README.md there).
 // If a text file breaks a rule, the build stops and names the file and the field –
 // so a product with a missing price can never go live.
 import { defineCollection } from "astro:content";
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { productColours } from "./data/product-colours.js";
+
+// Colour codes (src/data/product-colours.js): exactly 2 digits, each one used only once.
+// A wrong or doubled code stops the build before anything else is checked.
+const colourWithCode = new Map<string, string>(); // code → colour, e.g. "32" → "Tobacco Brown"
+for (const [name, { code }] of Object.entries(productColours)) {
+  if (!/^\d{2}$/.test(code)) {
+    throw new Error(`[colours] ${name}: the colour code "${code}" must be exactly 2 digits, e.g. 24 (src/data/product-colours.js)`);
+  }
+  const taken = colourWithCode.get(code);
+  if (taken) {
+    throw new Error(`[colours] ${taken} and ${name} both have the colour code ${code} – every code is used only once (src/data/product-colours.js)`);
+  }
+  colourWithCode.set(code, name);
+}
 
 // Turns "XS, S, M" into a list: ["XS", "S", "M"]
 const commaList = z.string({ error: "Missing – write at least one, comma between" }).transform((text) =>
@@ -16,16 +30,25 @@ const commaList = z.string({ error: "Missing – write at least one, comma betwe
 );
 
 const products = defineCollection({
-  // Every product.md one folder deep. Folders starting with _ (the template) are skipped.
-  // The folder name becomes the product's id: "core-tee/product.md" → "core-tee".
+  // Every product.md two folders deep: collection folder / product folder.
+  // Folders starting with _ (drafts) are skipped.
+  // The product folder's name becomes the id: "base-collection/core-tee/product.md" → "core-tee".
   loader: glob({
-    pattern: ["*/product.md", "!_*/**"],
+    pattern: ["*/*/product.md", "!**/_*/**"],
     base: "./src/content/products",
-    generateId: ({ entry }) => entry.split("/")[0],
+    generateId: ({ entry }) => entry.split("/")[1],
   }),
 
   schema: z.object({
     name: z.string({ error: "Name is missing" }),
+
+    // The product code: 3 capital letters (the product) + 2 digits (the design version,
+    // starts at 01), e.g. THZ01. Set once, never changed. That the 3 letters belong to one
+    // product only is checked in src/data/products.ts – these rules see one file at a time.
+    code: z
+      .string({ error: "Code is missing – 3 capital letters + 2 digits, e.g. THZ01" })
+      .regex(/^[A-Z]{3}\d{2}$/, { error: "Code must be 3 capital letters + 2 digits, e.g. THZ01" }),
+
     tagline: z.string({ error: "Tagline is missing" }),
 
     // 35 and 34.90 arrive as numbers, "34,90" (German comma) as text – both become a number

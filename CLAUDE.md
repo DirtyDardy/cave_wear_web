@@ -302,7 +302,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   centre and bottom, the forest always shows, the skyline is optional). The split screen stays Home only.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
-- **Product detail pages: never hide** (Pack stays visible) – decided, not built yet.
+- **Product detail pages: never hide** (Pack stays visible) – built 25 Oct: `Header.astro` sets
+  `data-pinned` on every `/products/…` page, `header-hide.js` skips a pinned header.
 - **Mobile panels = one system (rule, 28 Oct):** everything that opens over the page on phones
   (menu, Pack) uses the same panel glass (`--glass-tint-panel`), the same speed and easing
   (`--motion-duration`, `--motion-ease`), a top bar exactly the header's height (64px + the
@@ -399,11 +400,23 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 ### Product folder system (decided 25 Oct)
 
 - **Built 25 Oct, used by the Products page and every product page:** `src/content/products/`
-  with `README.md` (guide for anyone adding a product), `_template/` (blank, skipped – folders
-  starting with `_` are drafts), `core-tee/`, `field-hoodie/`. Rules + error messages in
+  with `README.md` (rules for the text file, photos, colours – for changing a product) and
+  one folder per collection (30 Oct): `base-collection/` (`core-tee/`, `field-hoodie/`,
+  `traverse-half-zip/`) and `supporter-collection/` (empty). The `collection:` line decides
+  the folder – when setting up a product, Claude reads it and puts the folder there; a folder
+  in the wrong collection stops the build (`src/data/products.ts`). The product folder's
+  name stays the id. Folders starting with `_` are drafts (skipped). Rules + error messages in
   `src/content.config.ts`; colour list `src/data/product-colours.js`; reader `src/data/products.ts`.
   Photo names (in use): `shot_0_<product>` and `shot_<1–5>_<product>_<colour>_<fit>`.
   Originals stay outside the repo (see 5); Claude crops them to exact 4:5 and converts to webp.
+- **Two folders (decided 30 Oct), each with a desktop shortcut:** **SetUP-Product** =
+  `D:\project\cave_wear_dis\products\` – originals, the blank `_template/` (moved there 30 Oct)
+  and the guide **`Cave Wear Product Guide.pdf`** (30 Oct, 10 pages: folders, adding a product,
+  text file, photos, product code, commit, error messages, cheat sheet – for anyone who adds or
+  changes products). Built by `_guide-source/build-guide.mjs`, which reads colours, codes and
+  products from the site – run it again after the system changes. Not in Git. **Web-Product** =
+  `src/content/products/` – what the site shows; after the setup Dardan changes products
+  here himself (text, photos) and commits – no Claude needed.
 
 - One folder per product: `src/content/products/<id>/` = one text file + the photos. Folder name =
   web address (`/products/<id>`) + favorite id – never rename (saved Packs use it too; colour
@@ -411,17 +424,42 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   email's safety check (another character → add it in `submission-created.mjs`). Card, product page and breadcrumb
   all read from this one file; nothing is typed twice. Presentation point: workflow for
   repetitive maintenance (change a price in one file → the whole site follows).
-- Text file fields: name (typed normally – the product page shows it uppercase via CSS) ·
-  tagline · description · price (number only) · collection ("Base Collection" / "Supporter
+- Text file fields: name (typed normally – the product page shows it exactly like that) ·
+  code (see "Cave Wear code system" below) · tagline · description · price (number only) · collection ("Base Collection" / "Supporter
   Collection") · sizes · fits (unisex / female / male) · colours · shot descriptions shot 0–5
   (alt texts; name, colour and fit are added automatically) · Design & Purpose · Fit &
   Silhouette · Materials (Dardan always writes these as vision).
 - Photos, all 4:5: **shot 0** = real photoshoot picture, any one colour – never changes.
   **Shots 1–5** = mock-ups, one set per colour (and per fit if the product has more than one):
   1 always front, 2 always back, 3–5 close-ups (vary per product, described in the text file).
-- Product colours: one shared list (name → hex) in `src/data/`; text files use the names only.
+- Product colours: one shared list (name → hex + code) in `src/data/product-colours.js` – all
+  17 colours of the colour sheet (see 11); text files use the names only.
 - Build safety net: missing field or unknown colour/collection → build stops and names the file.
   Missing photo → placeholder + warning (photos are still being made).
+- **Cave Wear code system (decided 30 Oct in the military-touch chat; data side built 30 Oct):**
+  every product configuration gets a code that looks like a military tag but is a real stock
+  code: `CW · THZ01 · 2-32` = brand (always CW) · product (3 capital letters) + design version
+  (2 digits) · fit code (1 digit) - colour code (2 digits). Exactly this format: "CW", space,
+  middle dot, space … Size is not part of it.
+  - **Product code** = the `code:` line right under `name:` in every product.md (and the
+    template): Core Tee `CTE01` · Field Hoodie `FHD01` · Traverse Half-Zip `THZ01`. 3 capital
+    letters + 2 digits; the letters are unique and never change (like the folder name); the
+    version starts at 01 and only goes +1 when the design really changes.
+  - **Fit codes** (`src/data/product-fits.js`): 0 unisex · 1 male · 2 female (1 + 2 follow
+    ISO/IEC 5218; one-size products are unisex → 0).
+  - **Colour codes** (`src/data/product-colours.js`): first digit = family (0 blacks · 1 stones
+    · 2 greens · 3 browns · 4 golds · 5 reds), darkest first in today's list. A code never
+    changes; a new colour goes at the END of its family (a new green = 24), a new family takes
+    the next free digit (6, 7 …). Most colours have no product yet.
+  - Build stops: wrong code format (`src/content.config.ts`) · two products with the same 3
+    letters (`src/data/products.ts` – the content rules only see one file at a time) · a colour
+    code that isn't 2 digits or is used twice (`src/content.config.ts`).
+  - `productCode(product, fit, colourName)` in `src/data/products.ts` builds the code.
+  - **On the product page (built 30 Oct):** a quiet line above the name, left, every screen
+    size – 12px (smallest on the site), weight 300, Muted Stone (5.3:1; Flint compared and
+    rejected – below the contrast rule), label letter spacing, 8px to the name. Not an
+    eye-catcher: it swaps with colour/fit without animation (`product-options.js` looks it
+    up in the page's `data-codes` list, written by `productCode()` at build time).
 
 ### Product card (decided 25 Oct)
 
@@ -493,8 +531,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - Left: shot 0 big (heart top right), 2×2 grid of shots 1–4, shot 5 big. Front and back sit on the
   **diagonal** – two shots that blend into the background never share a column.
 - Right column is **sticky** (stays while the photos scroll): name (stays the `<h1>` tag for
-  screen readers and Google, but looks like **Geist uppercase in the H2 size – not Barlow
-  Condensed**, decided 25 Oct: cleaner; weight Medium 500 – the lighter mockup weight, decided 25 Oct), tagline,
+  screen readers and Google, but looks like **Geist in the H2 size – not Barlow Condensed**,
+  decided 25 Oct: cleaner; **normal case, weight 450** like every H2 – decided 30 Oct, the caps
+  shouted next to the uppercase breadcrumb; was uppercase 500), tagline,
   description · line · price, German format ("35,00€") + "Preliminary Price Estimate." +
   "Learn more" · line · Size · Fit · Color · line · "Add to pack" (`.button-primary`, full width,
   12px corners) + "No payment – reserve your place for the launch." · accordions Design &
@@ -520,21 +559,27 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 
 ### Colours (final – only these, via CSS variables; components use role variables)
 
-| Role | Name | Hex |
-|---|---|---|
-| Background | Dark Obsidian | `#0D0D0E` |
-| Surface (header, footer, bag) | Obsidian | `#131314` |
-| Line / divider | Charcoal | `#1E1E1E` |
-| Input border | Flint | `#6B655E` |
-| Main text | Egret | `#F3EBE0` |
-| Secondary text | Weathered Bone | `#C4B9AC` |
-| Quiet text (only on Dark Obsidian/Obsidian) | Muted Stone | `#8C857B` |
-| Accent (main action, links, focus, bag count) | Wild Honey | `#C39132` |
-| Accent hover | Amber Gold | `#D4A54A` |
-| Brand support (large surfaces only) | Irr Olive | `#4B573E` |
-| Success / Error (icon or border only) | Forest Fern / Terracotta | `#5B7553` / `#B86B43` |
-| Logo dark brown | Moule | `#382D2B` |
-| Reserve (no role yet) | Tobacco Brown / Alpine Oak / Mossy Elm | `#9A7354` / `#AE946B` / `#5E6D4E` |
+| Role | Name | Hex | Code |
+|---|---|---|---|
+| Background | Dark Obsidian | `#0D0D0E` | 01 |
+| Surface (header, footer, bag) | Obsidian | `#131314` | 02 |
+| Line / divider | Charcoal | `#1E1E1E` | 03 |
+| Input border | Flint | `#6B655E` | 11 |
+| Main text | Egret | `#F3EBE0` | 14 |
+| Secondary text | Weathered Bone | `#C4B9AC` | 13 |
+| Quiet text (only on Dark Obsidian/Obsidian) | Muted Stone | `#8C857B` | 12 |
+| Accent (main action, links, focus, bag count) | Wild Honey | `#C39132` | 41 |
+| Accent hover | Amber Gold | `#D4A54A` | 42 |
+| Brand support (large surfaces only) | Irr Olive | `#4B573E` | 21 |
+| Success / Error (icon or border only) | Forest Fern / Terracotta | `#5B7553` / `#B86B43` | 23 / 51 |
+| Logo dark brown | Moule | `#382D2B` | 31 |
+| Reserve (no role yet) | Tobacco Brown / Alpine Oak / Mossy Elm | `#9A7354` / `#AE946B` / `#5E6D4E` | 32 / 33 / 22 |
+| Product colour only (new 30 Oct, no product yet) | White | `#FFFFFF` | 15 |
+
+- **Code** = the colour code in the product code (see 10, decided 30 Oct). Every colour here
+  is also a product colour in `src/data/product-colours.js`, under its colour sheet name –
+  except two: **Dark Obsidian is called "Black"** and **Irr Olive is called "Olive"** on the
+  site (easier for people).
 
 - Status messages: colour only on icon/left border; text Egret. On Irr Olive: Egret text only.
 - Form fields on Dark Obsidian or Obsidian, never on Charcoal. Text on accent: Dark Obsidian.
@@ -645,13 +690,6 @@ then Dardan decides.
 
 ## 14. Still open (ask, don't assume)
 
-- **⚠ REMIND DARDAN AT THE START OF EVERY SESSION, EVERY DAY, UNTIL IT'S DONE (asked 26 Oct):
-  bring the slight military influence back – this week, by Sun 1 Nov 2026.** Type version C
-  (light headings, normal-case nav, labels 0.08em) made the site more premium but less
-  "military" (brand language: subtle military influence, see 1). Find it again without losing
-  the premium look – e.g. uppercase labels / small technical details, coordinates-style text,
-  the nav, number labels like "01 / …". Show comparison versions first (rule 5); Dardan decides.
-  Remove this reminder only when Dardan says it's done.
 - **🔴 LINRO MUST-HAVES – HIGH PRIORITY (Dardan, 27 Oct): never cut these. Other things get cut
   first.** From Linro's development plan (`C:\Users\Dardan\Desktop\cave-wear-ai\
   Development_Plan_Brand_Content_Designer_Linro.pdf`). Not "do first" – "can't leave out":
@@ -720,7 +758,7 @@ then Dardan decides.
 - **Decided 27 Oct – to build (small tasks):** ("rename `/bag` → `/pack`" became no page at all
   and the "Choose a size" hint is built – both done in the Pack, 27 Oct) · "Learn more ›" and "Size
   chart and fit guide ›" on the product page always underlined (only these two) · legal
-  headings + product name weight 500 → 450 · Privacy Policy: add that Netlify Forms records the
+  headings weight 500 → 450 (product name done 30 Oct) · Privacy Policy: add that Netlify Forms records the
   IP address · Impressum, under Photo credits: one line that some product images are
   AI-generated (Gemini) and edited (**done 29 Oct**, version B – see 13).
 - **Decided 27 Oct – no change:** colour dots keep the brand hex (Egret dot stays `#F3EBE0`

@@ -1,25 +1,32 @@
-# Products – how to add or change a product
+# Products – how to change a product
 
 Every product is one folder in here: one text file (`product.md`) and its photos.
 The site builds the product card, the product page and the breadcrumb from that folder.
 Change something in the text file and the whole site follows – nothing is typed twice.
 
-## Add a new product
+Each product folder sits in the folder of its collection:
 
-1. Copy the `_template` folder. Never fill in `_template` itself – it stays empty.
-2. Rename the copy: short, lowercase, hyphens instead of spaces – e.g. `rain-jacket`.
-   This name becomes the web address (`/products/rain-jacket`) and saved favorites use it,
-   so **never rename the folder later**.
-3. Open `product.md` and fill in every line.
-4. Put the photos into the folder (names below).
-5. Start the site (`npm run dev`). If something is missing or wrong, the terminal says
-   which file and which field.
+```
+products/
+├── base-collection/
+│   ├── core-tee/
+│   └── field-hoodie/
+└── supporter-collection/
+```
+
+The `collection:` line in the text file decides the folder ("Base Collection" →
+`base-collection/`). If a product sits in the wrong collection folder, the build stops and
+says where it belongs.
+
+**New products start in the setup folder** `cave_wear_dis/products/`, next to this project
+(not in Git). It holds the original photos, the blank template and the steps. Only the
+finished product – text file + converted photos – comes into this folder.
+
+After a change, start the site (`npm run dev`). If something is missing or wrong, the
+terminal says which file and which field. Replaced a photo? Reload with Ctrl + F5.
 
 **Drafts:** a folder whose name starts with `_` is skipped (e.g. `_field-hoodie`). Use this
-while a product is still being filled in – remove the `_` when it's ready to go online.
-
-**Photos:** keep your originals outside this project (e.g. `cave_wear_dis/products/<product>/`).
-Only the finished, converted photos go into the product folder.
+to take a product off the site for a while – remove the `_` to bring it back.
 
 ## The text file
 
@@ -53,12 +60,40 @@ Colours in file names: lowercase, spaces become hyphens (`Tobacco Brown` → `to
 ## Colours
 
 Every colour name must be listed in `src/data/product-colours.js` – that list also holds the
-colour of the dot. New colour: add it there first, then use it in the text file.
+colour of the dot and the colour code (see below). New colour: add it there first, then use
+it in the text file.
 
 **A colour only in some fits:** write the fit in brackets after it –
 `colours: Black, Alpine Oak (male), Tobacco Brown (female)`. No brackets = every fit;
 several: `(female / male)`. On the product page that colour is then hidden for the
 other fits, and only its own photos are needed (here no `…_alpine-oak_female` shots).
+
+## The product code
+
+Every product configuration has a code that looks like a military tag but is a real stock
+code – an order can be read in one look:
+
+```
+CW · THZ01 · 2-32
+│    │  │    │ └─ colour code (2 digits)
+│    │  │    └─── fit code (1 digit)
+│    │  └──────── design version (2 digits)
+│    └─────────── product (3 capital letters)
+└──────────────── brand, always CW
+```
+
+- **Product + design version** – the `code:` line in the text file, e.g. `code: THZ01`.
+  Exactly 3 capital letters + 2 digits. The 3 letters belong to this product only and
+  never change (like the folder name). The version starts at 01 and only goes up by one
+  when the design really changes.
+- **Fit code** – fixed in `src/data/product-fits.js`: 0 unisex · 1 male · 2 female.
+  One-size products (beanie, buff) are unisex → 0.
+- **Colour code** – fixed in `src/data/product-colours.js`. The first digit is the colour
+  family (0 blacks · 1 stones · 2 greens · 3 browns · 4 golds · 5 reds). A new colour goes
+  at the end of its family (a new green = 24), a new family takes the next free digit.
+- The size is not part of the code.
+- **Never change a code once it's set.** The build stops if a code has the wrong format,
+  if two products share the same 3 letters, or if a colour code is used twice.
 
 ## Rules
 

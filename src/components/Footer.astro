@@ -135,6 +135,13 @@ const year = new Date().getFullYear();
   /* Social icons (look in SocialLinks.astro) – 8px more space above them */
   .footer-social {
     margin-block-start: var(--space-2);
+
+    /* Phone: bigger icons (24px instead of 20px) and a 48px tap area instead
+       of 44px (Google's minimum for touch) – easy to hit with a thumb (decided 30 Oct) */
+    @media (width < 48rem) {
+      --social-icon: var(--space-6);
+      --social-area: var(--space-12);
+    }
   }
 
   /* Newsletter */
@@ -228,13 +235,22 @@ const year = new Date().getFullYear();
     color: var(--color-text-quiet);
   }
 
+  /* Phone and tablet (base): everything centred – the © line on top, the links
+     in one row below it. From 1024px: © left, links right (decided 30 Oct). */
   .footer-bottom-inner {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-2) var(--space-6);
     padding-block: var(--space-4);
+    text-align: center;
+
+    @media (width >= 64rem) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      text-align: start;
+    }
   }
 
   /* Keeps the name on one line on small screens */
@@ -242,10 +258,22 @@ const year = new Date().getFullYear();
     white-space: nowrap;
   }
 
+  /* Phone: 12px between the links, so all four fit in one row at 375px.
+     Very narrow screens (320px) still wrap instead of sticking out. */
   .legal {
     display: flex;
-    flex-wrap: wrap; /* on narrow screens the links go to a second line instead of sticking out */
-    gap: var(--space-2) var(--space-6);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-3);
+
+    @media (width >= 48rem) {
+      column-gap: var(--space-6); /* tablet and desktop: 24px, there is room */
+    }
+
+    @media (width >= 64rem) {
+      justify-content: flex-start;
+    }
+
     margin: 0;
     padding: 0;
     list-style: none;
@@ -253,6 +281,15 @@ const year = new Date().getFullYear();
     & a {
       color: var(--color-text-quiet);
       transition: color 0.2s ease;
+
+      /* Touch screens: the text is only 20px high – an invisible 12px more above
+         and below makes a 44px tap target. The negative margin takes the same
+         12px back, so nothing in the layout moves. */
+      @media (pointer: coarse) {
+        display: inline-block;
+        padding-block: var(--space-3);
+        margin-block: calc(-1 * var(--space-3));
+      }
 
       &:hover {
         color: var(--color-accent);

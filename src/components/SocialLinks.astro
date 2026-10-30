@@ -36,12 +36,19 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
 </ul>
 
 <style>
-  /* 40px area, 20px icon, first icon lines up with the text above */
+  /* 40px area (44px on touch screens), 20px icon, first icon lines up with the
+     text above. A place that wants bigger icons sets --social-icon, a bigger
+     tap area --social-area (both: the footer on phones). */
   .social {
+    --icon-size: var(--social-icon, 1.25rem); /* 20px */
+    --area-size: var(--social-area, var(--control-height));
+
     display: flex;
     gap: var(--space-1);
     margin: 0;
-    margin-inline-start: -0.625rem; /* (40px area − 20px icon) ÷ 2 = 10px – icon edge lines up with the text */
+    /* (area − icon) ÷ 2 = the empty space left of the icon – pulled back, so the
+       icon edge lines up with the text */
+    margin-inline-start: calc((var(--icon-size) - var(--area-size)) / 2);
     padding: 0;
     list-style: none;
   }
@@ -49,14 +56,14 @@ const youtubeUrl = "https://www.youtube.com/channel/UCaJloMUYLBJ4UB4ft1N84YQ";
   .icon-link {
     display: grid;
     place-items: center;
-    inline-size: var(--control-height); /* 40px */
-    block-size: var(--control-height);
+    inline-size: var(--area-size); /* 40px, 44px on touch screens */
+    block-size: var(--area-size);
     color: var(--color-text-quiet);
     transition: color 0.2s ease;
 
     & svg {
-      inline-size: 1.25rem; /* 20px */
-      block-size: 1.25rem;
+      inline-size: var(--icon-size);
+      block-size: var(--icon-size);
     }
   }
 

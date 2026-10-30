@@ -6,17 +6,16 @@ import HeroSplit from "../components/HeroSplit.astro";
 <BaseLayout title="Home">
   <HeroSplit wildFocus="center 70%" anywhereFocus="center 60%" />
 
-  <!-- Two buttons right under the hero, always visible on load (the hero is
-       never taller than 90% of the screen). Labels are placeholders.
-       "Explore more" scrolls to the next section (id="explore"). -->
+  <!-- One button, centred on the hero's bottom edge (decided 30 Oct, from Wild Honey,
+       glass, glass + glow and glass + light). "Explore more ↓" is gone: the hero is
+       never taller than 90% of the screen, so the next section always peeks in –
+       no need for a button that scrolls to it. Label is a placeholder. -->
   <div class="container hero-cta">
-    <a href="/products" class="button button-primary">Discover the collection</a>
-    <a href="#explore" class="button button-outline">Explore more ↓</a>
+    <a href="/products" class="button button-glass">Discover the collection</a>
   </div>
   <!-- Closing section: last thing before the footer. Points straight to the
        FAQ and the contact form (on /contact they need id="faq" and id="contact-form"). -->
-  <!-- id="explore" moves to the first real Home section once it exists -->
-  <section id="explore" class="container section home-contact" aria-labelledby="home-contact-title">
+  <section class="container section home-contact" aria-labelledby="home-contact-title">
     <h2 id="home-contact-title">Questions?</h2>
     <p>Read the FAQ or write to us.</p>
     <div class="home-contact-buttons">
@@ -28,14 +27,38 @@ import HeroSplit from "../components/HeroSplit.astro";
 </BaseLayout>
 
 <style>
-  /* Centred under the hero, close to it, so it reads as part of the hero.
-     The space below comes from the next section. */
+  /* Centred on the hero's bottom edge: the button moves up by half its height,
+     so its top half lies over the photo – there the smoked glass really blurs
+     something. The space below comes from the next section. */
   .hero-cta {
+    /* One step bigger than every other button (decided 30 Oct): +4px in height
+       (44px with a mouse, 48px on touch screens), 20px sides, 16px text */
+    --hero-cta-height: calc(var(--control-height) + var(--space-1));
+
+    position: relative;
+    z-index: 3; /* above the hero */
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-4); /* 16px */
-    padding-block-start: var(--space-8); /* 32px */
+    margin-block-start: calc(-1 * var(--hero-cta-height) / 2);
+  }
+
+  /* Stronger glass (decided 30 Oct, from plain glass, glow, shine and sharp
+     corners): a brighter full 1px edge and a faint Egret fill, so the button
+     lifts off the dark – no shine, no glow. Corners stay the button radius. */
+  .hero-cta .button-glass {
+    block-size: var(--hero-cta-height);
+    padding-inline: calc(var(--space-4) + var(--space-1)); /* 20px */
+    border: 1px solid var(--glass-edge-hover);
+    background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+    font-size: var(--text-body); /* 16px */
+
+    /* Hover (mouse only): the fill gets a little lighter instead of darker */
+    @media (hover: hover) {
+      &:hover:not(:disabled) {
+        border-color: var(--glass-edge-hover);
+        background-color: color-mix(in srgb, var(--color-text) 14%, transparent);
+      }
+    }
   }
 
   /* Centred, like the hero button above it */

@@ -37,10 +37,11 @@ const accordions = [
 
 // Photo sizes: the browser picks the smallest file that is still sharp.
 // Big shots are about half the page, the 2×2 shots about a quarter.
+// On a phone every photo is one full-width slide of the swipe row.
 const bigWidths = [480, 960, 1440];
 const bigSizes = "(width >= 64rem) 30rem, 100vw";
-const smallWidths = [240, 480, 720];
-const smallSizes = "(width >= 64rem) 15rem, 50vw";
+const smallWidths = [240, 480, 720, 960];
+const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
 ---
 
 <BaseLayout title={product.name} description={`${product.name} – ${product.tagline}`}>
@@ -60,71 +61,92 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
       <!-- Every photo is a button: a click opens it big in the photo viewer
            (photo-viewer.js). data-shot = its number, data-full = the full-size file.
            aria-haspopup="dialog": screen readers say the button opens a window. -->
-      <div class="gallery">
-        <!-- Shot 0: the normal one, plus an own one for a fit if its photo exists
-             (e.g. shot_0_traverse-half-zip_female). product-options.js shows the one
-             that belongs to the chosen fit – data-fit="" is the normal one. -->
-        <div class="shot-0" data-product-id={product.id}>
-          <button type="button" class="photo-button" data-shot="0" data-fit="" data-full={product.shot0.image.src} aria-haspopup="dialog">
-            <Image
-              src={product.shot0.image}
-              alt={product.shot0.alt}
-              widths={bigWidths}
-              sizes={bigSizes}
-              loading="eager"
-              fetchpriority="high"
-            />
-          </button>
-          {
-            product.shot0ByFit.map((shot) => (
-              <button
-                type="button"
-                class="photo-button"
-                data-shot="0"
-                data-fit={shot.fit}
-                data-full={shot.image.src}
-                aria-haspopup="dialog"
-                hidden
-              >
-                <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
-              </button>
-            ))
-          }
-          <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
-            <HeartIcon class="favorite-icon" />
-          </button>
-        </div>
-
-        {
-          product.shotSets.map((set, index) => (
-            <div class="shot-set" data-colour={set.colour} data-fit={set.fit} hidden={index !== 0}>
-              {set.shots.map((shot) => (
+      <!-- On a phone the same photos become one swipe row with dots under it
+           (gallery-dots.js fills in the dots). From 768px: the grid as before. -->
+      <div class="gallery-column">
+        <div class="gallery">
+          <!-- Shot 0: the normal one, plus an own one for a fit if its photo exists
+               (e.g. shot_0_traverse-half-zip_female). product-options.js shows the one
+               that belongs to the chosen fit – data-fit="" is the normal one. -->
+          <div class="shot-0" data-product-id={product.id}>
+            <button type="button" class="photo-button" data-shot="0" data-fit="" data-full={product.shot0.image.src} aria-haspopup="dialog">
+              <Image
+                src={product.shot0.image}
+                alt={product.shot0.alt}
+                widths={bigWidths}
+                sizes={bigSizes}
+                loading="eager"
+                fetchpriority="high"
+              />
+            </button>
+            {
+              product.shot0ByFit.map((shot) => (
                 <button
                   type="button"
-                  class={`photo-button shot-${shot.number}`}
-                  data-shot={shot.number}
+                  class="photo-button"
+                  data-shot="0"
+                  data-fit={shot.fit}
                   data-full={shot.image.src}
                   aria-haspopup="dialog"
+                  hidden
                 >
-                  <Image
-                    src={shot.image}
-                    alt={shot.alt}
-                    widths={shot.number === 5 ? bigWidths : smallWidths}
-                    sizes={shot.number === 5 ? bigSizes : smallSizes}
-                  />
+                  <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
                 </button>
-              ))}
-            </div>
-          ))
-        }
+              ))
+            }
+            <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
+              <HeartIcon class="favorite-icon" />
+            </button>
+          </div>
+
+          {
+            product.shotSets.map((set, index) => (
+              <div class="shot-set" data-colour={set.colour} data-fit={set.fit} hidden={index !== 0}>
+                {set.shots.map((shot) => (
+                  <button
+                    type="button"
+                    class={`photo-button shot-${shot.number}`}
+                    data-shot={shot.number}
+                    data-full={shot.image.src}
+                    aria-haspopup="dialog"
+                  >
+                    <Image
+                      src={shot.image}
+                      alt={shot.alt}
+                      widths={shot.number === 5 ? bigWidths : smallWidths}
+                      sizes={shot.number === 5 ? bigSizes : smallSizes}
+                    />
+                  </button>
+                ))}
+              </div>
+            ))
+          }
+        </div>
+        <div class="gallery-dots" role="group" aria-label="Choose a photo"></div>
       </div>
 
       <!-- RIGHT: stays in place while the photos scroll (sticky) -->
       <div class="details">
         <div class="details-block">
           <h1 class="h2 product-name">{product.name}</h1>
-          <p class="tagline">{product.tagline}</p>
-          {product.description.map((paragraph) => <p class="description">{paragraph}</p>)}
+          <!-- Phone: less reading – the longer description is folded away behind the
+               small button next to the tagline (description-toggle.js). From 768px,
+               or without JavaScript, the description is always there. -->
+          <div class="tagline-row">
+            <p class="tagline">{product.tagline}</p>
+            {product.description.length > 0 && (
+              <button
+                type="button"
+                class="description-toggle"
+                aria-expanded="false"
+                aria-controls="product-description"
+                aria-label="Product description"
+              ></button>
+            )}
+          </div>
+          <div id="product-description" class="description-text">
+            {product.description.map((paragraph) => <p class="description">{paragraph}</p>)}
+          </div>
         </div>
 
         <div class="details-block">
@@ -268,6 +290,8 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
 <script src="../../scripts/product-options.js"></script>
 <script src="../../scripts/quantity.js"></script>
 <script src="../../scripts/photo-viewer.js"></script>
+<script src="../../scripts/gallery-dots.js"></script>
+<script src="../../scripts/description-toggle.js"></script>
 
 <style>
   /* Space below the header; the usual section space at the end */
@@ -295,6 +319,42 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     & li + li::before {
       content: ">" / "";
       margin-inline-end: var(--space-2);
+    }
+
+    /* Phone first: the full path, but on one line and smaller (12px) – good to
+       have, though hardly anyone uses it, so it shouldn't take much space
+       (decided 29 Oct). A product name that doesn't fit is cut with "…".
+       From 768px: the normal label size, as before. */
+    font-size: 0.75rem;
+    line-height: var(--space-4);
+
+    & ol {
+      flex-wrap: nowrap;
+    }
+
+    & li {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    & li:last-child {
+      flex-shrink: 1;
+      min-inline-size: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (width >= 48rem) {
+      font-size: var(--text-small);
+      line-height: var(--leading-small);
+
+      & ol {
+        flex-wrap: wrap;
+      }
+
+      & li {
+        white-space: normal;
+      }
     }
 
     & a {
@@ -341,6 +401,82 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     object-fit: cover;
   }
 
+  /* Phone (mobile first): one swipe row, one full-width photo at a time. Scroll snap
+     makes every swipe stop exactly on a photo. The scrollbar is hidden – the dots
+     show that there's more and where you are (a peeking next photo was tried
+     29 Oct and dropped: it looked like a mistake). */
+  .gallery {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* sideways only – it can't trap the page scroll */
+    overscroll-behavior-x: contain; /* a swipe at the end doesn't go "back" in the browser */
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none; /* older Safari */
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth; /* a tap on a dot glides to the photo */
+    }
+  }
+
+  .shot-0,
+  .shot-set :global(.photo-button) {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+
+  /* On the phone the set is no box of its own – its five photos sit in the row */
+  .shot-set {
+    display: contents;
+  }
+
+  /* Dots under the row: 24px tap area each, the dot itself 6px.
+     The photo you see = Egret, the others Flint. */
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    margin-block-start: var(--space-2);
+
+    & :global(.gallery-dot) {
+      display: grid;
+      place-items: center;
+      inline-size: var(--space-6);
+      block-size: var(--space-6);
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+
+      &::before {
+        content: "";
+        inline-size: 6px;
+        block-size: 6px;
+        border-radius: var(--radius-full);
+        background-color: var(--color-input-border);
+        transition: background-color 0.2s ease;
+      }
+
+      &[aria-current]::before {
+        background-color: var(--color-text);
+      }
+    }
+  }
+
+  /* From 768px: no row, no dots – the photo grid from my mockup */
+  @media (width >= 48rem) {
+    .gallery {
+      display: block;
+      overflow-x: visible;
+    }
+
+    .gallery-dots {
+      display: none;
+    }
+  }
+
   /* The heart sits on shot 0 (the heart's look is in global.css) */
   .shot-0 {
     position: relative;
@@ -367,14 +503,16 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
        4 close-up  | 2 back
        5 big close-up            */
   .shot-set {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "shot1 shot3"
-      "shot4 shot2"
-      "shot5 shot5";
+    @media (width >= 48rem) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "shot1 shot3"
+        "shot4 shot2"
+        "shot5 shot5";
+    }
 
-    /* "display: grid" would beat the hidden attribute – this makes hidden win again */
+    /* "display: grid" / "contents" would beat the hidden attribute – this makes hidden win again */
     &[hidden] {
       display: none;
     }
@@ -420,8 +558,92 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
     text-transform: uppercase;
   }
 
-  .tagline {
+  /* Tagline, and on phones the description button on the right */
+  .tagline-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
     margin-block-end: var(--space-3);
+  }
+
+  .tagline {
+    margin: 0;
+  }
+
+  /* The button: a 44px tap area (touch size) with the accordions' small chevron
+     at its right edge. Negative margins: the big tap area doesn't make the line taller.
+     Points down = description folded away, up = shown. */
+  .description-toggle {
+    display: none; /* without JavaScript: no button, the description is always there */
+    flex-shrink: 0;
+    place-items: center end;
+    inline-size: var(--control-height);
+    block-size: var(--control-height);
+    margin-block: calc((var(--space-6) - var(--control-height)) / 2);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      inline-size: 0.375rem;
+      block-size: 0.375rem;
+      border-block-end: 1.5px solid currentColor;
+      border-inline-end: 1.5px solid currentColor;
+      translate: -2px -2px;
+      rotate: 45deg;
+    }
+
+    &[aria-expanded="true"]::before {
+      translate: -2px 2px;
+      rotate: -135deg;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  /* Phone first: with JavaScript the button shows, and while it's closed the
+     description is hidden (the line under the tagline moves up) */
+  :global(html[data-js]) {
+    & .description-toggle {
+      display: grid;
+    }
+
+    & .details-block:has(.description-toggle[aria-expanded="false"]) {
+      & .tagline-row {
+        margin-block-end: 0;
+      }
+
+      & .description-text {
+        display: none;
+      }
+    }
+  }
+
+  /* From 768px: no button, the description is always there – more text is fine on a big screen */
+  @media (width >= 48rem) {
+    :global(html[data-js]) {
+      & .description-toggle {
+        display: none;
+      }
+
+      & .details-block:has(.description-toggle[aria-expanded="false"]) {
+        & .tagline-row {
+          margin-block-end: var(--space-3);
+        }
+
+        & .description-text {
+          display: block;
+        }
+      }
+    }
   }
 
   /* Small size, like the accordion texts – the tagline above is the main line */
@@ -530,6 +752,20 @@ const smallSizes = "(width >= 64rem) 15rem, 50vw";
   .fit-icon {
     inline-size: 100%;
     block-size: 100%;
+  }
+
+  /* Touch screens: the fit icon looks the same (32px), but an invisible area
+     around it is as big as the other controls (44px) */
+  @media (pointer: coarse) {
+    .fit {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: calc((var(--space-8) - var(--control-height)) / 2);
+      }
+    }
   }
 
   /* Colour dots: 40px, colour from the shared list (src/data/product-colours.js).

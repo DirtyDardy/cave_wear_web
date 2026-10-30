@@ -5,7 +5,7 @@
 // Choosing a colour or fit swaps shots 1–5 (src/scripts/product-options.js).
 import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getProducts, type Product } from "../../data/products";
+import { getProducts, productCode, type Product } from "../../data/products";
 import { productFits } from "../../data/product-fits.js";
 import HeartIcon from "../../assets/icons/heart.svg";
 import CloseIcon from "../../assets/icons/close.svg";
@@ -34,6 +34,15 @@ const accordions = [
   { title: "Fit & Silhouette", paragraphs: product.fitSilhouette },
   { title: "Materials", paragraphs: product.materials },
 ].filter((section) => section.paragraphs.length > 0);
+
+// The Cave Wear code for every colour × fit that exists, e.g. "black|male" → "CW · THZ01 · 1-01".
+// The page shows the first one; product-options.js swaps it when a colour or fit is chosen.
+const codes = Object.fromEntries(
+  product.colours.flatMap((colour) =>
+    colour.fits.map((fit) => [`${colour.file}|${fit}`, productCode(product, fit, colour.name)]),
+  ),
+);
+const firstCode = productCode(product, product.colours[0].fits[0], product.colours[0].name);
 
 // Photo sizes: the browser picks the smallest file that is still sharp.
 // Big shots are about half the page, the 2×2 shots about a quarter.
@@ -128,6 +137,7 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
       <!-- RIGHT: stays in place while the photos scroll (sticky) -->
       <div class="details">
         <div class="details-block">
+          <p class="product-code" data-codes={JSON.stringify(codes)}>{firstCode}</p>
           <h1 class="h2 product-name">{product.name}</h1>
           <!-- Phone: less reading – the longer description is folded away behind the
                small button next to the tagline (description-toggle.js). From 768px,
@@ -548,14 +558,26 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     }
   }
 
-  /* My H1 – Geist in the H2 size, uppercase (the text file has it in normal writing).
-     Medium (500), like every H2 since 26 Oct – the lighter weight from my mockup (decided 25 Oct). */
+  /* My H1 – Geist in the H2 size and weight (450), normal case like the text file
+     (decided 30 Oct: caps shouted next to the uppercase breadcrumb). */
   .product-name {
     max-inline-size: none;
     margin-block-end: var(--space-3);
     font-family: var(--font-body);
-    font-weight: 500;
-    text-transform: uppercase;
+    text-transform: none; /* every h1 is uppercase in global.css */
+  }
+
+  /* The Cave Wear code above the name, e.g. "CW · THZ01 · 1-01" – a quiet tag, not an
+     eye-catcher: the smallest size on the site (12px, like the phone breadcrumb), thin,
+     a distant colour. It changes with colour and fit without drawing the eye (no animation).
+     Same on every screen size. */
+  .product-code {
+    margin-block-end: var(--space-2);
+    color: var(--color-text-quiet);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 300;
+    line-height: var(--space-4); /* 16px */
+    letter-spacing: var(--tracking-wide);
   }
 
   /* Tagline, and on phones the description button on the right */

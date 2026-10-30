@@ -74,6 +74,13 @@ function showChosenSet() {
   const chosenColour = colourInputs.find((input) => input.checked);
   document.querySelector(".chosen-colour").textContent = chosenColour.nextElementSibling.textContent;
 
+  // The Cave Wear code above the name: the page wrote every code into data-codes,
+  // e.g. { "black|male": "CW · THZ01 · 1-01" } – JSON.parse turns that text back into
+  // an object, and we look up the chosen colour + fit
+  const codeLine = document.querySelector(".product-code");
+  const codes = JSON.parse(codeLine.dataset.codes);
+  codeLine.textContent = codes[`${colour}|${fit}`];
+
   // Shot 0: the chosen fit's own one if there is one, otherwise the normal one (data-fit="")
   const ownShot0 = shot0s.some((shot) => shot.dataset.fit === fit);
   for (const shot of shot0s) {

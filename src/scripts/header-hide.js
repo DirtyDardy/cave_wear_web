@@ -12,11 +12,19 @@ const remInPx = parseFloat(rootStyle.fontSize);
 const fadeDistance = parseFloat(rootStyle.getPropertyValue("--header-fade-distance")) * remInPx;
 const hideStart = header.hasAttribute("data-transparent") ? fadeDistance : header.offsetHeight;
 
-let lastY = window.scrollY;
+// iPhones (every browser there uses Apple's WebKit) let the page bounce past the
+// top and bottom and spring back ("rubber band"). Those bounce pixels are not
+// real scrolling, so we only count positions inside the real scroll range.
+function scrollPosition() {
+  const maxY = document.documentElement.scrollHeight - window.innerHeight;
+  return Math.min(Math.max(window.scrollY, 0), maxY);
+}
+
+let lastY = scrollPosition();
 let ticking = false;
 
 function update() {
-  const y = window.scrollY;
+  const y = scrollPosition();
   const distance = y - lastY;
 
   if (y <= hideStart) {
@@ -49,4 +57,10 @@ if (!header.hasAttribute("data-pinned")) {
     },
     { passive: true },
   );
+
+  // Phone browser bars grow and shrink while scrolling and change the window
+  // height. That jump is not the visitor scrolling: start counting fresh.
+  window.addEventListener("resize", () => {
+    lastY = scrollPosition();
+  });
 }

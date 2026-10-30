@@ -453,9 +453,12 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   - Build stops: wrong code format (`src/content.config.ts`) · two products with the same 3
     letters (`src/data/products.ts` – the content rules only see one file at a time) · a colour
     code that isn't 2 digits or is used twice (`src/content.config.ts`).
-  - `productCode(product, fit, colourName)` in `src/data/products.ts` builds the code –
-    nothing calls it yet. Showing it on the product page (place, style, update on colour/fit
-    click) is built in the military-touch chat.
+  - `productCode(product, fit, colourName)` in `src/data/products.ts` builds the code.
+  - **On the product page (built 30 Oct):** a quiet line above the name, left, every screen
+    size – 12px (smallest on the site), weight 300, Muted Stone (5.3:1; Flint compared and
+    rejected – below the contrast rule), label letter spacing, 8px to the name. Not an
+    eye-catcher: it swaps with colour/fit without animation (`product-options.js` looks it
+    up in the page's `data-codes` list, written by `productCode()` at build time).
 
 ### Product card (decided 25 Oct)
 

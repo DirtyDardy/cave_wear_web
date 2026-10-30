@@ -462,7 +462,7 @@ html:has(.drawer[open]) {
     background-color: var(--color-bg); /* form fields only on Dark Obsidian */
     color: var(--color-text);
     font: inherit;
-    font-size: var(--text-small); /* typed text 14px, like the contact form */
+    font-size: var(--text-field); /* typed text 14px (16px on phones), like the contact form */
     line-height: var(--leading-small);
 
     &::placeholder {

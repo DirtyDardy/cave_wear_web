@@ -126,11 +126,12 @@ const supporterCollection = cardsFor("Supporter Collection");
 
 <style>
   /* --- Photo header ------------------------------------------------------------
-     Same height as the Home hero (--hero-height, global.css), full width,
-     under the transparent header – like Home. */
+     Same height as the Home hero, but 60% of the screen on phones
+     (--photo-header-height, global.css), full width, under the transparent
+     header – like Home. */
   .products-hero {
     position: relative;
-    block-size: var(--hero-height);
+    block-size: var(--photo-header-height);
     margin-block-start: calc(-1 * var(--header-height) - 1px); /* under the transparent header */
     overflow: hidden;
   }

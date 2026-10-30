@@ -1,5 +1,5 @@
 // Product colours – one shared list for all products. Used for the colour dots.
-// The product text files (src/content/products/*/product.md) use these names –
+// The product text files (src/content/products/*/*/product.md) use these names –
 // spelled exactly like here. New colour: add one line here first.
 // In photo file names a colour is written in lowercase, spaces become hyphens
 // ("Tobacco Brown" → tobacco-brown).

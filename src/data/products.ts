@@ -1,4 +1,4 @@
-// PRODUCT READER – turns every product folder (src/content/products/) into what the
+// PRODUCT READER – turns every product folder (src/content/products/<collection>/) into what the
 // pages need: the fields, the long texts split by their headings, and the photos found
 // by their file names. The product page and the Products page use it.
 // Runs only while the site is built – nothing of this reaches the visitor's browser.
@@ -10,13 +10,29 @@ import placeholder from "../assets/products/placeholder.jpg";
 
 // Every photo in every product folder. import.meta.glob = "find all files that
 // match this pattern"; eager = load them right away.
-const photos = import.meta.glob<{ default: ImageMetadata }>("/src/content/products/*/*.{webp,jpg,jpeg,png}", {
+const photos = import.meta.glob<{ default: ImageMetadata }>("/src/content/products/*/*/*.{webp,jpg,jpeg,png}", {
   eager: true,
 });
 
-// "Tobacco Brown" → "tobacco-brown" (how colours are written in file names)
+// "Tobacco Brown" → "tobacco-brown" (how colours and collections are written in file names)
 function toFileName(text: string) {
   return text.toLowerCase().replaceAll(" ", "-");
+}
+
+// Every product folder sits in the folder of its collection ("Base Collection" →
+// base-collection/core-tee/). The collection line in the text file decides: a folder in
+// the wrong collection stops the build, so the folder and the text can never disagree.
+// Returns the folder, e.g. "base-collection/core-tee".
+function checkCollectionFolder(id: string, collection: string, filePath = "") {
+  const folder = filePath.split(/[\\/]/).at(-3);
+  const expected = toFileName(collection);
+  if (folder !== expected) {
+    throw new Error(
+      `[products] ${id}: the text file says "${collection}", but the folder is in "${folder}/". ` +
+        `Move the folder ${id} into src/content/products/${expected}/.`,
+    );
+  }
+  return `${expected}/${id}`;
 }
 
 // A colour name from the text file → everything a colour dot needs.
@@ -28,20 +44,21 @@ export function toColour(name: string) {
   return { name, file: toFileName(name), hex, veryDark: (red + green + blue) / 3 < 40 };
 }
 
-// Finds a photo by its name without the ending, e.g. "shot_1_core-tee_black_unisex".
+// Finds a photo in a product folder by its name without the ending,
+// e.g. "shot_1_core-tee_black_unisex" in "base-collection/core-tee".
 // Missing photo → the placeholder, plus a warning in the terminal.
-function findPhoto(id: string, name: string): ImageMetadata {
-  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${id}/${name}.`));
+function findPhoto(folder: string, name: string): ImageMetadata {
+  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${folder}/${name}.`));
   if (path) return photos[path].default;
 
-  console.warn(`[products] Photo missing: ${id}/${name} – placeholder used`);
+  console.warn(`[products] Photo missing: ${folder}/${name} – placeholder used`);
   return placeholder;
 }
 
 // The same, but for photos that are allowed to be missing (e.g. a women's shot 0):
 // no placeholder, no warning – just nothing.
-function findOptionalPhoto(id: string, name: string): ImageMetadata | undefined {
-  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${id}/${name}.`));
+function findOptionalPhoto(folder: string, name: string): ImageMetadata | undefined {
+  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${folder}/${name}.`));
   return path ? photos[path].default : undefined;
 }
 
@@ -79,7 +96,8 @@ function readShotDescriptions(text = "") {
 export async function getProducts() {
   const entries = await getCollection("products");
 
-  return entries.map(({ id, data, body = "" }) => {
+  return entries.map(({ id, data, body = "", filePath }) => {
+    const folder = checkCollectionFolder(id, data.collection, filePath);
     const sections = splitSections(body);
     const shotText = readShotDescriptions(sections["Shot descriptions"]);
 
@@ -98,7 +116,7 @@ export async function getProducts() {
         fit,
         shots: [1, 2, 3, 4, 5].map((number) => ({
           number,
-          image: findPhoto(id, `shot_${number}_${id}_${colour.file}_${fit}`),
+          image: findPhoto(folder, `shot_${number}_${id}_${colour.file}_${fit}`),
           alt: [`${data.name} in ${colour.name}, ${fit} fit`, shotText[number]].filter(Boolean).join(" – "),
         })),
       })),
@@ -119,13 +137,13 @@ export async function getProducts() {
       fitSilhouette: toParagraphs(sections["Fit & Silhouette"]),
       materials: toParagraphs(sections["Materials"]),
       shot0: {
-        image: findPhoto(id, `shot_0_${id}`),
+        image: findPhoto(folder, `shot_0_${id}`),
         alt: [data.name, shotText[0]].filter(Boolean).join(" – "),
       },
       // Optional: an own shot 0 for one fit, e.g. shot_0_traverse-half-zip_female.
       // The product page shows it while that fit is chosen; otherwise the normal shot 0.
       shot0ByFit: data.fits.flatMap((fit) => {
-        const image = findOptionalPhoto(id, `shot_0_${id}_${fit}`);
+        const image = findOptionalPhoto(folder, `shot_0_${id}_${fit}`);
         return image ? [{ fit, image, alt: [data.name, shotText[`0 ${fit}`]].filter(Boolean).join(" – ") }] : [];
       }),
       shotSets,

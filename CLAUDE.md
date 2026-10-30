@@ -399,11 +399,23 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 ### Product folder system (decided 25 Oct)
 
 - **Built 25 Oct, used by the Products page and every product page:** `src/content/products/`
-  with `README.md` (guide for anyone adding a product), `_template/` (blank, skipped – folders
-  starting with `_` are drafts), `core-tee/`, `field-hoodie/`. Rules + error messages in
+  with `README.md` (rules for the text file, photos, colours – for changing a product) and
+  one folder per collection (30 Oct): `base-collection/` (`core-tee/`, `field-hoodie/`,
+  `traverse-half-zip/`) and `supporter-collection/` (empty). The `collection:` line decides
+  the folder – when setting up a product, Claude reads it and puts the folder there; a folder
+  in the wrong collection stops the build (`src/data/products.ts`). The product folder's
+  name stays the id. Folders starting with `_` are drafts (skipped). Rules + error messages in
   `src/content.config.ts`; colour list `src/data/product-colours.js`; reader `src/data/products.ts`.
   Photo names (in use): `shot_0_<product>` and `shot_<1–5>_<product>_<colour>_<fit>`.
   Originals stay outside the repo (see 5); Claude crops them to exact 4:5 and converts to webp.
+- **Two folders (decided 30 Oct), each with a desktop shortcut:** **SetUP-Product** =
+  `D:\project\cave_wear_dis\products\` – originals, the blank `_template/` (moved there 30 Oct)
+  and the guide **`Cave Wear Product Guide.pdf`** (30 Oct, 10 pages: folders, adding a product,
+  text file, photos, product code, commit, error messages, cheat sheet – for anyone who adds or
+  changes products). Built by `_guide-source/build-guide.mjs`, which reads colours, codes and
+  products from the site – run it again after the system changes. Not in Git. **Web-Product** =
+  `src/content/products/` – what the site shows; after the setup Dardan changes products
+  here himself (text, photos) and commits – no Claude needed.
 
 - One folder per product: `src/content/products/<id>/` = one text file + the photos. Folder name =
   web address (`/products/<id>`) + favorite id – never rename (saved Packs use it too; colour

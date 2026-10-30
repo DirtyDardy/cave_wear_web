@@ -1,25 +1,32 @@
-# Products – how to add or change a product
+# Products – how to change a product
 
 Every product is one folder in here: one text file (`product.md`) and its photos.
 The site builds the product card, the product page and the breadcrumb from that folder.
 Change something in the text file and the whole site follows – nothing is typed twice.
 
-## Add a new product
+Each product folder sits in the folder of its collection:
 
-1. Copy the `_template` folder. Never fill in `_template` itself – it stays empty.
-2. Rename the copy: short, lowercase, hyphens instead of spaces – e.g. `rain-jacket`.
-   This name becomes the web address (`/products/rain-jacket`) and saved favorites use it,
-   so **never rename the folder later**.
-3. Open `product.md` and fill in every line.
-4. Put the photos into the folder (names below).
-5. Start the site (`npm run dev`). If something is missing or wrong, the terminal says
-   which file and which field.
+```
+products/
+├── base-collection/
+│   ├── core-tee/
+│   └── field-hoodie/
+└── supporter-collection/
+```
+
+The `collection:` line in the text file decides the folder ("Base Collection" →
+`base-collection/`). If a product sits in the wrong collection folder, the build stops and
+says where it belongs.
+
+**New products start in the setup folder** `cave_wear_dis/products/`, next to this project
+(not in Git). It holds the original photos, the blank template and the steps. Only the
+finished product – text file + converted photos – comes into this folder.
+
+After a change, start the site (`npm run dev`). If something is missing or wrong, the
+terminal says which file and which field. Replaced a photo? Reload with Ctrl + F5.
 
 **Drafts:** a folder whose name starts with `_` is skipped (e.g. `_field-hoodie`). Use this
-while a product is still being filled in – remove the `_` when it's ready to go online.
-
-**Photos:** keep your originals outside this project (e.g. `cave_wear_dis/products/<product>/`).
-Only the finished, converted photos go into the product folder.
+to take a product off the site for a while – remove the `_` to bring it back.
 
 ## The text file
 

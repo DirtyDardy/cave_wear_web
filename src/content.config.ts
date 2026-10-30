@@ -1,5 +1,5 @@
 // CONTENT – tells Astro where my content lives and what every file must contain.
-// Products: one folder per product in src/content/products/ (guide: README.md there).
+// Products: one folder per product in src/content/products/<collection>/ (guide: README.md there).
 // If a text file breaks a rule, the build stops and names the file and the field –
 // so a product with a missing price can never go live.
 import { defineCollection } from "astro:content";
@@ -16,12 +16,13 @@ const commaList = z.string({ error: "Missing – write at least one, comma betwe
 );
 
 const products = defineCollection({
-  // Every product.md one folder deep. Folders starting with _ (the template) are skipped.
-  // The folder name becomes the product's id: "core-tee/product.md" → "core-tee".
+  // Every product.md two folders deep: collection folder / product folder.
+  // Folders starting with _ (drafts) are skipped.
+  // The product folder's name becomes the id: "base-collection/core-tee/product.md" → "core-tee".
   loader: glob({
-    pattern: ["*/product.md", "!_*/**"],
+    pattern: ["*/*/product.md", "!**/_*/**"],
     base: "./src/content/products",
-    generateId: ({ entry }) => entry.split("/")[0],
+    generateId: ({ entry }) => entry.split("/")[1],
   }),
 
   schema: z.object({

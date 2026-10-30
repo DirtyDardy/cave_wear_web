@@ -166,10 +166,13 @@
      you click: size boxes, quantity, colour dots, the heart, inputs, social icons */
   --control-height: 2.5rem; /* touch screens: 44px, see right after this block */
   --header-fade-distance: 12.5rem; /* 200px of scrolling: photo-page header fades from 5% to solid */
-  /* Photo header height on every page (Home hero, Products …): 720px, but never
+  /* Home hero height (and every photo header from 768px): 720px, but never
      more than 90% of the screen height. min() takes the smaller value.
      svh = "small viewport height": steady on phones when the browser bar moves. */
   --hero-height: min(45rem, 90svh);
+  /* Photo headers of the other pages (Products, Brand …): the same on tablet
+     and desktop – on phones less tall, see right after this block */
+  --photo-header-height: var(--hero-height);
 
   /* Tells the browser the site is dark: scrollbars and form controls follow */
   color-scheme: dark;
@@ -184,6 +187,16 @@
 @media (pointer: coarse) {
   :root {
     --control-height: 2.75rem; /* 44px */
+  }
+}
+
+/* Phones: photo headers 60% of the screen instead of 90% (decided 30 Oct, from
+   90% / 70% / 60% / the whole uncropped photo – 70% zoomed the photo in too much).
+   A landscape photo gets cut less at the sides, and the first content peeks in.
+   The Home hero keeps 90%. */
+@media (width < 48rem) {
+  :root {
+    --photo-header-height: 60svh;
   }
 }
 

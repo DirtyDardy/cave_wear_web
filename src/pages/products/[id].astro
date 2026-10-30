@@ -548,14 +548,13 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     }
   }
 
-  /* My H1 – Geist in the H2 size, uppercase (the text file has it in normal writing).
-     Medium (500), like every H2 since 26 Oct – the lighter weight from my mockup (decided 25 Oct). */
+  /* My H1 – Geist in the H2 size and weight (450), normal case like the text file
+     (decided 30 Oct: caps shouted next to the uppercase breadcrumb). */
   .product-name {
     max-inline-size: none;
     margin-block-end: var(--space-3);
     font-family: var(--font-body);
-    font-weight: 500;
-    text-transform: uppercase;
+    text-transform: none; /* every h1 is uppercase in global.css */
   }
 
   /* Tagline, and on phones the description button on the right */

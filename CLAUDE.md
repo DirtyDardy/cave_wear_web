@@ -411,7 +411,7 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   email's safety check (another character → add it in `submission-created.mjs`). Card, product page and breadcrumb
   all read from this one file; nothing is typed twice. Presentation point: workflow for
   repetitive maintenance (change a price in one file → the whole site follows).
-- Text file fields: name (typed normally – the product page shows it uppercase via CSS) ·
+- Text file fields: name (typed normally – the product page shows it exactly like that) ·
   tagline · description · price (number only) · collection ("Base Collection" / "Supporter
   Collection") · sizes · fits (unisex / female / male) · colours · shot descriptions shot 0–5
   (alt texts; name, colour and fit are added automatically) · Design & Purpose · Fit &
@@ -493,8 +493,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - Left: shot 0 big (heart top right), 2×2 grid of shots 1–4, shot 5 big. Front and back sit on the
   **diagonal** – two shots that blend into the background never share a column.
 - Right column is **sticky** (stays while the photos scroll): name (stays the `<h1>` tag for
-  screen readers and Google, but looks like **Geist uppercase in the H2 size – not Barlow
-  Condensed**, decided 25 Oct: cleaner; weight Medium 500 – the lighter mockup weight, decided 25 Oct), tagline,
+  screen readers and Google, but looks like **Geist in the H2 size – not Barlow Condensed**,
+  decided 25 Oct: cleaner; **normal case, weight 450** like every H2 – decided 30 Oct, the caps
+  shouted next to the uppercase breadcrumb; was uppercase 500), tagline,
   description · line · price, German format ("35,00€") + "Preliminary Price Estimate." +
   "Learn more" · line · Size · Fit · Color · line · "Add to pack" (`.button-primary`, full width,
   12px corners) + "No payment – reserve your place for the launch." · accordions Design &
@@ -720,7 +721,7 @@ then Dardan decides.
 - **Decided 27 Oct – to build (small tasks):** ("rename `/bag` → `/pack`" became no page at all
   and the "Choose a size" hint is built – both done in the Pack, 27 Oct) · "Learn more ›" and "Size
   chart and fit guide ›" on the product page always underlined (only these two) · legal
-  headings + product name weight 500 → 450 · Privacy Policy: add that Netlify Forms records the
+  headings weight 500 → 450 (product name done 30 Oct) · Privacy Policy: add that Netlify Forms records the
   IP address · Impressum, under Photo credits: one line that some product images are
   AI-generated (Gemini) and edited (**done 29 Oct**, version B – see 13).
 - **Decided 27 Oct – no change:** colour dots keep the brand hex (Egret dot stays `#F3EBE0`

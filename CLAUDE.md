@@ -689,13 +689,6 @@ then Dardan decides.
 
 ## 14. Still open (ask, don't assume)
 
-- **⚠ REMIND DARDAN AT THE START OF EVERY SESSION, EVERY DAY, UNTIL IT'S DONE (asked 26 Oct):
-  bring the slight military influence back – this week, by Sun 1 Nov 2026.** Type version C
-  (light headings, normal-case nav, labels 0.08em) made the site more premium but less
-  "military" (brand language: subtle military influence, see 1). Find it again without losing
-  the premium look – e.g. uppercase labels / small technical details, coordinates-style text,
-  the nav, number labels like "01 / …". Show comparison versions first (rule 5); Dardan decides.
-  Remove this reminder only when Dardan says it's done.
 - **🔴 LINRO MUST-HAVES – HIGH PRIORITY (Dardan, 27 Oct): never cut these. Other things get cut
   first.** From Linro's development plan (`C:\Users\Dardan\Desktop\cave-wear-ai\
   Development_Plan_Brand_Content_Designer_Linro.pdf`). Not "do first" – "can't leave out":

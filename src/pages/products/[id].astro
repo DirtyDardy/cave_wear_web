@@ -289,6 +289,8 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
       <button type="button" class="viewer-arrow viewer-next" aria-label="Next photo">
         <span aria-hidden="true">›</span>
       </button>
+      <!-- Phone only: dots inside the photo (photo-viewer.js fills them in) -->
+      <div class="viewer-dots" role="group" aria-label="Choose a photo"></div>
     </div>
     <button type="button" class="icon-button viewer-close" aria-label="Close photos">
       <CloseIcon />
@@ -449,7 +451,11 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     display: flex;
     justify-content: center;
     margin-block-start: var(--space-2);
+  }
 
+  /* The same dots inside the photo viewer (phone) */
+  .gallery-dots,
+  .viewer-dots {
     & :global(.gallery-dot) {
       display: grid;
       place-items: center;
@@ -868,7 +874,10 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
 
   /* --- Photo viewer ------------------------------------------------------------------
      Full screen, Dark Obsidian. The big photo is 70% of the screen height (4:5),
-     the neighbours are 82% of it and slightly dimmed (as in my mockup). */
+     the neighbours are 82% of it and slightly dimmed (as in my mockup).
+     Phone (base): the photo is exactly as wide as the screen – at 70% height it was
+     wider than a phone and the arrows sat outside the screen. Neighbours only show
+     while swiping. From 768px: the mockup sizes. */
 
   /* The page behind can't scroll while the viewer is open */
   :global(html:has(.viewer[open])) {
@@ -876,8 +885,8 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
   }
 
   .viewer {
-    --viewer-h: min(70dvh, 56rem); /* height of the big photo */
-    --viewer-w: calc(var(--viewer-h) * 0.8); /* 4:5 */
+    --viewer-w: min(100vw, 70dvh * 0.8); /* width of the big photo */
+    --viewer-h: calc(var(--viewer-w) * 1.25); /* 4:5 */
     position: fixed;
     inset: 0;
     inline-size: 100%;
@@ -906,9 +915,17 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     text-align: center;
   }
 
+  /* touch-action: the browser keeps its own pinch zoom (accessibility), every other
+     finger move goes to photo-viewer.js (swipe, look around while zoomed) */
   .viewer-stage {
     position: absolute;
     inset: 0;
+    touch-action: pinch-zoom;
+  }
+
+  /* While a finger drags, the photos follow it without delay */
+  .viewer-stage.is-dragging :global(.viewer-slide) {
+    transition: none;
   }
 
   /* Every photo lies in the middle of the screen; photo-viewer.js moves it
@@ -926,7 +943,8 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     overflow: hidden; /* the zoom stays inside the photo */
     cursor: pointer;
     filter: brightness(0.9); /* slightly dimmed – just a tiny bit */
-    transform: translate(-50%, -50%) translateX(calc(var(--shift, 0) * var(--viewer-w))) scale(0.82);
+    /* --drag = how far a finger has dragged the row (set on the stage while swiping) */
+    transform: translate(-50%, -50%) translateX(calc(var(--shift, 0) * var(--viewer-w) + var(--drag, 0px))) scale(0.82);
     transition:
       transform 0.4s ease,
       filter 0.4s ease;
@@ -936,7 +954,7 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     z-index: 1;
     cursor: zoom-in;
     filter: none;
-    transform: translate(-50%, -50%) translateX(0) scale(1);
+    transform: translate(-50%, -50%) translateX(var(--drag, 0px)) scale(1);
   }
 
   .viewer :global(.viewer-slide.is-zoomed) {
@@ -961,12 +979,15 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     transition: transform 0.3s ease;
   }
 
-  /* ‹ › – small smoked-glass tabs on the left and right edge of the big photo */
+  /* ‹ › – small smoked-glass tabs on the left and right edge of the big photo.
+     Phone (base): no arrows – swiping is the way there, the dots inside the photo
+     show that there is more (decided 30 Oct: the arrows looked unclean on a phone).
+     From 768px: as in my mockup. */
   .viewer-arrow {
     position: absolute;
     z-index: 2;
     inset-block-start: 50%;
-    display: grid;
+    display: none;
     place-items: center;
     inline-size: var(--space-6); /* 24px */
     block-size: var(--space-12); /* 48px */
@@ -982,8 +1003,11 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     translate: -50% -50%;
     transition: background-color 0.2s ease;
 
-    &:hover {
-      background-color: var(--glass-tint-hover);
+    /* Only with a real mouse – after a tap the hover look would stay */
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--glass-tint-hover);
+      }
     }
   }
 
@@ -993,6 +1017,33 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
 
   .viewer-next {
     inset-inline-start: calc(50% + var(--viewer-w) / 2);
+  }
+
+  /* Dots inside the photo, just above the close button on its bottom edge */
+  .viewer-dots {
+    position: absolute;
+    z-index: 2;
+    inset-block-start: calc(
+      50% + var(--viewer-h) / 2 - var(--control-height) / 2 - var(--space-2) - var(--space-6)
+    );
+    inset-inline: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (width >= 48rem) {
+    .viewer {
+      --viewer-h: min(70dvh, 56rem);
+      --viewer-w: calc(var(--viewer-h) * 0.8);
+    }
+
+    .viewer-arrow {
+      display: grid;
+    }
+
+    .viewer-dots {
+      display: none;
+    }
   }
 
   /* Close: the round icon button from the style guide, centred on the bottom

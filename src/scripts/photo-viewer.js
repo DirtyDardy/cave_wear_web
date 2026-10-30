@@ -4,10 +4,13 @@
 // last photo comes the first). A click on the big photo zooms in – only inside the
 // photo and never further than its real pixels – the mouse looks around, another
 // click zooms out. Escape or × closes.
+// With a finger (phones, tablets): swipe left/right, double tap zooms in and out,
+// while zoomed one finger looks around. Phones also get dots inside the photo.
 
 const viewer = document.querySelector(".viewer");
 const stage = viewer.querySelector(".viewer-stage");
 const prevArrow = viewer.querySelector(".viewer-prev");
+const dotsBox = viewer.querySelector(".viewer-dots");
 
 const SIDE_SCALE = 0.82; // neighbours are 82% of the big photo (CSS uses the same number)
 const MAX_ZOOM = 2.5; // never more than 2.5×, even for very large photos
@@ -60,6 +63,9 @@ function render() {
       slide.classList.remove("is-jumping");
     }
   });
+
+  // The dot of the photo in the middle lights up (aria-current = "this one")
+  [...dotsBox.children].forEach((dot, n) => dot.toggleAttribute("aria-current", n === current));
 }
 
 // One step left (−1) or right (+1) – or several, when a photo further out is clicked
@@ -100,7 +106,9 @@ function resetZoom() {
   }
 }
 
-function toggleZoom(slide, event) {
+// inTheMiddle: event.detail = number of mouse clicks; 0 means Enter or Space on
+// the keyboard. A double tap passes false – it zooms where the finger tapped.
+function toggleZoom(slide, event, inTheMiddle = event.detail === 0) {
   if (slide.classList.contains("is-zoomed")) {
     resetZoom();
     render(); // puts the "Zoom in" label back
@@ -110,8 +118,7 @@ function toggleZoom(slide, event) {
   const zoom = maxZoomFor(slide);
   if (zoom < MIN_ZOOM) return; // photo too small – zooming would show pixels
 
-  // event.detail = number of mouse clicks; 0 means Enter or Space on the keyboard
-  aimZoom(slide, event, event.detail === 0);
+  aimZoom(slide, event, inTheMiddle);
   slide.style.setProperty("--zoom", zoom);
   slide.classList.add("is-zoomed");
   slide.setAttribute("aria-label", `Zoom out: ${slide.querySelector("img").alt}`);
@@ -144,6 +151,17 @@ function open(clickedButton) {
     return slide;
   });
 
+  // One dot per photo (phones only – CSS hides them from 768px). A tap moves there.
+  const dots = slides.map((slide, n) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "gallery-dot"; // same look as the dots under the page's photo row
+    dot.setAttribute("aria-label", `Photo ${n + 1} of ${slides.length}`);
+    dot.addEventListener("click", () => go(n - current));
+    return dot;
+  });
+  dotsBox.replaceChildren(...dots);
+
   current = Math.max(0, buttons.indexOf(clickedButton));
   render();
   viewer.showModal(); // opens the <dialog> above everything
@@ -161,6 +179,10 @@ document.querySelector(".gallery").addEventListener("click", (event) => {
 // In the viewer: the big photo zooms, a neighbour moves to the middle,
 // a click on the empty dark area closes
 stage.addEventListener("click", (event) => {
+  // The browser also sends a click after a finger lifts – after a swipe that
+  // click must do nothing (it would close the viewer or jump to a neighbour)
+  if (ignoreClick) return;
+
   const slide = event.target.closest(".viewer-slide");
   if (!slide) {
     if (event.target === stage) viewer.close();
@@ -168,10 +190,10 @@ stage.addEventListener("click", (event) => {
   }
 
   const offset = Number(slide.dataset.offset);
-  if (offset === 0) {
-    toggleZoom(slide, event);
-  } else {
+  if (offset !== 0) {
     go(offset);
+  } else if (lastPointer !== "touch") {
+    toggleZoom(slide, event); // with a finger, a double tap zooms instead (below)
   }
 });
 
@@ -179,6 +201,116 @@ stage.addEventListener("click", (event) => {
 stage.addEventListener("mousemove", (event) => {
   const slide = slides[current];
   if (slide && slide.classList.contains("is-zoomed")) aimZoom(slide, event);
+});
+
+// --- Fingers (phones and tablets) --------------------------------------------------------
+// Pointer events report mouse, pen and finger the same way; pointerType says which.
+// Only fingers are handled here – the mouse keeps the click zoom from above.
+
+const SWIPE_DISTANCE = 40; // px sideways before a drag counts as a swipe
+const DOUBLE_TAP_TIME = 300; // ms between two taps for a double tap
+
+let finger = null; // the finger on the screen: where it started, where it is now
+let fingersDown = 0; // two fingers = the browser's pinch zoom, we stay out of it
+let lastTap = null; // time and place of the last tap, to spot a double tap
+let lastPointer = "mouse"; // what touched the screen last: "mouse", "touch" or "pen"
+let ignoreClick = false; // true after a swipe, see the click handler
+
+// While zoomed, one finger drags the photo around. Moving the zoom centre the
+// other way moves the photo with the finger: by the distance ÷ (zoom − 1).
+function lookAround(slide, moveX, moveY) {
+  const zoom = Number(slide.style.getPropertyValue("--zoom"));
+  const box = slide.getBoundingClientRect();
+  const x = parseFloat(slide.style.getPropertyValue("--zoom-x")) - ((moveX / box.width) * 100) / (zoom - 1);
+  const y = parseFloat(slide.style.getPropertyValue("--zoom-y")) - ((moveY / box.height) * 100) / (zoom - 1);
+  slide.style.setProperty("--zoom-x", `${Math.min(100, Math.max(0, x))}%`);
+  slide.style.setProperty("--zoom-y", `${Math.min(100, Math.max(0, y))}%`);
+}
+
+// The photos stop following the finger (CSS animates them back into place)
+function endDrag() {
+  stage.classList.remove("is-dragging");
+  stage.style.removeProperty("--drag");
+  finger = null;
+}
+
+// A short touch without moving. Two of them quickly on the same spot = double tap.
+function tap(event) {
+  const slide = event.target.closest(".viewer-slide");
+  if (!slide || Number(slide.dataset.offset) !== 0) return; // the click handler does the rest
+
+  const quick = lastTap && event.timeStamp - lastTap.time < DOUBLE_TAP_TIME;
+  const close = lastTap && Math.hypot(event.clientX - lastTap.x, event.clientY - lastTap.y) < 30;
+  if (quick && close) {
+    toggleZoom(slide, event, false);
+    lastTap = null;
+  } else {
+    lastTap = { time: event.timeStamp, x: event.clientX, y: event.clientY };
+  }
+}
+
+// 1. Finger down: remember where. Not on the arrows or dots – those are buttons.
+stage.addEventListener("pointerdown", (event) => {
+  lastPointer = event.pointerType;
+  ignoreClick = false;
+  if (event.pointerType !== "touch") return;
+
+  fingersDown += 1;
+  if (fingersDown > 1 || event.target.closest(".viewer-arrow, .viewer-dots")) {
+    endDrag();
+    return;
+  }
+  finger = { id: event.pointerId, startX: event.clientX, startY: event.clientY, x: event.clientX, y: event.clientY };
+});
+
+// 2. Finger moves: zoomed → look around; otherwise the photos follow it sideways
+stage.addEventListener("pointermove", (event) => {
+  if (!finger || event.pointerId !== finger.id) return;
+
+  const moveX = event.clientX - finger.x;
+  const moveY = event.clientY - finger.y;
+  finger.x = event.clientX;
+  finger.y = event.clientY;
+
+  const slide = slides[current];
+  if (slide.classList.contains("is-zoomed")) {
+    lookAround(slide, moveX, moveY);
+    return;
+  }
+
+  const dragX = finger.x - finger.startX;
+  if (Math.abs(dragX) > Math.abs(finger.y - finger.startY)) {
+    stage.classList.add("is-dragging");
+    stage.style.setProperty("--drag", `${dragX}px`);
+  }
+});
+
+// 3. Finger up: far enough sideways = next/previous photo, hardly moved = a tap
+stage.addEventListener("pointerup", (event) => {
+  if (event.pointerType !== "touch") return;
+  fingersDown = Math.max(0, fingersDown - 1);
+  if (!finger || event.pointerId !== finger.id) return;
+
+  const dragX = finger.x - finger.startX;
+  const dragY = finger.y - finger.startY;
+  const zoomed = slides[current].classList.contains("is-zoomed");
+  endDrag();
+
+  if (!zoomed && Math.abs(dragX) > SWIPE_DISTANCE && Math.abs(dragX) > Math.abs(dragY)) {
+    ignoreClick = true;
+    go(dragX < 0 ? 1 : -1); // finger to the left = the next photo comes in from the right
+  } else if (Math.hypot(dragX, dragY) < 10) {
+    tap(event);
+  } else {
+    ignoreClick = true; // moved, but not a swipe (or looked around while zoomed)
+  }
+});
+
+// The browser took the touch over (e.g. its own pinch zoom): let go
+stage.addEventListener("pointercancel", (event) => {
+  if (event.pointerType !== "touch") return;
+  fingersDown = Math.max(0, fingersDown - 1);
+  endDrag();
 });
 
 prevArrow.addEventListener("click", () => go(-1));

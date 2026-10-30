@@ -372,10 +372,17 @@ const steps = [
     border: 1px solid var(--color-input-border);
   }
 
+  /* Phone (base): name and email one under the other, each full width – side by
+     side the email was cut off and a typed address scrolled out of view
+     (decided 30 Oct). From 768px: side by side, as in my sketch. */
   .field-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
+    gap: var(--space-6); /* 24px, like the other fields */
+
+    @media (width >= 48rem) {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
   }
 
   fieldset {
@@ -426,11 +433,12 @@ const steps = [
 
   /* What you type: Small (14px) – the same size as the chips and the button,
      so the whole box speaks one size (decided 26 Oct; body size looked too big).
+     On phones all three are 16px (global.css), so it still speaks one size.
      Comes after the rules above, because their "font: inherit" would reset it. */
   .field input:not([type="radio"]),
   .subject input,
   textarea {
-    font-size: var(--text-small);
+    font-size: var(--text-field);
     line-height: var(--leading-small);
   }
 
@@ -454,15 +462,21 @@ const steps = [
     gap: var(--space-2);
   }
 
+  /* Phone (base): 44px high (the tap minimum) with the 16px button text.
+     From 768px: 32px and 14px, as before. */
   .chip {
     display: inline-flex;
     align-items: center;
-    block-size: var(--space-8); /* 32px */
+    block-size: var(--control-height); /* 44px on touch screens */
     padding-inline: var(--space-3); /* 12px */
     border: 1px solid var(--color-input-border);
     border-radius: var(--radius-button); /* 12px */
     color: var(--color-text-secondary);
-    font-size: var(--text-small);
+    font-size: var(--text-button);
+
+    @media (width >= 48rem) {
+      block-size: var(--space-8); /* 32px */
+    }
     line-height: var(--leading-small);
     cursor: pointer;
 

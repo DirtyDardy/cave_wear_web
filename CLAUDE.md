@@ -302,7 +302,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   centre and bottom, the forest always shows, the skyline is optional). The split screen stays Home only.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
-- **Product detail pages: never hide** (Pack stays visible) – decided, not built yet.
+- **Product detail pages: never hide** (Pack stays visible) – built 25 Oct: `Header.astro` sets
+  `data-pinned` on every `/products/…` page, `header-hide.js` skips a pinned header.
 - **Mobile panels = one system (rule, 28 Oct):** everything that opens over the page on phones
   (menu, Pack) uses the same panel glass (`--glass-tint-panel`), the same speed and easing
   (`--motion-duration`, `--motion-ease`), a top bar exactly the header's height (64px + the

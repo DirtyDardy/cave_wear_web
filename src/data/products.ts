@@ -125,13 +125,17 @@ export async function getProducts() {
       fits: (fits ?? data.fits) as typeof data.fits,
     }));
 
-    // One set of shots 1–5 for every colour × fit that exists, e.g. black + unisex.
+    // Shot 5 is optional: no "Shot 5:" line in the text file → the product has only
+    // shots 1–4 (e.g. the beanie) and the page leaves the big shot 5 out.
+    const shotNumbers = "5" in shotText ? [1, 2, 3, 4, 5] : [1, 2, 3, 4];
+
+    // One set of shots for every colour × fit that exists, e.g. black + unisex.
     // Alt text = name, colour, fit + what the shot shows (written in the text file).
     const shotSets = colours.flatMap((colour) =>
       colour.fits.map((fit) => ({
         colour: colour.file,
         fit,
-        shots: [1, 2, 3, 4, 5].map((number) => ({
+        shots: shotNumbers.map((number) => ({
           number,
           image: findPhoto(folder, `shot_${number}_${id}_${colour.file}_${fit}`),
           alt: [`${data.name} in ${colour.name}, ${fit} fit`, shotText[number]].filter(Boolean).join(" – "),

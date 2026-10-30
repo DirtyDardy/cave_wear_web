@@ -53,6 +53,9 @@ All photos **4:5** (e.g. 1600 × 2000 px) – jpg, png or webp. File names: lowe
 | `shot_2_core-tee_black_unisex.webp` | Back |
 | `shot_3_…` to `shot_5_…` | Close-ups – what they show goes under "Shot descriptions" |
 
+**Only four mock-ups** (e.g. a beanie): delete the line `Shot 5:` in the text file. The product
+page then shows shots 1–4 without the big shot 5, and no `shot_5_…` photos are needed.
+
 The pattern is always **shot number _ product _ colour _ fit**. Every colour and every fit gets
 its own shots 1–5 (e.g. the half-zip in brown needs `…_brown_female` and `…_brown_male`).
 Colours in file names: lowercase, spaces become hyphens (`Tobacco Brown` → `tobacco-brown`).

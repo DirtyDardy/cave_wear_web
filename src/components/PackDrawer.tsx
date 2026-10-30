@@ -333,12 +333,14 @@ function PackRow({ item, product }: RowProps) {
   );
 }
 
-// The empty Pack – my quiet joke (decided 27 Oct), far away from prices and Reserve
+// The empty Pack – my quiet joke (decided 27 Oct), far away from prices and Reserve.
+// The button jumps straight to the first collection. closePack: already on /products,
+// the page would otherwise scroll behind the still-open drawer.
 function EmptyPack() {
   return (
     <div className="drawer-empty">
       <p>Your pack is empty. Packing light is good – but not that light.</p>
-      <a href="/products" className="button button-primary">
+      <a href="/products#base-collection" className="button button-primary" onClick={closePack}>
         Discover the collection
       </a>
     </div>

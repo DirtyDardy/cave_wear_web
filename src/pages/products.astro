@@ -81,7 +81,8 @@ const supporterCollection = cardsFor("Supporter Collection");
   </section>
 
   <div class="container section collections">
-    <section class="collection" aria-labelledby="base-title">
+    <!-- id: the Pack's "Discover the collection" jumps here (/products#base-collection) -->
+    <section id="base-collection" class="collection" aria-labelledby="base-title">
       <h2 id="base-title" class="label collection-title">Base Collection</h2>
       <ul class="product-grid" role="list">
         {
@@ -168,6 +169,11 @@ const supporterCollection = cardsFor("Supporter Collection");
     display: flex;
     flex-direction: column;
     gap: var(--section-space);
+  }
+
+  /* A jump from the Pack (/products#base-collection) lands 24px below the header */
+  .collection {
+    scroll-margin-block-start: var(--space-6); /* 24px – plus the header space from scroll-padding in global.css */
   }
 
   /* Small uppercase title with a line below, across the full width */

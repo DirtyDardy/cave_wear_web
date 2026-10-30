@@ -1,47 +1,80 @@
-// PRODUCT READER – turns every product folder (src/content/products/) into what the
+// PRODUCT READER – turns every product folder (src/content/products/<collection>/) into what the
 // pages need: the fields, the long texts split by their headings, and the photos found
 // by their file names. The product page and the Products page use it.
 // Runs only while the site is built – nothing of this reaches the visitor's browser.
 import { getCollection } from "astro:content";
 import type { ImageMetadata } from "astro";
 import { productColours } from "./product-colours.js";
+import { productFits } from "./product-fits.js";
 import { formatPrice } from "./price";
 import placeholder from "../assets/products/placeholder.jpg";
 
 // Every photo in every product folder. import.meta.glob = "find all files that
 // match this pattern"; eager = load them right away.
-const photos = import.meta.glob<{ default: ImageMetadata }>("/src/content/products/*/*.{webp,jpg,jpeg,png}", {
+const photos = import.meta.glob<{ default: ImageMetadata }>("/src/content/products/*/*/*.{webp,jpg,jpeg,png}", {
   eager: true,
 });
 
-// "Tobacco Brown" → "tobacco-brown" (how colours are written in file names)
+// "Tobacco Brown" → "tobacco-brown" (how colours and collections are written in file names)
 function toFileName(text: string) {
   return text.toLowerCase().replaceAll(" ", "-");
+}
+
+// Every product folder sits in the folder of its collection ("Base Collection" →
+// base-collection/core-tee/). The collection line in the text file decides: a folder in
+// the wrong collection stops the build, so the folder and the text can never disagree.
+// Returns the folder, e.g. "base-collection/core-tee".
+function checkCollectionFolder(id: string, collection: string, filePath = "") {
+  const folder = filePath.split(/[\\/]/).at(-3);
+  const expected = toFileName(collection);
+  if (folder !== expected) {
+    throw new Error(
+      `[products] ${id}: the text file says "${collection}", but the folder is in "${folder}/". ` +
+        `Move the folder ${id} into src/content/products/${expected}/.`,
+    );
+  }
+  return `${expected}/${id}`;
 }
 
 // A colour name from the text file → everything a colour dot needs.
 // veryDark: black and similar get a thin Flint ring, or the dot vanishes on the dark page.
 // (Average of red, green and blue below 40 out of 255.)
 export function toColour(name: string) {
-  const hex = productColours[name as keyof typeof productColours];
+  const { hex } = productColours[name as keyof typeof productColours];
   const [red, green, blue] = [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16));
   return { name, file: toFileName(name), hex, veryDark: (red + green + blue) / 3 < 40 };
 }
 
-// Finds a photo by its name without the ending, e.g. "shot_1_core-tee_black_unisex".
+// The 3 letters of a product code belong to one product only (CTE = the Core Tee).
+// The content rules see one file at a time, so this looks at all products together:
+// two products with the same letters stop the build.
+function checkCodesUnique(entries: { id: string; data: { code: string } }[]) {
+  const owners = new Map<string, string>(); // letters → product, e.g. "CTE" → "core-tee"
+  for (const { id, data } of entries) {
+    const letters = data.code.slice(0, 3);
+    const owner = owners.get(letters);
+    if (owner) {
+      throw new Error(`[products] ${owner} and ${id} both use the code letters ${letters} – every product needs its own 3 letters.`);
+    }
+    owners.set(letters, id);
+  }
+}
+
+// Finds a photo in a product folder by its name without the ending,
+// e.g. "shot_1_core-tee_black_unisex" in "base-collection/core-tee".
 // Missing photo → the placeholder, plus a warning in the terminal.
-function findPhoto(id: string, name: string): ImageMetadata {
-  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${id}/${name}.`));
+function findPhoto(folder: string, name: string): ImageMetadata {
+  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${folder}/${name}.`));
   if (path) return photos[path].default;
 
-  console.warn(`[products] Photo missing: ${id}/${name} – placeholder used`);
+  console.warn(`[products] Photo missing: ${folder}/${name} – placeholder used`);
   return placeholder;
 }
 
 // The same, but for photos that are allowed to be missing (e.g. a women's shot 0):
 // no placeholder, no warning – just nothing.
-function findOptionalPhoto(id: string, name: string): ImageMetadata | undefined {
-  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${id}/${name}.`));
+function findOptionalPhoto(folder: string, name: string): ImageMetadata | undefined {
+  const path = Object.keys(photos).find((path) => path.startsWith(`/src/content/products/${folder}/${name}.`));
   return path ? photos[path].default : undefined;
 }
 
@@ -78,8 +111,10 @@ function readShotDescriptions(text = "") {
 
 export async function getProducts() {
   const entries = await getCollection("products");
+  checkCodesUnique(entries);
 
-  return entries.map(({ id, data, body = "" }) => {
+  return entries.map(({ id, data, body = "", filePath }) => {
+    const folder = checkCollectionFolder(id, data.collection, filePath);
     const sections = splitSections(body);
     const shotText = readShotDescriptions(sections["Shot descriptions"]);
 
@@ -98,7 +133,7 @@ export async function getProducts() {
         fit,
         shots: [1, 2, 3, 4, 5].map((number) => ({
           number,
-          image: findPhoto(id, `shot_${number}_${id}_${colour.file}_${fit}`),
+          image: findPhoto(folder, `shot_${number}_${id}_${colour.file}_${fit}`),
           alt: [`${data.name} in ${colour.name}, ${fit} fit`, shotText[number]].filter(Boolean).join(" – "),
         })),
       })),
@@ -107,6 +142,7 @@ export async function getProducts() {
     return {
       id,
       name: data.name,
+      code: data.code, // e.g. "THZ01" – the full code comes from productCode() below
       tagline: data.tagline,
       price: data.price,
       priceText: formatPrice(data.price), // 34.9 → "34,90€" (src/data/price.ts)
@@ -119,13 +155,13 @@ export async function getProducts() {
       fitSilhouette: toParagraphs(sections["Fit & Silhouette"]),
       materials: toParagraphs(sections["Materials"]),
       shot0: {
-        image: findPhoto(id, `shot_0_${id}`),
+        image: findPhoto(folder, `shot_0_${id}`),
         alt: [data.name, shotText[0]].filter(Boolean).join(" – "),
       },
       // Optional: an own shot 0 for one fit, e.g. shot_0_traverse-half-zip_female.
       // The product page shows it while that fit is chosen; otherwise the normal shot 0.
       shot0ByFit: data.fits.flatMap((fit) => {
-        const image = findOptionalPhoto(id, `shot_0_${id}_${fit}`);
+        const image = findOptionalPhoto(folder, `shot_0_${id}_${fit}`);
         return image ? [{ fit, image, alt: [data.name, shotText[`0 ${fit}`]].filter(Boolean).join(" – ") }] : [];
       }),
       shotSets,
@@ -135,3 +171,13 @@ export async function getProducts() {
 
 // The shape of one product, for the pages ("type" = a description for TypeScript)
 export type Product = Awaited<ReturnType<typeof getProducts>>[number];
+
+// The Cave Wear code of one product configuration – looks like a military tag, but is a
+// real stock code: brand · product + design version · fit-colour.
+// productCode(product, "female", "Tobacco Brown") → "CW · THZ01 · 2-32"
+// The size isn't part of it (the size boxes already show it).
+export function productCode(product: Pick<Product, "code">, fit: keyof typeof productFits, colourName: string) {
+  const fitCode = productFits[fit].code;
+  const colourCode = productColours[colourName as keyof typeof productColours].code;
+  return `CW · ${product.code} · ${fitCode}-${colourCode}`;
+}

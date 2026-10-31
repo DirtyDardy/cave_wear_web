@@ -9,9 +9,27 @@
 const section = document.querySelector(".principles");
 
 const TILE_TIME = 5000; // ms – how long each tile stays the big one
+const MOVE_TIME = 600; // ms – how long a tile takes to move (same as the CSS transition)
 
 const touchScreen = matchMedia("(hover: none)");
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const row3 = matchMedia("(width >= 48rem)"); // the three tiles stand in a row
+
+// STEADY HEIGHT (tablet + desktop, 31 Oct). While one tile shrinks and the next
+// one grows, both are half-way for a moment – the row got ~60px shorter and
+// everything below it jumped up and down (and the scroll snap pulled the page
+// along). So the row keeps the height it has at rest: measured once, and again
+// whenever the window size changes.
+const row = section?.querySelector(".principles-row"); // ?. = only if the section exists
+
+function lockHeight() {
+  if (!row) return;
+  row.style.minBlockSize = ""; // first let it find its own height …
+  if (row3.matches) row.style.minBlockSize = `${row.offsetHeight}px`; // … then keep it
+}
+
+lockHeight();
+window.addEventListener("resize", lockHeight);
 
 if (section && !calm) {
   const tiles = [...section.querySelectorAll(".principle")]; // [...] = turn the list into an array
@@ -27,6 +45,14 @@ if (section && !calm) {
   //    the active tile = "active", the one after it = "next" (right),
   //    the one before it = "prev" (left). CSS moves them there.
   function show(index) {
+    // The tile that is big right now stays on top while it shrinks, so the new
+    // one comes up from behind it (not in front of it). After the move it's normal again.
+    const leaving = tiles.find((tile) => tile.dataset.place === "active");
+    if (leaving) {
+      leaving.setAttribute("data-leaving", "");
+      setTimeout(() => leaving.removeAttribute("data-leaving"), MOVE_TIME);
+    }
+
     // % = the rest after dividing: 3 % 3 = 0, so after the last tile comes the first
     active = (index + tiles.length) % tiles.length;
 

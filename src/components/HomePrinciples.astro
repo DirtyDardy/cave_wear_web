@@ -191,6 +191,7 @@ const principles = [
 
     .principles[data-loop] .principle {
       grid-area: stack;
+      z-index: 1; /* the small ones: at the back */
       inline-size: 64vw;
       /* Shrink around the middle of the tile (word 24px + 12px, then half of
          the 4:5 tile = 40vw), so the small tiles sit centred next to the big one */
@@ -198,6 +199,17 @@ const principles = [
       transition:
         transform 0.6s var(--motion-ease),
         opacity 0.6s var(--motion-ease);
+
+      /* Who lies on top: the big one over the small ones – and the one that is
+         just leaving the middle over everything, so the next tile comes up from
+         behind it (31 Oct) */
+      &[data-place="active"] {
+        z-index: 2;
+      }
+
+      &[data-leaving] {
+        z-index: 3;
+      }
 
       /* Left and right (my sketch, 31 Oct): half size, the screen edge cuts
          right through the middle of them */
@@ -256,7 +268,7 @@ const principles = [
 
       & .principle-word {
         color: var(--color-text); /* Egret */
-        font-size: 1.125rem; /* 18px – one step up from the 14px label */
+        font-size: var(--text-body); /* 16px – one step up from the 14px label */
       }
     }
 
@@ -268,7 +280,7 @@ const principles = [
 
         & .principle-word {
           color: var(--color-text);
-          font-size: 1.125rem;
+          font-size: var(--text-body);
         }
       }
     }

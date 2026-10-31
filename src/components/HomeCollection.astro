@@ -186,7 +186,8 @@ const widths = [480, 800, 1200, 1600];
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, var(--color-surface), transparent 50%);
+    /* The bottom 2px are solid Obsidian (see .home-card-image) */
+    background: linear-gradient(to top, var(--color-surface) 2px, transparent 50%);
     pointer-events: none;
     transition: opacity 0.4s ease; /* same speed as the card hover on /products */
   }
@@ -204,11 +205,14 @@ const widths = [480, 800, 1200, 1600];
     opacity: 0;
   }
 
+  /* The photo stops 2px above the bottom edge. Photo heights are rarely whole
+     pixels (e.g. 412.8px), and at that edge a hairline of photo showed below
+     the fade on phones (31 Oct). Now only the solid fade is there. */
   .home-card-image {
     position: absolute;
-    inset: 0;
+    inset: 0 0 2px;
     inline-size: 100%;
-    block-size: 100%;
+    block-size: calc(100% - 2px);
     object-fit: cover;
   }
 

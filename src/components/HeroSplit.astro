@@ -344,12 +344,14 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
      the city half of the bear turns into an outline, the wild copy fades in.
      Anywhere = the mirror image.
      On touch screens hero-auto.js sets data-side="wild" / "anywhere" instead
-     of the hover, with a slower, calmer fade (data-auto). */
+     of the hover, with a slower, calmer fade (data-auto). There the hover is
+     ignored (:not([data-auto])): a tap leaves a side "hovered", and with
+     data-side on the other side both states were on at once. */
   .hero-split[data-auto] {
     --speed: 0.8s;
   }
 
-  .hero-split:has(.side-wild:hover),
+  .hero-split:not([data-auto]):has(.side-wild:hover),
   .hero-split[data-side="wild"] {
     .side-anywhere .side-image {
       opacity: 0;
@@ -364,7 +366,7 @@ const { wildFocus = "center", anywhereFocus = "center" } = Astro.props;
     }
   }
 
-  .hero-split:has(.side-anywhere:hover),
+  .hero-split:not([data-auto]):has(.side-anywhere:hover),
   .hero-split[data-side="anywhere"] {
     .side-wild .side-image {
       opacity: 0;

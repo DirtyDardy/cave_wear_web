@@ -14,7 +14,7 @@ const SIDE_TIME = 4500; // ms – how long each side stays (decided 30 Oct, 3.5 
 const ROUNDS = 3; // wild + anywhere = 1 round; then it stops by itself (~29 s)
 
 // matchMedia = a media query in JavaScript. .matches is true or false right now,
-// and it can tell us when the answer changes (see step 5).
+// and it can tell us when the answer changes (see step 6).
 const touchScreen = matchMedia("(hover: none)");
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -84,7 +84,20 @@ if (hero && !calm) {
     }
   });
 
-  // 5. Switch the whole thing on or off. Runs once now, and again whenever the
+  // 5. A tap on a side = "show me this one": that side stays, and the clock
+  //    stops (the button shows play). Play goes on from there.
+  //    :scope > = only the real photos, not the copies in the bear's glass.
+  for (const side of ["wild", "anywhere"]) {
+    hero.querySelector(`:scope > .side-${side}`).addEventListener("click", () => {
+      if (!touchScreen.matches) return;
+      clearTimeout(timer);
+      hero.dataset.side = side;
+      started = true;
+      setPaused(true);
+    });
+  }
+
+  // 6. Switch the whole thing on or off. Runs once now, and again whenever the
   //    device changes (a mouse plugged into a tablet, or the browser's phone mode).
   function setUp() {
     const on = touchScreen.matches;

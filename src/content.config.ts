@@ -32,11 +32,13 @@ const commaList = z.string({ error: "Missing – write at least one, comma betwe
 const products = defineCollection({
   // Every product.md two folders deep: collection folder / product folder.
   // Folders starting with _ (drafts) are skipped.
-  // The product folder's name becomes the id: "base-collection/core-tee/product.md" → "core-tee".
+  // The product folder's name becomes the id, without its order number in front:
+  // "base-collection/01_core-tee/product.md" → "core-tee". So the number can change
+  // (new order on the site) while the web address and saved Packs stay the same.
   loader: glob({
     pattern: ["*/*/product.md", "!**/_*/**"],
     base: "./src/content/products",
-    generateId: ({ entry }) => entry.split("/")[1],
+    generateId: ({ entry }) => entry.split("/")[1].replace(/^\d+_/, ""),
   }),
 
   schema: z.object({

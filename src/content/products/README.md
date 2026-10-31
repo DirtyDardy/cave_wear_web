@@ -9,10 +9,16 @@ Each product folder sits in the folder of its collection:
 ```
 products/
 ├── base-collection/
-│   ├── core-tee/
-│   └── field-hoodie/
+│   ├── 01_core-tee/
+│   └── 02_field-hoodie/
 └── supporter-collection/
 ```
+
+**The number in front sets the order** on the Products page (01 comes first). The name
+after it is the web address (`01_core-tee` → `/products/core-tee`) and never changes –
+saved Packs and favorites use it. The number may change: rename `04_ridge-beanie` to
+`02_ridge-beanie` and the beanie moves up. Every folder needs a number, and no two
+products may share one – otherwise the build stops and says which.
 
 The `collection:` line in the text file decides the folder ("Base Collection" →
 `base-collection/`). If a product sits in the wrong collection folder, the build stops and
@@ -25,7 +31,7 @@ finished product – text file + converted photos – comes into this folder.
 After a change, start the site (`npm run dev`). If something is missing or wrong, the
 terminal says which file and which field. Replaced a photo? Reload with Ctrl + F5.
 
-**Drafts:** a folder whose name starts with `_` is skipped (e.g. `_field-hoodie`). Use this
+**Drafts:** a folder whose name starts with `_` is skipped (e.g. `_02_field-hoodie`). Use this
 to take a product off the site for a while – remove the `_` to bring it back.
 
 ## The text file

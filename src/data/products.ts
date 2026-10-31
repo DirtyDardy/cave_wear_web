@@ -21,19 +21,44 @@ function toFileName(text: string) {
 }
 
 // Every product folder sits in the folder of its collection ("Base Collection" →
-// base-collection/core-tee/). The collection line in the text file decides: a folder in
+// base-collection/01_core-tee/). The collection line in the text file decides: a folder in
 // the wrong collection stops the build, so the folder and the text can never disagree.
-// Returns the folder, e.g. "base-collection/core-tee".
+// Returns the folder, e.g. "base-collection/01_core-tee".
 function checkCollectionFolder(id: string, collection: string, filePath = "") {
-  const folder = filePath.split(/[\\/]/).at(-3);
+  const parts = filePath.split(/[\\/]/);
+  const folder = parts.at(-3);
   const expected = toFileName(collection);
   if (folder !== expected) {
     throw new Error(
       `[products] ${id}: the text file says "${collection}", but the folder is in "${folder}/". ` +
-        `Move the folder ${id} into src/content/products/${expected}/.`,
+        `Move the folder ${parts.at(-2)} into src/content/products/${expected}/.`,
     );
   }
-  return `${expected}/${id}`;
+  return `${expected}/${parts.at(-2)}`;
+}
+
+// The number in front of the product folder decides the order on the site:
+// "01_core-tee" → 1. A folder without a number stops the build, and so do two
+// products with the same number (the order would be a guess).
+function readOrder(filePath = "") {
+  const folder = filePath.split(/[\\/]/).at(-2) ?? "";
+  const number = folder.match(/^(\d+)_/)?.[1];
+  if (!number) {
+    throw new Error(`[products] ${folder}: the folder needs its order number in front, e.g. 07_${folder}.`);
+  }
+  return Number(number);
+}
+
+function checkOrderUnique(entries: { id: string; filePath?: string }[]) {
+  const owners = new Map<number, string>(); // number → product, e.g. 1 → "core-tee"
+  for (const { id, filePath } of entries) {
+    const order = readOrder(filePath);
+    const owner = owners.get(order);
+    if (owner) {
+      throw new Error(`[products] ${owner} and ${id} both have the number ${order} – every product needs its own number.`);
+    }
+    owners.set(order, id);
+  }
 }
 
 // A colour name from the text file → everything a colour dot needs.
@@ -112,8 +137,13 @@ function readShotDescriptions(text = "") {
 export async function getProducts() {
   const entries = await getCollection("products");
   checkCodesUnique(entries);
+  checkOrderUnique(entries);
 
-  return entries.map(({ id, data, body = "", filePath }) => {
+  // Sorted by the number in front of the folder (01, 02 …), not by name.
+  // "a, b" = two products; a negative result puts a first.
+  const sorted = [...entries].sort((a, b) => readOrder(a.filePath) - readOrder(b.filePath));
+
+  return sorted.map(({ id, data, body = "", filePath }) => {
     const folder = checkCollectionFolder(id, data.collection, filePath);
     const sections = splitSections(body);
     const shotText = readShotDescriptions(sections["Shot descriptions"]);
@@ -145,6 +175,7 @@ export async function getProducts() {
 
     return {
       id,
+      order: readOrder(filePath), // e.g. 1 – the Products page also sorts placeholders with it
       name: data.name,
       code: data.code, // e.g. "THZ01" – the full code comes from productCode() below
       tagline: data.tagline,

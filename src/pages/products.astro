@@ -17,6 +17,7 @@ const products = await getProducts();
 function toCard(product: Product) {
   return {
     id: product.id,
+    order: product.order,
     name: product.name,
     tagline: product.tagline,
     image: product.shot0.image,
@@ -32,27 +33,28 @@ const placeholderAlt = "Placeholder – product photo follows";
 const placeholderTagline = "Placeholder – one short line follows.";
 
 // PLACEHOLDER cards for products that have no folder yet. "id" = short name that
-// never changes – favorites are saved by it. A placeholder disappears by itself
+// never changes – favorites are saved by it. "order" = its place, the same number
+// as its folder will get (05 = the rain jacket). A placeholder disappears by itself
 // as soon as a folder with the same id exists.
 const placeholders = {
   "Base Collection": [
-    { id: "rain-jacket", name: "Rain jacket", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "rain-jacket", order: 5, name: "Rain jacket", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
   ],
   "Supporter Collection": [
-    { id: "supporter-tee", name: "Supporter Tee", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-    { id: "supporter-hoodie", name: "Supporter Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "supporter-tee", order: 7, name: "Supporter Tee", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
+    { id: "supporter-hoodie", order: 8, name: "Supporter Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
   ],
 };
 
 const folderIds = products.map((product) => product.id);
 
-// One collection's cards: first the products from folders, then the placeholders
-// that have no folder yet. "..." = put all items of that list in here.
+// One collection's cards: the products from folders and the placeholders that have
+// no folder yet, together sorted by their number. "..." = put all items of that list in here.
 function cardsFor(collection: Product["collection"]) {
   return [
     ...products.filter((product) => product.collection === collection).map(toCard),
     ...placeholders[collection].filter((card) => !folderIds.includes(card.id)),
-  ];
+  ].sort((a, b) => a.order - b.order);
 }
 
 const baseCollection = cardsFor("Base Collection");

@@ -462,9 +462,14 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   `src/content/products/` – what the site shows; after the setup Dardan changes products
   here himself (text, photos) and commits – no Claude needed.
 
-- One folder per product: `src/content/products/<id>/` = one text file + the photos. Folder name =
-  web address (`/products/<id>`) + favorite id – never rename (saved Packs use it too; colour
-  names as well). Product names: only letters, digits, spaces, `-` and `'` – the confirmation
+- One folder per product: `src/content/products/<collection>/<NN>_<id>/` = one text file + the
+  photos. **Order number (31 Oct, Dardan):** the two digits in front set the order on the
+  Products page (01 Core Tee · 02 Field Hoodie · 03 Traverse Half-Zip · 04 Ridge Beanie ·
+  05 rain jacket – placeholder card with `order: 5` in `products.astro` · 06 Pass Gaiter);
+  the setup folders in `cave_wear_dis` use the same numbers. The number is stripped from the
+  id (`content.config.ts`), so it may change; missing or doubled numbers stop the build
+  (`products.ts`). The name after the number = web address (`/products/<id>`) + favorite id –
+  never rename it (saved Packs use it too; colour names as well). Product names: only letters, digits, spaces, `-` and `'` – the confirmation
   email's safety check (another character → add it in `submission-created.mjs`). Card, product page and breadcrumb
   all read from this one file; nothing is typed twice. Presentation point: workflow for
   repetitive maintenance (change a price in one file → the whole site follows).

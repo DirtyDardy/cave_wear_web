@@ -1,6 +1,6 @@
 # CLAUDE.md – Cave Wear
 
-Project memory for Claude. Read fully at the start of every session. Updated 26 Oct 2026.
+Project memory for Claude. Read fully at the start of every session. Updated 31 Oct 2026.
 If this file and the code disagree, say so and ask – don't guess which one is right.
 
 ## 1. Project
@@ -147,13 +147,17 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 ## 6. Pages & status
 
 - **Global header + footer** – built (see 7 and 8).
-- **Home** – hero built (see 9). Under it two buttons: "Discover the collection" (filled
-  → `/products`) + "Explore more ↓" (outline, smooth scroll to `#explore`); labels are placeholders.
+- **Home** – hero built (see 9). One button, all screens (decided 30 Oct): **"Discover the
+  collection"** (`.button-glass` → `/products`), half over the hero photo's bottom edge, centred
+  (so the glass really blurs something): brighter edge + faint Egret fill, one step bigger than
+  every other button (see 11). "Explore more ↓" removed – the hero is never taller than 90% of
+  the screen, so the next section always peeks in; the button had no job.
   Last section "Questions?" with FAQ (filled → `/contact#faq`) + "Contact us" (outline →
-  `/contact#contact-form`). `id="explore"` sits on it until the first real Home section exists.
+  `/contact#contact-form`).
   Planned: featured products, short conservation overview, journey teaser, weather strip.
 - **Products** – overview + product pages built from the product folders (25 Oct, see 10).
-  Products so far: The Core Tee, The Field Hoodie. The Pack is a drawer, not a page (see 7).
+  Products so far: The Core Tee, The Field Hoodie, The Traverse Half-Zip, The Ridge Beanie,
+  The Pass Gaiter. The Pack is a drawer, not a page (see 7).
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
@@ -196,7 +200,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
     size · fit · colour, `[ − n + ]` (shared `.stepper`), quiet "Remove", row total. Same item =
     one row (newest on top), max 10; at 10: "Maximum 10 per item. Planning a big order? Contact
     us ›". "Estimated total" + "Preliminary prices. No payment now." Empty: "Your pack is empty.
-    Packing light is good – but not that light." + "Discover the collection".
+    Packing light is good – but not that light." + "Discover the collection" (jumps to
+    `/products#base-collection` and closes the Pack – on `/products` itself the page would
+    otherwise scroll behind it, 31 Oct).
   - **Reserve (decided 28 Oct, 9 questions):** "Reserve my place" → step 2 in the same drawer
     (summary, **First name** + email, short privacy line → `/privacy#reserve`, no checkbox,
     "Send reservation"), behaves like the contact form (`src/components/ReserveForm.tsx`, Netlify
@@ -223,7 +229,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   everything is filled in; under it a **grey** (Muted Stone) line "Still missing: …" – no red
   error messages. Terracotta only for a real problem (email typo, checked when leaving the
   field; sending failed), on the line only. After sending: "MESSAGE RECEIVED · date · time"
-  replaces the button. Typed text 14px. Sharp form box, 1px Flint.
+  replaces the button. Typed text 14px, 16px on phones (see 11). Sharp form box, 1px Flint.
+  **Phones (30 Oct):** topic chips 44px high (the tap minimum, was 32px); name and email
+  stacked – side by side the email was cut off, and an email typo is the one mistake that
+  really costs (then no answer is possible).
 - **Weather strip** ("Field conditions", Open-Meteo) – soft ask first: *"Show today's conditions
   for your location?"* [Use my location] [Show Regensburg]. Browser permission only after the
   click; declined → Regensburg. Shows weather + a product suggestion. Wanted, build later
@@ -235,7 +244,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   Main place Brand page, teaser on Home, one line near Reserve. Links only, no embedded feeds.
 - **Animations** basic only, always respecting `prefers-reduced-motion`.
 - **Scroll snap** CSS only, `proximity` never `mandatory`: hero, main CTA, max. one more.
-  Also for the product gallery and the mobile product row.
+  Also for the product gallery and the mobile product row. **One exception (30 Oct):** the
+  product page's photo swipe row on phones uses `x mandatory` – sideways only, so it can't
+  trap the page scroll.
 
 ### Ideas – wanted, build later (remind Dardan when we work on that part)
 
@@ -300,8 +311,14 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   under the transparent header (5% → solid), dark fade on top (`.top-fade`). The page goes into
   `photoHeaderPages` in `Header.astro`. Photo focus per photo (Products: `center 70%` – between
   centre and bottom, the forest always shows, the skyline is optional). The split screen stays Home only.
+  **Phones (decided 30 Oct, from 90 · 70 · 60% · uncropped):** photo headers (not the Home
+  hero) are 60% of the screen (`--photo-header-height`, `60svh` below 48rem) – the taller
+  the box, the more a landscape photo has to zoom in. One token, so the Brand header follows.
 - **Hides on scroll down, shows on scroll up** (threshold, no jitter) – built. Never hides while
   the menu/submenu is open or focus is in the header. No slide with reduced motion.
+  **iPhone fix (30 Oct, `517b0f4`):** the iPhone's bounce past the top/bottom and the phone
+  browser bar growing/shrinking don't count as scrolling (the header jumped there). Not tested
+  on a real iPhone yet.
 - **Product detail pages: never hide** (Pack stays visible) – built 25 Oct: `Header.astro` sets
   `data-pinned` on every `/products/…` page, `header-hide.js` skips a pinned header.
 - **Mobile panels = one system (rule, 28 Oct):** everything that opens over the page on phones
@@ -331,6 +348,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Footer** – built: Obsidian + hairline. Small logo · tagline · journey line · Instagram,
   Threads, YouTube · newsletter. Bottom: © year Cave Wear · A concept brand by Dardan Ademi ·
   Impressum · Privacy Policy. No email icon, no pop-up, no bearbiology.org link.
+  **Phones + tablets (30 Oct):** © line and legal links centred up to 1023px (desktop: © left,
+  links right). Phones: social icons 24px with a 48px tap area. Touch screens: every legal
+  link gets an invisible 44px tap area – nothing moves visually.
 
 ## 9. Home hero (`src/components/HeroSplit.astro`)
 
@@ -340,9 +360,17 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   appear (headline max 112px, 26ch column, small text Muted Stone). No button. Hidden H1
   "Built for the wild. Made for anywhere." Soft dark gradient on top for header readability.
 - Height `--hero-height` (`min(45rem, 90svh)`, same as every photo header); everything inside scales with it.
-- OPEN: text overlaps the bear at 1280px; mobile/touch version; Safari (Mac) check; larger
-  downloads of the hero photos (then re-check header readability + top gradient over them); final CTA text (direction "Discover the collection") + position –
-  always visible, never hover-only.
+- **Touch screens (built 30 Oct, `src/scripts/hero-auto.js`):** a finger can't hover, so time
+  does what the mouse does. Rest state 2 s (both sides, the bear whole) → wild and anywhere
+  take turns, 4.5 s each (3.5 s felt rushed), slower 0.8 s fade → after 3 rounds (~29 s) it
+  stops by itself, back to the rest state. Pause/play button (moving longer than 5 s needs one,
+  WCAG 2.2.2); whoever taps play chose it, so then it never stops by itself. Runs only while
+  the hero is on screen; reduced motion → stays still. The bear max 90% of the screen width,
+  never cut off. Phones (below 48rem): short texts ("Cold mornings, rough terrain – gear that
+  keeps up." / "Slow mornings to late nights – pieces that fit your everyday."). Same photos.
+- CTA: "Discover the collection" on the hero's bottom edge, always visible (see 6).
+- OPEN: text overlaps the bear at 1280px; Safari (Mac) check; larger downloads of the hero
+  photos (then re-check header readability + top gradient over them).
 
 ## 10. Products & product images
 
@@ -499,7 +527,17 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   the dark area closes. **Zoom:** click the big photo → zooms inside its frame only, mouse
   looks around, click again zooms out; max zoom = photo's real width ÷ shown width, never
   above 2.5× and not at all below 1.25× → never visible pixels. Browser zoom is not blocked
-  (accessibility). `src/scripts/photo-viewer.js`. Mobile/touch (swipe, pinch) = later phase.
+  (accessibility). `src/scripts/photo-viewer.js`.
+  **With a finger (built 30 Oct):** the photo is exactly screen-wide on phones (it was 455px on
+  375px – the arrows sat off screen); swipe = next photo (follows the finger), double tap =
+  zoom where you tapped, one finger looks around, double tap zooms out. The phone's own pinch
+  zoom stays free (accessibility). Phones: dots inside the photo instead of arrows (arrows on
+  the screen edge looked unclean); tablet and desktop keep the arrows.
+- **Product page on phones (built 30 Oct, below 48rem):** the gallery becomes one swipe row,
+  one full-width photo at a time, with dots under it (`gallery-dots.js`); the description
+  folds away behind a small button next to the tagline (`description-toggle.js`); the
+  breadcrumb sits on one 12px line and cuts with "…". One column, sticky only from 1024px.
+  From 768px the photo grid stays as before.
 - **"Add to pack" disabled until everything is chosen (decided 25 Oct):** starts with the
   standard disabled look (50%, not-allowed cursor); `product-options.js` switches it on once
   size, fit and colour are chosen. Fit/colour default to the first option, so in practice it
@@ -616,6 +654,12 @@ like a pill), message field 4px (input), the form box itself sharp.
 - Never outline on a photo, never glass on flat dark. Sentence case, **one size for every
   button: 40px high, 14px medium** (decided 24 Oct). Bigger or smaller only where Dardan asks.
   Pressed 97% (off with reduced motion). Reference: `/styleguide`.
+- **Touch and phones:** 44px high on touch screens (`--control-height`, `pointer: coarse`,
+  chosen 29 Oct from 40 / 44 / 48). 16px button text and 16px typed text in fields on phones
+  (`--text-button`, `--text-field`, below 48rem, decided 30 Oct after measuring 6 sites +
+  Apple/Google guidelines) – below 16px the iPhone zooms the page in when you tap a field.
+  Body and small text stay the same. Exception: the Home hero button is one step bigger
+  (44px with a mouse, 48px on touch, 16px text – see 6).
 
 ### Cards & glass
 Every card = the hero bear's **smoked glass**: blur 12px, saturate 1.2, brightness 0.9 + Dark
@@ -722,9 +766,11 @@ then Dardan decides.
   not used on purpose (own design system) – explain it.
 - **⚠ REMIND DARDAN EVERY DAY (asked 27 Oct): make product pictures for one new product.**
   Gemini has a daily image limit, so a little every day. Takes time → not late at night.
-  Status 27 Oct: **Half-Zip, male version – front (shot 1) + back (shot 2) done**; still missing
-  close-ups (shots 3–5), shot 0, and the female version. Then the next product (rain jacket,
-  beanie, buff). Method: memory "Gemini image method". Remove when all six products have photos.
+  Status 31 Oct: **5 of 6 done** – Core Tee, Field Hoodie, Traverse Half-Zip (both fits),
+  Ridge Beanie (30 Oct), Pass Gaiter (the buff, 31 Oct). **Only the rain jacket is left**
+  (The All-Weather Shell – Dardan's order: last, the other brand's logo has to go in
+  Photoshop, needs a full day). Method: memory "Gemini image method".
+  Remove when all six products have photos.
 - **⚠ BEFORE 11 NOV (Dardan, 29 Oct): colour-grade the product pictures right.** Every product,
   every colour, so the colours look right and the shots fit together as one shoot. Photoshop
   work (rule 9) – Dardan grades, Claude can put the shots side by side and point out
@@ -735,10 +781,11 @@ then Dardan decides.
   Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
   of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:
   `drafts/site-ideas.md`. Remove this line once answered.
-- **Pack: built 27–28 Oct, merged into `main` 28 Oct – NOT pushed yet.** Next, in the Pack chat
-  (29 Oct): Dardan sets `SMTP_PASSWORD` in Netlify (click by click, screenshot before the last
-  button) · fresh-clone build test · ONE push (it also brings the mobile menu live) · live test:
+- **Pack: built 27–28 Oct, merged into `main` 28 Oct – NOT pushed yet.** `SMTP_PASSWORD` is
+  set in Netlify (Dardan, 31 Oct – the live test confirms it). Push planned 31 Oct afternoon:
+  fresh-clone build test · ONE push (it also brings the mobile work live) · live test:
   a reservation reaches Netlify, the email arrives, `data-netlify` is gone from the live HTML.
+  After the live test: this line → "pushed and live", delete the test reservations.
 - **Contact page (26 Oct):** Dardan reads the new Privacy section once (netcup → Gmail, "deleted
   once answered" – true for how he works?). The contact form only reaches Netlify after a deploy
   (check: `data-netlify="true"` gone from the live HTML). Mobile layout = mobile phase.
@@ -746,13 +793,14 @@ then Dardan decides.
   info@cavewear.de for any form (contact + newsletter), forwarded to Gmail; reply goes straight to
   the visitor (Reply-to). Gmail put the first one in spam → "Kein Spam" + filter "never spam" for
   formresponses@netlify.com. Netlify's spam filter can catch repeated test messages (no email then).
-  OPEN: Privacy Policy – add "IP address" to what Netlify Forms records; delete the test submissions.
+  Privacy Policy now says Netlify Forms records the IP address (done 30 Oct, `2f5f40b`).
+  OPEN: delete the test submissions.
 - Newsletter double opt-in (the Reserve confirmation email is built, see 5).
 - Product details, donation model, weather → product mapping.
-- Home sections + final CTA; Brand page sections, then submenu + jump links.
+- Home sections; Brand page sections, then submenu + jump links.
 - Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
   strip/card. Glass comparison on `/styleguide` (see 11).
-- Hero at 1280px, mobile version, Safari check. Card radius.
+- Hero at 1280px, Safari check. Card radius.
 - Delete `/styleguide` and its footer link before launch. DNSSEC at the very end.
 - **Final steps before 11 Nov (Dardan, 26 Oct): 2FA on the Cave Wear Gmail and netcup** –
   remind Dardan, guide click by click (he types passwords and scans codes himself).
@@ -771,7 +819,7 @@ then Dardan decides.
   and the "Choose a size" hint is built – both done in the Pack, 27 Oct) · "Learn more ›" and "Size
   chart and fit guide ›" on the product page always underlined (only these two) · legal
   headings weight 500 → 450 (product name done 30 Oct) · Privacy Policy: add that Netlify Forms records the
-  IP address · Impressum, under Photo credits: one line that some product images are
+  IP address (**done 30 Oct**) · Impressum, under Photo credits: one line that some product images are
   AI-generated (Gemini) and edited (**done 29 Oct**, version B – see 13).
 - **Decided 27 Oct – no change:** colour dots keep the brand hex (Egret dot stays `#F3EBE0`
   = the target colour; the darker fabric in the photos is intended – see "Dyed for wash 10" in 7) · the black Core Tee's bright neck label is intended · product
@@ -786,6 +834,6 @@ then Dardan decides.
   (goes with "Photo system first"). Own chat, later – not the hub. (He tested a price change on
   the Core Tee on 29 Oct; it worked.)
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
-- Mobile phase for the product pages: one column without sticky, photo viewer with swipe and
-  pinch, card fit icons on touch.
+- Mobile phase for the product pages: one column, swipe and the photo viewer are done (30 Oct,
+  see 10) – still open: card fit icons on touch.
 - Real shot 0 photos (Core Tee, Field Hoodie, Half-Zip) – the AI stand-ins are online until then.

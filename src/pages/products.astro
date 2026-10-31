@@ -80,12 +80,24 @@ const supporterCollection = cardsFor("Supporter Collection");
   <div class="container section collections">
     <!-- id: the Pack's "Discover the collection" jumps here (/products#base-collection) -->
     <section id="base-collection" class="collection" aria-labelledby="base-title">
-      <!-- Title + quiet tag line (same look as the product code), then the short intro -->
+      <!-- Title + quiet tag line (same look as the product code), then the short intro.
+           The intro is folded away behind the small button on the right of the title
+           (description-toggle.js, same button as on the product page). Without
+           JavaScript: no button, the intro is always there. -->
       <div class="collection-head">
-        <h2 id="base-title" class="label collection-title">Base Collection</h2>
+        <div class="collection-title-row">
+          <h2 id="base-title" class="label collection-title">Base Collection</h2>
+          <button
+            type="button"
+            class="description-toggle"
+            aria-expanded="false"
+            aria-controls="base-intro"
+            aria-label="About the Base Collection"
+          ></button>
+        </div>
         <p class="collection-tags"><span>Tone on tone</span> · <span>Made to last</span> · <span>Built for anywhere</span></p>
       </div>
-      <p class="collection-intro">
+      <p id="base-intro" class="collection-intro">
         Essentials made for years, not seasons. Buy once, keep it. The collection grows one
         considered piece at a time.
       </p>
@@ -139,6 +151,7 @@ const supporterCollection = cardsFor("Supporter Collection");
 </BaseLayout>
 
 <script src="../scripts/favorites.js"></script>
+<script src="../scripts/description-toggle.js"></script>
 <style>
   /* --- Photo header ------------------------------------------------------------
      Same height as the Home hero, but 60% of the screen on phones
@@ -230,6 +243,77 @@ const supporterCollection = cardsFor("Supporter Collection");
   /* With an intro under it, the head sits 16px above it (24px straight to the cards) */
   .collection-head:has(+ .collection-intro) {
     margin-block-end: var(--space-4);
+  }
+
+  /* Base Collection: title on the left, the small button on the right, the line under both */
+  .collection-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block-end: var(--space-3);
+    border-block-end: 1px solid var(--color-line);
+
+    & .collection-title {
+      margin-block-end: 0; /* the button follows, so the heading's own space below would show */
+      padding-block-end: 0;
+      border: 0;
+    }
+  }
+
+  /* The small chevron button – the same look as the description button on the
+     product page. 40px to tap, but the negative margin keeps the title row 20px high,
+     like the Supporter title. */
+  .description-toggle {
+    display: none; /* without JavaScript: no button, the intro is always there */
+    flex-shrink: 0;
+    place-items: center end;
+    inline-size: var(--control-height);
+    block-size: var(--control-height);
+    margin-block: calc((var(--leading-small) - var(--control-height)) / 2);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      inline-size: 0.375rem;
+      block-size: 0.375rem;
+      border-block-end: 1.5px solid currentColor;
+      border-inline-end: 1.5px solid currentColor;
+      translate: -2px -2px;
+      rotate: 45deg;
+    }
+
+    &[aria-expanded="true"]::before {
+      translate: -2px 2px;
+      rotate: -135deg;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  /* With JavaScript the button shows, and while it's closed the intro is hidden
+     (the head then keeps its normal 24px to the cards) */
+  :global(html[data-js]) {
+    & .description-toggle {
+      display: grid;
+    }
+
+    & .collection:has(.description-toggle[aria-expanded="false"]) {
+      & .collection-head {
+        margin-block-end: var(--space-6);
+      }
+
+      & .collection-intro {
+        display: none;
+      }
+    }
   }
 
   /* 1 column on phones, 2 on tablets, 3 on desktop */

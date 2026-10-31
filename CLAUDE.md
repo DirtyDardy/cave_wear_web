@@ -165,7 +165,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   **Collection intros (31 Oct, from 20 questions, version A of two):** under each collection
   title + line a quiet tag line in the product-code style (12px, 300, Muted Stone, uppercase;
   a tag never breaks in the middle). Base: "Tone on tone · Made to last · Built for anywhere" +
-  Dardan's text (field briefing, no "we"/"I"). Supporter: "Pre-launch only · For early
+  Dardan's text (field briefing, no "we"/"I"), folded away behind the product page's chevron
+  button on the right of the title – closed by default on every screen (decided 31 Oct, the
+  head then looks like the Supporter one). Supporter: "Pre-launch only · For early
   believers · Conservation planned" + the explanation in the third-column card ("For the ones
   who were here first." … "Coming soon"). **Update when the Supporter design is done:** "bolder
   graphics" and "Coming soon" in the card; "Conservation planned" may become "Supports

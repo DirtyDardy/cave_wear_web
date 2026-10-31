@@ -396,6 +396,37 @@ p a {
   padding-block: var(--section-space); /* 64px → 96px from 768px */
 }
 
+/* "Look here": the place a link just sent you to gets a thin Wild Honey frame
+   and a faint tint, which fade out after about 3 seconds (decided 26 Oct for
+   the FAQ, 31 Oct also for the newsletter). A script adds "is-found" once the
+   place is in the middle of the screen (faq-open.js, look-here.js).
+   With reduced motion the frame simply stays, without fading. */
+.is-found {
+  border-radius: var(--radius-sm);
+  outline: 1px solid var(--color-accent);
+  outline-offset: var(--space-2); /* 8px around it */
+  background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  box-shadow: 0 0 0 var(--space-2) color-mix(in srgb, var(--color-accent) 6%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-found {
+    animation: look-here 3s ease-out forwards;
+  }
+}
+
+@keyframes look-here {
+  0%,
+  50% {
+    outline-color: var(--color-accent);
+  }
+  100% {
+    outline-color: transparent;
+    background-color: transparent;
+    box-shadow: 0 0 0 var(--space-2) transparent;
+  }
+}
+
 /* Soft dark fade at the top of a photo header (Home hero, Products), so the
    header links stay readable on bright photos (fog, sky). Sits above the
    photo; the element itself needs position: relative. */

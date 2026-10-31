@@ -2,6 +2,7 @@
 // HOME – THE JOURNEY SO FAR (from my Home anatomy, 31 Oct). Last Home section.
 // Left: label, heading, intro, button to the footer newsletter, the questions line.
 // Right: the real milestones + "Next up" (src/data/journey.js).
+// Phones: text, milestones, then the questions line.
 // No section numbers (decided 31 Oct).
 import { milestones, nextUp } from "../data/journey.js";
 ---
@@ -16,16 +17,15 @@ import { milestones, nextUp } from "../data/journey.js";
         Cave Wear is still a concept, built step by step and in the open. Here is what has really happened so far –
         and what comes next.
       </p>
-      <a href="#newsletter" class="button button-outline">Follow the journey</a>
-
-      <!-- The old "Questions?" block, merged into one quiet line (decided 31 Oct) -->
-      <div class="home-journey-questions">
-        <p>Got a question or an idea?</p>
-        <ul class="home-journey-links" role="list">
-          <li><a href="/contact#faq" class="text-link">Read the FAQ ›</a></li>
-          <li><a href="/contact#contact-form" class="text-link">Write to us ›</a></li>
-        </ul>
-      </div>
+      <!-- ↓ = it jumps down the page (like "Write to us ↓" on /contact); the hint says
+           where to, because "Follow the journey" alone didn't (31 Oct) -->
+      <!-- data-look-here: the newsletter gets the FAQ's "look here" frame after the jump -->
+      <a href="#newsletter" class="button button-outline" data-look-here>Follow the journey ↓</a>
+      <!-- Two lines on every screen, so the hint is never wider than the button (31 Oct) -->
+      <p class="small home-journey-hint">
+        Newsletter and socials
+        <span class="hint-line">down in the footer.</span>
+      </p>
     </div>
 
     <ol class="home-journey-list" role="list">
@@ -60,17 +60,35 @@ import { milestones, nextUp } from "../data/journey.js";
         </div>
       </li>
     </ol>
+
+    <!-- The old "Questions?" block, merged into one quiet line (decided 31 Oct).
+         Phones: under the milestones; desktop: left, under the button. -->
+    <div class="home-journey-questions">
+      <p>Got a question or an idea?</p>
+      <ul class="home-journey-links" role="list">
+        <li><a href="/contact#faq" class="text-link">Read the FAQ ›</a></li>
+        <li><a href="/contact#contact-form" class="text-link">Write to us ›</a></li>
+      </ul>
+    </div>
   </div>
 </section>
+
+<script src="../scripts/look-here.js"></script>
 
 <style>
   /* Written mobile first: the base = phones (one column),
      "width >=" adds tablet and desktop. */
 
-  /* Same inner line as the Base Collection (--home-inset, 48px from tablet up) */
+  /* Same inner line as the Base Collection (--home-inset, 48px from tablet up).
+     Three parts: text, milestones, questions. Phones: in that order, one column.
+     Desktop: text and questions left, the milestones right over both rows. */
   .home-journey-inner {
     display: grid;
-    gap: var(--space-12); /* 48px between text and list on phones */
+    grid-template-areas:
+      "text"
+      "list"
+      "questions";
+    gap: var(--space-12); /* 48px between the parts on phones */
 
     @media (width >= 48rem) {
       padding-inline: var(--home-inset, var(--space-12));
@@ -78,9 +96,17 @@ import { milestones, nextUp } from "../data/journey.js";
 
     /* Desktop: text left, milestones right (like the anatomy) */
     @media (width >= 64rem) {
+      grid-template-areas:
+        "text list"
+        "questions list";
       grid-template-columns: 1fr 1.15fr;
-      gap: var(--space-8); /* 32px */
+      grid-template-rows: auto 1fr; /* the questions sit right under the text */
+      gap: var(--space-12) var(--space-8); /* 48px down, 32px across */
     }
+  }
+
+  .home-journey-text {
+    grid-area: text;
   }
 
   .home-journey-label {
@@ -93,9 +119,21 @@ import { milestones, nextUp } from "../data/journey.js";
     color: var(--color-text-secondary); /* Weathered Bone */
   }
 
+  /* Quiet line under the button: where it takes you */
+  .home-journey-hint {
+    margin-block: var(--space-2) 0; /* 8px under the button */
+    color: var(--color-text-quiet); /* Muted Stone */
+
+    /* "down in the footer." on its own line */
+    & .hint-line {
+      display: block;
+    }
+  }
+
   /* --- Questions line: a hairline, one short sentence, two links in a row ----- */
   .home-journey-questions {
-    margin-block-start: var(--space-12); /* 48px under the button */
+    grid-area: questions;
+    align-self: start;
     padding-block-start: var(--space-6); /* 24px under the line */
     border-block-start: 1px solid var(--color-line); /* Charcoal */
 
@@ -115,6 +153,7 @@ import { milestones, nextUp } from "../data/journey.js";
 
   /* --- Milestones: big number left, title + line right, hairline between ----- */
   .home-journey-list {
+    grid-area: list;
     margin: 0;
     padding: 0;
     list-style: none;

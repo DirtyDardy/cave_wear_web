@@ -1,7 +1,7 @@
 // FAQ JUMP LINKS on the Contact page.
 // A link like /contact#pricing should show that answer right away – but a closed
 // <details> doesn't open by itself. This opens it, puts it in the middle of the screen
-// and marks it for a moment, so you see where to look ("is-found", CSS in contact.astro).
+// and marks it for a moment, so you see where to look ("is-found", CSS in global.css).
 
 function openTarget() {
   // location.hash = the part after # in the address, e.g. "#pricing"

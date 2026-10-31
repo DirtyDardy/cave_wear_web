@@ -162,6 +162,14 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   `/contact#contact-form`).
   Planned: featured products, short conservation overview, journey teaser, weather strip.
 - **Products** – overview + product pages built from the product folders (25 Oct, see 10).
+  **Collection intros (31 Oct, from 20 questions, version A of two):** under each collection
+  title + line a quiet tag line in the product-code style (12px, 300, Muted Stone, uppercase;
+  a tag never breaks in the middle). Base: "Tone on tone · Made to last · Built for anywhere" +
+  Dardan's text (field briefing, no "we"/"I"). Supporter: "Pre-launch only · For early
+  believers · Conservation planned" + the explanation in the third-column card ("For the ones
+  who were here first." … "Coming soon"). **Update when the Supporter design is done:** "bolder
+  graphics" and "Coming soon" in the card; "Conservation planned" may become "Supports
+  conservation" only once the donation is real. Later: a quiet link to the Brand page.
   Products so far: The Core Tee, The Field Hoodie, The Traverse Half-Zip, The Ridge Beanie,
   The Pass Gaiter. The Pack is a drawer, not a page (see 7).
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey

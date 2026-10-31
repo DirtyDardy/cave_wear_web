@@ -80,7 +80,15 @@ const supporterCollection = cardsFor("Supporter Collection");
   <div class="container section collections">
     <!-- id: the Pack's "Discover the collection" jumps here (/products#base-collection) -->
     <section id="base-collection" class="collection" aria-labelledby="base-title">
-      <h2 id="base-title" class="label collection-title">Base Collection</h2>
+      <!-- Title + quiet tag line (same look as the product code), then the short intro -->
+      <div class="collection-head">
+        <h2 id="base-title" class="label collection-title">Base Collection</h2>
+        <p class="collection-tags"><span>Tone on tone</span> · <span>Made to last</span> · <span>Built for anywhere</span></p>
+      </div>
+      <p class="collection-intro">
+        Essentials made for years, not seasons. Buy once, keep it. The collection grows one
+        considered piece at a time.
+      </p>
       <ul class="product-grid" role="list">
         {
           baseCollection.map((product) => (
@@ -93,7 +101,12 @@ const supporterCollection = cardsFor("Supporter Collection");
     </section>
 
     <section class="collection" aria-labelledby="supporter-title">
-      <h2 id="supporter-title" class="label collection-title">Supporter Collection</h2>
+      <!-- The donation is only planned → "Conservation planned", never "Supports conservation"
+           until it's real -->
+      <div class="collection-head">
+        <h2 id="supporter-title" class="label collection-title">Supporter Collection</h2>
+        <p class="collection-tags"><span>Pre-launch only</span> · <span>For early believers</span> · <span>Conservation planned</span></p>
+      </div>
       <ul class="product-grid" role="list">
         {
           supporterCollection.map((product) => (
@@ -102,10 +115,15 @@ const supporterCollection = cardsFor("Supporter Collection");
             </li>
           ))
         }
-        <!-- Text card in the third column. PLACEHOLDER text. -->
+        <!-- Text card in the third column: what the Supporter Collection is.
+             Update "bolder graphics" and "Coming soon" once the design is done. -->
         <li class="text-card">
-          <h3>Placeholder headline</h3>
-          <p class="small">Placeholder – what the Supporter Collection is and why it exists.</p>
+          <h3>For the ones who were here first.</h3>
+          <p class="small">
+            A tee and a hoodie with bolder graphics, reservable only before the launch – then
+            gone for good. Part of every piece is planned to support bear conservation.
+          </p>
+          <p class="collection-tags">Coming soon</p>
         </li>
       </ul>
     </section>
@@ -121,7 +139,6 @@ const supporterCollection = cardsFor("Supporter Collection");
 </BaseLayout>
 
 <script src="../scripts/favorites.js"></script>
-
 <style>
   /* --- Photo header ------------------------------------------------------------
      Same height as the Home hero, but 60% of the screen on phones
@@ -173,11 +190,46 @@ const supporterCollection = cardsFor("Supporter Collection");
     scroll-margin-block-start: var(--space-6); /* 24px – plus the header space from scroll-padding in global.css */
   }
 
-  /* Small uppercase title with a line below, across the full width */
+  /* Small uppercase title with a line below, across the full width,
+     then the tag line under the line (version A of two, decided 31 Oct) */
+  .collection-head {
+    margin-block-end: var(--space-6); /* 24px to the intro or the cards */
+  }
+
   .collection-title {
-    margin-block-end: var(--space-6); /* 24px to the cards */
     padding-block-end: var(--space-3); /* 12px to the line */
     border-block-end: 1px solid var(--color-line);
+  }
+
+  .collection-head .collection-tags {
+    margin-block-start: var(--space-3); /* 12px under the line */
+  }
+
+  /* The quiet tag line – same look as the product code on the product pages */
+  .collection-tags {
+    color: var(--color-text-quiet);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 300;
+    line-height: var(--space-4); /* 16px */
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+
+    /* A tag never breaks in the middle ("Built for / anywhere") – only between tags */
+    & span {
+      white-space: nowrap;
+    }
+  }
+
+  /* Two short lines under the title, never wider than a comfortable read */
+  .collection-intro {
+    max-inline-size: var(--measure-body);
+    margin-block-end: var(--space-6); /* 24px to the cards */
+    color: var(--color-text-secondary);
+  }
+
+  /* With an intro under it, the head sits 16px above it (24px straight to the cards) */
+  .collection-head:has(+ .collection-intro) {
+    margin-block-end: var(--space-4);
   }
 
   /* 1 column on phones, 2 on tablets, 3 on desktop */
@@ -214,6 +266,11 @@ const supporterCollection = cardsFor("Supporter Collection");
     border: 1px solid var(--color-line);
     background-color: var(--color-bg);
     text-align: center;
+
+    /* "Coming soon" under the text */
+    & .collection-tags {
+      margin-block-start: var(--space-4);
+    }
   }
 
   .favorites-empty {

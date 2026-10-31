@@ -521,6 +521,12 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   knit) – **shot 5 is optional (30 Oct):** no `Shot 5:` line in the text file → no shot 5.
   Shot 0 = a man in a whisky lounge in the Wild Honey beanie. Dardan's double fold of the
   cuff: vision for the text / a real photo later, not an AI picture.
+- Fifth product (31 Oct): `pass-gaiter` (The Pass Gaiter, `PGT01`, one size, unisex, Black only,
+  19,90€) = the "buff" – **never call it "Buff" on the site** (BUFF® is a registered brand name;
+  the neutral word is neck gaiter). Wordmark black on black on the top edge, wearer's right
+  (planned: thin silicone heat transfer); drawcord toggle in black recycled plastic (vision)
+  with the bear pressed in. Shot 0 = a man exploring an abandoned factory hall in winter.
+- Rain jacket name (31 Oct): **The All-Weather Shell** – not built yet.
 - **Shot 0 of all three products is AI (Gemini, Dardan 29 Oct)** – the people in them aren't
   real, so they're in Git and go live; stand-ins until a real photoshoot. Covered by the
   Impressum's AI line (see 13). The old Core Tee / Field Hoodie placeholders (another brand's

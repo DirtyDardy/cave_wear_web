@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HeroSplit from "../components/HeroSplit.astro";
+import HomePrinciples from "../components/HomePrinciples.astro";
 import HomeCollection from "../components/HomeCollection.astro";
 import HomeJourney from "../components/HomeJourney.astro";
 ---
@@ -16,8 +17,10 @@ import HomeJourney from "../components/HomeJourney.astro";
     <a href="/products" class="button button-glass">Discover the collection</a>
   </div>
 
-  <!-- Base Collection: Field Hoodie big, Core Tee + Ridge Beanie small (31 Oct).
-       Rugged · Functional · Refined will go above it. -->
+  <!-- Rugged · Functional · Refined: three tiles (video placeholders for now) -->
+  <HomePrinciples />
+
+  <!-- Base Collection: Field Hoodie big, Core Tee + Ridge Beanie small (31 Oct) -->
   <HomeCollection />
 
   <!-- Last section before the footer: real milestones + "Next up". The old

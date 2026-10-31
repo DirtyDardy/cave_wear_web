@@ -1,0 +1,284 @@
+---
+// HOME – RUGGED · FUNCTIONAL · REFINED (from my design, 31 Oct). Right under the hero.
+// Each tile, top to bottom: brand word → video → principle → one line.
+// The active tile is bigger (the middle one at rest).
+// - Mouse: hover a tile and it becomes the big one – nothing moves by itself.
+// - Touch screens (no hover): the tiles take turns by themselves
+//   (src/scripts/principles-loop.js), with a pause button. Phones: the active one
+//   big in the middle, the other two small and cut off at the sides.
+// Videos follow – for now each tile is a placeholder with what it will show.
+
+const principles = [
+  {
+    word: "Rugged",
+    title: "Built to Last",
+    line: "Made for the hundredth wear, not the first.",
+    video: "Kayaking in the hoodie or shell",
+  },
+  {
+    word: "Functional",
+    title: "Made to Adapt",
+    line: "One piece. Every place the day goes.",
+    video: "Layering: half-zip, gaiter, beanie",
+  },
+  {
+    word: "Refined",
+    title: "Quietly Confident",
+    line: "You notice it. It doesn't shout.",
+    video: "Embroidering the bear",
+  },
+];
+---
+
+<section class="container section principles" aria-labelledby="principles-title">
+  <h2 id="principles-title" class="visually-hidden">Rugged. Functional. Refined.</h2>
+
+  <ul class="principles-row" role="list">
+    {
+      principles.map((principle) => (
+        <li class="principle">
+          <p class="principle-word">{principle.word}</p>
+          <!-- Placeholder until the video loop exists -->
+          <div class="principle-media">
+            <p class="principle-placeholder">
+              Video loop
+              <span>{principle.video}</span>
+            </p>
+          </div>
+          <h3 class="principle-title">{principle.title}</h3>
+          <p class="small principle-line">{principle.line}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- Touch screens only (the script shows it): anything that moves longer than
+       5 seconds needs a way to stop it (WCAG 2.2.2) -->
+  <button type="button" class="icon-button principles-pause" aria-label="Pause" hidden>
+    <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3" height="12" /><rect x="14" y="6" width="3" height="12" /></svg>
+    <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l10 6-10 6z" /></svg>
+  </button>
+</section>
+
+<script src="../scripts/principles-loop.js"></script>
+
+<style>
+  /* Written mobile first: the base = phones without the loop (one column –
+     also what reduced motion shows). "width >=" adds tablet and desktop. */
+
+  /* The page snaps gently to this section (proximity, never mandatory – decided
+     27 Oct: once you're past the hero, it pulls you in). Only on Home. */
+  :global(html:has(.principles)) {
+    scroll-snap-type: y proximity;
+  }
+
+  .principles {
+    scroll-snap-align: center;
+  }
+
+  .principles-row {
+    display: grid;
+    gap: var(--space-12); /* 48px between tiles in the column */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* --- One tile ---------------------------------------------------------------- */
+
+  /* The brand word: a label, centred. A fixed line height, so the bigger active
+     word never pushes its tile down – all tiles start on one line. */
+  .principle-word {
+    margin-block-end: var(--space-3); /* 12px to the tile */
+    color: var(--color-text-secondary); /* Weathered Bone */
+    font-size: var(--text-small); /* 14px */
+    font-weight: 500;
+    line-height: var(--space-6); /* 24px */
+    letter-spacing: var(--tracking-wide);
+    text-align: center;
+    text-transform: uppercase;
+    transition:
+      font-size 0.5s var(--motion-ease),
+      color 0.5s var(--motion-ease);
+  }
+
+  /* Placeholder tile: 4:5 like the product photos, 12px corners (decided 31 Oct),
+     quiet stripes so it reads as "something goes here" */
+  .principle-media {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 1px solid var(--color-input-border); /* Flint */
+    border-radius: var(--radius-button); /* 12px */
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-bg) 0 var(--space-2),
+      var(--color-surface) var(--space-2) var(--space-4)
+    );
+  }
+
+  .principle-placeholder {
+    margin: 0;
+    padding: var(--space-4);
+    color: var(--color-text-quiet); /* Muted Stone */
+    font-size: var(--text-small);
+    font-weight: 500;
+    letter-spacing: var(--tracking-wide);
+    text-align: center;
+    text-transform: uppercase;
+
+    & span {
+      display: block;
+      margin-block-start: var(--space-1);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+  }
+
+  .principle-title {
+    margin-block: var(--space-4) var(--space-1); /* 16px under the tile, 4px to the line */
+    font-size: var(--text-body); /* 16px */
+    font-weight: 500;
+    line-height: var(--leading-body);
+    letter-spacing: -0.01em;
+  }
+
+  .principle-line {
+    margin-block-end: 0;
+  }
+
+  /* --- Pause button (touch screens) ------------------------------------------ */
+  .principles-pause {
+    display: grid;
+    place-items: center;
+    margin: var(--space-6) auto 0; /* 24px under the tiles, centred */
+
+    &[hidden] {
+      display: none;
+    }
+
+    & svg {
+      inline-size: var(--space-4); /* 16px */
+      block-size: var(--space-4);
+      fill: currentColor;
+    }
+
+    /* Running: pause icon. Paused (data-paused): play icon. */
+    & .icon-play,
+    &[data-paused] .icon-pause {
+      display: none;
+    }
+
+    &[data-paused] .icon-play {
+      display: block;
+    }
+  }
+
+  /* --- Phones with the loop (data-loop is set by the script) ------------------
+     All three tiles lie in the same grid cell, on top of each other. Each one
+     is then moved to its place: the active one big in the middle, the others
+     scaled down at the sides – partly off screen (the row is cut at the edges). */
+  @media (width < 48rem) {
+    .principles[data-loop] .principles-row {
+      grid-template-areas: "stack";
+      justify-items: center;
+      gap: 0;
+      margin-inline: calc(-1 * var(--gutter)); /* from screen edge to screen edge */
+      overflow: hidden;
+    }
+
+    .principles[data-loop] .principle {
+      grid-area: stack;
+      inline-size: 64vw;
+      /* Shrink around the middle of the tile (word 24px + 12px, then half of
+         the 4:5 tile = 40vw), so the small tiles sit centred next to the big one */
+      transform-origin: 50% calc(var(--space-6) + var(--space-3) + 40vw);
+      transition:
+        transform 0.6s var(--motion-ease),
+        opacity 0.6s var(--motion-ease);
+
+      /* Left and right (my sketch, 31 Oct): half size, the screen edge cuts
+         right through the middle of them */
+      &[data-place="prev"] {
+        transform: translateX(-50vw) scale(0.5);
+      }
+
+      &[data-place="next"] {
+        transform: translateX(50vw) scale(0.5);
+      }
+
+      /* The small ones keep their word, only the text under them goes */
+      &:not([data-place="active"]) :is(.principle-title, .principle-line) {
+        opacity: 0;
+      }
+
+      /* The tile that wraps around (left → right) would fly across the screen:
+         it disappears and fades in on its new side instead */
+      &[data-jump] {
+        opacity: 0;
+        transition: none;
+      }
+    }
+
+    .principle-word,
+    .principle-title,
+    .principle-line {
+      transition: opacity 0.4s var(--motion-ease);
+    }
+  }
+
+  /* --- Tablet and desktop: three tiles in a row -------------------------------
+     Each tile takes 1 part of the width, the active one 1.25 parts – so it grows
+     and the others make room. The 48px between tiles is padding (24px on each
+     side), not a gap: moving the mouse from tile to tile never crosses empty
+     space, so the middle tile doesn't jump back in between. */
+  @media (width >= 48rem) {
+    .principles-row {
+      display: flex;
+      align-items: flex-start; /* all tiles start on one line */
+      gap: 0;
+      padding-inline: calc(var(--home-inset, var(--space-12)) - var(--space-6));
+    }
+
+    .principle {
+      flex: 1 1 0;
+      padding-inline: var(--space-6); /* 24px */
+      transition: flex-grow 0.5s var(--motion-ease);
+    }
+
+    /* The active tile: at rest the middle one; with the loop the one the script
+       picks */
+    .principles:not([data-loop]) .principles-row:not(:has(.principle:hover)) .principle:nth-child(2),
+    .principles[data-loop] .principle[data-place="active"] {
+      flex-grow: 1.25;
+
+      & .principle-word {
+        color: var(--color-text); /* Egret */
+        font-size: 1.125rem; /* 18px – one step up from the 14px label */
+      }
+    }
+
+    /* Mouse: the hovered tile becomes the big one. Only on devices with a real
+       mouse – on a touch screen a tap would leave it stuck. */
+    @media (hover: hover) {
+      .principles:not([data-loop]) .principle:hover {
+        flex-grow: 1.25;
+
+        & .principle-word {
+          color: var(--color-text);
+          font-size: 1.125rem;
+        }
+      }
+    }
+  }
+
+  /* Reduced motion: no sliding or growing animation – changes are instant */
+  @media (prefers-reduced-motion: reduce) {
+    .principle,
+    .principle-word {
+      transition: none;
+    }
+  }
+</style>

@@ -1,18 +1,20 @@
 ---
 // HOME – BASE COLLECTION ("Pieces made to stay.", from my Home anatomy, 31 Oct).
-// One big card (Field Hoodie) and two small stacked ones (Core Tee, Ridge Beanie).
+// One big card (Core Tee) and two small stacked ones (Field Hoodie, Ridge Beanie).
 // Name, tagline and photos come from the product folders – nothing typed twice.
-// Same hover as the cards on /products: shot 1 fades in over shot 0.
+// Hover: the dark fade over the photo goes away (no second photo like on /products).
 import { Image } from "astro:assets";
 import { getProducts } from "../data/products";
 
-// Which products show here, in this order (first = the big card).
+// Which products show here, in this order (first = the big card). The Core Tee is
+// the big one (31 Oct): the strongest photo, and its dark forest fits the mood –
+// the bright hoodie photo works better small.
 // focus = which part of the photo stays visible in the wide box (object-position):
 // the boxes are wider than the 4:5 photos, so a strip of each photo is shown.
 const featured = [
-  { id: "field-hoodie", focus: "center 20%" },
-  { id: "core-tee", focus: "center 38%" },
-  { id: "ridge-beanie", focus: "center 27%" },
+  { id: "core-tee", focus: "center 34%" },
+  { id: "field-hoodie", focus: "center 11%" },
+  { id: "ridge-beanie", focus: "center 24%" },
 ];
 
 const products = await getProducts();
@@ -28,7 +30,6 @@ const cards = featured.flatMap(({ id, focus }) => {
       tagline: product.tagline,
       image: product.shot0.image,
       alt: product.shot0.alt,
-      hoverImage: product.shotSets[0].shots[0].image, // shot 1, first colour + fit
       href: `/products/${product.id}`,
       focus,
     },
@@ -36,9 +37,10 @@ const cards = featured.flatMap(({ id, focus }) => {
 });
 
 // The browser picks the smallest file that is still sharp. Big card ≈ 58% of
-// the content width, small cards ≈ 42%; on phones every card is full width.
+// the content width, small cards ≈ 42%; on phones the big card is full width,
+// the small ones half.
 const bigSizes = "(width >= 48rem) 55vw, 100vw";
-const smallSizes = "(width >= 48rem) 40vw, 100vw";
+const smallSizes = "(width >= 48rem) 40vw, 50vw";
 const widths = [480, 800, 1200, 1600];
 ---
 
@@ -60,13 +62,6 @@ const widths = [480, 800, 1200, 1600];
                 alt={card.alt}
                 class="home-card-image"
                 style={`object-position: ${card.focus}`}
-                widths={widths}
-                sizes={index === 0 ? bigSizes : smallSizes}
-              />
-              <Image
-                src={card.hoverImage}
-                alt=""
-                class="home-card-image home-card-image-hover"
                 widths={widths}
                 sizes={index === 0 ? bigSizes : smallSizes}
               />
@@ -120,19 +115,24 @@ const widths = [480, 800, 1200, 1600];
     color: var(--color-text-secondary); /* Weathered Bone */
   }
 
-  /* --- Cards: one big left, two small stacked right ------------------------- */
+  /* --- Cards ------------------------------------------------------------------
+     Phones (my sketch, 31 Oct): the big card over the full width, the two small
+     ones side by side under it, 12px apart. */
   .home-collection-grid {
     display: grid;
-    gap: var(--space-6); /* 24px */
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3); /* 12px */
     margin: 0;
     padding: 0;
     list-style: none;
 
-    /* From tablet up: big card 1.35 parts, small ones 1 part (like the anatomy).
-       The big card spans both rows; the small ones share its height. */
+    /* From tablet up: one big left, two small stacked right. Big card 1.35
+       parts, small ones 1 part (like the anatomy); the big card spans both
+       rows and the small ones share its height. */
     @media (width >= 48rem) {
       grid-template-columns: 1.35fr 1fr;
       grid-template-rows: 1fr 1fr;
+      gap: var(--space-6); /* 24px */
     }
   }
 
@@ -145,19 +145,31 @@ const widths = [480, 800, 1200, 1600];
   }
 
   .home-card-big {
+    grid-column: 1 / -1; /* phones: across both columns */
+
     @media (width >= 48rem) {
+      grid-column: auto;
       grid-row: 1 / span 2;
     }
   }
 
   /* --- Photo ------------------------------------------------------------------
-     Phones: every photo 3:2. From tablet up the big photo is 3:2 and sets the
+     Phones: the big photo 8:5, the small ones 4:5 – the photos' own shape, so
+     nothing is cut off. From tablet up the big photo is 3:2 and sets the
      height; the small photos fill whatever is left (flex: 1). */
   .home-card-media {
     position: relative;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
     background-color: var(--color-bg);
+
+    .home-card-big & {
+      aspect-ratio: 8 / 5;
+
+      @media (width >= 48rem) {
+        aspect-ratio: 3 / 2;
+      }
+    }
 
     @media (width >= 48rem) {
       .home-card:not(.home-card-big) & {
@@ -168,6 +180,30 @@ const widths = [480, 800, 1200, 1600];
     }
   }
 
+  /* Fade from the bottom of the photo up to the middle (decided 31 Oct): the
+     photo melts into the text part below (same Obsidian), no hard edge. */
+  .home-card-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--color-surface), transparent 50%);
+    pointer-events: none;
+    transition: opacity 0.4s ease; /* same speed as the card hover on /products */
+  }
+
+  /* Hover: the fade goes away and the whole photo shows (decided 31 Oct –
+     no second photo here). Mouse only – on phones a tap would leave it stuck. */
+  @media (hover: hover) {
+    .home-card:hover .home-card-media::after {
+      opacity: 0;
+    }
+  }
+
+  /* Keyboard users see it too (:focus-visible, not :focus-within – see /products) */
+  .home-card:has(:focus-visible) .home-card-media::after {
+    opacity: 0;
+  }
+
   .home-card-image {
     position: absolute;
     inset: 0;
@@ -176,28 +212,13 @@ const widths = [480, 800, 1200, 1600];
     object-fit: cover;
   }
 
-  /* Shot 1 lies on top, invisible until hover – same speed as /products */
-  .home-card-image-hover {
-    opacity: 0;
-    object-position: center 30%;
-    transition: opacity 0.4s ease;
-  }
-
-  /* Mouse only – on phones a tap would leave it stuck */
-  @media (hover: hover) {
-    .home-card:hover .home-card-image-hover {
-      opacity: 1;
-    }
-  }
-
-  /* Keyboard users see it too (:focus-visible, not :focus-within – see /products) */
-  .home-card:has(:focus-visible) .home-card-image-hover {
-    opacity: 1;
-  }
-
   /* --- Text ------------------------------------------------------------------ */
   .home-card-info {
-    padding: var(--space-4) var(--space-6); /* 16px top/bottom, 24px sides */
+    padding: var(--space-3) var(--space-4); /* phones: 12px top/bottom, 16px sides */
+
+    @media (width >= 48rem) {
+      padding: var(--space-4) var(--space-6); /* 16px top/bottom, 24px sides */
+    }
   }
 
   .home-card-name {

@@ -77,6 +77,12 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
     same line thickness and colour – not a redesign. If a request can mean a small or a big
     change, do the small one or ask first. Comparisons work best as a temporary `?version=`
     switch on localhost + screenshots; the switch is removed right after the decision.
+16. **iPhones too (Dardan, 30 Oct):** every mobile change must also work on iPhones. On an
+    iPhone every browser runs on Apple's WebKit – "works in Chrome on Android" proves nothing
+    (the header bug of 30 Oct only happened on iPhones). When planning a new part, say in one
+    line what could act differently on an iPhone. Nothing is changed just for Safari unless
+    Dardan decides it – say what, where and why. Checklist + findings: memory "iPhone / WebKit
+    checklist". Real tests on his girlfriend's iPhone (Dardan has none, Claude can't run iOS).
 
 ## 4. Tech stack
 
@@ -565,7 +571,7 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   (planned: thin silicone heat transfer); drawcord toggle in black recycled plastic (vision)
   with the bear pressed in. Shot 0 = a man exploring an abandoned factory hall in winter.
 - Rain jacket name (31 Oct): **The All-Weather Shell** – not built yet.
-- **Shot 0 of all three products is AI (Gemini, Dardan 29 Oct)** – the people in them aren't
+- **Shot 0 of all five products is AI (Gemini – Dardan 29 Oct, beanie + gaiter 31 Oct)** – the people in them aren't
   real, so they're in Git and go live; stand-ins until a real photoshoot. Covered by the
   Impressum's AI line (see 13). The old Core Tee / Field Hoodie placeholders (another brand's
   logo, unknown licence) were never in Git and now sit in the originals folder.
@@ -836,4 +842,5 @@ then Dardan decides.
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column, swipe and the photo viewer are done (30 Oct,
   see 10) – still open: card fit icons on touch.
-- Real shot 0 photos (Core Tee, Field Hoodie, Half-Zip) – the AI stand-ins are online until then.
+- Real shot 0 photos (Core Tee, Field Hoodie, Half-Zip, Ridge Beanie, Pass Gaiter) – the AI
+  stand-ins are online until then.

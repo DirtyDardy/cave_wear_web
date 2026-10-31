@@ -98,8 +98,8 @@ const principles = [
     text-align: center;
     text-transform: uppercase;
     transition:
-      font-size 0.5s var(--motion-ease),
-      color 0.5s var(--motion-ease);
+      font-size var(--motion-duration-slide) var(--motion-ease),
+      color var(--motion-duration-slide) var(--motion-ease);
   }
 
   /* Placeholder tile: 4:5 like the product photos, 12px corners (decided 31 Oct),
@@ -257,7 +257,7 @@ const principles = [
     .principle {
       flex: 1 1 0;
       padding-inline: var(--space-6); /* 24px */
-      transition: flex-grow 0.5s var(--motion-ease);
+      transition: flex-grow var(--motion-duration-slide) var(--motion-ease); /* 0.5s */
     }
 
     /* The active tile: at rest the middle one; with the loop the one the script

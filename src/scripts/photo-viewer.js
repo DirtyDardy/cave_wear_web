@@ -152,7 +152,8 @@ function open(clickedButton) {
   });
 
   // One dot per photo (phones only – CSS hides them from 768px). A tap moves there.
-  const dots = slides.map((slide, n) => {
+  // "_" = the slide itself isn't needed here, only its number n
+  const dots = slides.map((_, n) => {
     const dot = document.createElement("button");
     dot.type = "button";
     dot.className = "gallery-dot"; // same look as the dots under the page's photo row

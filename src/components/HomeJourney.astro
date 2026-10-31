@@ -4,10 +4,12 @@
 // Right: the real milestones + "Next up" (src/data/journey.js).
 // Phones: text, milestones, then the questions line.
 // No section numbers (decided 31 Oct).
+// On the olive band (.band in global.css – version C, decided 31 Oct).
 import { milestones, nextUp } from "../data/journey.js";
 ---
 
-<section class="container section home-journey" aria-labelledby="home-journey-title">
+<section class="band section home-journey" aria-labelledby="home-journey-title">
+  <div class="container">
   <div class="home-journey-inner">
     <div class="home-journey-text">
       <p class="label home-journey-label">The journey so far</p>
@@ -71,6 +73,7 @@ import { milestones, nextUp } from "../data/journey.js";
       </ul>
     </div>
   </div>
+  </div>
 </section>
 
 <script src="../scripts/look-here.js"></script>
@@ -109,9 +112,21 @@ import { milestones, nextUp } from "../data/journey.js";
     grid-area: text;
   }
 
+  /* Label: Egret with a small square in front, like a tag (version C, 31 Oct).
+     Not Wild Honey any more – that stays for things you can click. */
   .home-journey-label {
     margin-block-end: var(--space-2); /* 8px to the heading */
-    color: var(--color-accent); /* Wild Honey */
+    color: var(--color-text);
+
+    &::before {
+      content: "";
+      display: inline-block;
+      inline-size: var(--space-2); /* 8px */
+      block-size: var(--space-2);
+      margin-inline-end: var(--space-2);
+      background-color: currentColor;
+      vertical-align: 1px;
+    }
   }
 
   .home-journey-intro {
@@ -170,7 +185,7 @@ import { milestones, nextUp } from "../data/journey.js";
   /* The big date: Barlow Condensed like the H1 – the one display touch here */
   .milestone-date {
     margin: 0;
-    color: var(--color-accent);
+    color: var(--color-text); /* Egret – not clickable, so not Wild Honey (31 Oct) */
     font-family: var(--font-display);
     font-size: var(--space-8); /* 32px */
     font-weight: 700;

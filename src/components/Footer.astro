@@ -22,7 +22,9 @@ const year = new Date().getFullYear();
 
     <!-- Newsletter: Netlify Forms reads this form from the built HTML when the site is deployed.
          The script sends it with fetch, so the page does not reload. -->
+    <!-- id="newsletter": the jump target for "Follow the journey" on Home -->
     <form
+      id="newsletter"
       class="newsletter"
       name="newsletter"
       method="POST"

@@ -1,0 +1,234 @@
+---
+// HOME – BASE COLLECTION ("Pieces made to stay.", from my Home anatomy, 31 Oct).
+// One big card (Field Hoodie) and two small stacked ones (Core Tee, Ridge Beanie).
+// Name, tagline and photos come from the product folders – nothing typed twice.
+// Same hover as the cards on /products: shot 1 fades in over shot 0.
+import { Image } from "astro:assets";
+import { getProducts } from "../data/products";
+
+// Which products show here, in this order (first = the big card).
+// focus = which part of the photo stays visible in the wide box (object-position):
+// the boxes are wider than the 4:5 photos, so a strip of each photo is shown.
+const featured = [
+  { id: "field-hoodie", focus: "center 20%" },
+  { id: "core-tee", focus: "center 38%" },
+  { id: "ridge-beanie", focus: "center 27%" },
+];
+
+const products = await getProducts();
+
+// "flatMap" with an empty list skips a product that has no folder (yet) –
+// the section never breaks because of a missing product.
+const cards = featured.flatMap(({ id, focus }) => {
+  const product = products.find((item) => item.id === id);
+  if (!product) return [];
+  return [
+    {
+      name: product.name,
+      tagline: product.tagline,
+      image: product.shot0.image,
+      alt: product.shot0.alt,
+      hoverImage: product.shotSets[0].shots[0].image, // shot 1, first colour + fit
+      href: `/products/${product.id}`,
+      focus,
+    },
+  ];
+});
+
+// The browser picks the smallest file that is still sharp. Big card ≈ 58% of
+// the content width, small cards ≈ 42%; on phones every card is full width.
+const bigSizes = "(width >= 48rem) 55vw, 100vw";
+const smallSizes = "(width >= 48rem) 40vw, 100vw";
+const widths = [480, 800, 1200, 1600];
+---
+
+<section class="container section home-collection" aria-labelledby="home-collection-title">
+  <div class="home-collection-inner">
+    <div class="home-collection-head">
+      <h2 id="home-collection-title">Pieces made to stay.</h2>
+      <a href="/products#base-collection" class="text-link">View all products ›</a>
+      <p class="home-collection-line">The essentials first. Nothing you'd only wear once.</p>
+    </div>
+
+    <ul class="home-collection-grid" role="list">
+      {
+        cards.map((card, index) => (
+          <li class:list={["home-card", { "home-card-big": index === 0 }]}>
+            <div class="home-card-media">
+              <Image
+                src={card.image}
+                alt={card.alt}
+                class="home-card-image"
+                style={`object-position: ${card.focus}`}
+                widths={widths}
+                sizes={index === 0 ? bigSizes : smallSizes}
+              />
+              <Image
+                src={card.hoverImage}
+                alt=""
+                class="home-card-image home-card-image-hover"
+                widths={widths}
+                sizes={index === 0 ? bigSizes : smallSizes}
+              />
+            </div>
+            <div class="home-card-info">
+              <!-- The name link covers the whole card (stretched link, like on /products) -->
+              <h3 class="home-card-name">
+                <a href={card.href} class="home-card-link">{card.name}</a>
+              </h3>
+              <p class="small home-card-tagline">{card.tagline}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* --- Width ------------------------------------------------------------------
+     Two lines in my design: the header's width (logo → Pack button = .container)
+     and, a little further in, the line the Home content follows. --home-inset is
+     the space between them – 48px from tablet up, one value to change for all
+     Home sections. Phones: no extra space, the gutter is enough. */
+  .home-collection-inner {
+    @media (width >= 48rem) {
+      padding-inline: var(--home-inset, var(--space-12)); /* 48px */
+    }
+  }
+
+  /* --- Head: heading left, "View all products ›" right, line below ---------- */
+  .home-collection-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: var(--space-6); /* 24px */
+    margin-block-end: var(--space-8); /* 32px to the cards */
+
+    & h2 {
+      margin-block-end: var(--space-2); /* 8px – heading and line belong together */
+    }
+
+    & .text-link {
+      white-space: nowrap;
+    }
+  }
+
+  .home-collection-line {
+    grid-column: 1 / -1; /* the full width, under both */
+    margin-block-end: 0;
+    color: var(--color-text-secondary); /* Weathered Bone */
+  }
+
+  /* --- Cards: one big left, two small stacked right ------------------------- */
+  .home-collection-grid {
+    display: grid;
+    gap: var(--space-6); /* 24px */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    /* From tablet up: big card 1.35 parts, small ones 1 part (like the anatomy).
+       The big card spans both rows; the small ones share its height. */
+    @media (width >= 48rem) {
+      grid-template-columns: 1.35fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+
+  .home-card {
+    position: relative; /* the stretched link covers exactly this box */
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-line); /* Charcoal, like the product cards */
+    background-color: var(--color-surface); /* Obsidian, so the text part lifts off */
+  }
+
+  .home-card-big {
+    @media (width >= 48rem) {
+      grid-row: 1 / span 2;
+    }
+  }
+
+  /* --- Photo ------------------------------------------------------------------
+     Phones: every photo 3:2. From tablet up the big photo is 3:2 and sets the
+     height; the small photos fill whatever is left (flex: 1). */
+  .home-card-media {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background-color: var(--color-bg);
+
+    @media (width >= 48rem) {
+      .home-card:not(.home-card-big) & {
+        flex: 1;
+        aspect-ratio: auto;
+        min-block-size: var(--space-24); /* 96px – never a thin strip */
+      }
+    }
+  }
+
+  .home-card-image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Shot 1 lies on top, invisible until hover – same speed as /products */
+  .home-card-image-hover {
+    opacity: 0;
+    object-position: center 30%;
+    transition: opacity 0.4s ease;
+  }
+
+  /* Mouse only – on phones a tap would leave it stuck */
+  @media (hover: hover) {
+    .home-card:hover .home-card-image-hover {
+      opacity: 1;
+    }
+  }
+
+  /* Keyboard users see it too (:focus-visible, not :focus-within – see /products) */
+  .home-card:has(:focus-visible) .home-card-image-hover {
+    opacity: 1;
+  }
+
+  /* --- Text ------------------------------------------------------------------ */
+  .home-card-info {
+    padding: var(--space-4) var(--space-6); /* 16px top/bottom, 24px sides */
+  }
+
+  .home-card-name {
+    margin-block-end: var(--space-1); /* 4px – name and line belong together */
+    font-size: var(--text-body); /* 16px */
+    font-weight: 500;
+    line-height: var(--leading-body);
+    letter-spacing: -0.01em;
+  }
+
+  .home-card-tagline {
+    margin-block-end: 0;
+  }
+
+  /* --- Whole card clickable ("stretched link", same as ProductCard) ---------- */
+  .home-card-link {
+    color: inherit; /* the name stays Egret */
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  .home-card:has(.home-card-link:focus-visible) {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+</style>

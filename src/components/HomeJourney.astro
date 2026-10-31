@@ -1,0 +1,169 @@
+---
+// HOME – THE JOURNEY SO FAR (from my Home anatomy, 31 Oct). Last Home section.
+// Left: label, heading, intro, button to the footer newsletter, the questions line.
+// Right: the real milestones + "Next up" (src/data/journey.js).
+// No section numbers (decided 31 Oct).
+import { milestones, nextUp } from "../data/journey.js";
+---
+
+<section class="container section home-journey" aria-labelledby="home-journey-title">
+  <div class="home-journey-inner">
+    <div class="home-journey-text">
+      <p class="label home-journey-label">The journey so far</p>
+      <h2 id="home-journey-title">Still a concept. Getting real, step by step.</h2>
+      <!-- Draft intro + button label – still open, change freely -->
+      <p class="home-journey-intro">
+        Cave Wear is still a concept, built step by step and in the open. Here is what has really happened so far –
+        and what comes next.
+      </p>
+      <a href="#newsletter" class="button button-outline">Follow the journey</a>
+
+      <!-- The old "Questions?" block, merged into one quiet line (decided 31 Oct) -->
+      <div class="home-journey-questions">
+        <p>Got a question or an idea?</p>
+        <ul class="home-journey-links" role="list">
+          <li><a href="/contact#faq" class="text-link">Read the FAQ ›</a></li>
+          <li><a href="/contact#contact-form" class="text-link">Write to us ›</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <ol class="home-journey-list" role="list">
+      {
+        milestones.map((milestone) => (
+          <li class="milestone">
+            <p class="milestone-date" aria-hidden="true">
+              {milestone.day}
+              <span>{milestone.month}</span>
+            </p>
+            <div>
+              <h3 class="milestone-title">
+                <span class="visually-hidden">{`${milestone.day} ${milestone.month}: `}</span>
+                {milestone.title}
+              </h3>
+              <p class="small milestone-text">{milestone.text}</p>
+            </div>
+          </li>
+        ))
+      }
+      <li class="milestone">
+        <p class="milestone-date milestone-next" aria-hidden="true">
+          Next
+          <span>Up</span>
+        </p>
+        <div>
+          <h3 class="milestone-title">
+            <span class="visually-hidden">Next up: </span>
+            {nextUp.title}
+          </h3>
+          <p class="small milestone-text">{nextUp.text}</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* Written mobile first: the base = phones (one column),
+     "width >=" adds tablet and desktop. */
+
+  /* Same inner line as the Base Collection (--home-inset, 48px from tablet up) */
+  .home-journey-inner {
+    display: grid;
+    gap: var(--space-12); /* 48px between text and list on phones */
+
+    @media (width >= 48rem) {
+      padding-inline: var(--home-inset, var(--space-12));
+    }
+
+    /* Desktop: text left, milestones right (like the anatomy) */
+    @media (width >= 64rem) {
+      grid-template-columns: 1fr 1.15fr;
+      gap: var(--space-8); /* 32px */
+    }
+  }
+
+  .home-journey-label {
+    margin-block-end: var(--space-2); /* 8px to the heading */
+    color: var(--color-accent); /* Wild Honey */
+  }
+
+  .home-journey-intro {
+    margin-block-end: var(--space-6); /* 24px to the button */
+    color: var(--color-text-secondary); /* Weathered Bone */
+  }
+
+  /* --- Questions line: a hairline, one short sentence, two links in a row ----- */
+  .home-journey-questions {
+    margin-block-start: var(--space-12); /* 48px under the button */
+    padding-block-start: var(--space-6); /* 24px under the line */
+    border-block-start: 1px solid var(--color-line); /* Charcoal */
+
+    & p {
+      margin-block-end: var(--space-2); /* 8px to the links */
+    }
+  }
+
+  .home-journey-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6); /* 24px between the two links */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* --- Milestones: big number left, title + line right, hairline between ----- */
+  .home-journey-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .milestone {
+    display: grid;
+    grid-template-columns: var(--space-16) 1fr; /* 64px for the date */
+    gap: var(--space-4); /* 16px */
+    padding-block: var(--space-4); /* 16px */
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  /* The big date: Barlow Condensed like the H1 – the one display touch here */
+  .milestone-date {
+    margin: 0;
+    color: var(--color-accent);
+    font-family: var(--font-display);
+    font-size: var(--space-8); /* 32px */
+    font-weight: 700;
+    line-height: 0.9;
+    text-transform: uppercase;
+
+    /* The month under the number, small */
+    & span {
+      display: block;
+      margin-block-start: var(--space-1); /* 4px */
+      font-family: var(--font-body);
+      font-size: var(--text-small);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: var(--tracking-wide);
+    }
+  }
+
+  /* "Next up": two words instead of a number, so a bit smaller */
+  .milestone-next {
+    font-size: var(--space-6); /* 24px */
+  }
+
+  .milestone-title {
+    margin-block-end: var(--space-1); /* 4px – title and line belong together */
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--leading-body);
+    letter-spacing: -0.01em;
+  }
+
+  .milestone-text {
+    margin-block-end: 0;
+  }
+</style>

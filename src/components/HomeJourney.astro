@@ -78,6 +78,26 @@ import { milestones, nextUp } from "../data/journey.js";
 
 <script src="../scripts/look-here.js"></script>
 
+<script>
+  // The milestone animation (3 rounds, CSS below) waits until you can see it –
+  // otherwise it could be over before anyone scrolls down here.
+  // IntersectionObserver tells us when the section comes into view; then we mark
+  // it once and stop watching. Without JavaScript nothing moves (that's fine).
+  const journey = document.querySelector(".home-journey");
+
+  if (journey) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        journey.setAttribute("data-in-view", "");
+        observer.disconnect(); // once is enough
+      },
+      { threshold: 0.4 }, // 40% of the section on screen
+    );
+    observer.observe(journey);
+  }
+</script>
+
 <style>
   /* Written mobile first: the base = phones (one column),
      "width >=" adds tablet and desktop. */
@@ -180,6 +200,54 @@ import { milestones, nextUp } from "../data/journey.js";
     gap: var(--space-4); /* 16px */
     padding-block: var(--space-4); /* 16px */
     border-block-start: 1px solid var(--color-line);
+  }
+
+  /* --- One small movement (31 Oct) ----------------------------------------------
+     The milestones take turns growing a tiny bit (4%): 21 Oct → 26 Oct → 28 Oct →
+     Next up, then again. Each one has 2.5 s, one round = 10 s. Only the date and
+     the text grow, not the line above them (lines of different lengths look off).
+     It stops by itself after 3 rounds (~38 s) – anything that moves longer than
+     5 s needs a way to stop (WCAG 2.2.2), same idea as the hero.
+     Hover = it pauses, so you can read in peace. Reduced motion: nothing moves. */
+  @media (prefers-reduced-motion: no-preference) {
+    .milestone > * {
+      transform-origin: left center;
+      animation: milestone-turn 10s ease-in-out 3;
+    }
+
+    /* Each one waits for the one before it */
+    .milestone:nth-child(2) > * {
+      animation-delay: 2.5s;
+    }
+
+    .milestone:nth-child(3) > * {
+      animation-delay: 5s;
+    }
+
+    .milestone:nth-child(4) > * {
+      animation-delay: 7.5s;
+    }
+
+    /* Waits until the section is on screen (the script sets data-in-view),
+       and pauses while the mouse is over the list */
+    .home-journey:not([data-in-view]) .milestone > *,
+    .home-journey-list:hover .milestone > * {
+      animation-play-state: paused;
+    }
+  }
+
+  /* 0–0.4 s grow, hold until 2 s, back to normal by 2.5 s, then rest */
+  @keyframes milestone-turn {
+    0%,
+    25%,
+    100% {
+      transform: scale(1);
+    }
+
+    4%,
+    20% {
+      transform: scale(1.04);
+    }
   }
 
   /* The big date: Barlow Condensed like the H1 – the one display touch here */

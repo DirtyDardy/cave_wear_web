@@ -15,7 +15,7 @@ export const milestones = [
     text: "A contact form and FAQ, so questions have somewhere to go.",
   },
   {
-    day: "28",
+    day: "31",
     month: "Oct",
     title: "The Pack",
     text: "The Pack goes live: reserve your place, with a confirmation email.",

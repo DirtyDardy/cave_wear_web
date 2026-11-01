@@ -961,6 +961,14 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     cursor: zoom-out;
   }
 
+  /* The script puts the focus on the big photo, and iPhones then show the keyboard
+     ring as a frame around it. A finger doesn't need it; with a mouse or keyboard it stays. */
+  @media (hover: none) {
+    .viewer :global(.viewer-slide:focus-visible) {
+      outline: none;
+    }
+  }
+
   /* Going round in a circle: the photo that jumps from one end to the other
      must not fly across the screen – it moves without animation */
   .viewer :global(.viewer-slide.is-jumping) {

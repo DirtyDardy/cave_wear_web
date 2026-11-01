@@ -316,21 +316,23 @@ const supporterCollection = cardsFor("Supporter Collection");
     }
   }
 
-  /* 1 column on phones, 2 on tablets, 3 on desktop */
+  /* 1 column on phones, 2 on tablets, 3 on desktop.
+     minmax(0, 1fr), not just 1fr: a plain 1fr column may grow wider than the page
+     if its content asks for it – on iPhones the cards ran off the right edge. */
   .product-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6); /* 24px */
     margin: 0;
     padding: 0;
     list-style: none;
 
     @media (width >= 40rem) {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     @media (width >= 64rem) {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     /* "display: grid" above would beat the hidden attribute – this makes

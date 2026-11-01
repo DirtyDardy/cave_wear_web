@@ -4,8 +4,9 @@
 // The active tile is bigger (the middle one at rest).
 // - Mouse: hover a tile and it becomes the big one – nothing moves by itself.
 // - Touch screens (no hover): the tiles take turns by themselves
-//   (src/scripts/principles-loop.js), with a pause button. Phones: the active one
-//   big in the middle, the other two small and cut off at the sides.
+//   (src/scripts/principles-loop.js), with a pause button; a swipe stops that and
+//   moves the tiles by hand. Phones: the active one big in the middle, the other two
+//   small and cut off at the sides.
 // Videos follow – for now each tile is a placeholder with what it will show.
 
 const principles = [
@@ -82,6 +83,11 @@ const principles = [
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  /* With the loop the script handles sideways swipes; up and down stays the page's scroll */
+  .principles[data-loop] .principles-row {
+    touch-action: pan-y;
   }
 
   /* --- One tile ---------------------------------------------------------------- */

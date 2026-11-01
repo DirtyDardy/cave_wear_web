@@ -1,0 +1,389 @@
+---
+// ONE TECHNICAL DRAWING for "How the Pack works" (my idea, 1 Nov; decided from several
+// versions: a big blueprint, no card, a little above the middle): button click · typing
+// name and email · email received. Plain lines in code (SVG) that draw themselves, as if a
+// plotter were drawing them, with centre lines, dimension lines and small lettering. The
+// numbers are real: my buttons are 40px high with 12px corners (drawn twice as big here).
+// FIG. = "figure", the way technical manuals number their drawings.
+// RULE (1 Nov): a drawing plays once, the moment its number gets its colour (data-reached,
+// set by pack-steps.js). On tablet and desktop it's over before the next number gets its
+// colour: at most 1.65 s, the last one 1.2 s, so the whole run stays under 5 s (or it would
+// need a pause button). On phones scrolling starts each one.
+// The CSS describes the LAST frame, so with reduced motion or without JavaScript the
+// finished drawing just stands there.
+interface Props {
+  step: "click" | "type" | "mail";
+  figure: number;
+}
+
+const { step, figure } = Astro.props;
+
+// A rounded box as 8 pieces that draw themselves one after the other, each with the time its
+// length needs. Why pieces: the straight ones snap to the pixel grid (dw-crisp, see below),
+// but curves would look rough that way – so the corners have to be pieces of their own.
+function boxPieces(x: number, y: number, w: number, h: number, r: number, start: number, duration: number) {
+  const across = w - 2 * r;
+  const down = h - 2 * r;
+  const corner = (Math.PI * r) / 2; // a quarter of a circle
+  const pieces = [
+    { d: `M${x + r} ${y} H${x + w - r}`, length: across, straight: true },
+    { d: `M${x + w - r} ${y} A${r} ${r} 0 0 1 ${x + w} ${y + r}`, length: corner, straight: false },
+    { d: `M${x + w} ${y + r} V${y + h - r}`, length: down, straight: true },
+    { d: `M${x + w} ${y + h - r} A${r} ${r} 0 0 1 ${x + w - r} ${y + h}`, length: corner, straight: false },
+    { d: `M${x + w - r} ${y + h} H${x + r}`, length: across, straight: true },
+    { d: `M${x + r} ${y + h} A${r} ${r} 0 0 1 ${x} ${y + h - r}`, length: corner, straight: false },
+    { d: `M${x} ${y + h - r} V${y + r}`, length: down, straight: true },
+    { d: `M${x} ${y + r} A${r} ${r} 0 0 1 ${x + r} ${y}`, length: corner, straight: false },
+  ];
+  const total = 2 * across + 2 * down + 4 * corner;
+  let at = start;
+  return pieces.map((piece) => {
+    const time = (duration * piece.length) / total;
+    const timed = { ...piece, style: `--at: ${at}ms; --for: ${time}ms` };
+    at += time;
+    return timed;
+  });
+}
+
+// Natural typing. ends = where each letter really ends (measured once in Geist, 26px, 450),
+// times = when each letter appears, in ms – a human rhythm: a bit slower around @ and the dot.
+const TEXT_START = 64;
+const typedName = {
+  text: "Alex",
+  y: 118,
+  ends: [80.9, 87.7, 101, 116.3],
+  times: [300, 360, 430, 480],
+};
+const typedEmail = {
+  text: "alex@example.com",
+  y: 206,
+  ends: [78.1, 84.9, 98.1, 113.5, 137.1, 150.3, 164.5, 178.7, 201, 216.3, 223.2, 237.8, 243, 257, 271.7, 294.4],
+  times: [560, 610, 655, 715, 800, 860, 905, 950, 1000, 1050, 1095, 1140, 1215, 1265, 1310, 1360],
+};
+
+// The caret: one short line for each place it can be, each shown only while it's there
+const caretPlaces = [
+  { x: TEXT_START, y: typedName.y, at: 200 },
+  ...typedName.ends.map((x, i) => ({ x, y: typedName.y, at: typedName.times[i] })),
+  { x: TEXT_START, y: typedEmail.y, at: 550 },
+  ...typedEmail.ends.map((x, i) => ({ x, y: typedEmail.y, at: typedEmail.times[i] })),
+];
+---
+
+<svg class="dw-drawing" viewBox="0 0 400 320" aria-hidden="true">
+  <text class="dw-lettering" x="20" y="300">FIG. {figure}</text>
+  <g class="dw-object">
+    {
+      step === "click" && (
+        <>
+          <path class="dw-centre dw-crisp dw-grow-x" d="M36 160 H364" />
+          <path class="dw-centre dw-crisp dw-grow-y" d="M200 84 V236" />
+          <path class="dw-quiet dw-crisp dw-draw" pathLength="1" d="M336 120 H372" style="--at: 250ms; --for: 150ms" />
+          <path class="dw-quiet dw-crisp dw-draw" pathLength="1" d="M336 200 H372" style="--at: 250ms; --for: 150ms" />
+          <path class="dw-quiet dw-crisp dw-draw" pathLength="1" d="M360 160 V120" style="--at: 350ms; --for: 200ms" />
+          <path class="dw-quiet dw-crisp dw-draw" pathLength="1" d="M360 160 V200" style="--at: 350ms; --for: 200ms" />
+          <path class="dw-quiet dw-fade" d="M356 128 l4 -8 l4 8 M356 192 l4 8 l4 -8" style="--at: 500ms" />
+          <text class="dw-lettering dw-fade" x="368" y="165" style="--at: 450ms">40</text>
+          <path class="dw-quiet dw-draw" pathLength="1" d="M77 127 L50 92 H24" style="--at: 300ms; --for: 200ms" />
+          <text class="dw-lettering dw-fade" x="24" y="86" style="--at: 450ms">R12</text>
+          <g class="dw-button">
+            <rect class="dw-frame-fill" x="64" y="120" width="264" height="80" rx="24" />
+            {boxPieces(64, 120, 264, 80, 24, 50, 450).map((piece) => (
+              <path class:list={["dw-line", "dw-frame", { "dw-crisp": piece.straight }]} pathLength="1" d={piece.d} style={piece.style} />
+            ))}
+            <text class="dw-big dw-label" x="196" y="169" text-anchor="middle">Add to pack</text>
+          </g>
+          <path class="dw-line dw-ticks dw-click-ticks" d="M268 146 v-14 M254 150 l-9 -9 M282 150 l9 -9" />
+          <path class="dw-line dw-cursor" d="M268 162 v42 l11 -10 l9 19 l9 -4 l-9 -19 h15 Z" />
+        </>
+      )
+    }
+    {
+      step === "type" && (
+        <>
+          <path class="dw-centre dw-crisp dw-grow-x" d="M36 160 H364" />
+          <path class="dw-line dw-crisp dw-draw" pathLength="1" d="M56 128 H344" style="--at: 0ms; --for: 250ms" />
+          <path class="dw-line dw-crisp dw-draw" pathLength="1" d="M56 216 H344" style="--at: 80ms; --for: 250ms" />
+          <path class="dw-quiet dw-draw" pathLength="1" d="M56 128 L36 100 H20" style="--at: 120ms; --for: 150ms" />
+          <path class="dw-quiet dw-draw" pathLength="1" d="M56 216 L36 188 H20" style="--at: 180ms; --for: 150ms" />
+          <text class="dw-lettering dw-fade" x="20" y="94" style="--at: 220ms">NAME</text>
+          <text class="dw-lettering dw-fade" x="20" y="182" style="--at: 280ms">EMAIL</text>
+          {
+            [typedName, typedEmail].map((field) => (
+              <text class="dw-big" x={TEXT_START} y={field.y}>
+                {[...field.text].map((letter, i) => <tspan class="dw-letter" style={`--at: ${field.times[i]}ms`}>{letter}</tspan>)}
+              </text>
+            ))
+          }
+          {caretPlaces.map((place, i) => {
+            const next = caretPlaces[i + 1];
+            return (
+              <path
+                class:list={["dw-line", "dw-crisp", next ? "dw-caret" : "dw-caret-last"]}
+                d={`M${place.x + 1} ${place.y - 22} v26`}
+                style={`--at: ${place.at}ms; --for: ${next ? next.at - place.at : 0}ms`}
+              />
+            );
+          })}
+        </>
+      )
+    }
+    {
+      step === "mail" && (
+        <>
+          <path class="dw-centre dw-crisp dw-grow-x" d="M40 160 H360" />
+          <path class="dw-centre dw-crisp dw-grow-y" d="M200 60 V260" />
+          {boxPieces(80, 84, 240, 152, 4, 0, 450).map((piece) => (
+            <path class:list={["dw-line", "dw-piece", { "dw-crisp": piece.straight }]} pathLength="1" d={piece.d} style={piece.style} />
+          ))}
+          <path class="dw-line dw-draw" pathLength="1" d="M80 90 L200 174 L320 90" style="--at: 350ms; --for: 300ms" />
+          <path class="dw-quiet dw-draw" pathLength="1" d="M334 66 L352 44 H380" style="--at: 750ms; --for: 200ms" />
+          <text class="dw-lettering dw-fade" x="380" y="38" text-anchor="end" style="--at: 850ms">RECEIVED</text>
+          <g class="dw-badge">
+            <circle class="dw-line dw-badge-circle" cx="320" cy="84" r="20" />
+            <text class="dw-big dw-badge-number" x="320" y="91" text-anchor="middle">1</text>
+          </g>
+          <path class="dw-line dw-ticks dw-mail-ticks" d="M286 66 l-9 -9 M320 52 v-14" />
+        </>
+      )
+    }
+  </g>
+</svg>
+
+<style>
+  .dw-drawing {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Waiting for its number: not there yet */
+  :global(.home-pack[data-running]) :global(.pack-step:not([data-reached])) .dw-drawing {
+    visibility: hidden;
+  }
+
+  /* A little above the middle (decided 1 Nov), closer to the text. FIG. stays at the bottom. */
+  .dw-object {
+    transform: translateY(-24px);
+  }
+
+  .dw-line,
+  .dw-quiet,
+  .dw-centre {
+    fill: none;
+    stroke-width: var(--line, 1); /* always 1px on screen (pack-steps.js) */
+  }
+
+  .dw-line {
+    stroke: var(--color-text); /* Egret */
+  }
+
+  .dw-quiet {
+    stroke: var(--color-text-quiet); /* Muted Stone */
+  }
+
+  /* Straight lines snap to the pixel grid. All lines are equally thick, but one that lands
+     between two pixel rows gets spread over both and looks wider and dimmer than one that
+     lands on a row – on a normal screen the envelope looked different from the button. */
+  .dw-crisp {
+    shape-rendering: crispEdges;
+  }
+
+  /* The line of the site: long dash, short dash (the same as --trail-down in global.css) */
+  .dw-centre {
+    stroke: var(--color-input-border); /* Flint */
+    stroke-dasharray: 16 4 2 4;
+  }
+
+  .dw-lettering {
+    fill: var(--color-text-quiet);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+  }
+
+  .dw-big {
+    fill: var(--color-text);
+    font-size: 26px;
+    font-weight: 450;
+  }
+
+  .dw-ticks,
+  .dw-caret {
+    opacity: 0;
+  }
+
+  .dw-cursor,
+  .dw-frame-fill,
+  .dw-badge-circle {
+    fill: var(--color-bg); /* so the centre line stays out of the button's text */
+  }
+
+  .dw-button,
+  .dw-badge,
+  .dw-grow-x,
+  .dw-grow-y {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* --- The animations: only when they're welcome, and only once data-reached is set --- */
+  @media (prefers-reduced-motion: no-preference) {
+    /* A line draws itself: pathLength="1" makes its whole length count as 1, so one dash
+       of length 1 is the whole line. Pushing that dash along reveals the line bit by bit. */
+    :global(.pack-step[data-reached]) .dw-draw {
+      animation: dw-draw var(--for) cubic-bezier(0.4, 0, 0.2, 1) var(--at) backwards;
+    }
+
+    /* The pieces of a box: at a steady speed, so they join up into one movement */
+    :global(.pack-step[data-reached]) .dw-piece {
+      animation: dw-draw var(--for) linear var(--at) backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-fade {
+      animation: dw-fade 0.2s ease var(--at) backwards;
+    }
+
+    /* Centre lines grow out of their middle */
+    :global(.pack-step[data-reached]) .dw-grow-x {
+      animation: dw-grow-x 0.3s var(--motion-ease) backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-grow-y {
+      animation: dw-grow-y 0.3s var(--motion-ease) backwards;
+    }
+
+    /* BUTTON CLICK: outline and dimensions draw, cursor comes in, presses at 0.95 s */
+    :global(.pack-step[data-reached]) .dw-frame {
+      animation:
+        dw-draw var(--for) linear var(--at) backwards,
+        dw-frame-light 1ms 0.95s backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-label {
+      animation:
+        dw-fade 0.2s ease 0.3s backwards,
+        dw-label-light 1ms 0.95s backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-cursor {
+      animation: dw-cursor-in 0.45s var(--motion-ease) 0.45s backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-button {
+      animation: dw-press 0.2s ease 0.9s;
+    }
+
+    :global(.pack-step[data-reached]) .dw-click-ticks {
+      animation: dw-flash 0.6s ease-out 0.95s backwards;
+    }
+
+    /* TYPING: each letter gets its colour at its time; until then it's transparent, but
+       it already takes its place – that's what keeps the natural spacing */
+    :global(.pack-step[data-reached]) .dw-letter {
+      animation: dw-type 1ms var(--at) backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-caret {
+      animation: dw-caret var(--for) var(--at);
+    }
+
+    :global(.pack-step[data-reached]) .dw-caret-last {
+      animation: dw-fade 1ms var(--at) backwards;
+    }
+
+    /* EMAIL RECEIVED: envelope and flap draw, the badge pops up, ticks flash */
+    :global(.pack-step[data-reached]) .dw-badge {
+      animation: dw-badge 0.3s ease-out 0.65s backwards;
+    }
+
+    :global(.pack-step[data-reached]) .dw-mail-ticks {
+      animation: dw-flash 0.5s ease-out 0.7s backwards;
+    }
+  }
+
+  @keyframes dw-draw {
+    from {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes dw-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes dw-grow-x {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes dw-grow-y {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  @keyframes dw-frame-light {
+    from {
+      stroke: var(--color-input-border);
+    }
+    to {
+      stroke: var(--color-input-border);
+    }
+  }
+
+  @keyframes dw-label-light {
+    from {
+      fill: var(--color-text-quiet);
+    }
+  }
+
+  @keyframes dw-cursor-in {
+    from {
+      opacity: 0;
+      transform: translate(60px, 80px);
+    }
+  }
+
+  @keyframes dw-press {
+    50% {
+      transform: scale(0.97);
+    }
+  }
+
+  @keyframes dw-flash {
+    20% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dw-type {
+    from {
+      fill: transparent;
+    }
+  }
+
+  @keyframes dw-caret {
+    from,
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dw-badge {
+    from {
+      transform: scale(0);
+    }
+    60% {
+      transform: scale(1.15);
+    }
+  }
+</style>

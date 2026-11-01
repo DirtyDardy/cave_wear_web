@@ -3,18 +3,32 @@
 // honest: no payment, not an order.
 // A dashed trail like on /contact, here lying down, from screen edge to screen edge.
 // The numbers sit on it in circles that break the line. A Wild Honey dot walks along
-// it once (src/scripts/pack-steps.js), the first time the section is on screen: the line
-// behind it takes its colour, each number it reaches does too, and its text appears and stays.
+// once (src/scripts/pack-steps.js): the line behind it takes its colour, each number it
+// reaches does too, its text appears and stays, and its technical drawing plays.
+// Tablet and desktop: by itself, once the section is on screen. Phones: step by step
+// while scrolling, each one when it comes into view.
 // Without JavaScript and with reduced motion: no dot, all three texts simply stay.
 import PackIcon from "../assets/icons/backpack.svg";
+import PackDrawing from "./PackDrawing.astro";
 
-// The three cards wait for my animated technical drawings, in this order:
-// button click · filling in name and email · email received notification
+// drawing = which technical drawing plays in the card (PackDrawing.astro)
 const steps = [
-  { title: "Add to pack", text: "Pick a piece, a colour and your size. Your pack keeps it until you're ready." },
-  { title: "Reserve", text: "No payment, no card. Send your pack as a reservation. Nothing is ordered." },
-  { title: "Early access", text: "At launch, you hear from us first. Then you decide if you want to order." },
-];
+  {
+    title: "Add to pack",
+    text: "Pick a piece, a colour and your size. Your pack keeps it until you're ready.",
+    drawing: "click",
+  },
+  {
+    title: "Reserve",
+    text: "No payment, no card. Send your pack as a reservation. Nothing is ordered.",
+    drawing: "type",
+  },
+  {
+    title: "Early access",
+    text: "At launch, you hear from us first. Then you decide if you want to order.",
+    drawing: "mail",
+  },
+] as const;
 ---
 
 <section class="section home-pack" aria-labelledby="home-pack-title">
@@ -38,7 +52,9 @@ const steps = [
               <span class="pack-number" aria-hidden="true">{index + 1}</span>
               <h3 class="pack-step-title">{step.title}</h3>
               <p class="small pack-step-text">{step.text}</p>
-              <div class="pack-step-drawing"></div>
+              <div class="pack-step-drawing">
+                <PackDrawing step={step.drawing} figure={index + 1} />
+              </div>
             </li>
           ))
         }
@@ -113,20 +129,16 @@ const steps = [
     }
   }
 
-  /* The trail: same as /contact – 1px, 8px dash, 8px gap. On phones it runs down
-     through the middle of the 32px circles. Two lines lie exactly on top of each
-     other, with the same dashes: the grey one, and the coloured one. */
+  /* The trail: the line of the site (global.css), 1px. On phones it runs down through
+     the middle of the 32px circles. Two lines lie exactly on top of each other, with the
+     same dashes: the grey one, and the coloured one. */
   .pack-track::before,
   .pack-walked {
     position: absolute;
     inset-block: 0;
     inset-inline-start: calc(var(--gutter) + var(--space-4));
     inline-size: 1px;
-    background-image: repeating-linear-gradient(
-      to bottom,
-      var(--trail-colour) 0 var(--space-2),
-      transparent var(--space-2) var(--space-4)
-    );
+    background-image: var(--trail-down);
 
     /* Tablet and desktop: across the whole screen, through the middle of the circles */
     @media (width >= 48rem) {
@@ -134,23 +146,19 @@ const steps = [
       inset-inline: 0;
       inline-size: auto;
       block-size: 1px;
-      background-image: repeating-linear-gradient(
-        to right,
-        var(--trail-colour) 0 var(--space-2),
-        transparent var(--space-2) var(--space-4)
-      );
+      background-image: var(--trail-across);
     }
   }
 
   .pack-track::before {
     content: "";
-    --trail-colour: var(--color-input-border); /* Flint */
+    color: var(--color-input-border); /* Flint */
   }
 
   /* clip-path = show only a part of an element. The script cuts the coloured line
      off where the dot is, and it slides along at the dot's speed. */
   .pack-walked {
-    --trail-colour: var(--pack-progress);
+    color: var(--pack-progress);
     transition: clip-path var(--pack-move) var(--motion-ease);
   }
 
@@ -268,31 +276,18 @@ const steps = [
     opacity: 0;
   }
 
-  /* The card for my technical drawing: stripes, 12px corners, 5:4 as in my sketch. The
-     final look is the 1px Flint outline. While it waits for the dot, the outline is
-     dimmer (Charcoal) and comes up together with its number – never lighter than Flint. */
+  /* The place for my technical drawing, 5:4 as in my sketch. No card around it (decided
+     1 Nov, from normal, subtle and no card): the drawing stands directly on the page. */
   .pack-step-drawing {
     grid-column: 2;
     inline-size: 100%;
     aspect-ratio: 5 / 4;
     margin-block-start: var(--space-8); /* 32px under the text on phones */
-    border: 1px solid var(--color-input-border);
-    border-radius: var(--radius-button);
-    background: repeating-linear-gradient(
-      135deg,
-      var(--color-bg) 0 var(--space-2),
-      var(--color-surface) var(--space-2) var(--space-4)
-    );
-    transition: border-color var(--motion-duration) var(--motion-ease);
 
     @media (width >= 48rem) {
       grid-column: auto;
       margin-block-start: var(--space-12); /* 48px */
     }
-  }
-
-  .home-pack[data-running] .pack-step:not([data-reached]) .pack-step-drawing {
-    border-color: var(--color-line);
   }
 
   /* --- Under the steps: two lines, the button next to them ---------------------- */

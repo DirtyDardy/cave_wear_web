@@ -1,9 +1,12 @@
-// HOME – HOW THE PACK WORKS. The "Open your pack" button, and the dot that walks along
-// the trail once, the first time the section is on screen: from outside the screen to
-// 1, 2 and 3, where it stays hidden behind the number. The line behind it takes its
-// colour, each number it reaches and that number's card do too, and its text appears and stays.
-// It moves for less than 5 seconds, so it needs no pause button (WCAG 2.2.2).
-// Reduced motion: nothing moves – the section simply shows all three texts.
+// HOME – HOW THE PACK WORKS. The "Open your pack" button, and the dot that walks along the
+// trail once: from outside the screen to 1, 2 and 3, where it stays hidden behind the
+// number. The line behind it takes its colour, each number it reaches does too, that
+// number's text appears and stays, and its technical drawing plays (PackDrawing.astro).
+// - Tablet and desktop: by itself, once the section is on screen. It moves for less than
+//   5 seconds, so it needs no pause button (WCAG 2.2.2).
+// - Phones (my idea, 1 Nov): the steps stand under each other, so on a timer they would
+//   play before anyone sees them. Here scrolling starts each step, when it comes into view.
+// Reduced motion: nothing moves – the section simply shows all three texts and drawings.
 import { openPack } from "./pack-store";
 
 const section = document.querySelector(".home-pack");
@@ -12,9 +15,19 @@ const START_TIME = 500; // ms – before the first move, once the section is on 
 // ms into a move (0.8 s, --pack-move in the CSS): the dot slips behind the number, measured:
 // it starts to disappear at ~370, it's gone at ~530 (1 Nov: at 800 the colour came too late)
 const REACH_TIME = 450;
-// ms – from the colour to the next move. RULE (1 Nov): a card's animation has to be over
-// before the next number gets its colour, so it gets at most REST_TIME + REACH_TIME.
+// ms – from the colour to the next move. RULE (1 Nov): a drawing has to be over before
+// the next number gets its colour, so it gets at most REST_TIME + REACH_TIME.
 const REST_TIME = 1200;
+
+// The drawings are 400 units wide, so 1px on screen is a different number of units on each
+// screen size. CSS draws their lines with this number (--line), so they always stay 1px.
+function setLineWidth() {
+  const width = section?.querySelector(".pack-step-drawing")?.clientWidth;
+  if (width) section.style.setProperty("--line", 400 / width);
+}
+
+setLineWidth();
+window.addEventListener("resize", setLineWidth);
 
 section?.querySelector(".home-pack-open").addEventListener("click", openPack);
 
@@ -26,6 +39,7 @@ if (section && !calm) {
   const dot = section.querySelector(".pack-dot");
   const steps = [...section.querySelectorAll(".pack-step")]; // [...] = turn the list into an array
   const numbers = steps.map((step) => step.querySelector(".pack-number"));
+  const drawings = steps.map((step) => step.querySelector(".pack-step-drawing"));
   const across = matchMedia("(width >= 48rem)"); // the trail lies across (phones: it runs down)
 
   let stop = -1; // where the dot is: -1 outside the screen, 0 1 2 the numbers
@@ -58,8 +72,15 @@ if (section && !calm) {
     walked.style.transition = "";
   }
 
-  // 2. The walk: go to a number. The moment the dot slips behind it, mark it (CSS colours
-  //    the number and the card's outline, and shows the text), rest, then on to the next.
+  // The dot and the coloured line appear, outside the screen
+  function enter() {
+    dot.hidden = false;
+    walked.hidden = false;
+    jump(-1);
+  }
+
+  // 2. TABLET AND DESKTOP: the walk. Go to a number. The moment the dot slips behind it,
+  //    mark it (CSS colours the number, shows the text and plays the drawing), rest, go on.
   function moveTo(index) {
     stop = index;
     show(stop);
@@ -69,20 +90,42 @@ if (section && !calm) {
     }, REACH_TIME);
   }
 
-  // 3. The first time the 1 is in the upper 60% of the screen: start, and stop watching –
-  //    it only ever runs once. Watching the 1 (not the whole track) means it also starts
-  //    on a small screen, where the tall track never fits. rootMargin makes the area
-  //    the observer looks at smaller: -40% cuts the lower part of the screen off.
-  const observer = new IntersectionObserver(
+  // It starts the first time the 1 is in the upper 60% of the screen, and only ever runs
+  // once. rootMargin makes the area the observer looks at smaller: -40% cuts the lower
+  // part of the screen off.
+  const walkObserver = new IntersectionObserver(
     ([entry]) => {
       if (!entry.isIntersecting) return;
-      observer.disconnect();
-      dot.hidden = false;
-      walked.hidden = false;
-      jump(-1);
+      walkObserver.disconnect();
+      enter();
       setTimeout(() => moveTo(0), START_TIME);
     },
     { rootMargin: "0px 0px -40% 0px" },
+  );
+
+  // 3. PHONES: the dot only goes to a number when that step comes into view. Whoever
+  //    scrolls fast past a step doesn't lose it: everything up to here gets marked.
+  function reach(index) {
+    if (index <= stop) return; // already there (scrolling back up changes nothing)
+    if (dot.hidden) enter();
+    stop = index;
+    show(stop);
+    setTimeout(() => {
+      steps.slice(0, index + 1).forEach((step) => step.setAttribute("data-reached", ""));
+    }, REACH_TIME);
+  }
+
+  // A step starts when half of its drawing is on screen: the number and the text are
+  // already visible then, so you see all of it happen.
+  const stepObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        stepObserver.unobserve(entry.target); // each step only once
+        reach(drawings.indexOf(entry.target));
+      });
+    },
+    { threshold: 0.5 },
   );
 
   // 4. A new width moves the numbers, so the dot and the line go to their new place.
@@ -96,5 +139,6 @@ if (section && !calm) {
 
   // 5. Everything is ready: hide the texts until the dot gets there, start watching
   section.setAttribute("data-running", "");
-  observer.observe(numbers[0]);
+  if (across.matches) walkObserver.observe(numbers[0]);
+  else drawings.forEach((drawing) => stepObserver.observe(drawing));
 }

@@ -102,6 +102,24 @@
      so it glides instead of jumping; closing stays at --motion-duration (quick) */
   --motion-duration-slide: 0.5s;
 
+  /* The line of the site (decided 1 Nov): long dash, short dash, like the centre line in a
+     technical drawing – the trail on Home and /contact, and in my Pack drawings. One
+     definition for all of them; an element chooses its colour with "color". */
+  --trail-across: repeating-linear-gradient(
+    to right,
+    currentColor 0 16px,
+    transparent 16px 20px,
+    currentColor 20px 22px,
+    transparent 22px 26px
+  );
+  --trail-down: repeating-linear-gradient(
+    to bottom,
+    currentColor 0 16px,
+    transparent 16px 20px,
+    currentColor 20px 22px,
+    transparent 22px 26px
+  );
+
   /* Keyboard focus ring – Wild Honey, with a small gap */
   --focus-ring: 2px solid var(--color-accent);
   --focus-offset: 3px;

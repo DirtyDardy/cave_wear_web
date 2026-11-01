@@ -530,7 +530,7 @@ const steps = [
   }
 
   /* --- The trail ----------------------------------------------------------------------------
-     A dashed line (8px dash, 8px gap) on the left of the text column, from the top of the
+     The line of the site (global.css) on the left of the text column, from the top of the
      page down to a Wild Honey marker next to the "Write to us" heading, with a small stop at
      the "Questions" heading. Only on wide screens – on smaller ones there's no room beside the text. */
 
@@ -548,11 +548,8 @@ const steps = [
       inset-block: 0 calc(-1 * (var(--write-gap) + var(--leading-h2) / 2));
       inset-inline-start: calc(-1 * var(--trail-offset));
       inline-size: 1px;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        var(--color-input-border) 0 var(--space-2),
-        transparent var(--space-2) var(--space-4)
-      );
+      background-image: var(--trail-down);
+      color: var(--color-input-border); /* Flint */
     }
 
     /* Small round stop next to the "Questions" heading */

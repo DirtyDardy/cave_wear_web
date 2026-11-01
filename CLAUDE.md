@@ -184,9 +184,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
   header (a tool page, not a showcase). Top to bottom: Bears' Cave coordinates (Peștera Urșilor,
   Romania – 140 cave bear skeletons) · H1 "Contact" · one line + email + "Write to us ↓" ·
-  **FAQ** (`#faq`, "01 / Questions") · "02 / Write to us" + 01–03 steps + the form
+  **FAQ** (`#faq`, big heading "Questions") · big heading "Write to us" + 01–03 steps + the form
   (`#contact-form`). A dashed **trail** (CSS scroll animation, off with reduced motion, only from
-  1200px) runs from the coordinates to the "02" marker; its dashes slide down while scrolling
+  1200px) runs from the coordinates to the marker next to "Write to us"; its dashes slide down while scrolling
   ("momentum"). FAQ → "Write to us" gap 192px (`--write-gap`, the trail uses the same value).
   Name stays "Contact"; Impressum stays its own page (not repeated here).
 - **FAQ** – 14 questions in 3 groups (The brand · The products · Launch & Pack), all in

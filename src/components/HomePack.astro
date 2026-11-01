@@ -1,0 +1,309 @@
+---
+// HOME – HOW THE PACK WORKS (my sketch, 1 Nov). Explains Reserve in 3 steps –
+// honest: no payment, not an order.
+// A dashed trail like on /contact, here lying down, from screen edge to screen edge.
+// The numbers sit on it in circles that break the line. A Wild Honey dot walks along
+// it by itself (src/scripts/pack-steps.js): each number it reaches turns Wild Honey
+// and its text appears, as long as you need to read it.
+// Without JavaScript and with reduced motion: no dot, all three texts simply stay.
+import PackIcon from "../assets/icons/backpack.svg";
+
+const steps = [
+  { title: "Add to pack", text: "Pick a piece, a colour and your size." },
+  { title: "Reserve", text: "No payment, no card. Send your pack as a reservation. Nothing is ordered." },
+  { title: "Early access", text: "At launch, you hear from us first. Then you decide if you want to order." },
+];
+---
+
+<section class="section home-pack" aria-labelledby="home-pack-title">
+  <div class="container">
+    <div class="home-pack-inner">
+      <p class="label home-pack-label">How the Pack works</p>
+      <h2 id="home-pack-title">Reserve your place. Pay nothing.</h2>
+    </div>
+  </div>
+
+  <!-- The track is as wide as the screen (the trail runs off both edges), the steps
+       stay on the Home content lines inside it -->
+  <div class="pack-track">
+    <div class="pack-dot" aria-hidden="true" hidden></div>
+    <div class="container">
+      <ol class="pack-steps" role="list">
+        {
+          steps.map((step, index) => (
+            <li class="pack-step">
+              <span class="pack-number" aria-hidden="true">{index + 1}</span>
+              <h3 class="pack-step-title">{step.title}</h3>
+              <p class="small pack-step-text">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="home-pack-inner home-pack-foot">
+      <div class="home-pack-note">
+        <p class="home-pack-note-line">Not a shop yet. Reserving is a way of saying: I'd wear this.</p>
+        <p class="small home-pack-note-small">Cave Wear is a concept. A reservation shows interest. It is not an order.</p>
+      </div>
+
+      <!-- Opens the Pack drawer, like the Pack button in the header. Needs JavaScript,
+           so without it the button stays hidden (see below). -->
+      <button
+        type="button"
+        class="button button-primary home-pack-open"
+        aria-haspopup="dialog"
+        aria-controls="pack-drawer"
+      >
+        <PackIcon class="home-pack-icon" />
+        Open your pack
+      </button>
+
+      <!-- Only when the dot moves (the script shows it): anything that moves longer than
+           5 seconds needs a way to stop it (WCAG 2.2.2). Paused = all three texts show. -->
+      <button type="button" class="icon-button home-pack-pause" aria-label="Pause" hidden>
+        <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3" height="12" /><rect x="14" y="6" width="3" height="12" /></svg>
+        <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l10 6-10 6z" /></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script src="../scripts/pack-steps.js"></script>
+
+<style>
+  /* Written mobile first: the base = phones (the trail runs down on the left),
+     "width >=" lays it down across the screen for tablet and desktop. */
+
+  /* Same inner line as the other Home sections (--home-inset, 48px from tablet up) */
+  .home-pack-inner {
+    @media (width >= 48rem) {
+      padding-inline: var(--home-inset, var(--space-12));
+    }
+  }
+
+  .home-pack-label {
+    margin-block-end: var(--space-2); /* 8px to the heading */
+    color: var(--color-accent); /* Wild Honey, as in my sketch */
+  }
+
+  /* --- The track ---------------------------------------------------------------
+     isolation = its own little stack of layers: trail at the bottom, the dot on it,
+     the numbers on top – so the dot disappears behind a number and comes out again.
+     overflow: hidden cuts the dot off at the screen edge when it walks in and out. */
+  .pack-track {
+    position: relative;
+    isolation: isolate;
+    margin-block: var(--space-6); /* 24px */
+    padding-block: var(--space-6); /* 24px of trail above the first and under the last number */
+    overflow: hidden;
+
+    /* The trail: same as /contact – 1px Flint, 8px dash, 8px gap. On phones it runs
+       down through the middle of the 32px circles. */
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: calc(var(--gutter) + var(--space-4));
+      inline-size: 1px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        var(--color-input-border) 0 var(--space-2),
+        transparent var(--space-2) var(--space-4)
+      );
+    }
+
+    /* Tablet and desktop: across the whole screen, through the middle of the circles */
+    @media (width >= 48rem) {
+      margin-block: var(--space-12) var(--space-16); /* 48px above, 64px below */
+      padding-block: 0;
+
+      &::before {
+        inset-block: var(--space-4) auto;
+        inset-inline: 0;
+        inline-size: auto;
+        block-size: 1px;
+        background-image: repeating-linear-gradient(
+          to right,
+          var(--color-input-border) 0 var(--space-2),
+          transparent var(--space-2) var(--space-4)
+        );
+      }
+    }
+  }
+
+  /* The dot: the end marker from /contact (Wild Honey ring with a dot). The script
+     moves it with transform – 1.5s is also MOVE_TIME in pack-steps.js. */
+  .pack-dot {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    z-index: 1;
+    inline-size: calc(var(--space-4) + 2px); /* 18px */
+    block-size: calc(var(--space-4) + 2px);
+    border: 1.5px solid var(--color-accent);
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle, var(--color-accent) 3px, var(--color-bg) 3.5px);
+    translate: -50% -50%;
+    transition: transform 1.5s var(--motion-ease);
+  }
+
+  /* --- The steps --------------------------------------------------------------- */
+  .pack-steps {
+    display: grid;
+    gap: var(--space-8); /* 32px between the steps on phones */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      padding-inline: var(--home-inset, var(--space-12));
+    }
+  }
+
+  /* Phones: number left, title and text right */
+  .pack-step {
+    display: grid;
+    grid-template-columns: var(--space-8) 1fr;
+    align-content: start; /* a shorter text must not push its title down */
+    column-gap: var(--space-4); /* 16px */
+
+    /* Tablet and desktop: everything centred under the number (my sketch) */
+    @media (width >= 48rem) {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      padding-inline: var(--space-4);
+      text-align: center;
+    }
+  }
+
+  /* The circle breaks the trail: it has the page's background. It starts grey and
+     turns Wild Honey when the dot reaches it (data-reached, set by the script). */
+  .pack-number {
+    position: relative;
+    z-index: 2;
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    inline-size: var(--space-8); /* 32px */
+    block-size: var(--space-8);
+    border: 1px solid var(--color-input-border); /* Flint */
+    border-radius: var(--radius-full);
+    background-color: var(--color-bg);
+    color: var(--color-text-quiet); /* Muted Stone */
+    font-size: var(--text-small);
+    line-height: 1;
+    transition:
+      color var(--motion-duration) var(--motion-ease),
+      border-color var(--motion-duration) var(--motion-ease);
+
+    @media (width >= 48rem) {
+      grid-row: auto;
+      margin-block-end: var(--space-4); /* 16px to the title */
+    }
+  }
+
+  .pack-step[data-reached] .pack-number {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .pack-step-title {
+    margin-block: var(--space-1); /* 4px – lines up with the middle of the circle */
+    font-size: var(--text-body);
+    font-weight: 500;
+    line-height: var(--leading-body);
+    letter-spacing: -0.01em;
+
+    @media (width >= 48rem) {
+      margin-block: 0 var(--space-2); /* 8px to the text */
+    }
+  }
+
+  /* The title always stays. While the dot walks (data-running), a text only shows
+     when the dot is at its number (data-current). Only opacity changes: the text
+     keeps its space, so nothing jumps, and screen readers can always read it. */
+  .pack-step-text {
+    grid-column: 2;
+    transition: opacity var(--motion-duration) var(--motion-ease);
+
+    @media (width >= 48rem) {
+      grid-column: auto;
+      max-inline-size: 16rem; /* 256px */
+      text-wrap: balance;
+    }
+  }
+
+  .home-pack[data-running] .pack-step:not([data-current]) .pack-step-text {
+    opacity: 0;
+  }
+
+  /* --- Under the steps: two lines, the button next to them, pause on the far right */
+  .home-pack-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6); /* 16px down, 24px across */
+  }
+
+  .home-pack-note {
+    flex: 1 1 100%; /* phones: a line of its own */
+
+    @media (width >= 48rem) {
+      flex: 0 1 auto;
+    }
+  }
+
+  .home-pack-note-line {
+    margin-block-end: var(--space-1); /* 4px */
+    font-size: var(--text-small);
+    font-weight: 500;
+    line-height: var(--leading-small);
+  }
+
+  .home-pack-note-small {
+    color: var(--color-text-quiet); /* Muted Stone */
+  }
+
+  .home-pack-open {
+    gap: var(--space-2); /* 8px between icon and text */
+  }
+
+  .home-pack-icon {
+    inline-size: var(--space-6); /* 24px, like in the header */
+    block-size: var(--space-6);
+  }
+
+  /* No JavaScript = no drawer, so no button that does nothing */
+  :global(html:not([data-js])) .home-pack-open {
+    display: none;
+  }
+
+  .home-pack-pause {
+    margin-inline-start: auto;
+
+    &[hidden] {
+      display: none;
+    }
+
+    & svg {
+      inline-size: var(--space-4); /* 16px */
+      block-size: var(--space-4);
+      fill: currentColor;
+    }
+
+    /* Running: pause icon. Paused (data-paused): play icon. */
+    & .icon-play,
+    &[data-paused] .icon-pause {
+      display: none;
+    }
+
+    &[data-paused] .icon-play {
+      display: block;
+    }
+  }
+</style>

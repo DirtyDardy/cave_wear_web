@@ -6,6 +6,7 @@
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProductCard from "../components/ProductCard.astro";
+import Coordinates from "../components/Coordinates.astro";
 import { getProducts, type Product } from "../data/products";
 import heroImage from "../assets/products/products-hero.jpg";
 import placeholder from "../assets/products/placeholder.jpg";
@@ -146,6 +147,11 @@ const supporterCollection = cardsFor("Supporter Collection");
       <h2 id="favorites-title" class="label collection-title">Favorites</h2>
       <ul id="favorites-list" class="product-grid" role="list" hidden></ul>
       <p id="favorites-empty" class="small favorites-empty">No favorites yet. Click the heart on a product to keep it here.</p>
+
+      <!-- Brente Holme: my favorite island, so it sits with the favorites -->
+      <div class="favorites-coordinates">
+        <Coordinates place="brente-holme" />
+      </div>
     </section>
   </div>
 </BaseLayout>
@@ -361,5 +367,9 @@ const supporterCollection = cardsFor("Supporter Collection");
 
   .favorites-empty {
     color: var(--color-text-quiet);
+  }
+
+  .favorites-coordinates {
+    margin-block-start: var(--space-6); /* 24px under the text or the cards */
   }
 </style>

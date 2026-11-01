@@ -1,0 +1,88 @@
+---
+// HIDDEN COORDINATES – one on each of the four pages (1 Nov). Looks like a quiet label, but
+// it's a real button, so a keyboard reaches it too. Grey until it's clicked, then it stays
+// Wild Honey (src/scripts/coordinates.js). After the fourth find, a bar says so and a section
+// opens on the Brand page. Screen readers also hear the place's name.
+import { places } from "../data/places.js";
+
+interface Props {
+  place: keyof typeof places;
+}
+
+const { place } = Astro.props;
+---
+
+<button type="button" class="label coordinates" data-place={place} aria-pressed="false">
+  <span class="visually-hidden">{places[place].name}: </span>{places[place].coordinates}
+</button>
+
+<!-- Empty until the fourth find. role="status": screen readers read out what appears here,
+     so it has to be on the page before that. The text waits in the template. -->
+<p class="small coordinates-bar" role="status"></p>
+<template class="coordinates-bar-text">
+  <a href="/brand#my-places" class="text-link">4 of 4. Something opened on the Brand page ›</a>
+</template>
+
+<script src="../scripts/coordinates.js"></script>
+
+<style>
+  button.coordinates {
+    position: relative; /* the invisible tap area below is placed inside this box */
+    display: block;
+    margin-block: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-quiet);
+    font-family: inherit;
+    text-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+
+    /* Touch screens: the text is only 20px high – an invisible 12px more above and below
+       makes a 44px tap target. Nothing in the layout moves. */
+    @media (pointer: coarse) {
+      &::after {
+        content: "";
+        position: absolute;
+        inset-block: calc(-1 * var(--space-3));
+        inset-inline: 0;
+      }
+    }
+
+    /* One step brighter, never yellow: yellow only means "found". Only with a real
+       mouse – on an iPhone a hover would stick after the tap. */
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-text-secondary);
+      }
+    }
+
+    &[aria-pressed="true"] {
+      color: var(--color-accent);
+    }
+  }
+
+  /* While it's empty it must take up no space at all */
+  .coordinates-bar {
+    margin-block: 0;
+  }
+
+  /* One glass bar at the bottom of the screen, on every page: nothing on the page jumps.
+     z-index 40 = under the header (50). 64px up: clear of Astro's toolbar on localhost.
+     The home bar on an iPhone adds its own space. */
+  .coordinates-bar:not(:empty) {
+    position: fixed;
+    z-index: 40;
+    inset-block-end: calc(var(--space-16) + env(safe-area-inset-bottom));
+    inset-inline: var(--gutter);
+    inline-size: fit-content;
+    margin-inline: auto;
+    padding: var(--space-3) var(--space-4);
+    border: 0.5px solid var(--glass-edge);
+    background-color: var(--glass-tint);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+    backdrop-filter: var(--glass-blur);
+  }
+</style>

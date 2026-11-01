@@ -1,9 +1,46 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Coordinates from "../components/Coordinates.astro";
+import { places } from "../data/places.js";
 ---
 
 <BaseLayout title="Brand">
   <section class="container section">
     <h1>Brand</h1>
   </section>
+
+  <!-- The hidden section: it opens once all four coordinates are found (coordinates.js).
+       A game, not a lock – it's in the page's code, and the browser's dev tools can open it.
+       Placeholder until I write my text. -->
+  <section id="my-places" class="container section" aria-labelledby="my-places-title" hidden>
+    <h2 id="my-places-title">Four places</h2>
+    <ul class="my-places" role="list">
+      {
+        Object.values(places).map(({ name, coordinates }) => (
+          <li>
+            <h3>{name}</h3>
+            <p class="label">{coordinates}</p>
+            <p>My text follows.</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Gjilan. Just above the footer for now – later near the Team section -->
+  <div class="container coordinates-end">
+    <Coordinates place="gjilan" />
+  </div>
 </BaseLayout>
+
+<style>
+  .my-places {
+    display: grid;
+    gap: var(--space-8); /* 32px */
+    margin-block-start: var(--space-8);
+  }
+
+  .coordinates-end {
+    padding-block-end: var(--space-12); /* 48px to the footer */
+  }
+</style>

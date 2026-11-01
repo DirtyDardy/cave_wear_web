@@ -182,8 +182,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
   discuss) – use them when building the page. Not part of the site build.
 - **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
-  header (a tool page, not a showcase). Top to bottom: Bears' Cave coordinates (Peștera Urșilor,
-  Romania – 140 cave bear skeletons) · H1 "Contact" · one line + email + "Write to us ↓" ·
+  header (a tool page, not a showcase). Top to bottom: Regensburg coordinates (where the Regen
+  meets the Danube, see "Hidden coordinates" in 7) · H1 "Contact" · one line + email + "Write to us ↓" ·
   **FAQ** (`#faq`, big heading "Questions") · big heading "Write to us" + 01–03 steps + the form
   (`#contact-form`). A dashed **trail** (CSS scroll animation, off with reduced motion, only from
   1200px) runs from the coordinates to the marker next to "Write to us"; its dashes slide down while scrolling
@@ -261,6 +261,19 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   beanie + buff · 5–15 °C → half-zip · above 15 °C → T-shirt (final once products are defined).
 - **Follow the journey** – timeline of real milestones only (small data file) + social links.
   Main place Brand page, teaser on Home, one line near Reserve. Links only, no embedded feeds.
+- **Hidden coordinates** (Dardan's idea) – built 2 Nov. One per page, a real button that looks
+  like a quiet label: Home = Bears' Cave, bottom left in Field conditions · Products = Brente
+  Holme inside Favorites (his favorite island, where he first had the idea for the company) ·
+  Brand = Gjilan, his birth city (just above the footer for now; later under the first team
+  photo, or next to his About Us text if the Team section is cut) · Contact = Regensburg.
+  Grey, hover Weathered Bone, once found it stays Wild Honey and its cross lights up on the Home
+  map (yellow pictures `public/map/found-<id>.svg` over the map; two lie behind the Today's pick
+  glass and look faint, Dardan's call). Fourth find: a glass bar with a link, and the section
+  `/brand#my-places` opens (placeholder – the text is Dardan's). List `src/data/places.js`,
+  `src/components/Coordinates.astro`, `src/scripts/coordinates.js`, localStorage
+  `cave-wear-coordinates`, covered in the Privacy Policy. A game, not a lock: dev tools can open
+  it. Bears' Cave is where the 140 skeletons were found, never "where the cave bear was first
+  found" (first described from Zoolithen Cave, Bavaria). OPEN: bar wording, a FAQ question.
 - **Animations** basic only, always respecting `prefers-reduced-motion`.
 - **Scroll snap** CSS only, `proximity` never `mandatory`: hero, main CTA, max. one more.
   Also for the product gallery and the mobile product row. **One exception (30 Oct):** the

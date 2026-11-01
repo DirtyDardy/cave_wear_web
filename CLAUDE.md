@@ -61,7 +61,10 @@ Dardan can fully explain. Linro's references: linear.app, vercel.com.
 9. Not every problem needs code. If it belongs in Corel/Photoshop, say so.
 10. **No invented facts:** no fake certifications, partnerships, sustainability claims, material
     claims (organic, GSM …) or specs presented as real. Donations are *planned*. bearbiology.org
-    = a normal link, never a partnership, never their logo. Never name Carinthia or copy its specs.
+    = a normal link, never a partnership, never their logo. Never name Carinthia or copy its specs
+    – **one exception (Dardan, 1 Nov):** the credit in the All-Weather Shell's Design & Purpose
+    ("Its design reference is the Carinthia PRG jacket … not affiliated with or endorsed by
+    Carinthia"). Nowhere else, never its logo, specs or material claims.
 11. When replacing something, remove the old version. Project-wide cleanups only when asked.
 12. Hosting/DNS/accounts: click-by-click numbered steps. Dardan sends a screenshot before every
     final confirm button; Claude checks it first. Claude never handles passwords.
@@ -173,7 +176,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   graphics" and "Coming soon" in the card; "Conservation planned" may become "Supports
   conservation" only once the donation is real. Later: a quiet link to the Brand page.
   Products so far: The Core Tee, The Field Hoodie, The Traverse Half-Zip, The Ridge Beanie,
-  The Pass Gaiter. The Pack is a drawer, not a page (see 7).
+  The Pass Gaiter, The All-Weather Shell. The Pack is a drawer, not a page (see 7).
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
@@ -465,7 +468,7 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 - One folder per product: `src/content/products/<collection>/<NN>_<id>/` = one text file + the
   photos. **Order number (31 Oct, Dardan):** the two digits in front set the order on the
   Products page (01 Core Tee · 02 Field Hoodie · 03 Traverse Half-Zip · 04 Ridge Beanie ·
-  05 rain jacket – placeholder card with `order: 5` in `products.astro` · 06 Pass Gaiter);
+  05 All-Weather Shell · 06 Pass Gaiter);
   the setup folders in `cave_wear_dis` use the same numbers. The number is stripped from the
   id (`content.config.ts`), so it may change; missing or doubled numbers stop the build
   (`products.ts`). The name after the number = web address (`/products/<id>`) + favorite id –
@@ -585,7 +588,13 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   the neutral word is neck gaiter). Wordmark black on black on the top edge, wearer's right
   (planned: thin silicone heat transfer); drawcord toggle in black recycled plastic (vision)
   with the bear pressed in. Shot 0 = a man exploring an abandoned factory hall in winter.
-- Rain jacket name (31 Oct): **The All-Weather Shell** – not built yet.
+- Sixth product (1 Nov), the last of the Base Collection: `all-weather-shell` (The All-Weather
+  Shell, `TAS01`, XS–XXL, unisex, Black only, 149,90€ = Claude's estimate, Dardan confirms).
+  Military details + a shorter, boxier fit than the reference jacket: hem at the hip, gently
+  gathered ("a little tucked"), never the long rain jacket look. Bear black on black, small,
+  wearer's left chest above the seam (planned: thin silicone heat transfer, like the gaiter);
+  plain back; no sleeve wordmark. Shot 0 = a stand-in (man in the rain, wet city street) until
+  Dardan's own photo next week. Dardan's own text.
 - **Shot 0 of all five products is AI (Gemini – Dardan 29 Oct, beanie + gaiter 31 Oct)** – the people in them aren't
   real, so they're in Git and go live; stand-ins until a real photoshoot. Covered by the
   Impressum's AI line (see 13). The old Core Tee / Field Hoodie placeholders (another brand's
@@ -787,10 +796,9 @@ then Dardan decides.
   not used on purpose (own design system) – explain it.
 - **⚠ REMIND DARDAN EVERY DAY (asked 27 Oct): make product pictures for one new product.**
   Gemini has a daily image limit, so a little every day. Takes time → not late at night.
-  Status 31 Oct: **5 of 6 done** – Core Tee, Field Hoodie, Traverse Half-Zip (both fits),
-  Ridge Beanie (30 Oct), Pass Gaiter (the buff, 31 Oct). **Only the rain jacket is left**
-  (The All-Weather Shell – Dardan's order: last, the other brand's logo has to go in
-  Photoshop, needs a full day). Method: memory "Gemini image method".
+  Status 1 Nov: **6 of 6 done** – Core Tee, Field Hoodie, Traverse Half-Zip (both fits),
+  Ridge Beanie (30 Oct), Pass Gaiter (the buff, 31 Oct), All-Weather Shell (1 Nov).
+  Method: memory "Gemini image method".
   Remove when all six products have photos.
 - **⚠ BEFORE 11 NOV (Dardan, 29 Oct): colour-grade the product pictures right.** Every product,
   every colour, so the colours look right and the shots fit together as one shoot. Photoshop

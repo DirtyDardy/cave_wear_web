@@ -2,8 +2,10 @@
 // Privacy Policy – information according to Art. 13 GDPR.
 // Describes ONLY what the website really does today. When a new feature collects data,
 // add a section here BEFORE it goes live:
-//   - weather strip (location → Open-Meteo) - newsletter service for sending (e.g. Brevo)
+//   - newsletter service for sending (e.g. Brevo)
 // The contact form (/contact) is covered under "Contact form" (added 26 Oct 2026).
+// Field conditions on Home (Open-Meteo) is covered under "Weather on the Home page" (#weather,
+// added 1 Nov 2026).
 // Reserve (Netlify Forms + the confirmation email via a Netlify Function) is covered under
 // "Reservations" (#reserve, added 28 Oct 2026) – the Reserve form links there.
 // Favorites (localStorage, src/scripts/favorites.js) and the Pack (localStorage,
@@ -27,9 +29,10 @@ const missing = (label: string) => `[${label} – to be added]`;
     <li>No cookies – that's why there is no cookie banner.</li>
     <li>Fonts and images come from this website's own server, not from Google or others.</li>
     <li>
-      Data is only processed when you visit the site (technical server data), when you sign up
-      for the newsletter (your email address), when you write to us (your message) and when you
-      reserve your place (your first name, email and Pack).
+      Data is only processed when you visit the site (technical server data), when the weather
+      on the Home page loads (your IP address), when you sign up for the newsletter (your email
+      address), when you write to us (your message) and when you reserve your place (your first
+      name, email and Pack).
     </li>
     <li>
       Favorites you save with the heart and what you put in your Pack stay in your own browser.
@@ -122,6 +125,32 @@ const missing = (label: string) => `[${label} – to be added]`;
     your reservation once the launch is over and your order is confirmed or declined – at the
     latest 12 months after you reserved. You can cancel it at any time by replying to the
     confirmation email or writing to us.
+  </p>
+
+  <h2 id="weather">Weather on the Home page</h2>
+  <p>
+    The weather on the Home page comes from Open-Meteo, a service of OpenMeteo GmbH, Hintere
+    Schilligmatte 6, 6463 Bürglen, Switzerland. When this section comes near your screen, your
+    browser asks Open-Meteo for the weather in Regensburg. Like every request on the internet, this
+    sends your IP address and technical data about your browser to Open-Meteo. We don't receive or
+    store any of it.
+  </p>
+  <p>
+    Your location is only used if you click "Use my location" and allow it in your browser. It is
+    rounded to about 11 km, and only this rounded position goes to Open-Meteo, directly from your
+    browser. We don't receive it, and this website doesn't save it – not in your browser either.
+  </p>
+  <p>
+    Open-Meteo states that it may collect IP addresses for server maintenance and to prevent
+    misuse, that it doesn't link them to a person, and that it deletes its server logs, which can
+    also contain coordinates, after 90 days. Its own{" "}
+    <a href="https://open-meteo.com/en/terms">terms and privacy notes</a> apply. OpenMeteo GmbH is
+    based in Switzerland, for which the European Commission has issued an adequacy decision.
+  </p>
+  <p>
+    Legal basis for the Regensburg weather: Art. 6 (1) (f) GDPR – our legitimate interest in showing
+    today's weather on the page. For your location: your consent, Art. 6 (1) (a) GDPR. You can
+    withdraw it at any time in your browser's settings.
   </p>
 
   <h2>Data stored in your browser</h2>

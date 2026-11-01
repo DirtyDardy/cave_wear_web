@@ -8,7 +8,9 @@
 
 const section = document.querySelector(".principles");
 
-const TILE_TIME = 5000; // ms – how long each tile stays the big one
+const TILE_TIME = 4000; // ms – how long each tile stays the big one (1 Nov: 5 s felt too slow)
+const START_TIME = 1000; // ms – the first move once the section is on screen (1 Nov: my friends
+// scrolled past without noticing that it moves, so it has to show that early)
 const MOVE_TIME = 600; // ms – how long a tile takes to move (same as the CSS transition)
 
 const touchScreen = matchMedia("(hover: none)");
@@ -82,24 +84,25 @@ if (section && !calm) {
 
   // 3. The clock: wait, then the next tile becomes the big one, and so on.
   //    While the hero is still moving it just looks again a second later.
-  function run() {
+  //    wait = TILE_TIME: if nobody says how long to wait, it's the normal time.
+  function run(wait = TILE_TIME) {
     clearTimeout(timer);
     if (!section.hasAttribute("data-loop") || paused || !inView) return;
     if (heroMoving()) {
-      timer = setTimeout(run, 1000);
+      timer = setTimeout(() => run(wait), 1000);
       return;
     }
     timer = setTimeout(() => {
       show(active + 1);
       run();
-    }, TILE_TIME);
+    }, wait);
   }
 
   // 4. Only while at least half of the section is on screen
   const observer = new IntersectionObserver(
     ([entry]) => {
       inView = entry.isIntersecting;
-      run();
+      run(START_TIME); // just came on screen: the first move comes quickly
     },
     { threshold: 0.5 },
   );

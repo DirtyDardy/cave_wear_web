@@ -263,10 +263,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Follow the journey** – timeline of real milestones only (small data file) + social links.
   Main place Brand page, teaser on Home, one line near Reserve. Links only, no embedded feeds.
 - **Hidden coordinates** (Dardan's idea) – built 2 Nov. One per page, a real button that looks
-  like a quiet label: Home = Bears' Cave, bottom left in Field conditions · Products = Brente
-  Holme inside Favorites (his favorite island, where he first had the idea for the company) ·
-  Brand = Gjilan, his birth city (just above the footer for now; later under the first team
-  photo, or next to his About Us text if the Team section is cut) · Contact = Regensburg.
+  like a quiet label: Home = Bears' Cave, bottom left in Field conditions · Products = Gjilan,
+  his birth city, inside Favorites · Brand = Brente Holme, after the last paragraph of Why We
+  Exist (where he first had the idea for the company; swapped 2 Nov, the text doesn't name the
+  island, the numbers do) · Contact = Regensburg.
   Grey, hover Weathered Bone, once found it stays Wild Honey and its cross lights up on the Home
   map (yellow pictures `public/map/found-<id>.svg` over the map; two lie behind the Today's pick
   glass and look faint, Dardan's call). Fourth find: a glass bar with a link, and the section

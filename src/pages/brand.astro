@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import BrandTop from "../components/BrandTop.astro";
 import BrandTrail from "../components/BrandTrail.astro";
 import BrandWhy from "../components/BrandWhy.astro";
-import Coordinates from "../components/Coordinates.astro";
 import { places } from "../data/places.js";
 ---
 
@@ -29,11 +28,6 @@ import { places } from "../data/places.js";
       }
     </ul>
   </section>
-
-  <!-- Gjilan. Just above the footer for now – later near the Team section -->
-  <div class="container coordinates-end">
-    <Coordinates place="gjilan" />
-  </div>
 </BaseLayout>
 
 <style>
@@ -41,9 +35,5 @@ import { places } from "../data/places.js";
     display: grid;
     gap: var(--space-8); /* 32px */
     margin-block-start: var(--space-8);
-  }
-
-  .coordinates-end {
-    padding-block-end: var(--space-12); /* 48px to the footer */
   }
 </style>

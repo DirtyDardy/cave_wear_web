@@ -11,7 +11,7 @@ About Us
 CAVE WEAR
 Rugged. Functional. Refined.
 
-Cave Wear makes clothing for people who move between worlds: a trail in the morning, a city street by evening. Garments that feel right in the wilderness and look right at a bar or a family dinner.
+We make clothing for people who move between worlds: a trail in the morning, a city street by evening. Garments that feel right in the wilderness and look right at a bar or a family dinner.
 
 ### Why We Exist
 

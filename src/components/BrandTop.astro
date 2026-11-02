@@ -1,14 +1,12 @@
 ---
-// BRAND – TOP (2 Nov). One column: one photo, the heading on the dark water, the trail
-// comes down from the photo into my first paragraph, which writes itself once.
-// The photo is ONLY a placeholder while I build (Raul Ling, Pexels, tagged Finland): it
-// must be replaced with a new picture before feature/brand goes into main, and its line
-// in the Impressum changes with it. The page never names a place for it.
+// BRAND – TOP (2 Nov). One column: the view out of a cave (Yugen Pictures, Pexels, see the
+// Impressum), the heading low in the picture, the trail comes down from the photo into my
+// first paragraph, which writes itself once.
 import { Image } from "astro:assets";
 import heroImage from "../assets/brand/brand-hero.jpg";
 
 const first =
-  "Cave Wear makes clothing for people who move between worlds: a trail in the morning, a city street by evening.";
+  "We make clothing for people who move between worlds: a trail in the morning, a city street by evening.";
 const second =
   "Garments that feel right in the wilderness and look right at a bar or a family dinner.";
 
@@ -22,7 +20,7 @@ const secondWords = second.split(" ");
 <section class="brand-top top-fade">
   <Image
     src={heroImage}
-    alt="A rocky island with pine trees in a calm lake, under a cloudy sky"
+    alt="View out of a dark cave: a person stands in shallow water, looking out at trees in the mist"
     class="brand-top-image"
     widths={[640, 1024, 1600, 2000]}
     sizes="100vw"
@@ -40,7 +38,9 @@ const secondWords = second.split(" ");
     <!-- Screen readers get the sentences in one piece, not word by word -->
     <span class="visually-hidden">{first} {second}</span>
     <span aria-hidden="true">
-      {firstWords.map((word, i) => <Fragment><span class="word" style={`--i: ${i}`}>{word}</span>{" "}</Fragment>)}
+      <span class="brand-intro-first">
+        {firstWords.map((word, i) => <Fragment><span class="word" style={`--i: ${i}`}>{word}</span>{" "}</Fragment>)}
+      </span>
       <span class="brand-intro-second">
         {secondWords.map((word, i) => <Fragment><span class="word" style={`--i: ${firstWords.length + i}`}>{word}</span>{" "}</Fragment>)}
       </span>
@@ -60,9 +60,9 @@ const secondWords = second.split(" ");
     overflow: hidden;
   }
 
-  /* Vertical position 80% (50% = centre, 100% = bottom edge): more dark water for the
-     heading, less bright sky behind the header. Wide screens show a thin strip of the
-     photo (the height stops at 720px), so there 70% keeps the tree tops in view. */
+  /* Vertical position (50% = centre, 100% = bottom edge). Most screens show nearly the
+     whole photo. Wide screens only show a strip of it (the height stops at 720px), so
+     there 40% keeps the person and the trees in view, with the heading on the dark ground. */
   .brand-top-image {
     position: absolute;
     inset: 0;
@@ -72,12 +72,12 @@ const secondWords = second.split(" ");
     object-position: center 80%;
 
     @media (width >= 100rem) {
-      object-position: center 70%;
+      object-position: center 40%;
     }
   }
 
-  /* Soft dark fade over the water, so bright ripples can't pull the heading
-     below the contrast rule. */
+  /* Soft dark fade over the bottom half: the heading lies on the bright reflection in the
+     water, and without it "About Us" falls below the contrast rule (4.5:1). */
   .brand-top::after {
     content: "";
     position: absolute;
@@ -85,8 +85,8 @@ const secondWords = second.split(" ");
     inset: 0;
     background-image: linear-gradient(
       to top,
-      color-mix(in srgb, var(--color-bg) 40%, transparent),
-      transparent 45%
+      color-mix(in srgb, var(--color-bg) 70%, transparent),
+      transparent 50%
     );
     pointer-events: none;
   }
@@ -101,12 +101,8 @@ const secondWords = second.split(" ");
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-block-end: var(--space-8); /* 32px */
+    padding-block-end: var(--space-16); /* 64px: same height as "Products", so a page change won't move it */
     text-align: center;
-
-    @media (width >= 48rem) {
-      padding-block-end: var(--space-12); /* 48px */
-    }
   }
 
   /* One step bigger than a normal label and right on the heading. On a photo the
@@ -143,10 +139,24 @@ const secondWords = second.split(" ");
      48, 40 and 32px felt off). It stands out through the trail, the colours and the
      animation instead. */
   .brand-intro {
-    max-inline-size: var(--measure-lead);
+    max-inline-size: none;
     margin-inline: auto;
     color: var(--color-text);
     text-align: center;
+  }
+
+  /* Each sentence on its own line(s). The second may run wider than the first, so on
+     desktop it stays on one line (decided 2 Nov). "balance" evens out the lines where
+     they wrap, so no single word is left alone. */
+  .brand-intro-first,
+  .brand-intro-second {
+    display: block;
+    text-wrap: balance;
+  }
+
+  .brand-intro-first {
+    max-inline-size: var(--measure-lead);
+    margin-inline: auto;
   }
 
   .brand-intro-second {

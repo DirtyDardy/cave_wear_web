@@ -139,24 +139,18 @@ const secondWords = second.split(" ");
      48, 40 and 32px felt off). It stands out through the trail, the colours and the
      animation instead. */
   .brand-intro {
-    max-inline-size: none;
+    max-inline-size: var(--measure-lead);
     margin-inline: auto;
     color: var(--color-text);
     text-align: center;
   }
 
-  /* Each sentence on its own line(s). The second may run wider than the first, so on
-     desktop it stays on one line (decided 2 Nov). "balance" evens out the lines where
-     they wrap, so no single word is left alone. */
+  /* Each sentence starts on its own line (decided 2 Nov). "balance" evens out the lines,
+     so no single word is left alone. */
   .brand-intro-first,
   .brand-intro-second {
     display: block;
     text-wrap: balance;
-  }
-
-  .brand-intro-first {
-    max-inline-size: var(--measure-lead);
-    margin-inline: auto;
   }
 
   .brand-intro-second {

@@ -22,6 +22,7 @@ import {
   type Reservation,
 } from "../scripts/pack-store";
 import { formatPrice } from "../data/price";
+import { supportChoices } from "../data/product-support.js";
 // ?raw = the SVG file as text, so the drawer shows my own icons (the same files)
 import closeIcon from "../assets/icons/close.svg?raw";
 // My open backpack: the header shows it closed, the drawer shows the Pack opened
@@ -48,6 +49,22 @@ export type PackProduct = {
   fits: Record<string, string>; // "unisex" → "Unisex"
   photos: Record<string, string>; // "olive_unisex" → address of the small front photo
 };
+
+// The Supporter choice of a row – undefined for every other product
+function supportOf(item: PackItem) {
+  return supportChoices[item.support as keyof typeof supportChoices];
+}
+
+// "M · Unisex · Black", plus what a Supporter piece supports. The same text in the row, the
+// reservation and the email. filter(Boolean) drops the part a product doesn't have.
+function itemDetails(item: PackItem, product: PackProduct) {
+  return [item.size, product.fits[item.fit], product.colours[item.colour], supportOf(item)?.detail].filter(Boolean).join(" · ");
+}
+
+// A row's total: the product's price + the extra of its Supporter choice, times the quantity
+function rowTotal(item: PackItem, product: PackProduct) {
+  return (product.price + (supportOf(item)?.extra ?? 0)) * item.quantity;
+}
 
 // Props = the values a component gets from outside, like the attributes of an HTML tag
 type Props = {
@@ -106,7 +123,7 @@ export default function PackDrawer({ catalog }: Props) {
   let total = 0;
   let pieces = 0;
   for (const item of rows) {
-    total += catalog[item.id].price * item.quantity;
+    total += rowTotal(item, catalog[item.id]);
     pieces += item.quantity;
   }
 
@@ -115,8 +132,7 @@ export default function PackDrawer({ catalog }: Props) {
   const packText = rows
     .map((item) => {
       const product = catalog[item.id];
-      const details = `${item.size} · ${product.fits[item.fit]} · ${product.colours[item.colour]}`;
-      return `${item.quantity} × ${product.name} – ${details} – ${formatPrice(product.price * item.quantity)}`;
+      return `${item.quantity} × ${product.name} – ${itemDetails(item, product)} – ${formatPrice(rowTotal(item, product))}`;
     })
     .join("\n");
 
@@ -127,9 +143,9 @@ export default function PackDrawer({ catalog }: Props) {
       const product = catalog[item.id];
       return {
         name: product.name,
-        details: `${item.size} · ${product.fits[item.fit]} · ${product.colours[item.colour]}`,
+        details: itemDetails(item, product),
         quantity: item.quantity,
-        price: product.price * item.quantity,
+        price: rowTotal(item, product),
       };
     });
     addReservation({ sentAt, lines, total });
@@ -256,7 +272,7 @@ type RowProps = {
 function PackRow({ item, product }: RowProps) {
   const key = itemKey(item);
   // Opens the product page with this colour and fit already chosen (product-options.js)
-  const link = `/products/${item.id}?colour=${item.colour}&fit=${item.fit}`;
+  const link = `/products/${item.id}?colour=${item.colour}&fit=${item.fit}${item.support ? `&support=${item.support}` : ""}`;
 
   // After Remove, the button is gone – focus moves to the title, so keyboard users
   // keep their place in the drawer
@@ -280,11 +296,9 @@ function PackRow({ item, product }: RowProps) {
           <a href={link} className="drawer-name">
             <ProductName name={product.name} />
           </a>
-          <span className="drawer-price">{formatPrice(product.price * item.quantity)}</span>
+          <span className="drawer-price">{formatPrice(rowTotal(item, product))}</span>
         </div>
-        <p className="small">
-          {item.size} · {product.fits[item.fit]} · {product.colours[item.colour]}
-        </p>
+        <p className="small">{itemDetails(item, product)}</p>
 
         <div className="drawer-controls">
           {/* aria-disabled instead of disabled: the button stays focusable at 1 and 10,

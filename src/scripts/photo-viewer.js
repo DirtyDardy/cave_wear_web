@@ -132,7 +132,9 @@ function open(clickedButton) {
   const buttons = [
     document.querySelector(".shot-0 .photo-button:not([hidden])"), // the shot 0 of the chosen fit
     ...document.querySelectorAll(".shot-set:not([hidden]) .photo-button"),
-  ].sort((a, b) => Number(a.dataset.shot) - Number(b.dataset.shot));
+  ]
+    .filter(Boolean) // a product without shot 0 has none to add
+    .sort((a, b) => Number(a.dataset.shot) - Number(b.dataset.shot));
 
   for (const old of slides) old.remove();
 

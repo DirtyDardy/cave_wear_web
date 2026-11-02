@@ -4,6 +4,8 @@
 // olive already chosen – that's what the colour dots on the Products page link to.
 // And it runs "Add to pack": the choice goes into the shared Pack list (pack-store.ts).
 import { addItem, openPack, canReserve, maxReservations } from "./pack-store";
+import { formatPrice } from "../data/price";
+import { supportChoices } from "../data/product-support.js";
 
 const sets = document.querySelectorAll(".shot-set");
 
@@ -12,7 +14,7 @@ const sets = document.querySelectorAll(".shot-set");
 //    option, it gets chosen; anything else in the address is ignored.
 const params = new URLSearchParams(window.location.search);
 
-for (const group of ["colour", "fit"]) {
+for (const group of ["colour", "fit", "support"]) {
   const wanted = params.get(group);
   const options = document.querySelectorAll(`input[name="${group}"]`);
   const match = [...options].find((option) => option.value === wanted);
@@ -117,10 +119,20 @@ packButton.addEventListener("click", () => {
     size: chosen("size"),
     fit: chosen("fit"),
     colour: chosen("colour"),
+    support: chosen("support"), // Supporter Collection only – otherwise undefined and not saved
     quantity: Number(document.querySelector("#quantity").value),
   });
   openPack();
 });
+
+// The price at the top follows the support choice (Supporter Collection only):
+// the product's price + the extra of the chosen choice.
+function showChosenPrice() {
+  const support = supportChoices[chosen("support")];
+  if (!support) return; // every other product: no choice, the price stays as it is
+  const priceLine = document.querySelector(".price");
+  priceLine.textContent = formatPrice(Number(priceLine.dataset.price) + support.extra);
+}
 
 // 5. Every time an option is chosen: show the matching photos, check the button.
 //    "change" fires when a radio button gets chosen – by click or with the arrow keys.
@@ -132,9 +144,13 @@ document.addEventListener("change", (event) => {
   if (event.target.name === "colour" || event.target.name === "fit") {
     showChosenSet();
   }
+  if (event.target.name === "support") {
+    showChosenPrice();
+  }
   updatePackButton();
 });
 
 matchColoursToFit();
 showChosenSet();
+showChosenPrice();
 updatePackButton();

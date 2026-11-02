@@ -2,57 +2,34 @@
 // PRODUCTS (from my products sketch): photo header, Base Collection,
 // Supporter Collection, Favorites.
 // Every product folder in src/content/products/ becomes a card here by itself.
-// Products without a folder yet still show as PLACEHOLDER cards (not clickable).
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProductCard from "../components/ProductCard.astro";
 import { getProducts, type Product } from "../data/products";
 import heroImage from "../assets/products/products-hero.jpg";
-import placeholder from "../assets/products/placeholder.jpg";
+import supporterPrint from "../assets/products/supporter-print.webp";
 
 const products = await getProducts();
 
-// A product folder → what the card needs. Card photo = shot 0,
-// hover photo = shot 1 (front) in the first colour and fit.
+// A product folder → what the card needs. Photo + hover photo: shot 0 + shot 1,
+// without shot 0: shot 1 + shot 2 (first colour and fit).
 function toCard(product: Product) {
   return {
     id: product.id,
-    order: product.order,
     name: product.name,
     tagline: product.tagline,
-    image: product.shot0.image,
-    alt: product.shot0.alt,
-    hoverImage: product.shotSets[0].shots[0].image,
+    image: product.card.image,
+    alt: product.card.alt,
+    hoverImage: product.cardHover.image,
     href: `/products/${product.id}`,
     colours: product.colours,
     fits: product.fits,
   };
 }
 
-const placeholderAlt = "Placeholder – product photo follows";
-const placeholderTagline = "Placeholder – one short line follows.";
-
-// PLACEHOLDER cards for products that have no folder yet. "id" = short name that
-// never changes – favorites are saved by it. "order" = its place, the same number
-// as its folder will get. A placeholder disappears by itself as soon as a folder
-// with the same id exists.
-const placeholders = {
-  "Base Collection": [],
-  "Supporter Collection": [
-    { id: "supporter-tee", order: 7, name: "Supporter Tee", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-    { id: "supporter-hoodie", order: 8, name: "Supporter Hoodie", tagline: placeholderTagline, image: placeholder, alt: placeholderAlt },
-  ],
-};
-
-const folderIds = products.map((product) => product.id);
-
-// One collection's cards: the products from folders and the placeholders that have
-// no folder yet, together sorted by their number. "..." = put all items of that list in here.
+// One collection's cards, in the order of the folder numbers
 function cardsFor(collection: Product["collection"]) {
-  return [
-    ...products.filter((product) => product.collection === collection).map(toCard),
-    ...placeholders[collection].filter((card) => !folderIds.includes(card.id)),
-  ].sort((a, b) => a.order - b.order);
+  return products.filter((product) => product.collection === collection).map(toCard);
 }
 
 const baseCollection = cardsFor("Base Collection");
@@ -127,15 +104,24 @@ const supporterCollection = cardsFor("Supporter Collection");
             </li>
           ))
         }
-        <!-- Text card in the third column: what the Supporter Collection is.
-             Update "bolder graphics" and "Coming soon" once the design is done. -->
+        <!-- Text card in the third column: what the Supporter Collection is. -->
         <li class="text-card">
           <h3>For the ones who were here first.</h3>
+          <Image
+            src={supporterPrint}
+            alt="The Supporter back print: a cave bear, head down, half skeleton and half outline"
+            class="text-card-print"
+            widths={[320, 640, 960]}
+            sizes="(width >= 64rem) 20vw, (width >= 40rem) 40vw, 75vw"
+          />
           <p class="small">
-            A tee and a hoodie with bolder graphics, reservable only before the launch – then
-            gone for good. Part of every piece is planned to support bear conservation.
+            The print shows Ursus spelaeus, the cave bear, named by Rosenmüller in 1794. Half
+            skeleton, half outline: the bones are all that's left of it.
           </p>
-          <p class="collection-tags">Coming soon</p>
+          <p class="small">
+            A tee and a hoodie, reservable only before the launch – then gone for good. Every
+            piece is planned to support what you choose: bears, Cave Wear or both.
+          </p>
         </li>
       </ul>
     </section>
@@ -342,20 +328,46 @@ const supporterCollection = cardsFor("Supporter Collection");
     }
   }
 
-  /* Same surface and line as a product card; text centred in the middle */
+  /* Same surface and line as a product card. From the top down (my layout, 2 Nov):
+     title, the print big in the middle, the text at the bottom. */
   .text-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-8); /* 32px */
+    gap: var(--space-4); /* 16px */
+    padding: var(--space-6); /* 24px */
     border: 1px solid var(--color-line);
     background-color: var(--color-bg);
-    text-align: center;
 
-    /* "Coming soon" under the text */
-    & .collection-tags {
-      margin-block-start: var(--space-4);
+    & h3 {
+      margin: 0;
+      font-size: 2rem; /* 32px – one step above the normal H3 */
+      line-height: 2.25rem; /* 36px */
+    }
+
+    & p {
+      margin: 0;
+    }
+
+    /* The two texts stay one block: only 8px between them */
+    & p + p {
+      margin-block-start: calc(var(--space-2) - var(--space-4));
+    }
+  }
+
+  /* The print, centred. Phone and tablet: 3/4 of the card's width, the card's height follows.
+     Desktop: the card stands next to the product cards and has to match their height,
+     so the print takes all the height the title and text leave free (object-fit: contain
+     = never cut, never stretched). It never gets smaller than 192px high. */
+  .text-card-print {
+    align-self: center;
+    inline-size: 75%;
+    block-size: auto;
+
+    @media (width >= 64rem) {
+      flex: 1 1 0;
+      inline-size: 100%;
+      min-block-size: 12rem;
+      object-fit: contain;
     }
   }
 

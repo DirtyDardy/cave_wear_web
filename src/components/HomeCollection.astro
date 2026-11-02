@@ -28,8 +28,8 @@ const cards = featured.flatMap(({ id, focus }) => {
     {
       name: product.name,
       tagline: product.tagline,
-      image: product.shot0.image,
-      alt: product.shot0.alt,
+      image: product.card.image,
+      alt: product.card.alt,
       href: `/products/${product.id}`,
       focus,
     },

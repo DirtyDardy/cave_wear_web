@@ -173,6 +173,12 @@ export async function getProducts() {
       })),
     );
 
+    // Shot 0 is optional too: no "Shot 0:" line → the page starts with shot 1.
+    const shot0 =
+      "0" in shotText
+        ? { image: findPhoto(folder, `shot_0_${id}`), alt: [data.name, shotText[0]].filter(Boolean).join(" – ") }
+        : undefined;
+
     return {
       id,
       order: readOrder(filePath), // e.g. 1 – the Products page also sorts placeholders with it
@@ -189,10 +195,10 @@ export async function getProducts() {
       designPurpose: toParagraphs(sections["Design & Purpose"]),
       fitSilhouette: toParagraphs(sections["Fit & Silhouette"]),
       materials: toParagraphs(sections["Materials"]),
-      shot0: {
-        image: findPhoto(folder, `shot_0_${id}`),
-        alt: [data.name, shotText[0]].filter(Boolean).join(" – "),
-      },
+      shot0,
+      // The product card: shot 0 + hover shot 1. Without shot 0: shot 1 + hover shot 2.
+      card: shot0 ?? shotSets[0].shots[0],
+      cardHover: shotSets[0].shots[shot0 ? 0 : 1],
       // Optional: an own shot 0 for one fit, e.g. shot_0_traverse-half-zip_female.
       // The product page shows it while that fit is chosen; otherwise the normal shot 0.
       shot0ByFit: data.fits.flatMap((fit) => {

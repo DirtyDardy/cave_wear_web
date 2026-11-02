@@ -52,7 +52,7 @@ const principles = [
     --principles-width: 30.75rem; /* 492px: the heading on one line, and the first text line ends on "worn" */
 
     position: relative;
-    margin-block-start: var(--section-space); /* from 48rem 96px: 48px to the trail, 48px from it to the heading */
+    margin-block-start: calc(2 * var(--section-space)); /* the same gap as from my first paragraph to Why We Exist */
   }
 
   .brand-principles-heading,
@@ -173,7 +173,7 @@ const principles = [
      the page, and down out of the section. On phones there's nowhere to turn, so it isn't
      there. */
   .brand-principles-trail {
-    --trail-drop: var(--space-12); /* 48px: from the photo's row down to the first turn */
+    --trail-drop: calc(2 * var(--section-space) - var(--space-12)); /* from the photo's row down to the first turn, 48px above the heading */
     --trail-tail: calc(var(--section-space) - var(--space-12)); /* from the last turn to the end of the section */
     --trail-to-middle: calc(var(--principles-width) / 2 + var(--space-16)); /* 64px beside the rows, then half of them */
 
@@ -182,7 +182,7 @@ const principles = [
     @media (width >= 48rem) {
       display: block;
       position: absolute;
-      inset-block: calc(-1 * var(--section-space));
+      inset-block: calc(-2 * var(--section-space)) calc(-1 * var(--section-space));
       inset-inline-start: calc(50% - var(--trail-to-middle));
       inset-inline-end: calc(var(--brand-why-shift) - var(--space-6));
       color: var(--color-input-border); /* Flint */
@@ -203,9 +203,9 @@ const principles = [
     }
   }
 
-  /* It draws itself while you scroll, one line after the other. The box is the block plus
-     the same space above and below, so 50% is the moment the block is in the middle of the
-     screen: by then the line has passed all three rows. */
+  /* It draws itself while you scroll, one line after the other. The box starts higher above
+     the block than it ends below it, so the block is in the middle of the screen a little
+     after 50%, at about 55%: by then the line has passed all three rows. */
   @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       /* Written as single lines on purpose, see BrandTrail.astro */
@@ -228,7 +228,7 @@ const principles = [
         0 1px,
         1px 0;
     }
-    3% {
+    10% {
       background-size:
         1px var(--trail-drop),
         0 1px,
@@ -236,7 +236,7 @@ const principles = [
         0 1px,
         1px 0;
     }
-    20% {
+    27% {
       background-size:
         1px var(--trail-drop),
         100% 1px,
@@ -244,7 +244,7 @@ const principles = [
         0 1px,
         1px 0;
     }
-    50% {
+    55% {
       background-size:
         1px var(--trail-drop),
         100% 1px,
@@ -252,7 +252,7 @@ const principles = [
         0 1px,
         1px 0;
     }
-    75% {
+    78% {
       background-size:
         1px var(--trail-drop),
         100% 1px,

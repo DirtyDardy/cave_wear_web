@@ -757,6 +757,14 @@ then Dardan decides.
   H2 line height = font size; Lead 450, −0.03em (was Light 300); body −0.01em; labels 0.08em
   (was 0.14em); nav normal case. Light headings + tight spacing = the premium look. Presentation point.
 
+### The trail line (Dardan, 2 Nov)
+- **Every dotted line looks like the one on Contact:** `--trail-down` / `--trail-across` in
+  `global.css` (long dash, short dash), Flint, 1px.
+- **Every diagonal in the trail leans 15° from vertical**, like the cut in the logo (measured
+  in `bear-light.svg`: 15.1°).
+- On the Brand page it's a visual path through the brand, never a rule for placement: it may
+  change sides, and it never runs through text.
+
 ### Logo & icons
 - `src/assets/logo-horizontal.svg` (`currentColor`, inlined in header/footer) and
   `public/logo/bear-light.svg` (hero glass mask). Other versions in Git history / design folder.

@@ -17,7 +17,9 @@ Cave Wear makes clothing for people who move between worlds: a trail in the morn
 
 Cave Wear started with a simple question: why should outdoor clothing look like outdoor clothing?
 
-The idea came from my own experience. I've always felt most comfortable in functional, tactical clothing, but it doesn't always suit every occasion. I wanted something different: clothing that could handle the outdoors without looking out of place anywhere else.
+It began on my first trip to Sweden, around midsummer 2022. I saw many different clothes, and they were mostly very practical. But outdoor clothing has a problem that goes through most brands that concentrate on functionality: the fit is a very basic fit that doesn't look very aesthetically pleasing on many people.
+
+I've always felt most comfortable in functional, tactical clothing, but it doesn't always suit every occasion. And clothes that do look sharp have their own problems: either I spend a long time styling them until they look right, or I have to be careful in them all day. I love it when I can just live my life, put everything in the washing machine without thinking about it, and walk through thorns without worrying about ripping anything. So I wanted something different: clothing that could handle the outdoors without looking out of place anywhere else.
 
 My background in media technology, graphic design, and merchandise production shaped the way I approached the idea. Working with different materials and printing techniques taught me to pay attention to the details behind a garment, not just how it looks.
 
@@ -119,6 +121,14 @@ That idea shapes the details:
 
 Specific claims will only follow once the materials, the production and the evidence
 are clear.
+
+---
+
+## Text 3 – Conservation, last line (added 2 Nov 2026)
+
+That’s our bear minimum.
+
+(Bear the animal, on purpose. It ends the Conservation part.)
 
 ---
 

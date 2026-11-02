@@ -12,6 +12,7 @@ export type PackItem = {
   size: string; // e.g. "M"
   fit: string; // "unisex", "female" or "male"
   colour: string; // as in the photo file names, e.g. "black"
+  support?: string; // Supporter Collection only: where the 5€ goes (src/data/product-support.js)
   quantity: number; // 1 to maxQuantity
 };
 
@@ -54,9 +55,9 @@ export const packCount = computed(packItems, (items) => {
   return count;
 });
 
-// Same product + size + fit + colour = the same row, e.g. "core-tee|M|unisex|black"
+// Same product + size + fit + colour + support = the same row, e.g. "core-tee|M|unisex|black|"
 export function itemKey(item: PackItem) {
-  return [item.id, item.size, item.fit, item.colour].join("|");
+  return [item.id, item.size, item.fit, item.colour, item.support].join("|");
 }
 
 // Keeps a quantity a whole number between 1 and maxQuantity.

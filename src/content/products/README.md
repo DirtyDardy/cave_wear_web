@@ -12,6 +12,8 @@ products/
 │   ├── 01_core-tee/
 │   └── 02_field-hoodie/
 └── supporter-collection/
+    ├── 07_supporter-tee/
+    └── 08_supporter-hoodie/
 ```
 
 **The number in front sets the order** on the Products page (01 comes first). The name
@@ -65,6 +67,9 @@ page then shows shots 1–4 without the big shot 5, and no `shot_5_…` photos a
 The pattern is always **shot number _ product _ colour _ fit**. Every colour and every fit gets
 its own shots 1–5 (e.g. the half-zip in brown needs `…_brown_female` and `…_brown_male`).
 Colours in file names: lowercase, spaces become hyphens (`Tobacco Brown` → `tobacco-brown`).
+
+**No shot 0:** delete the line `Shot 0:` in the text file. The product page then starts with
+shot 1, the card shows shot 1 (hover: shot 2), and no `shot_0_…` photo is needed.
 
 ## Colours
 

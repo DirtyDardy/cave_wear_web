@@ -175,6 +175,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   who were here first." … "Coming soon"). **Update when the Supporter design is done:** "bolder
   graphics" and "Coming soon" in the card; "Conservation planned" may become "Supports
   conservation" only once the donation is real. Later: a quiet link to the Brand page.
+  **Done 2 Nov:** "Coming soon" is gone; "bolder graphics" left the card when its text was rewritten (see 10).
   Products so far: The Core Tee, The Field Hoodie, The Traverse Half-Zip, The Ridge Beanie,
   The Pass Gaiter, The All-Weather Shell. The Pack is a drawer, not a page (see 7).
 - **Brand** – story & origin, identity & purpose, conservation, donation approach, journey
@@ -608,6 +609,30 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
   wearer's left chest above the seam (planned: thin silicone heat transfer, like the gaiter);
   plain back; no sleeve wordmark. Shot 0 = a stand-in (man in the rain, wet city street) until
   Dardan's own photo next week. Dardan's own text.
+- **Supporter Collection (built 2 Nov):** `07_supporter-tee` (The Supporter Tee, `STE01`) and
+  `08_supporter-hoodie` (The Supporter Hoodie, `SHD01`), XS–XXL, unisex, Black only, each 5€ above its
+  Base piece: 34,90€ / 74,90€. This is the "Pre-launch pieces" idea (see 7). Back: Dardan's print,
+  placed by him in Photoshop – the cave bear, head down, half skeleton, half outline, vertical
+  CAVE·WEAR, label "Ursus spelaeus / Rosenmüller / 1794", crop marks (master: `final vector.pdf`,
+  transparent PNG in the setup folders). Front: the embroidered stacked logo, centred – on the tee too
+  (it was planned as printed, changed 2 Nov). Back print planned as direct-to-garment, embroidery
+  planned: always vision. Texts copied from the Core Tee / Field Hoodie and adapted; taglines are
+  Claude's draft.
+  - **Shots (2 Nov):** 1 front, 2 back, 3 embroidery close-up, 4 copied from Base (tee: neck label,
+    hoodie: flatlock seam). **Shot 0 is optional now:** no `Shot 0:` line in the text file = no shot 0.
+    Then the page goes 1 big · 2 | 3 · 4 big (`.no-shot-0`), the heart stays top right of the gallery, the
+    card shows shot 1, hover shot 2. The print as the card photo was built and rejected the same day.
+  - **"Your support:" (2 Nov):** boxes Bears · Cave Wear · Both under Fit and Color, only on the
+    Supporter Collection, list in `src/data/product-support.js`. Bears is chosen at the start. The
+    price at the top follows the choice, and the Pack, reservation and email follow it too: Both = 5€
+    more (39,90€ / 79,90€) – Claude's assumption of 5€ per cause. Under the boxes: "Planned – nothing
+    is paid now." It is saved in the Pack (`support`), so the same piece with another choice is its
+    own row. The detail text is letters and spaces only, so the email's safety check needs no change.
+    Privacy Policy `#reserve` names it. The real email is not tested yet (needs a push).
+  - **Third-column card (Dardan's layout, 2 Nov):** title 32/36 top left, the print centred, both texts
+    at the bottom, left-aligned. Desktop: the print takes the height that is left (at least 192px), so
+    the card matches the product cards. Phone and tablet: 75% of the card's width. Text is Claude's
+    draft, Dardan is happy with it for now and may change it.
 - **Shot 0 of all five products is AI (Gemini – Dardan 29 Oct, beanie + gaiter 31 Oct)** – the people in them aren't
   real, so they're in Git and go live; stand-ins until a real photoshoot. Covered by the
   Impressum's AI line (see 13). The old Core Tee / Field Hoodie placeholders (another brand's
@@ -878,5 +903,9 @@ then Dardan decides.
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column, swipe and the photo viewer are done (30 Oct,
   see 10) – still open: card fit icons on touch.
+- **Supporter – OPEN (2 Nov), ask Dardan:** is Both = 5€ more right, and how is it split between the
+  causes (the site only says "both", no promise) · what the head pointing down and the crop marks
+  mean (for the card) · a shorter text if the print should be as big as in his picture (74% of the
+  card, now about 65% at 1440).
 - Real shot 0 photos (Core Tee, Field Hoodie, Half-Zip, Ridge Beanie, Pass Gaiter) – the AI
   stand-ins are online until then.

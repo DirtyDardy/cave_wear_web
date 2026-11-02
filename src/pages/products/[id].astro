@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getProducts, productCode, type Product } from "../../data/products";
 import { productFits } from "../../data/product-fits.js";
+import { supportChoices } from "../../data/product-support.js";
 import HeartIcon from "../../assets/icons/heart.svg";
 import CloseIcon from "../../assets/icons/close.svg";
 
@@ -77,41 +78,52 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
           <!-- Shot 0: the normal one, plus an own one for a fit if its photo exists
                (e.g. shot_0_traverse-half-zip_female). product-options.js shows the one
                that belongs to the chosen fit – data-fit="" is the normal one. -->
-          <div class="shot-0" data-product-id={product.id}>
-            <button type="button" class="photo-button" data-shot="0" data-fit="" data-full={product.shot0.image.src} aria-haspopup="dialog">
-              <Image
-                src={product.shot0.image}
-                alt={product.shot0.alt}
-                widths={bigWidths}
-                sizes={bigSizes}
-                loading="eager"
-                fetchpriority="high"
-              />
-            </button>
-            {
-              product.shot0ByFit.map((shot) => (
-                <button
-                  type="button"
-                  class="photo-button"
-                  data-shot="0"
-                  data-fit={shot.fit}
-                  data-full={shot.image.src}
-                  aria-haspopup="dialog"
-                  hidden
-                >
-                  <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
+          {
+            product.shot0 ? (
+              <div class="shot-0" data-product-id={product.id}>
+                <button type="button" class="photo-button" data-shot="0" data-fit="" data-full={product.shot0.image.src} aria-haspopup="dialog">
+                  <Image
+                    src={product.shot0.image}
+                    alt={product.shot0.alt}
+                    widths={bigWidths}
+                    sizes={bigSizes}
+                    loading="eager"
+                    fetchpriority="high"
+                  />
                 </button>
-              ))
-            }
-            <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
-              <HeartIcon class="favorite-icon" />
-            </button>
-          </div>
+                {product.shot0ByFit.map((shot) => (
+                  <button
+                    type="button"
+                    class="photo-button"
+                    data-shot="0"
+                    data-fit={shot.fit}
+                    data-full={shot.image.src}
+                    aria-haspopup="dialog"
+                    hidden
+                  >
+                    <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
+                  </button>
+                ))}
+                <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
+                  <HeartIcon class="favorite-icon" />
+                </button>
+              </div>
+            ) : (
+              <div class="gallery-favorite" data-product-id={product.id}>
+                <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
+                  <HeartIcon class="favorite-icon" />
+                </button>
+              </div>
+            )
+          }
 
           {
             product.shotSets.map((set, index) => (
-              <div class="shot-set" data-colour={set.colour} data-fit={set.fit} hidden={index !== 0}>
-                {set.shots.map((shot) => (
+              <div class={`shot-set${product.shot0 ? "" : " no-shot-0"}`} data-colour={set.colour} data-fit={set.fit} hidden={index !== 0}>
+                {set.shots.map((shot) => {
+                  // Big photos: shot 5, or without a shot 0 the first and the last shot
+                  const big = shot.number === 5 || (!product.shot0 && (shot.number === 1 || shot.number === 4));
+                  return (
                   <button
                     type="button"
                     class={`photo-button shot-${shot.number}`}
@@ -122,11 +134,13 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
                     <Image
                       src={shot.image}
                       alt={shot.alt}
-                      widths={shot.number === 5 ? bigWidths : smallWidths}
-                      sizes={shot.number === 5 ? bigSizes : smallSizes}
+                      widths={big ? bigWidths : smallWidths}
+                      sizes={big ? bigSizes : smallSizes}
+                      loading={!product.shot0 && index === 0 && shot.number === 1 ? "eager" : "lazy"}
                     />
                   </button>
-                ))}
+                  );
+                })}
               </div>
             ))
           }
@@ -160,7 +174,8 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
         </div>
 
         <div class="details-block">
-          <p class="price">{product.priceText}</p>
+          <!-- data-price: product-options.js adds the extra of the chosen support to it -->
+          <p class="price" data-price={product.price} aria-live="polite">{product.priceText}</p>
           <p class="small price-note">Preliminary Price Estimate.</p>
           <!-- Straight to the pricing question in the FAQ (src/content/faq.yaml, id: pricing) -->
           <a href="/contact#pricing" class="text-link small">Learn more <span aria-hidden="true">›</span></a>
@@ -233,6 +248,25 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
               }
             </div>
           </fieldset>
+
+          <!-- Supporter Collection: the visitor chooses what the piece supports.
+               Same boxes as the sizes; the first choice starts chosen, like fit and colour. -->
+          {
+            product.collection === "Supporter Collection" && (
+              <fieldset class="support">
+                <legend class="label">Your support:</legend>
+                <div class="sizes">
+                  {Object.entries(supportChoices).map(([value, { label }], index) => (
+                    <label class="size">
+                      <input type="radio" name="support" value={value} checked={index === 0} class="visually-hidden" />
+                      {label}
+                    </label>
+                  ))}
+                </div>
+                <p class="small note">Planned – nothing is paid now.</p>
+              </fieldset>
+            )
+          }
         </div>
 
         <div class="details-block">
@@ -418,6 +452,7 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
      show that there's more and where you are (a peeking next photo was tried
      29 Oct and dropped: it looked like a mistake). */
   .gallery {
+    position: relative; /* the heart of a product without shot 0 sits on it */
     display: flex;
     gap: var(--space-2);
     overflow-x: auto;
@@ -498,6 +533,12 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     position: relative;
   }
 
+  /* No shot 0: the heart keeps its place, top right of the gallery. This wrapper is
+     no box of its own, so it adds no extra slide to the phone row. */
+  .gallery-favorite {
+    display: contents;
+  }
+
   /* Each photo is a button that opens the photo viewer – no button look of its own */
   .photo-button {
     display: block;
@@ -526,6 +567,16 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
         "shot1 shot3"
         "shot4 shot2"
         "shot5 shot5";
+    }
+
+    /* A product without shot 0: the front big, back and close-up side by side, the last shot big */
+    &.no-shot-0 {
+      @media (width >= 48rem) {
+        grid-template-areas:
+          "shot1 shot1"
+          "shot2 shot3"
+          "shot4 shot4";
+      }
     }
 
     /* "display: grid" / "contents" would beat the hidden attribute – this makes hidden win again */
@@ -703,8 +754,9 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     gap: var(--space-4) var(--space-12); /* 16px between rows, 48px between Fit and Color */
   }
 
-  .options fieldset:first-child {
-    grid-column: 1 / -1; /* Size spans both columns */
+  .options fieldset:first-child,
+  .options .support {
+    grid-column: 1 / -1; /* Size and the support choice span both columns */
   }
 
   fieldset {

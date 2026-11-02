@@ -1,0 +1,157 @@
+---
+// HOME – FIELD CONDITIONS. First prototype (1 Nov), from my references: a black and white
+// map of Europe with thin moving lines as the backdrop, the weather standing directly on
+// it, today's pick in a glass card, the two buttons from my earlier design.
+// Three parts: the map (a picture), the lines (src/scripts/field-lines.js, a picture too –
+// no real wind) and the real weather (FieldConditions.tsx, Open-Meteo: Regensburg by default,
+// the visitor's own location after a click).
+// Map: Natural Earth (public domain), with my four places on it as small crosses (a dot
+// next to the heading read like an arrow): Regensburg, Gjilan, Stora Le, Bears' Cave.
+// Without JavaScript nothing here can work, so the whole section stays hidden.
+import { getProducts } from "../data/products";
+import FieldConditions from "./FieldConditions";
+import europeMap from "../assets/europe-map.svg";
+import "../styles/field-conditions.css";
+
+// Everything the pick needs about a product, from the product folders – nothing typed twice
+const products = await getProducts();
+const pieces = Object.fromEntries(
+  products.map(({ id, name, tagline }) => [id, { name, tagline, href: `/products/${id}` }]),
+);
+---
+
+<section class="section home-conditions" aria-labelledby="home-conditions-title">
+  <div class="conditions-backdrop" aria-hidden="true">
+    <img src={europeMap.src} alt="" class="conditions-map" width={europeMap.width} height={europeMap.height} loading="lazy" decoding="async" />
+    <canvas class="field-lines"></canvas>
+  </div>
+
+  <div class="container">
+    <div class="home-conditions-inner">
+      <p class="label home-conditions-label">Field conditions</p>
+      <h2 id="home-conditions-title">What would you wear today?</h2>
+
+      <!-- client:visible = React starts when the section comes near the screen. 400px early,
+           so Regensburg's weather is usually there before the section is seen. -->
+      <FieldConditions client:visible={{ rootMargin: "400px" }} pieces={pieces} />
+    </div>
+  </div>
+
+  <!-- The script shows it. Anything that moves longer than 5 seconds needs a way to stop it. -->
+  <button type="button" class="icon-button field-pause" aria-label="Pause" hidden>
+    <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3" height="12" /><rect x="14" y="6" width="3" height="12" /></svg>
+    <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l10 6-10 6z" /></svg>
+  </button>
+</section>
+
+<script src="../scripts/field-lines.js"></script>
+
+<style>
+  /* isolation = its own little stack of layers, so the backdrop can lie behind the
+     text without slipping behind the page itself. */
+  .home-conditions {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    margin-block-start: calc(2 * var(--section-space)); /* double the gap to the Pack, so the two read as separate sections */
+    color: var(--color-text); /* the lines read their colour from here */
+
+    /* The page snaps gently here too (my notes, 27 Oct). Not on phones: the section
+       is taller than the screen there. */
+    @media (width >= 48rem) {
+      scroll-snap-align: center;
+    }
+  }
+
+  :global(html:not([data-js])) .home-conditions {
+    display: none;
+  }
+
+  /* From screen edge to screen edge. The mask lets the top and bottom melt into the
+     page, so the map has no hard edge. */
+  .conditions-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+  }
+
+  /* cover = fills the section and cuts off what doesn't fit. Phones see only a narrow strip
+     of the map: this one holds all four of my crosses. From tablet up, the middle of Europe. */
+  .conditions-map {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: 55% 62%;
+
+    @media (width >= 48rem) {
+      object-position: 47% 62%;
+    }
+  }
+
+  .field-lines {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  /* Same inner line as the other Home sections (--home-inset, 48px from tablet up).
+     Tablet and desktop: position: relative = the Today's pick card (field-conditions.css)
+     is placed inside this box. A margin here, not a padding: the card's percentages
+     should count from the content line. */
+  .home-conditions-inner {
+    @media (width >= 48rem) {
+      position: relative;
+      margin-inline: var(--home-inset, var(--space-12));
+    }
+  }
+
+  .home-conditions-label {
+    margin-block-end: var(--space-2); /* 8px to the heading */
+    color: var(--color-accent); /* Wild Honey, like How the Pack works */
+  }
+
+  /* On tablet and desktop the heading stays in the left half, beside the card */
+  .home-conditions-inner h2 {
+    margin-block-end: var(--space-8); /* 32px */
+
+    @media (width >= 48rem) {
+      inline-size: calc(50% - var(--space-3));
+      margin-block-end: var(--space-12); /* 48px */
+    }
+  }
+
+  /* Bottom right, like the corner of a video player. Same look as the tiles' button. */
+  .field-pause {
+    position: absolute;
+    inset-block-end: var(--space-2); /* phones: 8px, so it stays clear of the privacy line */
+    inset-inline-end: var(--gutter);
+
+    @media (width >= 48rem) {
+      inset-block-end: var(--space-6); /* 24px */
+    }
+
+    &[hidden] {
+      display: none;
+    }
+
+    & svg {
+      inline-size: var(--space-4); /* 16px */
+      block-size: var(--space-4);
+      fill: currentColor;
+    }
+
+    & .icon-play,
+    &[data-paused] .icon-pause {
+      display: none;
+    }
+
+    &[data-paused] .icon-play {
+      display: block;
+    }
+  }
+</style>

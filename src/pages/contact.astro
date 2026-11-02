@@ -1,6 +1,6 @@
 ---
 // CONTACT PAGE (my version A sketch, sharp form box – decided 26 Oct).
-// Top to bottom: intro with the email · FAQ (01 / Questions) · "Write to us" with the form.
+// Top to bottom: intro with the email · FAQ ("Questions") · "Write to us" with the form.
 // A dashed trail runs down the left side and ends at "Write to us" (CSS only, see below).
 // The FAQ comes from src/content/faq.yaml – every question has its own jump target,
 // e.g. /contact#pricing (the product pages link there).
@@ -49,7 +49,7 @@ const steps = [
 
         <!-- FAQ. id="faq" = the jump target of the Home button "FAQ". -->
         <section id="faq" class="faq" aria-labelledby="faq-title">
-          <h2 id="faq-title" class="label faq-title">01 / Questions</h2>
+          <h2 id="faq-title" class="faq-title">Questions</h2>
           {
             faqGroups.map((group) => (
               <div class="faq-group">
@@ -73,8 +73,7 @@ const steps = [
       <!-- WRITE TO US. id="contact-form" = the jump target of the Home button "Contact us". -->
       <section id="contact-form" class="write" aria-labelledby="write-title">
         <div class="write-text">
-          <!-- The trail's second stop (01 = Questions) – the end marker sits next to it -->
-          <p class="label write-step">02 / Write to us</p>
+          <!-- The trail's end marker sits next to this heading -->
           <h2 id="write-title" class="write-title">Write to us</h2>
           <p class="write-intro">Your question wasn't here? We're happy to help.</p>
 
@@ -230,7 +229,6 @@ const steps = [
 
   .faq-title {
     position: relative; /* the trail's first stop sits next to it */
-    color: var(--color-text-secondary);
   }
 
   .faq-group {
@@ -281,13 +279,8 @@ const steps = [
     }
   }
 
-  /* "02 / Write to us" – looks like "01 / Questions" */
-  .write-step {
-    position: relative; /* the trail's end marker sits next to it */
-    color: var(--color-text-secondary);
-  }
-
   .write-title {
+    position: relative; /* the trail's end marker sits next to it */
     margin-block-end: var(--space-2);
   }
 
@@ -537,13 +530,13 @@ const steps = [
   }
 
   /* --- The trail ----------------------------------------------------------------------------
-     A dashed line (8px dash, 8px gap) on the left of the text column, from the top of the
-     page down to a Wild Honey marker next to "02 / Write to us", with a small stop at
-     "01 / Questions". Only on wide screens – on smaller ones there's no room beside the text. */
+     The line of the site (global.css) on the left of the text column, from the top of the
+     page down to a Wild Honey marker next to the "Write to us" heading, with a small stop at
+     the "Questions" heading. Only on wide screens – on smaller ones there's no room beside the text. */
 
   .trail,
   .faq-title::before,
-  .write-step::before {
+  .write-title::before {
     display: none;
   }
 
@@ -551,17 +544,15 @@ const steps = [
     .trail {
       display: block;
       position: absolute;
-      inset-block: 0 calc(-1 * var(--write-gap)); /* down to "02 / Write to us" */
+      /* Down to the middle of the "Write to us" heading – it ends behind the marker */
+      inset-block: 0 calc(-1 * (var(--write-gap) + var(--leading-h2) / 2));
       inset-inline-start: calc(-1 * var(--trail-offset));
       inline-size: 1px;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        var(--color-input-border) 0 var(--space-2),
-        transparent var(--space-2) var(--space-4)
-      );
+      background-image: var(--trail-down);
+      color: var(--color-input-border); /* Flint */
     }
 
-    /* Small round stop next to "01 / Questions" */
+    /* Small round stop next to the "Questions" heading */
     .faq-title::before {
       content: "";
       display: block;
@@ -577,7 +568,7 @@ const steps = [
     }
 
     /* The end: a Wild Honey ring with a dot – you've arrived */
-    .write-step::before {
+    .write-title::before {
       content: "";
       display: block;
       position: absolute;

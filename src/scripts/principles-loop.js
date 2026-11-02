@@ -1,7 +1,8 @@
 // HOME – RUGGED · FUNCTIONAL · REFINED ON TOUCH SCREENS (phones, tablets – no hover).
 // With a mouse the visitor picks a tile by hovering (CSS only). A finger can't
 // hover, so here the tiles take turns by themselves: Functional starts in the
-// middle, then Refined, Rugged, Functional … The pause button stops it.
+// middle, then Refined, Rugged, Functional … The pause button stops it, and so does a
+// swipe: whoever swipes wants to choose, so from then on the tiles only follow the finger.
 // It only runs while the section is on screen and never while the hero is still
 // switching by itself – two things moving at once would be too much.
 // Reduced motion: nothing moves – phones show the three tiles under each other.
@@ -12,6 +13,7 @@ const TILE_TIME = 4000; // ms – how long each tile stays the big one (1 Nov: 5
 const START_TIME = 1000; // ms – the first move once the section is on screen (1 Nov: my friends
 // scrolled past without noticing that it moves, so it has to show that early)
 const MOVE_TIME = 600; // ms – how long a tile takes to move (same as the CSS transition)
+const SWIPE_DISTANCE = 40; // px – a finger moving less than this sideways is no swipe
 
 const touchScreen = matchMedia("(hover: none)");
 const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -60,9 +62,10 @@ if (section && !calm) {
 
     tiles.forEach((tile, i) => {
       const place = ["active", "next", "prev"][(i - active + tiles.length) % tiles.length];
-      // A tile going from the far left to the far right would fly across the
+      // A tile going from one far side to the other would fly across the
       // screen – mark it, so CSS lets it disappear and fade in on its new side
-      tile.toggleAttribute("data-jump", tile.dataset.place === "prev" && place === "next");
+      const old = tile.dataset.place;
+      tile.toggleAttribute("data-jump", (old === "prev" && place === "next") || (old === "next" && place === "prev"));
       tile.dataset.place = place;
     });
 
@@ -130,7 +133,37 @@ if (section && !calm) {
     });
   });
 
-  // 7. Switch the whole thing on or off. Runs once now, and again whenever the
+  // 7. Swiping. touchstart notes where the finger lands, touchend where it lifts.
+  //    Mostly sideways and far enough = a swipe: the loop stops and the next or previous
+  //    tile becomes the big one. Mostly up and down = the page scrolls as usual.
+  let touchX = 0;
+  let touchY = 0;
+
+  row.addEventListener(
+    "touchstart",
+    (event) => {
+      touchX = event.touches[0].clientX;
+      touchY = event.touches[0].clientY;
+    },
+    { passive: true },
+  );
+
+  row.addEventListener(
+    "touchend",
+    (event) => {
+      const sideways = event.changedTouches[0].clientX - touchX;
+      const upDown = event.changedTouches[0].clientY - touchY;
+      if (!section.hasAttribute("data-loop")) return;
+      if (Math.abs(sideways) < SWIPE_DISTANCE || Math.abs(sideways) < Math.abs(upDown)) return;
+
+      setPaused(true);
+      run(); // stops the waiting clock
+      show(active + (sideways < 0 ? 1 : -1)); // finger to the left = the next tile
+    },
+    { passive: true },
+  );
+
+  // 8. Switch the whole thing on or off. Runs once now, and again whenever the
   //    device changes (a mouse plugged into a tablet, or the browser's phone mode).
   function setUp() {
     const on = touchScreen.matches;

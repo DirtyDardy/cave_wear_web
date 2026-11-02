@@ -9,7 +9,8 @@
 // Reserve (Netlify Forms + the confirmation email via a Netlify Function) is covered under
 // "Reservations" (#reserve, added 28 Oct 2026) – the Reserve form links there.
 // Favorites (localStorage, src/scripts/favorites.js) and the Pack (localStorage,
-// src/scripts/pack-store.ts, added 28 Oct 2026) are covered under "Data stored in your browser".
+// src/scripts/pack-store.ts, added 28 Oct 2026) and the hidden coordinates (localStorage,
+// src/scripts/coordinates.js, added 1 Nov 2026) are covered under "Data stored in your browser".
 // Keep the newsletter purpose in sync with the note in Footer.astro.
 import LegalLayout from "../layouts/LegalLayout.astro";
 import EmailLinks from "../components/EmailLinks.astro";
@@ -174,6 +175,13 @@ const missing = (label: string) => `[${label} – to be added]`;
     After you reserve, your browser also keeps a copy of your reservations – what you reserved and
     when, not your name or email – so you can still see them later. Deleting this website's data
     in your browser removes this copy, but it does not cancel the reservation itself.
+  </p>
+  <p>
+    A few small coordinates are hidden on this website as a game. When you click one, your browser
+    remembers which ones you found (local storage) – only short place names, e.g. "gjilan". It
+    stays on your device and is never sent to us or anyone else. You can remove it by deleting this
+    website's data in your browser settings. This is only stored after you click a coordinate,
+    because the game can't work without it (§ 25 (2) no. 2 TDDDG).
   </p>
   <p>
     Netlify shows a small "Netlify" badge on

@@ -10,6 +10,8 @@
 // Without JavaScript nothing here can work, so the whole section stays hidden.
 import { getProducts } from "../data/products";
 import FieldConditions from "./FieldConditions";
+import Coordinates from "./Coordinates.astro";
+import { places } from "../data/places.js";
 import europeMap from "../assets/europe-map.svg";
 import "../styles/field-conditions.css";
 
@@ -23,6 +25,14 @@ const pieces = Object.fromEntries(
 <section class="section home-conditions" aria-labelledby="home-conditions-title">
   <div class="conditions-backdrop" aria-hidden="true">
     <img src={europeMap.src} alt="" class="conditions-map" width={europeMap.width} height={europeMap.height} loading="lazy" decoding="async" />
+    <!-- One Wild Honey cross per place, the same size and crop as the map, so each lies exactly
+         on its cross. A picture can't be recoloured from outside, so coordinates.js shows these
+         for the places already found. lazy + hidden = nothing loads until one is found. -->
+    {
+      Object.keys(places).map((place) => (
+        <img src={`/map/found-${place}.svg`} alt="" class="conditions-map" data-map-cross={place} width={europeMap.width} height={europeMap.height} loading="lazy" decoding="async" hidden />
+      ))
+    }
     <canvas class="field-lines"></canvas>
   </div>
 
@@ -35,6 +45,12 @@ const pieces = Object.fromEntries(
            so Regensburg's weather is usually there before the section is seen. -->
       <FieldConditions client:visible={{ rootMargin: "400px" }} pieces={pieces} />
     </div>
+  </div>
+
+  <!-- Bears' Cave: bottom left, on the pause button's line. It comes before the button, so
+       this empty strip can never lie over it. -->
+  <div class="container conditions-coordinates">
+    <Coordinates place="bears-cave" />
   </div>
 
   <!-- The script shows it. Anything that moves longer than 5 seconds needs a way to stop it. -->
@@ -122,6 +138,22 @@ const pieces = Object.fromEntries(
     @media (width >= 48rem) {
       inline-size: calc(50% - var(--space-3));
       margin-block-end: var(--space-12); /* 48px */
+    }
+  }
+
+  /* A strip as high as the pause button and at the same height, so the text sits on its
+     line. Left edge: the same content line as everything above it. */
+  .conditions-coordinates {
+    position: absolute;
+    inset-block-end: var(--space-2); /* phones: 8px, like the pause button */
+    inset-inline: 0;
+    display: flex;
+    align-items: center;
+    block-size: var(--space-12); /* 48px */
+
+    @media (width >= 48rem) {
+      inset-block-end: var(--space-6); /* 24px */
+      padding-inline-start: calc(var(--gutter) + var(--home-inset, var(--space-12)));
     }
   }
 

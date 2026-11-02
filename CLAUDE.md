@@ -835,11 +835,10 @@ then Dardan decides.
   Home questions – what each of the 3 videos (Rugged · Functional · Refined) shows, the one line
   of text in the cave breather, the 3 milestones + "Next up" for "The journey so far". Details:
   `drafts/site-ideas.md`. Remove this line once answered.
-- **Pack: built 27–28 Oct, merged into `main` 28 Oct – NOT pushed yet.** `SMTP_PASSWORD` is
-  set in Netlify (Dardan, 31 Oct – the live test confirms it). Push planned 31 Oct afternoon:
-  fresh-clone build test · ONE push (it also brings the mobile work live) · live test:
-  a reservation reaches Netlify, the email arrives, `data-netlify` is gone from the live HTML.
-  After the live test: this line → "pushed and live", delete the test reservations.
+- **Pack: pushed and live (31 Oct, one push with the mobile work).** Live test passed: the
+  confirmation email arrives (proves `SMTP_PASSWORD`), a reply goes to info@, `data-netlify` is
+  gone from the live HTML; newsletter and contact form work too (Dardan, 1 Nov).
+  OPEN: delete the test reservations in Netlify → Forms.
 - **Contact page (26 Oct):** Dardan reads the new Privacy section once (netcup → Gmail, "deleted
   once answered" – true for how he works?). The contact form only reaches Netlify after a deploy
   (check: `data-netlify="true"` gone from the live HTML). Mobile layout = mobile phase.

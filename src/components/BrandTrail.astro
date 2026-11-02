@@ -1,0 +1,53 @@
+---
+// BRAND – THE TRAIL BETWEEN TWO SECTIONS (2 Nov): the line of the site, in the space
+// between them, never through text. Only decoration, so screen readers skip it.
+---
+
+<div class="brand-trail" aria-hidden="true"></div>
+
+<style>
+  /* Two sections have 2 x --section-space between them. The negative margins pull the
+     line into that space, so the gap doesn't grow; it stops 24px from the text at both ends. */
+  .brand-trail {
+    --trail-reach: calc(var(--section-space) - var(--space-6));
+
+    inline-size: 1px;
+    block-size: calc(2 * var(--trail-reach));
+    margin-block: calc(-1 * var(--trail-reach));
+    /* 50%, not "auto": auto centres the line itself and lands half a pixel off the other
+       trail pieces, which start at 50%. On screen that was a 1px jump where they meet. */
+    margin-inline-start: 50%;
+    background-image: var(--trail-down);
+    background-size: 1px 100%;
+    background-repeat: no-repeat;
+    color: var(--color-input-border); /* Flint */
+  }
+
+  /* It draws itself while you scroll, like on Contact: its tip follows the middle of the
+     screen. Only in browsers that know scroll animations (others show the whole line)
+     and never for people who asked for less motion. The line grows through its size, not
+     clip-path: on odd window widths 50% lands on half a pixel, and clip-path then cuts the
+     line in half, so it looks dimmer than the next piece. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose: the build would join a full "animation:"
+         line and view() into one, which some browsers can't read */
+      .brand-trail {
+        animation-name: brand-trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  @keyframes brand-trail-draw {
+    from {
+      background-size: 1px 0;
+    }
+    to {
+      background-size: 1px 100%;
+    }
+  }
+</style>

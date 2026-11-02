@@ -1,12 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BrandTop from "../components/BrandTop.astro";
+import BrandTrail from "../components/BrandTrail.astro";
+import BrandWhy from "../components/BrandWhy.astro";
 import Coordinates from "../components/Coordinates.astro";
 import { places } from "../data/places.js";
 ---
 
 <BaseLayout title="Brand">
   <BrandTop />
+  <BrandTrail />
+  <BrandWhy />
 
   <!-- The hidden section: it opens once all four coordinates are found (coordinates.js).
        A game, not a lock – it's in the page's code, and the browser's dev tools can open it.

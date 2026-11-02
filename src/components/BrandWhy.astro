@@ -1,0 +1,228 @@
+---
+// BRAND – WHY WE EXIST (2 Nov). My text word for word, two thirds on the left, one photo
+// in the third on the right (the same three columns as the Products grid).
+// The photo comes from the product folder, with its alt text from there: the embroidered
+// bear of the Field Hoodie, for now.
+import { Image } from "astro:assets";
+import { getProducts } from "../data/products";
+
+const products = await getProducts();
+const hoodie = products.find((item) => item.id === "field-hoodie");
+const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
+---
+
+<section id="why-we-exist" class="container section" aria-labelledby="why-title">
+  <div class="brand-why">
+    <!-- The trail comes in from the middle of the page and wraps around the photo's right
+         side. Only decoration, so screen readers skip it. -->
+    <div class="brand-why-trail" aria-hidden="true"></div>
+
+    <h2 id="why-title">Why We Exist</h2>
+
+    <div class="brand-why-text">
+      <p class="lead-small brand-why-question">
+        Cave Wear started with a simple question: why should outdoor clothing look like outdoor
+        clothing?
+      </p>
+      <p>
+        It began on my first trip to Sweden, around midsummer 2022. I saw many different clothes,
+        and they were mostly very practical. But outdoor clothing has a problem that goes through
+        most brands that concentrate on functionality: the fit is a very basic fit that doesn't
+        look very aesthetically pleasing on many people.
+      </p>
+      <p>
+        I've always felt most comfortable in functional, tactical clothing, but it doesn't always
+        suit every occasion. And clothes that do look sharp have their own problems: either I spend
+        a long time styling them until they look right, or I have to be careful in them all day. I
+        love it when I can just live my life, put everything in the washing machine without
+        thinking about it, and walk through thorns without worrying about ripping anything. So I
+        wanted something different: clothing that could handle the outdoors without looking out of
+        place anywhere else.
+      </p>
+      <p>
+        My background in media technology, graphic design, and merchandise production shaped the
+        way I approached the idea. Working with different materials and printing techniques taught
+        me to pay attention to the details behind a garment, not just how it looks.
+      </p>
+      <p>
+        I wanted to bring that experience together with my love for nature, exploring materials
+        that balance durability, comfort, design, and environmental responsibility. During my
+        research, I came across wood-fiber fabrics, opening up new possibilities for what everyday
+        outdoor-inspired clothing could be.
+      </p>
+    </div>
+
+    {
+      photo?.image && (
+        <div class="brand-why-media">
+          <Image
+            src={photo.image}
+            alt={photo.alt}
+            class="brand-why-photo"
+            widths={[320, 640, 960]}
+            sizes="(width >= 48rem) 33vw, 100vw"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  /* Written mobile first. The base = phones: one column, photo under the text. */
+  .brand-why {
+    --brand-why-gap: var(--space-12); /* 48px */
+    --brand-why-shift: var(--space-6); /* how far the photo moves left: 24px on tablets */
+
+    position: relative;
+    display: grid;
+    gap: var(--space-4); /* 16px */
+
+    /* Three equal columns: the heading across all three, then the text in two
+       and the photo in one */
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-4) var(--brand-why-gap); /* 16px between rows, 48px between columns */
+      align-items: start;
+    }
+
+    /* The photo's box stretches to the height of the text */
+    @media (width >= 64rem) {
+      align-items: stretch;
+    }
+
+    /* From here the text stops at its reading width before its columns end, so there is
+       room for the photo to move closer to it */
+    @media (width >= 80rem) {
+      --brand-why-shift: var(--space-24); /* 96px */
+    }
+  }
+
+  .brand-why h2 {
+    margin-block-end: 0;
+
+    @media (width >= 48rem) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .brand-why-text {
+    display: grid;
+    gap: var(--space-4); /* 16px */
+
+    @media (width >= 48rem) {
+      grid-column: span 2;
+    }
+  }
+
+  .brand-why-text p {
+    color: var(--color-text-secondary);
+  }
+
+  .brand-why-text .brand-why-question {
+    margin-block-end: var(--space-4); /* 16px + the 16px gap */
+    color: var(--color-text);
+  }
+
+  .brand-why-media {
+    margin-block-start: var(--space-4); /* 16px + the 16px gap on phones */
+
+    @media (width >= 48rem) {
+      position: relative;
+      inset-inline-end: var(--brand-why-shift);
+      margin-block-start: 0;
+    }
+  }
+
+  /* Phones and tablets: 4:5. Desktop: exactly as high as the text, from my question to
+     the last line (decided 2 Nov). The photo is taken out of the flow (absolute), so only
+     the text decides the height, and it follows when the text changes. */
+  .brand-why-photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+
+    @media (width >= 64rem) {
+      position: absolute;
+      inset: 0;
+      block-size: 100%;
+      aspect-ratio: auto;
+    }
+  }
+
+  /* The trail's turn. One box with three lines as its backgrounds: down from where
+     BrandTrail ends, across, and down the photo's right side. The line keeps 24px from the
+     photo on both sides (decided 2 Nov). The box starts 24px above the heading, the photo
+     starts under the heading, so --trail-turn (heading + its gap) is where the line turns.
+     On phones there's nowhere to turn, so it isn't there. */
+  .brand-why-trail {
+    --trail-turn: calc(var(--leading-h2) + var(--space-4));
+
+    display: none;
+
+    @media (width >= 48rem) {
+      display: block;
+      position: absolute;
+      inset-block: calc(-1 * var(--space-6)) 0;
+      inset-inline-start: 50%;
+      inset-inline-end: calc(var(--brand-why-shift) - var(--space-6));
+      color: var(--color-input-border); /* Flint */
+      background-image: var(--trail-down), var(--trail-across), var(--trail-down);
+      background-position:
+        top left,
+        left 0 top var(--trail-turn),
+        right 0 top var(--trail-turn);
+      background-size:
+        1px var(--trail-turn),
+        100% 1px,
+        1px calc(100% - var(--trail-turn));
+      background-repeat: no-repeat;
+    }
+  }
+
+  /* It draws itself while you scroll, right where BrandTrail stops: a little further down,
+     then it slides across, then down the side. */
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose: the build would join a full "animation:"
+         line and view() into one, which some browsers can't read */
+      .brand-why-trail {
+        animation-name: brand-why-trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  /* Each line grows from nothing, because a size of 0 draws nothing. The dashes keep their
+     length while it grows (they're set in px), so the line slides out, it doesn't stretch. */
+  @keyframes brand-why-trail-draw {
+    from {
+      background-size:
+        1px 0,
+        0 1px,
+        1px 0;
+    }
+    10% {
+      background-size:
+        1px var(--trail-turn),
+        0 1px,
+        1px 0;
+    }
+    40% {
+      background-size:
+        1px var(--trail-turn),
+        100% 1px,
+        1px 0;
+    }
+    to {
+      background-size:
+        1px var(--trail-turn),
+        100% 1px,
+        1px calc(100% - var(--trail-turn));
+    }
+  }
+</style>

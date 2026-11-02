@@ -36,7 +36,7 @@ const secondWords = second.split(" ");
 </section>
 
 <div class="container section brand-intro-section">
-  <p class="lead brand-intro">
+  <p class="lead-small brand-intro">
     <!-- Screen readers get the sentences in one piece, not word by word -->
     <span class="visually-hidden">{first} {second}</span>
     <span aria-hidden="true">
@@ -134,13 +134,16 @@ const secondWords = second.split(" ");
     inline-size: 1px;
     block-size: var(--section-space);
     background-image: var(--trail-down);
+    background-size: 1px 100%;
+    background-repeat: no-repeat;
     color: var(--color-input-border);
   }
 
-  /* Two sentences, two colours, in the Lead size: 48px and 40px felt off the type scale
-     and competed with the headings (decided 2 Nov). It stands out through the trail, the
-     colours and the animation instead. */
+  /* Two sentences, two colours, in the page's opening size (.lead-small, decided 2 Nov:
+     48, 40 and 32px felt off). It stands out through the trail, the colours and the
+     animation instead. */
   .brand-intro {
+    max-inline-size: var(--measure-lead);
     margin-inline: auto;
     color: var(--color-text);
     text-align: center;
@@ -161,7 +164,7 @@ const secondWords = second.split(" ");
     }
 
     :global(html[data-js]) .brand-intro-section:not([data-write="go"])::before {
-      clip-path: inset(0 0 100% 0);
+      background-size: 1px 0;
     }
 
     .brand-intro-section[data-write="go"]::before {
@@ -174,12 +177,13 @@ const secondWords = second.split(" ");
     }
   }
 
+  /* Through its size, not clip-path: see BrandTrail.astro */
   @keyframes trail-in {
     from {
-      clip-path: inset(0 0 100% 0);
+      background-size: 1px 0;
     }
     to {
-      clip-path: inset(0);
+      background-size: 1px 100%;
     }
   }
 

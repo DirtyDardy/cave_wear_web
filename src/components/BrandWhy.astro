@@ -4,6 +4,7 @@
 // The photo comes from the product folder, with its alt text from there: the embroidered
 // bear of the Field Hoodie, for now.
 import { Image } from "astro:assets";
+import BrandPrinciples from "./BrandPrinciples.astro";
 import Coordinates from "./Coordinates.astro";
 import { getProducts } from "../data/products";
 
@@ -12,7 +13,7 @@ const hoodie = products.find((item) => item.id === "field-hoodie");
 const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 ---
 
-<section id="why-we-exist" class="container section" aria-labelledby="why-title">
+<section id="why-we-exist" class="container section brand-why-section" aria-labelledby="why-title">
   <div class="brand-why">
     <!-- The trail comes in from the middle of the page and wraps around the photo's right
          side. Only decoration, so screen readers skip it. -->
@@ -72,14 +73,24 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
       )
     }
   </div>
+
+  <BrandPrinciples />
 </section>
 
 <style>
   /* Written mobile first. The base = phones: one column, photo under the text. */
-  .brand-why {
+  .brand-why-section {
     --brand-why-gap: var(--space-12); /* 48px */
     --brand-why-shift: var(--space-6); /* how far the photo moves left: 24px on tablets */
 
+    /* From here the text stops at its reading width before its columns end, so there is
+       room for the photo to move closer to it */
+    @media (width >= 80rem) {
+      --brand-why-shift: var(--space-24); /* 96px */
+    }
+  }
+
+  .brand-why {
     position: relative;
     display: grid;
     gap: var(--space-4); /* 16px */
@@ -95,12 +106,6 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     /* The photo's box stretches to the height of the text */
     @media (width >= 64rem) {
       align-items: stretch;
-    }
-
-    /* From here the text stops at its reading width before its columns end, so there is
-       room for the photo to move closer to it */
-    @media (width >= 80rem) {
-      --brand-why-shift: var(--space-24); /* 96px */
     }
   }
 

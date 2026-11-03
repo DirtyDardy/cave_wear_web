@@ -57,6 +57,11 @@ print method, and the environmental side. Everything in it is planned, not fact.
 
 ### SECTION 1: EVERY MARK HAS A REASON
 
+**NOT ON THE SITE (my decision, 3 Nov 2026).** It would be the biggest section of the
+page, and everything in it is planned, so right now it doesn't build trust. For a real
+pre-release I would put something like this in. Until then, people can ask me or write
+an email. My first text stays below, the version that was built comes after it.
+
 Every Cave Wear piece starts with the same question: what does this garment have
 to do, and what should the logo do on it? So there is no single method for every
 piece. Each one gets the method that suits its fabric and its use. All of this
@@ -94,6 +99,80 @@ The bear on the Pass Gaiter's toggle is pressed in, not printed, so it can't wea
 Sometimes the best decision is to leave something out. The Field Hoodie has no
 back print: one embroidered logo is enough, a print adds cost, and nobody sees it
 under a backpack.
+
+### SECTION 1, THE VERSION THAT WAS BUILT (3 Nov 2026, then cut)
+
+Layout: thirds like Why We Exist, a close-up above each block, 3 + 3. Photos in black:
+Traverse Half-Zip shot 3 · Core Tee shot 5 · Supporter Hoodie shot 2 · All-Weather
+Shell shot 3 · Pass Gaiter shot 4 · Field Hoodie shot 2 (its plain back, right under the
+Supporter print).
+
+Every Cave Wear piece starts with the same question: what does this garment have to
+do, and what should the logo do on it?
+
+So there is no single method for every piece. Each one gets the method that suits its
+fabric and its use. All of this is what we plan for production.
+
+The logo stays quiet: tone on tone, matte, a little lighter than the fabric. You notice
+it up close. It doesn't shout.
+
+EMBROIDERY
+Planned for the hoodie and the half-zip. On a fabric that can carry it, embroidery is
+the best mark you can give a garment. From my experience, dyed thread keeps its colour
+longer than most prints.
+
+On the hoodie, the bear sits centred between the drawstrings. On the half-zip, it sits
+on the diagonal yoke seam, so the seam runs through the cut between its head and body.
+The construction becomes part of the logo. The beanie carries the bear as an embroidered
+patch on the cuff, because a woven label looked cheap.
+
+HEAT TRANSFER VINYL
+Planned for the Core Tee's chest: a thin film pressed on with heat, like the numbers on
+the back of a sports jersey. On a T-shirt, embroidery is a grey zone: it can work, but
+the stitching on the inside sits against your skin. The Base Collection is worn all day,
+every day, and should never feel noisy, so the Core Tee goes the safe way.
+
+The Supporter Tee makes the other call. It's a statement piece, worn more in the city
+than outside, so its logo is planned in embroidery to match the Supporter Hoodie, and
+the two read as one collection.
+
+DIRECT-TO-GARMENT
+Planned for the back print of the Supporter Collection. The ink should become part of
+the fabric and not sit on top of it like a sticker, so the piece falls better and feels
+more natural. No screen is needed either, so each shirt size can get its own print size,
+and the bear always stays in proportion.
+
+I plan to use the system I worked with for four years, because I know how to set it up
+so a print still looks good long after the first day. I have shirts I printed on it that
+are worn out by now. The print still looks good.
+
+SILICONE HEAT TRANSFER
+Planned for the All-Weather Shell, because embroidery would pierce the waterproof fabric.
+It is only slightly raised, so nothing can get pulled off. The Pass Gaiter uses it too:
+it sits on your face, so the inside has to stay flat, and the wordmark can stretch instead
+of cracking.
+
+PRESSED IN
+The bear on the Pass Gaiter's toggle is planned as pressed in, not printed, so it can't
+wear off. There is no ink to fade and nothing to peel: the mark is part of the toggle
+itself, for as long as the toggle lasts.
+
+SOMETIMES THE BEST DECISION IS TO LEAVE SOMETHING OUT.
+The Field Hoodie has no back print: one embroidered logo is enough, a print adds cost,
+and nobody sees it under a backpack. The Supporter pieces are statement pieces, so there
+the print is the point.
+
+Notes for when this comes back (Claude):
+- Not decided: heat transfer vinyl (Flexdruck) was Claude's reading of "like the numbers on
+  player tricots", never confirmed. CLAUDE.md still says "T-shirt printed". "Print" alone is
+  too generic as a method name.
+- Written by Claude, not checked yet: "centred between the drawstrings" (from the decision of
+  25 Oct), the thin film / sports jersey part, "There is no ink to fade ... as long as the
+  toggle lasts" (written to even out the row height, may be filler).
+- Left out of this version: the neck labels. Direct-to-garment vs. heat transfer foil. Why not
+  screen printing (one screen is often used for every shirt size, many screens cost too much).
+  The system is Kornit Digital: only for telling people, never as a claim on the site.
+- On phones it was about 5,200px long. It needs a shorter idea there, not just one column.
 
 ### SECTION 2: MADE TO STAY
 

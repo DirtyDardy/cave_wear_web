@@ -1,0 +1,188 @@
+---
+// BRAND – ON RECORD. The cave bear in numbers, from GBIF (see src/data/cave-bear-records.ts).
+// First version: the wording is a draft for me to rewrite. Thirds like Why We Exist.
+import { getCaveBearRecords } from "../data/cave-bear-records";
+
+const { total, withCountry, top, romania, checked } = await getCaveBearRecords();
+
+const number = (value: number) => value.toLocaleString("en-GB");
+const date = checked.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+// The longest bar fills its space, the others follow in proportion
+const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
+---
+
+<section id="on-record" class="container section" aria-labelledby="records-title">
+  <div class="brand-records">
+    <!-- The trail comes in from Our Symbol. Only decoration, so screen readers skip it. -->
+    <div class="brand-records-trail" aria-hidden="true"></div>
+
+    <div class="brand-records-head">
+      <h2 id="records-title">On Record</h2>
+      <p class="h1 brand-records-total">{number(total)}</p>
+      <p class="label">Records of Ursus spelaeus</p>
+    </div>
+
+    <div class="brand-records-body">
+      <p class="lead-small">The cave bear is gone. Its records aren't.</p>
+      <p>
+        Museums still keep its bones and teeth, and GBIF, a public database of the world's species,
+        brings their catalogues together. A record is one entry in such a catalogue, not one
+        bear. {number(withCountry)} of them name a country.
+      </p>
+
+      <ul class="brand-records-list" role="list">
+        {
+          [...top, romania].map(({ name, count }) => (
+            <li>
+              <span>{name}</span>
+              <span class="brand-records-bar" style={share(count)} aria-hidden="true" />
+              <span class="brand-records-count">{number(count)}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p>The list shows what has been catalogued and shared, not where the bears lived.</p>
+      <p class="small">
+        Source: <a href="https://www.gbif.org/species/4833659">GBIF.org</a>, as of {date}.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Written mobile first. The base = phones: one column. */
+  .brand-records {
+    position: relative;
+    display: grid;
+    gap: var(--space-12); /* 48px */
+
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .brand-records p {
+    margin-block-end: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .brand-records h2 {
+    margin-block-end: var(--space-8); /* 32px */
+  }
+
+  .brand-records .brand-records-total {
+    margin-block-end: var(--space-2); /* 8px */
+    color: var(--color-text);
+  }
+
+  .brand-records-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4); /* 16px */
+
+    @media (width >= 64rem) {
+      grid-column: 2 / -1;
+    }
+  }
+
+  .brand-records .lead-small {
+    color: var(--color-text);
+  }
+
+  /* One row: name, bar, number. The bar takes what's left, so it can never push the page wider. */
+  .brand-records-list {
+    display: grid;
+    gap: var(--space-2); /* 8px */
+    margin-block: var(--space-4); /* 16px + the 16px gap */
+    padding: 0;
+    list-style: none;
+
+    & li {
+      display: grid;
+      grid-template-columns: 6rem minmax(0, 1fr) 3.5rem;
+      column-gap: var(--space-3); /* 12px */
+      align-items: center;
+      color: var(--color-text-secondary);
+    }
+  }
+
+  /* The inner line is drawn with a background, so the bar's box keeps its full width */
+  .brand-records-bar {
+    block-size: var(--space-2); /* 8px */
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: max(var(--share), 2px) 100%;
+    background-repeat: no-repeat;
+    color: var(--color-input-border); /* Flint */
+  }
+
+  .brand-records-count {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The trail: straight across from the line on Our Symbol's right, then straight down between
+     the columns to the section's end. On phones it isn't there. */
+  .brand-records-trail {
+    --trail-to: 50%;
+
+    display: none;
+
+    @media (width >= 48rem) {
+      display: block;
+      position: absolute;
+      inset-block: calc(-1 * var(--section-space));
+      inset-inline-start: var(--trail-to);
+      inset-inline-end: calc(50% - 30.75rem / 2 - var(--space-16));
+      color: var(--color-input-border); /* Flint */
+      background-image: var(--trail-across), var(--trail-down);
+      background-position:
+        right 0 top 0,
+        left 0 top 0;
+      background-size:
+        100% 1px,
+        1px 100%;
+      background-repeat: no-repeat;
+    }
+
+    @media (width >= 64rem) {
+      --trail-to: calc((100% - 2 * var(--space-12)) / 3 + var(--space-12) / 2);
+    }
+  }
+
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose, see BrandTrail.astro */
+      .brand-records-trail {
+        animation-name: brand-records-trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  @keyframes brand-records-trail-draw {
+    from {
+      background-size:
+        0 1px,
+        1px 0;
+    }
+    25% {
+      background-size:
+        100% 1px,
+        1px 0;
+    }
+    to {
+      background-size:
+        100% 1px,
+        1px 100%;
+    }
+  }
+</style>

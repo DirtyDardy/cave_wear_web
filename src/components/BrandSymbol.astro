@@ -400,7 +400,7 @@ const steps = [
     margin-block-start: var(--space-12); /* 48px */
   }
 
-  /* The trail: straight across from Made to Stay's line to the line beside this column, then
+  /* The trail: straight across from Made to Stay's line to the line on this column's right, then
      straight down. Tablets come in from the page's middle, desktop from between the thirds.
      On phones it isn't there. */
   .brand-symbol-trail {
@@ -414,13 +414,13 @@ const steps = [
       /* The title's -16px margin pulls this whole box up, so the start comes 16px back down: the line
          turns exactly where Made to Stay's line ends */
       inset-block: calc(var(--space-4) - var(--section-space)) calc(-1 * var(--section-space));
-      inset-inline-start: calc(50% - 30.75rem / 2 - var(--space-16));
-      inset-inline-end: calc(100% - var(--trail-from));
+      inset-inline-start: var(--trail-from);
+      inset-inline-end: calc(50% - 30.75rem / 2 - var(--space-16));
       color: var(--color-input-border); /* Flint */
       background-image: var(--trail-across), var(--trail-down);
       background-position:
-        right 0 top 0,
-        left 0 top 0;
+        left 0 top 0,
+        right 0 top 0;
       background-size:
         100% 1px,
         1px 100%;

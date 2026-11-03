@@ -1,0 +1,465 @@
+---
+// BRAND – OUR SYMBOL (3 Nov). One narrow column on every screen. My first logo stands
+// where the bear will stay; while you scroll it makes way for today's logo as a dim outline, and
+// each text gives one part its real colour. The texts slide up and disappear under the logo.
+// The page scrolls normally: there is no scroll box inside it, which would trap a finger on phones.
+import { Image } from "astro:assets";
+import firstLogo from "../assets/brand/logo-2022-outline.svg";
+import { logoParts, logoViewBox } from "../data/logo-parts.js";
+
+// lights = the parts this text switches on. glow = the part it is talking about right now.
+// stagger = the parts light up one after another (brown, then Egret), not all at once.
+const steps = [
+  {
+    lights: "front back",
+    glow: "front back",
+    stagger: true,
+    text: "The colours come from my 2022 logo: brown for the fur in front and Egret for the bones behind it. I dropped the bones. They looked too aggressive, and in production every rib would be a small piece that could break or fall off. Fewer, larger shapes last longer.",
+  },
+  {
+    lights: "legs",
+    glow: "legs",
+    text: "The separate pieces are the legs on the far side. They give the bear a clear silhouette and more room to work with in production. It walks, because I didn't want another aggressive bear. It looks ahead, minds its own business and keeps moving, away from fast fashion.",
+  },
+  {
+    lights: "cave wear",
+    glow: "cave wear",
+    text: "The name comes from the cave bear. We make clothing, so the bear became the wear: Cave Wear.",
+  },
+  {
+    lights: "rugged functional refined",
+    glow: "rugged functional refined",
+    stagger: true,
+    text: "RUGGED: loose skin, a thick layer of fat and dense fur.<br />FUNCTIONAL: a bear is an omnivore, and its big paws and claws handle whatever comes next.<br />REFINED: everything it needs and nothing more.",
+  },
+  {
+    lights: "dot dot-left dot-right",
+    glow: "dot dot-left dot-right",
+    text: "The dots come from my graffiti background. I always put dots in front of, behind or in the middle of my words.",
+  },
+];
+---
+
+<section id="our-symbol" class="container section" aria-labelledby="symbol-title">
+  <div class="brand-symbol">
+    <!-- The trail comes in from Made to Stay. Only decoration, so screen readers skip it. -->
+    <div class="brand-symbol-trail" aria-hidden="true"></div>
+
+    <div class="brand-symbol-column">
+      <!-- The title and the logo stay in place as long as the texts in this box are moving -->
+      <div class="brand-symbol-scroller">
+        <h2 id="symbol-title" class="brand-symbol-title">Our Symbol:<br />The Cave Bear</h2>
+
+        <div class="brand-symbol-stage">
+          <div class="brand-symbol-frame">
+            <span class="brand-symbol-mark brand-symbol-mark-top-left" aria-hidden="true"></span>
+            <span class="brand-symbol-mark brand-symbol-mark-top-right" aria-hidden="true"></span>
+            <span class="brand-symbol-mark brand-symbol-mark-bottom-left" aria-hidden="true"></span>
+            <span class="brand-symbol-mark brand-symbol-mark-bottom-right" aria-hidden="true"></span>
+
+            <svg
+              class="brand-symbol-logo"
+              viewBox={logoViewBox}
+              role="img"
+              aria-label="The Cave Wear logo: a walking bear, the words Cave Wear with a dot between them, and Rugged, Functional, Refined."
+            >
+              {
+                logoParts.map(({ part, small, d }) => (
+                  <path class:list={["brand-symbol-part", { "is-small": small }]} data-part={part} d={d} />
+                ))
+              }
+            </svg>
+
+            <!-- My first logo, with an outline in the file itself: its dark grey would vanish on the dark page -->
+            <div class="brand-symbol-first">
+              <Image
+                src={firstLogo}
+                alt="The first Cave Wear logo from 2022: a walking bear, brown fur in front and bones behind, above the word Cavewear."
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- The script makes this box taller and moves the texts inside it at half the scroll speed -->
+        <div class="brand-symbol-slow">
+          <div class="brand-symbol-steps">
+            <p class="brand-symbol-step" data-lights="" data-glow="">
+              That's my first logo, from 2022. It's the first logo I designed for an idea of my own,
+              for a company I would stand behind 100%. It was my first vision. Today I can see its
+              good sides and its bad sides and know how to make it better, and I still appreciate it.
+            </p>
+            <!-- From here on today's logo shows, still only as an outline -->
+            <div class="brand-symbol-intro brand-symbol-step" data-lights="" data-glow="">
+              <p class="lead-small">
+                The cave bear is an extinct species that once roamed prehistoric Europe.
+              </p>
+              <p>
+                Its powerful build and adaptation to its environment made it a natural source of
+                inspiration for Cave Wear.
+              </p>
+            </div>
+            {
+              steps.map(({ lights, glow, stagger, text }) => (
+                <p
+                  class="brand-symbol-step"
+                  data-lights={lights}
+                  data-glow={glow}
+                  data-stagger={stagger ? "" : undefined}
+                >
+                  <Fragment set:html={text} />
+                </p>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Outside the moving box: it stands under the finished logo, and they leave together -->
+      <p class="lead-small brand-symbol-step brand-symbol-end" data-lights="" data-glow="">
+        We want to create clothing that feels considered rather than complicated, functional rather
+        than excessive, and adaptable rather than limited to a single setting.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script src="../scripts/brand-symbol.js"></script>
+
+<style>
+  /* One layout, written mobile first: the same narrow column on every screen. */
+  .brand-symbol {
+    position: relative;
+  }
+
+  .brand-symbol-column {
+    --symbol-width: 30.75rem; /* 492px, the same width as my three principles */
+
+    max-inline-size: var(--symbol-width);
+    margin-inline: auto;
+  }
+
+  /* Where the title stands: under the header while it's showing, at the very top once it's gone */
+  .brand-symbol-scroller {
+    --symbol-top: var(--header-height);
+    --title-height: calc(2 * var(--text-h2) + 2 * var(--space-4)); /* two lines + 16px above and below */
+  }
+
+  :global(body:has(.site-header[data-hidden])) .brand-symbol-scroller {
+    --symbol-top: 0px;
+  }
+
+  /* The title stays above everything, with a solid background.
+     Its big bottom margin (the logo's height, cancelled again by the logo) lets it go exactly when
+     the logo lets go, so they leave together. Only on screens tall enough: on a phone held sideways,
+     or at 200% zoom, title and logo would fill the screen and leave no room for the text. */
+  .brand-symbol-title {
+    position: relative;
+    z-index: 2;
+    margin-block: calc(-1 * var(--space-4)) var(--stage-height, 0px);
+    padding-block: var(--space-4); /* 16px */
+    background-color: var(--color-bg);
+
+    @media (height >= 40rem) {
+      position: sticky;
+      inset-block-start: var(--symbol-top);
+      transition: inset-block-start 0.3s ease; /* the header's speed */
+    }
+  }
+
+  /* The same 16px past the text as behind the logo: the texts slide on up behind the title */
+  .brand-symbol-title::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset-block: 0;
+    inset-inline: calc(-1 * var(--space-4));
+    background-color: var(--color-bg);
+  }
+
+  .brand-symbol p {
+    margin-block-end: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .brand-symbol .lead-small,
+  .brand-symbol .is-current {
+    color: var(--color-text);
+  }
+
+  .brand-symbol-intro {
+    display: grid;
+    gap: var(--space-4); /* 16px */
+  }
+
+  /* Sticks right under the title, with a solid background, so the texts slide behind it.
+     The padding leaves room for the crop marks: 12px above the picture, 16px below it, which is
+     where the texts disappear. */
+  .brand-symbol-stage {
+    position: relative;
+    z-index: 1;
+    margin-block-start: calc(-1 * var(--stage-height, 0px));
+    padding-block: var(--space-3) var(--space-4); /* 12px, 16px */
+    background-color: var(--color-bg);
+
+    @media (height >= 40rem) {
+      position: sticky;
+      inset-block-start: calc(var(--symbol-top) + var(--title-height));
+      transition: inset-block-start 0.3s ease; /* the header's speed */
+    }
+  }
+
+  /* The solid area behind the logo reaches 16px past the text on both sides, so no letter can peek
+     out next to it. 16px is also a phone's page gutter, so it never makes the page wider.
+     It also reaches 4px up behind the title, so no text can show in the seam between the two. */
+  .brand-symbol-stage::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset-block: calc(-1 * var(--space-1)) 0; /* 4px */
+    inset-inline: calc(-1 * var(--space-4));
+    background-color: var(--color-bg);
+  }
+
+  /* Hangs under the logo: the texts fade into the page's background instead of being cut off */
+  .brand-symbol-stage::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 100%;
+    inset-inline: calc(-1 * var(--space-4));
+    block-size: var(--space-8); /* 32px */
+    background-image: linear-gradient(var(--color-bg), transparent);
+    pointer-events: none;
+  }
+
+  /* The frame the crop marks sit around. From tablets on the picture is wider than my text, 32px on
+     each side (from my sketch, 3 Nov). */
+  .brand-symbol-frame {
+    position: relative;
+    padding: var(--space-3); /* 12px */
+
+    @media (width >= 48rem) {
+      margin-inline: calc(-1 * var(--space-8)); /* 32px */
+    }
+  }
+
+  /* Real crop marks: both lines start at the corner and point away from the picture */
+  .brand-symbol-mark {
+    display: none; /* no purpose on a phone, decided 3 Nov. The room they leave stays. */
+    position: absolute;
+    inline-size: var(--space-3); /* 12px */
+    block-size: var(--space-3); /* 12px */
+    border: 0 solid var(--color-input-border); /* Flint */
+
+    @media (width >= 48rem) {
+      display: block;
+    }
+  }
+
+  .brand-symbol-mark-top-left {
+    inset-block-start: calc(-1 * var(--space-3));
+    inset-inline-start: calc(-1 * var(--space-3));
+    border-block-end-width: 1px;
+    border-inline-end-width: 1px;
+  }
+
+  .brand-symbol-mark-top-right {
+    inset-block-start: calc(-1 * var(--space-3));
+    inset-inline-end: calc(-1 * var(--space-3));
+    border-block-end-width: 1px;
+    border-inline-start-width: 1px;
+  }
+
+  .brand-symbol-mark-bottom-left {
+    inset-block-end: calc(-1 * var(--space-3));
+    inset-inline-start: calc(-1 * var(--space-3));
+    border-block-start-width: 1px;
+    border-inline-end-width: 1px;
+  }
+
+  .brand-symbol-mark-bottom-right {
+    inset-block-end: calc(-1 * var(--space-3));
+    inset-inline-end: calc(-1 * var(--space-3));
+    border-block-start-width: 1px;
+    border-inline-start-width: 1px;
+  }
+
+  .brand-symbol-logo {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+    transition: opacity 0.8s ease;
+  }
+
+  /* Today's logo waits until my first logo makes way for it */
+  [data-view="first"] .brand-symbol-logo {
+    opacity: 0;
+  }
+
+  /* Without JavaScript the logo simply stands there finished, in its real colours */
+  .brand-symbol-part {
+    --part-colour: var(--color-text);
+    --light-time: 1.6s; /* the script waits the same time between parts (brand-symbol.js) */
+
+    fill: var(--part-colour);
+    stroke: var(--part-colour);
+    stroke-opacity: 0;
+    stroke-width: 3;
+    vector-effect: non-scaling-stroke;
+    /* The outline stays while the colour fills in, and only fades in the second half, so the part
+       never disappears on its way from outline to colour */
+    transition:
+      fill var(--light-time) ease,
+      stroke var(--light-time) ease,
+      stroke-opacity calc(var(--light-time) / 2) ease calc(var(--light-time) / 2),
+      stroke-width 0s linear var(--light-time);
+  }
+
+  .brand-symbol-part[data-part="front"] {
+    --part-colour: var(--color-logo-brown);
+  }
+
+  /* Not lit yet: a dim outline. The thin words get a dim fill, an outline would clog them. */
+  [data-ready] .brand-symbol-part:not(.is-lit) {
+    --part-dim: color-mix(in srgb, var(--color-input-border) 45%, var(--color-bg));
+
+    fill: transparent;
+    stroke: var(--part-dim);
+    stroke-opacity: 1;
+    stroke-width: 1;
+  }
+
+  [data-ready] .brand-symbol-part.is-small:not(.is-lit) {
+    fill: var(--part-dim);
+    stroke: none;
+  }
+
+  /* The part I'm talking about right now: a very faint edge that slowly comes and goes. An animated
+     line and not a CSS filter, because Safari has been unreliable with filters on single SVG shapes. */
+  @media (prefers-reduced-motion: no-preference) {
+    .brand-symbol-part.is-current {
+      animation: brand-symbol-glow 3s ease-in-out infinite alternate;
+      animation-delay: var(--light-time); /* only once the colour is there */
+    }
+  }
+
+  @keyframes brand-symbol-glow {
+    from {
+      stroke-opacity: 0;
+    }
+    to {
+      stroke-opacity: 0.2;
+    }
+  }
+
+  /* My first logo stands in the middle of the marks, then fades away. Only with JavaScript, because
+     without it nothing could ever make it leave. */
+  .brand-symbol-first {
+    display: none;
+    position: absolute;
+    inset: 0;
+    place-items: center;
+    transition: opacity 0.8s ease;
+  }
+
+  [data-ready] .brand-symbol-first {
+    display: grid;
+  }
+
+  [data-view="logo"] .brand-symbol-first {
+    opacity: 0;
+  }
+
+  .brand-symbol-first :global(img) {
+    display: block;
+    inline-size: 70%; /* from my picture, 3 Nov */
+    block-size: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-symbol-title,
+    .brand-symbol-stage,
+    .brand-symbol-part,
+    .brand-symbol-logo,
+    .brand-symbol-first {
+      transition: none;
+    }
+  }
+
+  .brand-symbol-steps {
+    display: grid;
+    gap: var(--space-16); /* 64px */
+    padding-block-start: var(--space-8); /* 32px, the height of the fade, so the first line starts clear of it */
+  }
+
+  .brand-symbol-step {
+    transition: color 0.3s ease;
+  }
+
+  .brand-symbol-end {
+    margin-block-start: var(--space-12); /* 48px */
+  }
+
+  /* The trail: straight across from Made to Stay's line to the line beside this column, then
+     straight down. Tablets come in from the page's middle, desktop from between the thirds.
+     On phones it isn't there. */
+  .brand-symbol-trail {
+    --trail-from: 50%;
+
+    display: none;
+
+    @media (width >= 48rem) {
+      display: block;
+      position: absolute;
+      /* The title's -16px margin pulls this whole box up, so the start comes 16px back down: the line
+         turns exactly where Made to Stay's line ends */
+      inset-block: calc(var(--space-4) - var(--section-space)) calc(-1 * var(--section-space));
+      inset-inline-start: calc(50% - 30.75rem / 2 - var(--space-16));
+      inset-inline-end: calc(100% - var(--trail-from));
+      color: var(--color-input-border); /* Flint */
+      background-image: var(--trail-across), var(--trail-down);
+      background-position:
+        right 0 top 0,
+        left 0 top 0;
+      background-size:
+        100% 1px,
+        1px 100%;
+      background-repeat: no-repeat;
+    }
+
+    @media (width >= 64rem) {
+      --trail-from: calc((100% - 2 * var(--space-12)) / 3 + var(--space-12) / 2);
+    }
+  }
+
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose, see BrandTrail.astro */
+      .brand-symbol-trail {
+        animation-name: brand-symbol-trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  @keyframes brand-symbol-trail-draw {
+    from {
+      background-size:
+        0 1px,
+        1px 0;
+    }
+    5% {
+      background-size:
+        100% 1px,
+        1px 0;
+    }
+    to {
+      background-size:
+        100% 1px,
+        1px 100%;
+    }
+  }
+</style>

@@ -52,8 +52,10 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
 
     const fromPath = cleanPath(sessionStorage.getItem("swipe-from"));
     const toPath = cleanPath(location.pathname);
-    const from = pageOrder.indexOf(fromPath);
-    const to = pageOrder.indexOf(toPath);
+    // In the menu, a product page counts as Products (the menu marks it that way too)
+    const menuPlace = (path) => pageOrder.indexOf(path.startsWith("/products/") ? "/products" : path);
+    const from = menuPlace(fromPath);
+    const to = menuPlace(toPath);
     const root = document.documentElement;
 
     if (

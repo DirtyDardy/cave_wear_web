@@ -27,7 +27,7 @@ const principles = [
 <div class="brand-principles">
   <div class="brand-principles-trail" aria-hidden="true"></div>
 
-  <p class="lead brand-principles-heading">We are built around three principles</p>
+  <p class="lead brand-principles-heading">Built around three principles</p>
 
   <!-- An ordered list already tells screen readers the number, so they skip the big one -->
   <ol class="brand-principles-list" role="list">
@@ -45,6 +45,8 @@ const principles = [
     }
   </ol>
 </div>
+
+<script src="../scripts/brand-principles.js"></script>
 
 <style>
   /* Written mobile first. The base = phones: as wide as the page. */
@@ -71,7 +73,7 @@ const principles = [
     }
   }
 
-  /* Pulled in by the same distance on both sides: the W of the heading is as far from the
+  /* Pulled in by the same distance on both sides: the heading's first letter is as far from the
      rows' left edge as the S is from their right edge (decided 2 Nov). The gap between the
      rows is fixed, so a row with two lines of text keeps the same distance to the next one. */
   .brand-principles-list {
@@ -133,40 +135,21 @@ const principles = [
     }
   }
 
-  /* The rows appear one after the other while you scroll, shortly before the trail reaches
-     each of them (decided 2 Nov). The timeline is the whole block, and "cover 50%" is the
-     moment its middle is in the middle of the screen: that's when the last row is finished.
-     Each row finishes 48px of scrolling before the next one (--i = its place in the list).
-     Only in browsers that know scroll animations (others show the rows right away) and never
-     for people who asked for less motion. */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      .brand-principles {
-        view-timeline-name: --brand-principles;
-      }
-
-      /* Written as single lines on purpose, see BrandTrail.astro */
-      .brand-principle {
-        --row-end: calc(50% - (2 - var(--i)) * var(--space-12));
-
-        animation-name: brand-principle-in;
-        animation-timing-function: ease-out;
-        animation-fill-mode: both;
-        animation-timeline: --brand-principles;
-        animation-range: cover calc(var(--row-end) - var(--space-24)) cover var(--row-end);
-      }
-    }
+  /* Each row fades in once, in its own time, and then stays, also when you scroll back (like
+     my first paragraph). brand-principles.js starts it. Without that script (no JavaScript, or
+     people who asked for less motion) data-reveal is never set, so the rows simply stand there. */
+  .brand-principles[data-reveal] .brand-principle {
+    opacity: 0;
+    translate: 0 var(--space-4);
+    transition:
+      opacity 0.9s ease-out,
+      translate 0.9s ease-out;
+    transition-delay: var(--reveal-delay, 0s);
   }
 
-  @keyframes brand-principle-in {
-    from {
-      opacity: 0;
-      translate: 0 var(--space-4);
-    }
-    to {
-      opacity: 1;
-      translate: 0 0;
-    }
+  .brand-principles[data-reveal] .brand-principle[data-in] {
+    opacity: 1;
+    translate: 0 0;
   }
 
   /* The trail. One box with five lines as its backgrounds, like the turn in BrandWhy: down

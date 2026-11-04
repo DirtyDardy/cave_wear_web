@@ -19,8 +19,12 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
 
     <div class="brand-records-head">
       <h2 id="records-title">On Record</h2>
-      <p class="h1 brand-records-total">{number(total)}</p>
-      <p class="label">Records of Ursus spelaeus</p>
+      <!-- brand-records.js counts the visible number up, so screen readers get the real one -->
+      <p class="h1 brand-records-total">
+        <span class="visually-hidden">{number(total)}</span>
+        <span aria-hidden="true" data-count-to={total}>{number(total)}</span>
+      </p>
+      <p class="label">Records of <br class="brand-records-break" />Ursus spelaeus</p>
     </div>
 
     <div class="brand-records-body">
@@ -33,10 +37,10 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
 
       <ul class="brand-records-list" role="list">
         {
-          [...top, romania].map(({ name, count }) => (
+          [...top, romania].map(({ name, count }, i) => (
             <li>
               <span>{name}</span>
-              <span class="brand-records-bar" style={share(count)} aria-hidden="true" />
+              <span class="brand-records-bar" style={`${share(count)}; --i: ${i}`} aria-hidden="true" />
               <span class="brand-records-count">{number(count)}</span>
             </li>
           ))
@@ -50,6 +54,8 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
     </div>
   </div>
 </section>
+
+<script src="../scripts/brand-records.js"></script>
 
 <style>
   /* Written mobile first. The base = phones: one column. */
@@ -72,13 +78,42 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
     color: var(--color-text-secondary);
   }
 
+  /* Phones (from my sketch, 4 Nov): heading, number and label on the middle, the number bigger, so
+     it's the first thing you see. From tablet up: on the left, and the normal H1 size. */
+  .brand-records-head {
+    text-align: center;
+
+    @media (width >= 48rem) {
+      text-align: start;
+    }
+  }
+
   .brand-records h2 {
-    margin-block-end: var(--space-8); /* 32px */
+    margin-block-end: var(--space-4); /* 16px */
+
+    @media (width >= 48rem) {
+      margin-block-end: var(--space-8); /* 32px */
+    }
   }
 
   .brand-records .brand-records-total {
+    max-inline-size: none;
     margin-block-end: var(--space-2); /* 8px */
     color: var(--color-text);
+    font-size: 5rem; /* 80px */
+    font-variant-numeric: tabular-nums; /* all digits equally wide, so the number can't wobble while it counts */
+
+    @media (width >= 48rem) {
+      max-inline-size: var(--measure-h1);
+      font-size: var(--text-h1);
+    }
+  }
+
+  /* Phones: "Records of" and "Ursus spelaeus" each get their own line */
+  .brand-records-break {
+    @media (width >= 48rem) {
+      display: none;
+    }
   }
 
   .brand-records-body {
@@ -118,7 +153,22 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
     background-image: linear-gradient(currentColor, currentColor);
     background-size: max(var(--share), 2px) 100%;
     background-repeat: no-repeat;
-    color: var(--color-input-border); /* Flint */
+    color: var(--color-irr-olive); /* an exception to its "large areas only" rule (my decision, 4 Nov) */
+  }
+
+  /* Every second bar one step brighter */
+  .brand-records-list li:nth-child(even) .brand-records-bar {
+    color: var(--color-mossy-elm);
+  }
+
+  /* The first time you see them they grow, one after the other (brand-records.js says when): 0.8s
+     each, 80ms apart, so they end about when the number does. */
+  .brand-records-list[data-grow="waiting"] .brand-records-bar {
+    background-size: 0 100%;
+  }
+
+  .brand-records-list[data-grow="go"] .brand-records-bar {
+    transition: background-size 0.8s var(--motion-ease) calc(var(--i) * 80ms);
   }
 
   .brand-records-count {

@@ -54,7 +54,11 @@ const principles = [
     --principles-width: 30.75rem; /* 492px: the heading on one line, and the first text line ends on "worn" */
 
     position: relative;
-    margin-block-start: calc(2 * var(--section-space)); /* the same gap as from my first paragraph to Why We Exist */
+    margin-block-start: var(--section-space); /* phones: half the gap, BrandWhy gives the other half, with the line between */
+
+    @media (width >= 48rem) {
+      margin-block-start: calc(2 * var(--section-space)); /* the same gap as from my first paragraph to Why We Exist */
+    }
   }
 
   .brand-principles-heading,

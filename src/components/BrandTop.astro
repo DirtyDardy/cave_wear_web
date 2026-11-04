@@ -39,7 +39,7 @@ const secondWords = second.split(" ");
     <span class="visually-hidden">{first} {second}</span>
     <span aria-hidden="true">
       <span class="brand-intro-first">
-        {firstWords.map((word, i) => <Fragment><span class="word" style={`--i: ${i}`}>{word}</span>{" "}</Fragment>)}
+        {firstWords.map((word, i) => <Fragment><span class="word" style={`--i: ${i}`}>{word}</span>{" "}{word === "morning," && <br class="brand-intro-break" />}</Fragment>)}
       </span>
       <span class="brand-intro-second">
         {secondWords.map((word, i) => <Fragment><span class="word" style={`--i: ${firstWords.length + i}`}>{word}</span>{" "}</Fragment>)}
@@ -155,6 +155,14 @@ const secondWords = second.split(" ");
 
   .brand-intro-second {
     color: var(--color-text-secondary);
+  }
+
+  /* Phones: "a trail in the morning," and "a city street by evening." each get their own line,
+     so "a" isn't left alone at the end of a line. From tablet up the line is wide enough. */
+  .brand-intro-break {
+    @media (width >= 48rem) {
+      display: none;
+    }
   }
 
   /* It writes itself, once (decided 2 Nov, from "plays once" and "on scroll"): the trail

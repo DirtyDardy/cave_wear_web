@@ -1,11 +1,25 @@
 ---
 // BRAND – THE TRAIL BETWEEN TWO SECTIONS (2 Nov): the line of the site, in the space
 // between them, never through text. Only decoration, so screen readers skip it.
+// phoneOnly: from tablet up the sections bring their own lines, so this one steps aside.
+// stopsAtEdge: the next section has its own background, and the line ends where that begins.
+interface Props {
+  phoneOnly?: boolean;
+  stopsAtEdge?: boolean;
+}
+
+const { phoneOnly = false, stopsAtEdge = false } = Astro.props;
 ---
 
-<div class="brand-trail" aria-hidden="true"></div>
+<div class:list={["brand-trail", { "brand-trail-phone": phoneOnly, "brand-trail-edge": stopsAtEdge }]} aria-hidden="true"></div>
 
 <style>
+  .brand-trail-phone {
+    @media (width >= 48rem) {
+      display: none;
+    }
+  }
+
   /* Two sections have 2 x --section-space between them. The negative margins pull the
      line into that space, so the gap doesn't grow; it stops 24px from the text at both ends. */
   .brand-trail {
@@ -21,6 +35,12 @@
     background-size: 1px 100%;
     background-repeat: no-repeat;
     color: var(--color-input-border); /* Flint */
+  }
+
+  /* Only the upper half: from 24px under the text down to the edge */
+  .brand-trail-edge {
+    block-size: var(--trail-reach);
+    margin-block-end: 0;
   }
 
   /* It draws itself while you scroll, like on Contact: its tip follows the middle of the

@@ -492,6 +492,11 @@ const isPinned = currentPath.startsWith("/products/");
     :global(html[data-js]) {
       & .header-inner {
         flex-wrap: nowrap;
+
+        /* Very narrow screens (below 360px): logo, Pack and menu only fit with a smaller gap */
+        @media (width < 22.5rem) {
+          column-gap: var(--space-4);
+        }
       }
 
       & .nav {

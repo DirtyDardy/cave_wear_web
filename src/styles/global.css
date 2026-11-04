@@ -183,7 +183,7 @@
 
   /* Layout */
   --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
-  --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
+  --gutter: clamp(1.5rem, 4vw, 3rem); /* side space, grows with the screen. 24px on phones (4 Nov, was 16px: too thin next to Apple's) */
   --header-height: 4rem; /* 64px on all screens – compact */
   /* 40px – the height of every button (decided 24 Oct) and of the other things
      you click: size boxes, quantity, colour dots, the heart, inputs, social icons */
@@ -226,6 +226,14 @@
     --photo-header-height: 60svh;
     --text-button: var(--text-body); /* 16px */
     --text-field: var(--text-body); /* 16px */
+  }
+}
+
+/* Very narrow screens (below 360px, or a phone with big display zoom): the old 16px side
+   space, because every pixel of width counts there */
+@media (width < 22.5rem) {
+  :root {
+    --gutter: 1rem;
   }
 }
 

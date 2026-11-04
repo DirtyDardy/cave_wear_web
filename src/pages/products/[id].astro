@@ -104,13 +104,13 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
                     <Image src={shot.image} alt={shot.alt} widths={bigWidths} sizes={bigSizes} />
                   </button>
                 ))}
-                <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
+                <button type="button" class="favorite-button" aria-label={`Favourite ${product.name}`} aria-pressed="false">
                   <HeartIcon class="favorite-icon" />
                 </button>
               </div>
             ) : (
               <div class="gallery-favorite" data-product-id={product.id}>
-                <button type="button" class="favorite-button" aria-label={`Favorite ${product.name}`} aria-pressed="false">
+                <button type="button" class="favorite-button" aria-label={`Favourite ${product.name}`} aria-pressed="false">
                   <HeartIcon class="favorite-icon" />
                 </button>
               </div>
@@ -227,9 +227,9 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
           </fieldset>
 
           <fieldset>
-            <!-- The chosen colour's name after "Color:", quiet – so Alpine Oak and Tobacco
+            <!-- The chosen colour's name after "Colour:", quiet – so Alpine Oak and Tobacco
                  Brown can't be mixed up. product-options.js changes it with the dot. -->
-            <legend class="label">Color: <span class="chosen-colour">{product.colours[0].name}</span></legend>
+            <legend class="label">Colour: <span class="chosen-colour">{product.colours[0].name}</span></legend>
             <!-- data-fits: the fits a colour exists in. product-options.js hides the
                  dot for the other fits. -->
             <div class="circles">
@@ -746,12 +746,12 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
 
   /* --- Size, fit, colour ----------------------------------------------------------- */
 
-  /* Size on its own row; Fit and Color next to each other below it –
+  /* Size on its own row; Fit and Colour next to each other below it –
      both answer "which version?", so they share one line */
   .options {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: var(--space-4) var(--space-12); /* 16px between rows, 48px between Fit and Color */
+    gap: var(--space-4) var(--space-12); /* 16px between rows, 48px between Fit and Colour */
   }
 
   .options fieldset:first-child,

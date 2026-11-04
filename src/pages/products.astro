@@ -130,9 +130,9 @@ const supporterCollection = cardsFor("Supporter Collection");
     <!-- Filled by favorites.js: a copy of every card whose heart is on.
          The list starts hidden; the text shows until there's a favorite. -->
     <section aria-labelledby="favorites-title">
-      <h2 id="favorites-title" class="label collection-title">Favorites</h2>
+      <h2 id="favorites-title" class="label collection-title">Favourites</h2>
       <ul id="favorites-list" class="product-grid" role="list" hidden></ul>
-      <p id="favorites-empty" class="small favorites-empty">No favorites yet. Click the heart on a product to keep it here.</p>
+      <p id="favorites-empty" class="small favorites-empty">No favourites yet. Click the heart on a product to keep it here.</p>
 
       <!-- Gjilan, my birth city. It moved here on 2 Nov, so the Brand page can have
            Brente Holme, where my story starts. -->
@@ -329,7 +329,7 @@ const supporterCollection = cardsFor("Supporter Collection");
     }
 
     /* "display: grid" above would beat the hidden attribute – this makes
-       hidden win again (used by the empty Favorites list) */
+       hidden win again (used by the empty Favourites list) */
     &[hidden] {
       display: none;
     }

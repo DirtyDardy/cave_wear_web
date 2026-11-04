@@ -18,7 +18,7 @@ A considered everyday T-shirt built around clean lines, understated graphics, an
 
 ## Design & Purpose
 
-The Core Tee is envisioned as an everyday essential: understated enough to wear on its own, versatile enough to work as part of a layered outfit. Its design prioritizes simplicity over seasonal trends.
+The Core Tee is envisioned as an everyday essential: understated enough to wear on its own, versatile enough to work as part of a layered outfit. Its design prioritises simplicity over seasonal trends.
 
 ## Fit & Silhouette
 
@@ -26,7 +26,7 @@ The proposed direction is a clean, relaxed silhouette with balanced proportions.
 
 ## Materials
 
-The material selection will prioritize comfort, durability, and a suitable balance of structure and softness. Wood-derived fibers are among the material inspirations being explored for the collection.<!-- Always written as vision: "planned", "our vision", "what I'm working on" – never as fact. -->
+The material selection will prioritise comfort, durability, and a suitable balance of structure and softness. Wood-derived fibres are among the material inspirations being explored for the collection.<!-- Always written as vision: "planned", "our vision", "what I'm working on" – never as fact. -->
 
 ## Shot descriptions
 

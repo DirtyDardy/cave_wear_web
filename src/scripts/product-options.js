@@ -72,7 +72,7 @@ function showChosenSet() {
     set.hidden = !(set.dataset.colour === colour && set.dataset.fit === fit);
   }
 
-  // The colour's name after "Color:" – read from the chosen dot's hidden label text
+  // The colour's name after "Colour:" – read from the chosen dot's hidden label text
   const chosenColour = colourInputs.find((input) => input.checked);
   document.querySelector(".chosen-colour").textContent = chosenColour.nextElementSibling.textContent;
 

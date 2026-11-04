@@ -4,7 +4,7 @@
 
 name: The Field Hoodie
 code: FHD01 # 3 capital letters (the product) + 2 digits (design version, starts at 01). Set once, never change.
-tagline: A dependable layer. Wherever the day takes you
+tagline: Under a shell in the rain. On its own in town.
 price: 69.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: XS, S, M, L, XL, XXL # e.g. XS, S, M, L, XL, XXL – or: One size
@@ -14,7 +14,7 @@ colours: Black, Egret # names from src/data/product-colours.js, comma between �
 
 ## Description
 
-A lightweight grid fleece hoodie combining functional fabric structure with understated design. Finished with a stitched Cave Wear logo, it's designed to bring together thermal comfort, moisture management, and everyday versatility.
+One bear, centred on the chest between the drawstrings, and nothing on the back. It's planned with a grid fleece inside, for warmth without the bulk.
 
 ## Design & Purpose
 

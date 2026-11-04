@@ -4,7 +4,7 @@
 
 name: The Core Tee
 code: CTE01 # 3 capital letters (the product) + 2 digits (design version, starts at 01). Set once, never change.
-tagline: Everyday essentials. Nothing unnecessary.
+tagline: Loose on the trail. Tucked in at dinner.
 price: 29.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: XS, S, M, L, XL, XXL # e.g. XS, S, M, L, XL, XXL – or: One size
@@ -14,7 +14,7 @@ colours: Black, Olive, Egret # names from src/data/product-colours.js, comma bet
 
 ## Description
 
-A considered everyday T-shirt built around clean lines, understated graphics, and a versatile silhouette. Designed as a foundation for a wardrobe that moves naturally between outdoor settings and everyday life.
+A T-shirt with flat seams on the shoulders, because that's where backpack straps sit. The drop shoulder and longer body let you wear it loose, or tucked in for a sharper look.
 
 ## Design & Purpose
 

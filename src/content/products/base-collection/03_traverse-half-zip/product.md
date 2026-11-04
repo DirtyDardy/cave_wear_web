@@ -4,7 +4,7 @@
 
 name: The Traverse Half-Zip
 code: THZ01 # 3 capital letters (the product) + 2 digits (design version, starts at 01). Set once, never change.
-tagline: Adaptable by design. Understated by nature.
+tagline: Closed on the trail. Open at the bar.
 price: 79.90 # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: XS, S, M, L, XL, XXL # e.g. XS, S, M, L, XL, XXL – or: One size
@@ -14,7 +14,7 @@ colours: Black, Alpine Oak (male), Tobacco Brown (female) # names from src/data/
 
 ## Description
 
-A minimalist half-zip designed to bridge everyday comfort and outdoor functionality. A versatile layering piece with a considered silhouette and a more technical visual character.
+A half-zip built around one seam: it runs straight through the cut in the Cave Bear, so the way the garment is made becomes part of the logo. Zip it up when the wind comes, open it when you warm up.
 
 ## Design & Purpose
 

@@ -4,7 +4,7 @@
 
 name: The Ridge Beanie
 code: TRB01 # 3 capital letters (the product) + 2 digits (design version, starts at 01). Set once, never change.
-tagline: A daily essential. Warmth without the noise.
+tagline: On the ridge at dawn. Still on after dark.
 price: 24,90  # number only, e.g. 35 or 34,90 – the site shows "35,00€"
 collection: Base Collection # Base Collection or Supporter Collection
 sizes: One size # e.g. XS, S, M, L, XL, XXL – or: One size
@@ -14,7 +14,7 @@ colours: Black, Wild Honey, Moule  # names from src/data/product-colours.js, com
 
 ## Description
 
-A minimalist beanie designed to bring warmth and understated character to everyday outfits. Its simple form and versatile styling make it a natural companion to the Cave Wear collection.
+A short fisherman beanie with one detail: the bear on the cuff, planned as an embroidered patch in the beanie's own colour. The cuff is planned to fold once or twice, so you choose how it sits.
 
 ## Design & Purpose
 

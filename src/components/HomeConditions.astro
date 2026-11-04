@@ -69,7 +69,7 @@ const pieces = Object.fromEntries(
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    margin-block-start: calc(2 * var(--section-space)); /* double the gap to the Pack, so the two read as separate sections */
+    margin-block-start: calc(var(--section-space) / 2); /* a little more than the gap above the Pack, because the background changes here */
     color: var(--color-text); /* the lines read their colour from here */
 
     /* The page snaps gently here too (my notes, 27 Oct). Not on phones: the section

@@ -602,6 +602,27 @@ const steps = [
     }
   }
 
+  /* The stop next to "Questions" turns Wild Honey the moment the line's tip reaches it: when the
+     heading is in the middle of the screen, the same moment the line above is measured against. */
+  @media (width >= 75rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .faq-title::before {
+        animation-name: stop-reached;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(50vh + var(--space-4));
+      }
+    }
+  }
+
+  @keyframes stop-reached {
+    to {
+      border-color: var(--color-accent);
+      background-color: var(--color-accent);
+    }
+  }
+
   /* Momentum (decided 26 Oct): while the line grows, its dashes also slide down along it,
      a little faster than you scroll – like footsteps leading you to the form */
   @keyframes trail-draw {

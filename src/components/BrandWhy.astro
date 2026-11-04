@@ -1,6 +1,6 @@
 ---
-// BRAND – WHY WE EXIST (2 Nov). My text word for word, two thirds on the left, one photo
-// in the third on the right (the same three columns as the Products grid).
+// BRAND – WHY WE EXIST (2 Nov). My text word for word in the left half, one photo in the right
+// half, with the trail around it (4 Nov).
 // The photo comes from the product folder, with its alt text from there: the embroidered
 // bear of the Field Hoodie, for now.
 import { Image } from "astro:assets";
@@ -70,7 +70,11 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
       <!-- Brente Holme, where the idea began. The text doesn't name it: the numbers do, for
            anyone who looks them up. The div keeps the empty status line out of the grid gap. -->
       <div class="brand-why-coordinates">
-        <Coordinates place="brente-holme" />
+        <BrandTrail phoneOnly short />
+        <div class="brand-why-coordinates-spot">
+          <Coordinates place="brente-holme" />
+        </div>
+        <BrandTrail phoneOnly short />
       </div>
     </div>
 
@@ -81,28 +85,34 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
             src={photo.image}
             alt={photo.alt}
             class="brand-why-photo"
-            widths={[320, 640, 960]}
-            sizes="(width >= 48rem) 33vw, 100vw"
+            widths={[640, 960, 1280, 1600]}
+            sizes="(width >= 48rem) 50vw, 80vh"
           />
         </div>
       )
     }
   </div>
 
-  <BrandTrail phoneOnly />
   <BrandPrinciples />
 </section>
 
 <script src="../scripts/description-toggle.js"></script>
+<script src="../scripts/brand-why-fade.js"></script>
 
 <style>
   /* Written mobile first. The base = phones: one column, the photo under my question. */
   .brand-why-section {
-    --brand-why-gap: var(--space-12); /* 48px */
-    --brand-why-shift: var(--space-6); /* how far the photo moves left: 24px on tablets */
+    /* Phones: its own stack of layers, so the photo lies behind the text but above the page */
+    isolation: isolate;
 
-    /* From here the text stops at its reading width before its columns end, so there is
-       room for the photo to move closer to it */
+    @media (width >= 48rem) {
+      isolation: auto;
+    }
+
+    --brand-why-gap: var(--space-12); /* 48px */
+    --brand-why-shift: var(--space-6); /* how far the photo stays from the section's right edge: 24px on tablets */
+
+    /* Wide screens: the trail's right side comes further in */
     @media (width >= 80rem) {
       --brand-why-shift: var(--space-24); /* 96px */
     }
@@ -112,30 +122,29 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     position: relative;
     display: grid;
     gap: var(--space-4); /* 16px */
-    margin-block-end: var(--section-space); /* phones: half the gap to my principles, with the line between */
     text-align: center; /* phones: one narrow column, so everything sits on the middle like the part above */
 
-    /* Three equal columns: the heading across all three, then the text in two
-       and the photo in one */
+    /* Two equal halves: the heading across both, then the text and the photo. The trail runs
+       down the page's middle, so half the gap keeps both 24px from it. */
     @media (width >= 48rem) {
-      margin-block-end: 0;
       text-align: start;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-4) var(--brand-why-gap); /* 16px between rows, 48px between columns */
       align-items: start;
     }
 
-    /* The photo's box stretches to the height of the text */
-    @media (width >= 64rem) {
+    /* The photo's box stretches to the height of the text (see .brand-why-photo) */
+    @media (width >= 87.5rem) {
       align-items: stretch;
     }
   }
 
   .brand-why h2 {
-    margin-block-end: 0;
+    margin-block: 55svh 0; /* phones: the first screen belongs to the photo, the heading stands low on it */
 
     @media (width >= 48rem) {
       grid-column: 1 / -1;
+      margin-block-start: 0;
     }
   }
 
@@ -150,7 +159,6 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 
     @media (width >= 48rem) {
       display: grid;
-      grid-column: span 2;
       gap: var(--space-4); /* 16px */
 
       & > * {
@@ -162,11 +170,15 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
   /* The fold, same chevron as on the product page. Without JavaScript: no button, all the text. */
   .brand-why-toggle {
     display: none;
-    justify-self: center;
+    justify-self: start;
     align-items: center;
     gap: var(--space-3); /* 12px */
     min-block-size: var(--control-height);
+    /* The button is taller than its words (for fingers). Takes that back below them, so the space
+       under the words is the same as under a paragraph. */
+    margin-block-end: calc((var(--leading-body) - var(--control-height)) / 2);
     padding: 0;
+    transition: margin-block-end var(--motion-duration) var(--motion-ease);
     border: 0;
     background: none;
     color: var(--color-accent);
@@ -187,6 +199,11 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     &[aria-expanded="true"]::after {
       translate: 0 2px;
       rotate: -135deg;
+    }
+
+    /* Closed, the folded text has no height, but still its 16px gap: this takes the gap back */
+    &[aria-expanded="false"] {
+      margin-block-end: calc((var(--leading-body) - var(--control-height)) / 2 - var(--space-4));
     }
 
     &:focus-visible {
@@ -215,7 +232,6 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     grid-template-rows: 1fr;
     transition:
       grid-template-rows var(--motion-duration) var(--motion-ease),
-      margin var(--motion-duration) var(--motion-ease),
       visibility var(--motion-duration);
 
     @media (width >= 48rem) {
@@ -241,7 +257,6 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 
   :global(html[data-js]) .brand-why-toggle[aria-expanded="false"] + .brand-why-more {
     grid-template-rows: 0fr;
-    margin-block-end: calc(-1 * var(--space-4)); /* closed it has no height, so it takes back its gap too */
     visibility: hidden;
 
     /* From tablet up the text is always there, also for screen readers */
@@ -251,7 +266,8 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .brand-why-more {
+    .brand-why-more,
+    .brand-why-toggle {
       transition: none;
     }
   }
@@ -269,49 +285,94 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     }
   }
 
+  /* Phones: the numbers stand in the exact middle between my text and my principles, with the
+     line above and below them: 24px, 40px of line, 12px, the numbers, 12px, 40px of line, 24px. */
   .brand-why-coordinates {
+    padding-block-start: var(--space-2); /* 8px + the 16px gap above = 24px */
+
+    @media (width >= 48rem) {
+      padding-block-start: 0;
+    }
+
+    /* Phones: over the photo, and Muted Stone only works on the dark page, so one step lighter */
+    @media (width < 48rem) {
+      --color-text-quiet: var(--color-text-secondary);
+    }
+  }
+
+  .brand-why-coordinates-spot {
     display: grid;
     justify-items: center;
+    padding-block: var(--space-3); /* 12px */
 
     @media (width >= 48rem) {
       justify-items: start;
+      padding-block: 0;
     }
   }
 
   .brand-why-text .brand-why-question {
     order: 1;
     margin-block-end: var(--space-4); /* 16px + the 16px gap */
+    margin-inline: auto; /* big phones: the sentence stops at its reading width, so its box has to be on the middle too */
     color: var(--color-text);
     text-align: center;
 
     @media (width >= 48rem) {
       order: 0;
+      margin-inline: 0;
       text-align: start;
     }
   }
 
+  /* Phones (my decision, 4 Nov): the photo is the background of the whole section. This box runs
+     from screen edge to screen edge, behind everything, and one screen further than my text, so
+     the photo can stay until it has faded out over my principles (brand-why-fade.js). */
   .brand-why-media {
-    order: 2;
-    margin-block-end: var(--space-4); /* 16px + the 16px gap on phones */
+    position: absolute;
+    z-index: -1;
+    inset-block: 0 -100svh;
+    inset-inline: calc(-1 * var(--gutter));
+    pointer-events: none;
 
+    /* From tablet up the trail wraps around the photo, 24px away on the top, left and right
+       (my decision, 4 Nov). The margin keeps it inside the trail's right side. */
     @media (width >= 48rem) {
       position: relative;
-      inset-inline-end: var(--brand-why-shift);
-      order: 0;
-      margin-block-end: 0;
+      z-index: auto;
+      inset: auto;
+      margin-inline-end: var(--brand-why-shift);
+      pointer-events: auto;
     }
   }
 
-  /* Phones and tablets: 4:5. Desktop: exactly as high as the text, from my question to
-     the last line (decided 2 Nov). The photo is taken out of the flow (absolute), so only
-     the text decides the height, and it follows when the text changes. */
+  /* Phones: one whole screen, staying in place (sticky) inside its box while the text passes over
+     it. Dimmed for the text, and its top and bottom melt into the page. Sticky works on iPhones,
+     where a fixed background picture doesn't.
+     Tablets and small desktops: 4:5, so the bear is never cut off. From 1400px: exactly as high as
+     the text, from my question to the last line (decided 2 Nov). Below that the text is so tall and
+     the photo so narrow that stretching would cut the bear. The photo is taken out of the flow
+     (absolute), so only the text decides the height, and it follows when the text changes. */
   .brand-why-photo {
+    position: sticky;
+    inset-block-start: 0;
     inline-size: 100%;
-    block-size: auto;
-    aspect-ratio: 4 / 5;
+    block-size: 100svh;
     object-fit: cover;
+    filter: brightness(0.6); /* measured: dark enough for Wild Honey and my grey text, also on the stitching */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
 
-    @media (width >= 64rem) {
+    @media (width >= 48rem) {
+      position: static;
+      block-size: auto;
+      aspect-ratio: 4 / 5;
+      filter: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    @media (width >= 87.5rem) {
       position: absolute;
       inset: 0;
       block-size: 100%;

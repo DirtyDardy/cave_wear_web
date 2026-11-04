@@ -13,8 +13,12 @@ if (stage) {
   const texts = document.querySelector(".brand-symbol-steps");
   const endText = document.querySelector(".brand-symbol-end");
 
-  // Half speed only while the logo really stays in place, and never with reduced motion
-  const canSlow = window.matchMedia("(height >= 40rem) and (prefers-reduced-motion: no-preference)");
+  // canStay: title and logo really stay in place (the same screen height as in the CSS), and the
+  // page isn't asked for less motion. canSlow: on top of that, the texts move at half speed. Not on
+  // phones: a finger scrolls the page outside of this script, so the script's half speed would
+  // always arrive a moment late, and the text would tremble (above all on iPhones).
+  const canStay = window.matchMedia("(height >= 40rem) and (prefers-reduced-motion: no-preference)");
+  const canSlow = window.matchMedia("(width >= 48rem) and (height >= 40rem) and (prefers-reduced-motion: no-preference)");
 
   // Heights are only written when they really change: every write makes the browser re-check the
   // page's layout, and that during scrolling is what can make things tremble on a phone
@@ -55,12 +59,12 @@ if (stage) {
     const toSecondText = steps[1].offsetTop - steps[0].offsetTop;
     snapPoints[1].style.insetBlockStart = `${toSecondText / speed}px`;
     slowBox.style.setProperty("--logo-bottom", `${logoBottom}px`);
-    firstLogoStays = canSlow.matches && inBox < toSecondText; // halfway between the two
+    firstLogoStays = canStay.matches && inBox < toSecondText; // halfway between the two
 
     // While title and logo stay in place, the header keeps the state it came in with (header-hide.js
     // leaves it alone): showing stays showing, hidden stays hidden, until you leave this part.
     const scroller = slowBox.parentElement.getBoundingClientRect();
-    header.toggleAttribute("data-frozen", canSlow.matches && scroller.top < header.offsetHeight && scroller.bottom > logoBottom);
+    header.toggleAttribute("data-frozen", canStay.matches && scroller.top < header.offsetHeight && scroller.bottom > logoBottom);
   }
 
   function update() {

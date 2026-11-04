@@ -193,12 +193,19 @@ const steps = [
 
   /* A real button that looks like my text links */
   .brand-symbol-again {
+    display: block; /* phones: on the middle, under my closing sentence */
     margin-block-start: var(--space-4); /* 16px */
+    margin-inline: auto;
     padding: 0;
     border: 0;
     background: none;
     font: inherit;
     cursor: pointer;
+
+    @media (width >= 48rem) {
+      display: inline-block;
+      margin-inline: 0;
+    }
   }
 
   /* The title stays above everything, with a solid background.
@@ -211,6 +218,11 @@ const steps = [
     margin-block: calc(-1 * var(--space-4)) var(--stage-height, 0px);
     padding-block: var(--space-4); /* 16px */
     background-color: var(--color-bg);
+    text-align: center; /* phones: on the middle, above the logo */
+
+    @media (width >= 48rem) {
+      text-align: start;
+    }
 
     @media (height >= 40rem) {
       position: sticky;
@@ -472,8 +484,16 @@ const steps = [
     transition: color 0.3s ease;
   }
 
+  /* Phones: my closing sentence on the middle, under the finished logo */
   .brand-symbol-end {
     margin-block-start: var(--space-12); /* 48px */
+    text-align: center;
+    text-wrap: balance;
+
+    @media (width >= 48rem) {
+      text-align: start;
+      text-wrap: wrap;
+    }
   }
 
   /* The trail: straight across from Made to Stay's line to the line on this column's right, then

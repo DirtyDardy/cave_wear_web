@@ -87,6 +87,45 @@ export function removeItem(key: string) {
   packItems.set(packItems.get().filter((item) => itemKey(item) !== key));
 }
 
+// --- EXPLORER'S BONUS (decided 4 Nov) ----------------------------------------------------
+// The reward for finding all four hidden coordinates: 5€ off, once per browser and never more
+// than one in a Pack. It isn't a product: it has no size, photo or quantity, so it's its own line.
+// A game, not a lock: it lives in the browser like everything else here, so dev tools could fake
+// it. That's fine because no money moves. A real discount would have to be checked on a server.
+export const bonusAmount = 5;
+export const bonusName = "Explorer's bonus";
+export const bonusDetails = "If and when Cave Wear launches";
+// The same text is checked in netlify/functions/submission-created.mjs: change both together
+export const bonusLine = `1 × ${bonusName} – ${bonusDetails} – −5,00€`;
+
+// unused = the button still works · in-pack = waiting in the Pack · used = sent with a reservation
+type BonusState = "unused" | "in-pack" | "used";
+
+function loadBonus(): BonusState {
+  try {
+    const saved = localStorage.getItem("cave-wear-bonus");
+    return saved === "in-pack" || saved === "used" ? saved : "unused";
+  } catch {
+    return "unused";
+  }
+}
+
+export const explorerBonus = atom<BonusState>(loadBonus());
+
+explorerBonus.subscribe((state) => {
+  try {
+    localStorage.setItem("cave-wear-bonus", state);
+  } catch {
+    // Storage blocked: it still works until the page is closed
+  }
+});
+
+// Only from "unused", so a second click can never add a second one. It asks the saved value too,
+// because another open tab may already have used it.
+export function addBonus() {
+  if (explorerBonus.get() === "unused" && loadBonus() === "unused") explorerBonus.set("in-pack");
+}
+
 export function openPack() {
   isPackOpen.set(true);
 }
@@ -129,4 +168,5 @@ export const canReserve = computed(reservations, (list) => list.length < maxRese
 export function addReservation(reservation: Reservation) {
   reservations.set([reservation, ...reservations.get()]);
   packItems.set([]);
+  if (explorerBonus.get() === "in-pack") explorerBonus.set("used"); // it went with this reservation
 }

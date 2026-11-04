@@ -182,7 +182,7 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
   discuss) – use them when building the page. Not part of the site build.
-  **Built 2–4 Nov on `feature/brand` (desktop done, phones next).** Order: `BrandTop` · `BrandTrail` ·
+  **Built 2–4 Nov on `feature/brand`, desktop and phones.** Order: `BrandTop` · `BrandTrail` ·
   Why Cave Wear Exists (`BrandWhy`, with `BrandPrinciples`) · Made to Stay (`BrandStay`) · My Symbol
   (`BrandSymbol`) · On Record (`BrandRecords`) · Still Here (`BrandBears`, the page's end) · hidden
   `#my-places`. **Voice: "I", not "we"** (Dardan, 4 Nov) – "we" stays only where it means all people
@@ -215,6 +215,38 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
     `submission-created.mjs` refuses more than one, a bonus alone, or a total that doesn't add up.
     A game, not a lock (dev tools can fake it, no money moves) – say so in the presentation.
     The real email with the bonus is only testable after a push.
+  - **Why Cave Wear Exists on desktop (4 Nov, his sketch):** two equal halves, the photo 24px from the
+    trail on top, left and right; it takes the text's height only from 1400px, below that 4:5. The
+    sentence about the one-person team sits under the first paragraph on every screen.
+  - **On Record, every screen (4 Nov):** the number counts up 1,000 and the bars grow, once, on first
+    sight (`brand-records.js`), never with reduced motion. Tabular digits so the number can't shake.
+    Bars Irr Olive and Mossy Elm in turn: a second deliberate exception to "large surfaces only".
+  - **Phones (4 Nov, desktop unchanged, mobile first, except two `width < 48rem` spots on purpose):**
+    - **One line between sections:** every gap is the same as "…family dinner." to "Why Cave Wear
+      Exists" (128px, `<BrandTrail phoneOnly />`). Exceptions: the line from the top photo stays, and
+      the coordinates stand exactly in the middle between Why and the principles, a short line above
+      and below (172px in all).
+    - **Centring:** headings and opening sentences are centred, long paragraphs stay left. Ask before
+      centring body text.
+    - **Photo backgrounds:** Why and Still Here use the photo as a full-screen background that stays
+      in place (absolute box + sticky image, works on iPhones where a fixed background doesn't), and
+      Still Here has no green on phones. Why's photo fades out over the principles
+      (`brand-why-fade.js`). Readability measured over the photos: Wild Honey 4.64:1 at the brightest
+      5% (brightness 0.6), so Why's coordinates are Weathered Bone there. Desktop stays framed on
+      purpose: on wide screens a background would show the limits of the picture's resolution.
+    - **Why:** the long story folds away behind "Read the whole story" / "The whole story".
+    - **Made to Stay:** heading, strongest sentence, the goal, then the heading "Status" (phones only)
+      over Construction, Colour + wash strip (edge to edge) and Materials, then "I don't make
+      sustainability claims yet." The text was also shortened a little on every screen.
+    - **My Symbol:** title and logo still stick, but the texts scroll at normal speed (half speed by
+      script lags behind a finger and would tremble on iPhones). Snap never runs on phones.
+    - **`#my-places`:** the map is its own picture between the text and the card, with a fixed shape,
+      so opening a row can't rescale it, and zoomed so all four crosses show. Chevrons on closed rows
+      (touch has no hover), a smaller card so map + card fit an iPhone 16 screen. Its line above only
+      appears once the section is open.
+  - **Checked 4 Nov (finished site, Chrome without a window):** reduced motion (nothing moves, the
+    finished number and full bars stand there), keyboard (a focus ring on every stop, rows open on
+    focus, fold and "Read the logo story again" work), 200% zoom and 320px (no sideways scroll).
 - **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
   header (a tool page, not a showcase). Top to bottom: Regensburg coordinates (where the Regen
   meets the Danube, see "Hidden coordinates" in 7) · H1 "Contact" · one line + email + "Write to us ↓" ·
@@ -740,6 +772,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 Every size, space and line height is a multiple of 4px, only from `--space-*`: 1=4 · 2=8 · 3=12 ·
 4=16 · 6=24 · 8=32 · 12=48 · 16=64 · 24=96px. Measure from the box. Exceptions: 1px lines,
 `clamp()` font sizes, spacing that results inside a component. Break the grid only deliberately.
+**Side margin (Dardan, 4 Nov, after comparing with Apple's phone site):** `--gutter` is 24px on phones
+on the whole site (was 16px), 16px below 360px, unchanged from 600px up. The footer's bottom row
+keeps 16px so its links stay on one row.
 
 ### Corners
 Default **sharp (0)**. Rounding only where Dardan decides. Scale only: `--radius-sm` 4 (inputs,
@@ -855,6 +890,12 @@ then Dardan decides.
   (a chat message is enough) – right to one's own image.
 
 ## 14. Still open (ask, don't assume)
+
+- **⚠ Brand page: real iPhone test (his girlfriend's iPhone, not done yet).** Built site over Wi-Fi
+  (`astro preview --host`). Check: the photos stay in place, the fade, the fold, My Symbol sticky +
+  collapse + "Read the logo story again" (if the collapse fails: off on phones), count-up and bars,
+  wash strip without sideways scroll, the hidden section's tap and fit (the map's top with Safari's
+  bars open). The real email with the Explorer's bonus can only be tested after a push.
 
 - **🔴 LINRO MUST-HAVES – HIGH PRIORITY (Dardan, 27 Oct): never cut these. Other things get cut
   first.** From Linro's development plan (`C:\Users\Dardan\Desktop\cave-wear-ai\

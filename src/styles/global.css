@@ -104,7 +104,8 @@
 
   /* The line of the site (decided 1 Nov): long dash, short dash, like the centre line in a
      technical drawing – the trail on Home and /contact, and in my Pack drawings. One
-     definition for all of them; an element chooses its colour with "color". */
+     definition for all of them; an element chooses its colour with "color".
+     Every diagonal in the trail leans 15° from vertical, like the cut in my logo (2 Nov). */
   --trail-across: repeating-linear-gradient(
     to right,
     currentColor 0 16px,
@@ -182,7 +183,7 @@
 
   /* Layout */
   --max-width: 90rem; /* 1440px content width – stops growing on ultrawide screens */
-  --gutter: clamp(1rem, 4vw, 3rem); /* side space, grows with the screen */
+  --gutter: clamp(1.5rem, 4vw, 3rem); /* side space, grows with the screen. 24px on phones (4 Nov, was 16px: too thin next to Apple's) */
   --header-height: 4rem; /* 64px on all screens – compact */
   /* 40px – the height of every button (decided 24 Oct) and of the other things
      you click: size boxes, quantity, colour dots, the heart, inputs, social icons */
@@ -225,6 +226,14 @@
     --photo-header-height: 60svh;
     --text-button: var(--text-body); /* 16px */
     --text-field: var(--text-body); /* 16px */
+  }
+}
+
+/* Very narrow screens (below 360px, or a phone with big display zoom): the old 16px side
+   space, because every pixel of width counts there */
+@media (width < 22.5rem) {
+  :root {
+    --gutter: 1rem;
   }
 }
 
@@ -342,6 +351,16 @@ p {
   font-weight: 450; /* was Light 300 (version C) */
   line-height: var(--leading-lead);
   letter-spacing: -0.03em;
+}
+
+/* Between Lead and body: 24/32 on every screen. The opening sentences of the Brand page
+   (decided 2 Nov). */
+.lead-small {
+  max-inline-size: var(--measure-lead);
+  font-size: var(--text-h3); /* 24px */
+  font-weight: 450;
+  line-height: var(--space-8); /* 32px */
+  letter-spacing: var(--tracking-h3);
 }
 
 .small {

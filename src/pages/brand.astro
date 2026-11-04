@@ -1,46 +1,406 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Coordinates from "../components/Coordinates.astro";
+import BrandTop from "../components/BrandTop.astro";
+import BrandTrail from "../components/BrandTrail.astro";
+import BrandWhy from "../components/BrandWhy.astro";
+import BrandStay from "../components/BrandStay.astro";
+import BrandSymbol from "../components/BrandSymbol.astro";
+import BrandRecords from "../components/BrandRecords.astro";
+import BrandBears from "../components/BrandBears.astro";
 import { places } from "../data/places.js";
+import europeMap from "../assets/europe-map.svg";
+
+const placeIds = Object.keys(places) as (keyof typeof places)[];
+
+// Where each cross lies on the map picture, so a big cross grows out of its own middle
+const crossAt = {
+  gjilan: "59.125% 80.9%",
+  "brente-holme": "47.125% 37.2%",
+  "bears-cave": "59.5% 69.7%",
+  regensburg: "47.375% 64.5%",
+};
+
 ---
 
 <BaseLayout title="Brand">
-  <section class="container section">
-    <h1>Brand</h1>
-  </section>
+  <BrandTop />
+  <BrandTrail />
+  <BrandWhy />
+  <BrandTrail phoneOnly />
+  <BrandStay />
+  <BrandTrail phoneOnly />
+  <BrandSymbol />
+  <BrandTrail phoneOnly />
+  <BrandRecords />
+  <BrandTrail phoneOnly stopsAtEdge />
+  <BrandBears />
 
   <!-- The hidden section: it opens once all four coordinates are found (coordinates.js).
-       A game, not a lock – it's in the page's code, and the browser's dev tools can open it.
-       Placeholder until I write my text. -->
-  <section id="my-places" class="container section" aria-labelledby="my-places-title" hidden>
-    <h2 id="my-places-title">Four places</h2>
-    <ul class="my-places" role="list">
-      {
-        Object.values(places).map(({ name, coordinates }) => (
-          <li>
-            <h3>{name}</h3>
-            <p class="label">{coordinates}</p>
-            <p>My text follows.</p>
-          </li>
-        ))
-      }
-    </ul>
+       A game, not a lock – it's in the page's code, and the browser's dev tools can open it. -->
+  <!-- The same line as between the other sections, on phones. Only there once the section is open. -->
+  <div class="my-places-lead"><BrandTrail phoneOnly /></div>
+  <section id="my-places" class="section" aria-labelledby="my-places-title" hidden>
+    <div class="container">
+      <h2 id="my-places-title">You looked closer.</h2>
+      <p class="my-places-intro">
+        Most people scroll past these numbers. Here's what they mean to me, and something for finding them.
+      </p>
+
+      <!-- The map from Field conditions, without the moving lines. The section only opens once all
+           four are found, so all four crosses are lit (coordinates.js shows every data-map-cross).
+           The big crosses lie on top, and my-places.js shows the one of the open place.
+           Phones: its own picture between my text and the card. From tablet up: behind the section. -->
+      <div class="my-places-backdrop" aria-hidden="true">
+        <div class="my-places-maps">
+          <img src={europeMap.src} alt="" class="my-places-map" width={europeMap.width} height={europeMap.height} loading="lazy" decoding="async" />
+          {
+            placeIds.map((place) => (
+              <img src={`/map/found-${place}.svg`} alt="" class="my-places-map" data-map-cross={place} width={europeMap.width} height={europeMap.height} loading="lazy" decoding="async" hidden />
+            ))
+          }
+          {
+            placeIds.map((place, i) => (
+              <img src={`/map/found-${place}-big.svg`} alt="" class="my-places-map my-places-big" data-map-big={place} data-active={i === 0 ? "" : undefined} style={`--cross-at: ${crossAt[place]}`} width={europeMap.width} height={europeMap.height} loading="lazy" decoding="async" />
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- One glass card. A button in each row, so keyboards and touch screens can open it too. -->
+      <ul class="my-places" role="list">
+        {
+          placeIds.map((place, i) => (
+            <li class="my-places-row" data-place={place} data-open={i === 0 ? "" : undefined}>
+              <h3>
+                <button type="button" class="my-places-button" aria-expanded={i === 0 ? "true" : "false"}>
+                  <span class="my-places-name">{places[place].name}</span>
+                  <span class="label my-places-coordinates">{places[place].coordinates}</span>
+                </button>
+              </h3>
+              <div class="my-places-panel">
+                <p>{places[place].text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- The reward: a line in the Pack, once per browser (my-places.js, pack-store.ts) -->
+      <div class="my-places-bonus">
+        <button type="button" class="button button-primary my-places-bonus-button">Add 5€ off to my pack</button>
+        <p class="small">5€ off your order, if and when Cave Wear launches. One per pack, once per browser.</p>
+      </div>
+    </div>
   </section>
 
-  <!-- Gjilan. Just above the footer for now – later near the Team section -->
-  <div class="container coordinates-end">
-    <Coordinates place="gjilan" />
-  </div>
+  <script src="../scripts/my-places.js"></script>
 </BaseLayout>
 
 <style>
-  .my-places {
-    display: grid;
-    gap: var(--space-8); /* 32px */
-    margin-block-start: var(--space-8);
+  /* relative + z-index: the line lies above the bear photo's last faded bit. :has = "if the section
+     right after me is still hidden, I'm not there either". */
+  .my-places-lead {
+    position: relative;
+    z-index: 1;
+
+    &:has(+ #my-places[hidden]) {
+      display: none;
+    }
   }
 
-  .coordinates-end {
-    padding-block-end: var(--space-12); /* 48px to the footer */
+  /* isolation = its own stack of layers, so the map lies behind the text */
+  #my-places {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    /* Phones: heading and opening sentence on the middle, like the other sections */
+    & h2 {
+      text-align: center;
+
+      @media (width >= 48rem) {
+        text-align: start;
+      }
+    }
+  }
+
+  /* Phones: from screen edge to screen edge, between my text and the card, and always this shape, so
+     the crosses are always in the same place. From tablet up: behind the whole section.
+     The mask lets the top and bottom melt into the page, like on Home. */
+  .my-places-backdrop {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 375 / 320;
+    margin-block: var(--space-2) calc(-1 * var(--space-4)); /* the card lies over the map's last faded 16px */
+    margin-inline: calc(-1 * var(--gutter));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 16%, black 84%, transparent);
+
+    @media (width >= 48rem) {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      aspect-ratio: auto;
+      margin: 0;
+    }
+  }
+
+  /* From tablet up the whole map moves to the right, away from the card. Its left edge would
+     then be a hard cut, so it melts in too. */
+  .my-places-maps {
+    position: absolute;
+    inset: 0;
+
+    @media (width >= 48rem) {
+      translate: 14% 0;
+      -webkit-mask-image: linear-gradient(to right, transparent, black 16%);
+      mask-image: linear-gradient(to right, transparent, black 16%);
+    }
+  }
+
+  /* Phones: zoomed in on the part of Europe with my four places, so all four crosses are always on
+     the picture. 224% = how far it's zoomed. The two percentages move the map itself: 31% of its
+     width to the left, 28% of its height up. */
+  .my-places-map {
+    position: absolute;
+    inset: 0 auto auto 0;
+    inline-size: 224%;
+    max-inline-size: none;
+    block-size: auto;
+    translate: -31% -28%;
+
+    /* From tablet up: 5% smaller than the page is wide, and placed so the point halfway between
+       Brente Holme and Gjilan is in the section's middle. So those two crosses are always the
+       same distance from the section's top and bottom. 59.05% = that point on the map. */
+    @media (width >= 48rem) {
+      inset: 50% auto auto 2.5%;
+      inline-size: 95%;
+      max-inline-size: 100%;
+      translate: 0 -59.05%;
+    }
+  }
+
+  /* Only see-through, not hidden: so the picture is already loaded when its place opens.
+     From tablet up it also shrinks to half, the size of the small cross, and grows back out of
+     its own middle. On phones only the fade. */
+  .my-places-big {
+    opacity: 0;
+    transition:
+      opacity 0.2s ease-out,
+      scale 0.2s ease-out;
+
+    @media (width >= 48rem) {
+      scale: 0.5;
+      transform-origin: var(--cross-at);
+    }
+
+    &[data-active] {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  /* Phones: on the middle, as the opening sentence */
+  .my-places-intro {
+    max-inline-size: 30rem; /* 480px, as wide as the card */
+    margin-block: var(--space-4) 0; /* 16px */
+    margin-inline: auto;
+    color: var(--color-text-secondary);
+    text-align: center;
+    text-wrap: balance;
+
+    @media (width >= 48rem) {
+      margin-inline: 0;
+      text-align: start;
+      text-wrap: wrap;
+    }
+  }
+
+  /* Phones: the button as wide as the card, like "Add to pack" on the product page */
+  .my-places-bonus {
+    display: grid;
+    justify-items: stretch;
+    gap: var(--space-2); /* 8px */
+    max-inline-size: 30rem;
+    margin-block-start: var(--space-6); /* 24px */
+
+    @media (width >= 48rem) {
+      justify-items: start;
+    }
+
+    & p {
+      margin: 0;
+      color: var(--color-text-quiet);
+    }
+  }
+
+  /* Used up: plain grey, no Wild Honey, so it can't be mistaken for something to click */
+  .my-places-bonus-button:disabled {
+    border: 1px solid var(--color-input-border); /* Flint */
+    background-color: transparent;
+    color: var(--color-text-quiet); /* Muted Stone */
+    opacity: 1;
+  }
+
+  /* The glass card. Written mobile first: as wide as the page on phones. */
+  .my-places {
+    margin-block: 0;
+    padding: 0;
+    border: 1px solid var(--glass-edge);
+    background-color: var(--glass-tint);
+    box-shadow: var(--glass-shadow);
+    list-style: none;
+    -webkit-backdrop-filter: var(--glass-blur); /* older Safari */
+    backdrop-filter: var(--glass-blur);
+
+    /* The box never changes: a fixed size, with room for four rows and the longest text. Only
+       what's inside it moves. */
+    @media (width >= 48rem) {
+      margin-block-start: var(--space-8); /* 32px */
+
+      --row-height: 5.25rem; /* 84px: 32px padding, 28px name, 4px gap, 20px coordinates */
+      --text-height: 7.5rem; /* 120px: four lines and 24px below them */
+
+      overflow: hidden;
+      max-inline-size: 30rem; /* 480px */
+      block-size: calc(4 * var(--row-height) + var(--text-height) + 5px); /* + 3 lines between the rows and the 2 of the frame */
+    }
+  }
+
+  .my-places-row + .my-places-row {
+    border-block-start: 1px solid var(--glass-edge-faint);
+  }
+
+  .my-places-row h3 {
+    margin: 0;
+  }
+
+  .my-places-name,
+  .my-places-coordinates {
+    grid-column: 1;
+  }
+
+  /* Phones: smaller than on desktop (my decision, 4 Nov), so the map and the whole card fit on one
+     screen, and you can see the cross of the place you're reading about. */
+  .my-places-name {
+    font-size: 1.125rem; /* 18px */
+    line-height: var(--space-6); /* 24px */
+
+    @media (width >= 48rem) {
+      font-size: var(--text-h3);
+      line-height: var(--leading-h3);
+    }
+  }
+
+  .my-places-button {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-1) var(--space-3); /* 4px, 12px */
+    align-items: center;
+    inline-size: 100%;
+    padding: var(--space-3) var(--space-4); /* phones: 12px 16px */
+    border: 0;
+    background: none;
+    color: var(--color-text-secondary);
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+    cursor: pointer;
+    transition: color var(--motion-duration) var(--motion-ease);
+
+    @media (width >= 48rem) {
+      block-size: var(--row-height);
+      padding: var(--space-4) var(--space-6); /* 16px 24px */
+    }
+
+    &:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: calc(-1 * var(--focus-offset));
+    }
+
+    /* A finger can't hover, so the closed rows show that there's more: the same chevron as on the
+       product page. With a mouse on a big screen, hovering is enough and it isn't there. */
+    &::after {
+      content: "";
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      inline-size: 0.375rem;
+      block-size: 0.375rem;
+      border-block-end: 1.5px solid currentColor;
+      border-inline-end: 1.5px solid currentColor;
+      translate: 0 -2px;
+      rotate: 45deg;
+    }
+
+    @media (width >= 48rem) and (hover: hover) {
+      column-gap: 0;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .my-places-row[data-open] .my-places-button {
+    color: var(--color-text);
+
+    &::after {
+      visibility: hidden; /* it's already open */
+    }
+  }
+
+  .my-places-coordinates {
+    margin: 0;
+    color: var(--color-text-quiet);
+  }
+
+  /* 0fr to 1fr = the row grows from nothing to exactly the height of its text */
+  .my-places-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--motion-duration) var(--motion-ease),
+      visibility var(--motion-duration);
+
+    /* One row closes exactly as much as the other opens, at the same speed, so nothing jumps */
+    @media (width >= 48rem) {
+      grid-template-rows: 0px;
+    }
+
+    & p {
+      min-block-size: 0;
+      margin: 0;
+      padding-inline: var(--space-4); /* phones: 16px, the same as the rows */
+      padding-block-end: var(--space-3); /* phones: 12px */
+      color: var(--color-text-secondary);
+      font-size: var(--text-small); /* phones: 14/20 */
+      line-height: var(--leading-small);
+
+      @media (width >= 48rem) {
+        padding-inline: var(--space-6); /* 24px */
+        padding-block-end: var(--space-4); /* 16px */
+        font-size: var(--text-body);
+        line-height: var(--leading-body);
+      }
+    }
+  }
+
+  .my-places-row[data-open] .my-places-panel {
+    grid-template-rows: 1fr;
+    visibility: visible;
+
+    @media (width >= 48rem) {
+      grid-template-rows: var(--text-height);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .my-places-big,
+    .my-places-button,
+    .my-places-panel {
+      transition: none;
+    }
   }
 </style>

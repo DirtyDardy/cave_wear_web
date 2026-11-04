@@ -29,11 +29,27 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const linePattern = /^\d{1,2} × [\p{L}\d' -]{1,60} – [\p{L}\d·' -]{1,60} – \d{1,3}(\.\d{3})*,\d{2}€$/u;
 const totalPattern = /^\d{1,3}(\.\d{3})*,\d{2}€$/;
 
-// Only real reservation text gets an email: at most 40 lines, every line and the total
-// in my format
+// The hidden reward (Explorer's bonus, the same text as in pack-store.ts): exactly this line
+const bonusLine = "1 × Explorer's bonus – If and when Cave Wear launches – −5,00€";
+
+// "1.234,50€" or "−5,00€" as whole cents: 123450 or -500. Cents, because adding decimal numbers
+// on a computer can come out a tiny bit wrong.
+function cents(price) {
+  const number = Number(price.replace(/[.€−]/g, "").replace(",", ""));
+  return price.startsWith("−") ? -number : number;
+}
+
+// Only real reservation text gets an email: at most 40 lines, every line and the total in my
+// format. For the bonus: at most one per Pack, never alone, and the total must be what the lines
+// add up to, so nobody can get a mail from my domain confirming a bigger discount.
 function looksLikeMyReservation(pack, total) {
   const lines = String(pack ?? "").split("\n");
-  return lines.length <= 40 && lines.every((line) => linePattern.test(line)) && totalPattern.test(String(total ?? ""));
+  const pieces = lines.filter((line) => line !== bonusLine);
+  const totalText = String(total ?? "");
+  if (lines.length > 40 || lines.length - pieces.length > 1 || pieces.length === 0) return false;
+  if (!pieces.every((line) => linePattern.test(line)) || !totalPattern.test(totalText)) return false;
+  const sum = lines.reduce((all, line) => all + cents(line.split(" – ")[2]), 0);
+  return sum === cents(totalText);
 }
 
 // "2026-10-28T20:15:00.000Z" → "28.10.2026 · 21:15" (German format, German time –

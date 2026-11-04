@@ -18,6 +18,11 @@ import {
   canReserve,
   addReservation,
   maxReservations,
+  explorerBonus,
+  bonusAmount,
+  bonusName,
+  bonusDetails,
+  bonusLine,
   type PackItem,
   type Reservation,
 } from "../scripts/pack-store";
@@ -66,6 +71,11 @@ function rowTotal(item: PackItem, product: PackProduct) {
   return (product.price + (supportOf(item)?.extra ?? 0)) * item.quantity;
 }
 
+// A price that may be negative (the bonus), with a real minus sign: "−5,00€"
+function formatSigned(price: number) {
+  return price < 0 ? `−${formatPrice(-price)}` : formatPrice(price);
+}
+
 // Props = the values a component gets from outside, like the attributes of an HTML tag
 type Props = {
   catalog: Record<string, PackProduct>; // product folder name → product
@@ -77,6 +87,7 @@ export default function PackDrawer({ catalog }: Props) {
   const open = useStore(isPackOpen);
   const reservedList = useStore(reservations);
   const roomForMore = useStore(canReserve);
+  const hasBonus = useStore(explorerBonus) === "in-pack";
 
   // Which step the drawer shows: the Pack itself, or the Reserve form (step 2).
   // useState = React's memory for it; setStep changes it and draws the drawer again.
@@ -126,15 +137,16 @@ export default function PackDrawer({ catalog }: Props) {
     total += rowTotal(item, catalog[item.id]);
     pieces += item.quantity;
   }
+  // The bonus comes off the total. Math.max = it can never go below 0.
+  if (hasBonus) total = Math.max(0, total - bonusAmount);
 
   // The Pack as text for the reservation – one line per row, e.g.
   // "2 × The Core Tee – M · Unisex · Olive – 69,80€" (Netlify shows it to me like that)
-  const packText = rows
-    .map((item) => {
-      const product = catalog[item.id];
-      return `${item.quantity} × ${product.name} – ${itemDetails(item, product)} – ${formatPrice(rowTotal(item, product))}`;
-    })
-    .join("\n");
+  const packLines = rows.map((item) => {
+    const product = catalog[item.id];
+    return `${item.quantity} × ${product.name} – ${itemDetails(item, product)} – ${formatPrice(rowTotal(item, product))}`;
+  });
+  const packText = [...packLines, ...(hasBonus ? [bonusLine] : [])].join("\n");
 
   // After a successful "Send reservation": keep a frozen copy with its time (the store
   // also empties the Pack), then show the Pack step with the new reservation in focus
@@ -148,6 +160,7 @@ export default function PackDrawer({ catalog }: Props) {
         price: rowTotal(item, product),
       };
     });
+    if (hasBonus) lines.push({ name: bonusName, details: bonusDetails, quantity: 1, price: -bonusAmount });
     addReservation({ sentAt, lines, total });
     setJustReserved(sentAt);
     focusNext.current = "reservation";
@@ -195,7 +208,7 @@ export default function PackDrawer({ catalog }: Props) {
             {/* One scroll area: the current Pack, then my reservations under it */}
             <div className="drawer-body">
               {rows.length === 0 ? (
-                <EmptyPack />
+                <EmptyPack hasBonus={hasBonus} />
               ) : (
                 <ul className="drawer-list" role="list">
                   {/* key = a name React uses to tell the rows apart when the list changes */}
@@ -212,6 +225,15 @@ export default function PackDrawer({ catalog }: Props) {
 
             {rows.length > 0 && (
               <div className="drawer-total">
+                {hasBonus && (
+                  <div className="drawer-bonus">
+                    <p className="drawer-bonus-line">
+                      <span>{bonusName}</span>
+                      <span>{formatSigned(-bonusAmount)}</span>
+                    </p>
+                    <p className="small">{bonusDetails}. One per pack.</p>
+                  </div>
+                )}
                 <p className="drawer-total-line">
                   <span>Estimated total</span>
                   <span>{formatPrice(total)}</span>
@@ -350,10 +372,11 @@ function PackRow({ item, product }: RowProps) {
 // The empty Pack – my quiet joke (decided 27 Oct), far away from prices and Reserve.
 // The button jumps straight to the first collection. closePack: already on /products,
 // the page would otherwise scroll behind the still-open drawer.
-function EmptyPack() {
+function EmptyPack({ hasBonus }: { hasBonus: boolean }) {
   return (
     <div className="drawer-empty">
       <p>Your pack is empty. Packing light is good – but not that light.</p>
+      {hasBonus && <p className="small">Your {bonusName} is saved here: 5€ off once you add a piece.</p>}
       <a href="/products#base-collection" className="button button-primary" onClick={closePack}>
         Discover the collection
       </a>
@@ -420,7 +443,7 @@ function Reservations({ list, justReserved, newestRef }: ReservationsProps) {
                         {line.quantity} × <ProductName name={line.name} />
                         <span className="drawer-reservation-details">{line.details}</span>
                       </span>
-                      <span>{formatPrice(line.price)}</span>
+                      <span>{formatSigned(line.price)}</span>
                     </li>
                   ))}
                 </ul>

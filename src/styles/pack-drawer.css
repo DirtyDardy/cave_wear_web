@@ -248,6 +248,19 @@ html:has(.drawer[open]) {
   }
 }
 
+/* Explorer's bonus: the reward from the Brand page, its own line above the total */
+.drawer-bonus {
+  margin-block-end: var(--space-3); /* 12px */
+}
+
+.drawer-bonus-line {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block-end: 0;
+  font-variant-numeric: tabular-nums;
+}
+
 .drawer-total-line {
   display: flex;
   justify-content: space-between;

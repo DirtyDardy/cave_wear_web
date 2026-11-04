@@ -1,0 +1,280 @@
+---
+// BRAND – STILL HERE, the bears today. Everything Cave Wear does here is planned, so the text says
+// so. bearbiology.org is
+// a normal link, never a partnership. Tablet and desktop: the olive band the style guide keeps for
+// this, with the photo in a column. Phones: no green, the photo is the background of the section.
+import { Image } from "astro:assets";
+import bear from "../assets/brand/brown-bear.webp";
+---
+
+<section id="conservation" class="band section brand-bears-section" aria-labelledby="bears-title">
+  <div class="container">
+    <div class="brand-bears">
+      <!-- The trail comes straight down from On Record. Only decoration, so screen readers skip it. -->
+      <div class="brand-bears-trail" aria-hidden="true"></div>
+
+      <!-- The bear looks to the right, so it stands left and looks at the text -->
+      <div class="brand-bears-media">
+        <Image
+          class="brand-bears-photo"
+          src={bear}
+          alt="A large brown bear walking through a bare forest, seen from the side."
+          widths={[480, 800, 1334]}
+          sizes="(width >= 64rem) 33vw, (width >= 48rem) 50vw, 67vh"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="brand-bears-text">
+        <h2 id="bears-title">Still Here</h2>
+        <p class="lead-small">The cave bear is extinct. Our bears aren't.</p>
+        <p>
+          Eight bear species live today. The IUCN Red List, the world's main list of threatened
+          species, counts six of them as vulnerable to extinction.{" "}
+          <!-- Only where the brown bear text isn't shown, which says the same -->
+          <span class="brand-bears-short">Where people take over more of their land, bears lose their habitat and their numbers fall.</span>
+        </p>
+
+        <!-- Desktop only: fills the empty space beside the photo, phones keep the shorter text -->
+        <div class="brand-bears-extra">
+          <h3>The European brown bear</h3>
+          <p>
+            We mostly talk about the polar bear, and its situation really is bad. But here, the
+            European brown bear gets a special place. It isn't one of those six, yet we took so much
+            of its habitat that it's gone from large parts of Europe. In 2006 a brown bear named Bruno
+            walked into Bavaria, the first wild bear in Germany in about 170 years. It was shot within
+            weeks.
+          </p>
+        </div>
+
+        <h3>What I plan to do</h3>
+        <p>
+          At the end of every year, I plan to donate a percentage of my profit to bear research and
+          conservation. How much is still open. Organisations like the International Association for Bear Research and Management
+          (<a href="https://www.bearbiology.org/">bearbiology.org</a>) show what that work looks like.
+        </p>
+        <p>
+          On my Supporter pieces, you will be able to choose what your piece supports, and bears are
+          one of the choices. Nothing is sold yet, so nothing has been donated yet.
+        </p>
+
+        <p class="lead-small brand-bears-end">That's my bear minimum.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Phones (my decision, 4 Nov): no green, the photo is the background of the whole section. Written
+     this way round on purpose: it only takes away what .band gives, without repeating its values. */
+  @media (width < 48rem) {
+    .brand-bears-section {
+      isolation: isolate; /* its own stack of layers, so the photo lies behind the text */
+      padding-block-start: 0;
+      background: none;
+      box-shadow: none;
+    }
+  }
+
+  /* Written mobile first. The base = phones: the text, with the photo behind it. */
+  .brand-bears {
+    position: relative;
+
+    @media (width >= 48rem) {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-12); /* 48px */
+    }
+
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* Phones: from screen edge to screen edge, behind everything, and exactly as high as this
+     section. So the photo stays in here, and can never reach into the section after it. */
+  .brand-bears-media {
+    position: absolute;
+    z-index: -1;
+    inset-block: 0 calc(-1 * var(--section-space));
+    inset-inline: calc(-1 * var(--gutter));
+    pointer-events: none;
+
+    @media (width >= 48rem) {
+      position: static;
+      z-index: auto;
+      pointer-events: auto;
+    }
+  }
+
+  /* Phones: one whole screen, staying in place (sticky) inside its box while the text passes over
+     it. Dimmed for the text, and its top and bottom melt into the page. Sticky works on iPhones,
+     where a fixed background picture doesn't. */
+  .brand-bears-photo {
+    position: sticky;
+    inset-block-start: 0;
+    display: block;
+    inline-size: 100%;
+    block-size: 100svh;
+    object-fit: cover;
+    object-position: 62% 50%; /* the bear's face stays on the screen */
+    filter: brightness(0.45);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+
+    @media (width >= 48rem) {
+      position: static;
+      block-size: auto;
+      filter: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+
+  .brand-bears-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4); /* 16px */
+    padding-block-start: 55svh; /* phones: the first screen belongs to the photo */
+
+    @media (width >= 48rem) {
+      padding-block-start: 0;
+    }
+
+    @media (width >= 64rem) {
+      grid-column: 2 / -1;
+    }
+
+    & :is(h2, h3, p) {
+      margin-block-end: 0;
+    }
+
+    & h3 {
+      margin-block-start: var(--space-8); /* 32px + the 16px gap */
+    }
+
+    /* Phones: heading, opening sentence and my last line on the middle, like the other sections.
+       The long text and "What I plan to do" stay left. */
+    & h2 {
+      text-align: center;
+
+      @media (width >= 48rem) {
+        text-align: start;
+      }
+    }
+
+    & .lead-small {
+      margin-inline: auto;
+      text-align: center;
+      text-wrap: balance;
+
+      @media (width >= 48rem) {
+        margin-inline: 0;
+        text-align: start;
+        text-wrap: wrap;
+      }
+    }
+
+    & h2 + .lead-small {
+      margin-block-end: var(--space-4); /* phones: 16px + the 16px gap, like the other sections */
+
+      @media (width >= 48rem) {
+        margin-block-end: 0;
+      }
+    }
+
+    /* On olive the colour alone can't say "link" */
+    & a {
+      text-decoration: underline;
+    }
+  }
+
+  @media (width >= 90rem) {
+    .brand-bears-short {
+      display: none;
+    }
+  }
+
+  .brand-bears-extra {
+    display: none;
+    margin-block-start: var(--space-8); /* 32px + the 16px gap */
+
+    /* Only from 1440px: the photo is tall enough there, so this
+       fills the space beside it and the section doesn't grow */
+    @media (width >= 90rem) {
+      display: grid;
+      gap: var(--space-4); /* 16px */
+    }
+
+    & h3 {
+      margin-block-start: 0;
+    }
+  }
+
+  /* Laptops: the photo isn't at its full height yet, so the headings sit 16px closer to the
+     text above them, and the section still doesn't grow. */
+  @media (90rem <= width < 97rem) {
+    .brand-bears-extra,
+    .brand-bears-text > h3 {
+      margin-block-start: var(--space-4); /* 16px + the 16px gap */
+    }
+  }
+
+  /* My last line, on the same bottom edge as the photo */
+  .brand-bears-text .brand-bears-end {
+    margin-block-start: auto;
+    padding-block-start: var(--space-8); /* 32px */
+
+    @media (width >= 90rem) {
+      padding-block-start: var(--space-6); /* 24px, so it ends level with the photo */
+    }
+  }
+
+  /* The trail: straight down between the photo and the text. On phones it isn't there. */
+  .brand-bears-trail {
+    --trail-at: 50%;
+
+    display: none;
+
+    @media (width >= 48rem) {
+      display: block;
+      position: absolute;
+      inset-block: calc(-1 * var(--section-space));
+      inset-inline-start: var(--trail-at);
+      inline-size: 1px;
+      color: var(--color-line);
+      background-image: var(--trail-down);
+      background-repeat: no-repeat;
+    }
+
+    @media (width >= 64rem) {
+      --trail-at: calc((100% - 2 * var(--space-12)) / 3 + var(--space-12) / 2);
+    }
+  }
+
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose, see BrandTrail.astro.
+         The range differs from the other sections: the page stops here, so the green section's
+         bottom never reaches the middle of the screen. The line starts where On Record's line
+         ends (the green's top at 75% of the screen) and finishes when the green's bottom is at
+         85%. That is about as far as you scroll, so it draws smoothly and always arrives. */
+      .brand-bears-trail {
+        animation-name: brand-bears-trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 25vh cover calc(100% - 85vh);
+      }
+    }
+  }
+
+  @keyframes brand-bears-trail-draw {
+    from {
+      background-size: 1px 0;
+    }
+    to {
+      background-size: 1px 100%;
+    }
+  }
+</style>

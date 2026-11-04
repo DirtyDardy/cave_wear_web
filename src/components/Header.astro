@@ -52,7 +52,7 @@ function getCurrent(href: string) {
 
 // Pages that start with a full-width photo: the header starts transparent
 // (the photo shows through) and turns solid on scroll. Add new pages here.
-const photoHeaderPages = ["/", "/products"];
+const photoHeaderPages = ["/", "/products", "/brand"];
 const isTransparent = photoHeaderPages.includes(currentPath);
 
 // Product pages (/products/core-tee …): the header never hides, so Pack stays in reach
@@ -492,6 +492,11 @@ const isPinned = currentPath.startsWith("/products/");
     :global(html[data-js]) {
       & .header-inner {
         flex-wrap: nowrap;
+
+        /* Very narrow screens (below 360px): logo, Pack and menu only fit with a smaller gap */
+        @media (width < 22.5rem) {
+          column-gap: var(--space-4);
+        }
       }
 
       & .nav {

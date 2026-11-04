@@ -1,0 +1,210 @@
+---
+// BRAND – TOP (2 Nov). One column: the view out of a cave (Yugen Pictures, Pexels, see the
+// Impressum), the heading low in the picture, the trail comes down from the photo into my
+// first paragraph, which writes itself once.
+import { Image } from "astro:assets";
+import heroImage from "../assets/brand/brand-hero.jpg";
+
+const first =
+  "I design clothing for people who move between worlds: a trail in the morning, a city street by evening.";
+const second =
+  "Garments that feel right in the wilderness and look right at a bar or a family dinner.";
+
+// The sentences as lists of words. Each word gets its own <span> with its place in the
+// paragraph (--i): the CSS uses that number to let the words appear one after the other.
+const firstWords = first.split(" ");
+const secondWords = second.split(" ");
+---
+
+<!-- top-fade: soft dark fade at the top for the header (global.css) -->
+<section class="brand-top top-fade">
+  <Image
+    src={heroImage}
+    alt="View out of a dark cave: a person stands in shallow water, looking out at trees in the mist"
+    class="brand-top-image"
+    widths={[640, 1024, 1600, 2000]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="container brand-top-inner">
+    <p class="label brand-top-label">About</p>
+    <h1>CAVE WEAR</h1>
+  </div>
+</section>
+
+<div class="container section brand-intro-section">
+  <p class="lead-small brand-intro">
+    <!-- Screen readers get the sentences in one piece, not word by word -->
+    <span class="visually-hidden">{first} {second}</span>
+    <span aria-hidden="true">
+      <span class="brand-intro-first">
+        {firstWords.map((word, i) => <Fragment><span class="word" style={`--i: ${i}`}>{word}</span>{" "}{word === "morning," && <br class="brand-intro-break" />}</Fragment>)}
+      </span>
+      <span class="brand-intro-second">
+        {secondWords.map((word, i) => <Fragment><span class="word" style={`--i: ${firstWords.length + i}`}>{word}</span>{" "}</Fragment>)}
+      </span>
+    </span>
+  </p>
+</div>
+
+<script src="../scripts/brand-intro.js"></script>
+
+<style>
+  /* Written mobile first. Same photo header as Products: height from
+     --photo-header-height (global.css), full width, under the transparent header. */
+  .brand-top {
+    position: relative;
+    block-size: var(--photo-header-height);
+    margin-block-start: calc(-1 * var(--header-height) - 1px); /* under the transparent header */
+    overflow: hidden;
+  }
+
+  /* Vertical position (50% = centre, 100% = bottom edge). Most screens show nearly the
+     whole photo. Wide screens only show a strip of it (the height stops at 720px), so
+     there 40% keeps the person and the trees in view, with the heading on the dark ground. */
+  .brand-top-image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: center 80%;
+
+    @media (width >= 100rem) {
+      object-position: center 40%;
+    }
+  }
+
+  /* Soft dark fade over the bottom half: the heading lies on the bright reflection in the
+     water, and without it "About" falls below the contrast rule (4.5:1). */
+  .brand-top::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background-image: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-bg) 70%, transparent),
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+
+  /* Centred near the bottom, on the water (dark = readable).
+     z-index 2 = above both fades. */
+  .brand-top-inner {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-block-end: var(--space-16); /* 64px: same height as "Products", so a page change won't move it */
+    text-align: center;
+  }
+
+  /* One step bigger than a normal label and right on the heading. On a photo the
+     quiet colours would get lost, so it's Egret. */
+  .brand-top-label {
+    margin-block-end: 0;
+    color: var(--color-text);
+    font-size: var(--text-body); /* 16px */
+    line-height: var(--leading-body);
+  }
+
+  /* --- My first paragraph: the trail leads into it ---------------------------- */
+
+  .brand-intro-section {
+    position: relative;
+    padding-block-start: calc(var(--section-space) + var(--space-6)); /* the trail + 24px */
+  }
+
+  /* The trail: the line of the site (--trail-down in global.css), Flint, 1px */
+  .brand-intro-section::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 50%;
+    inline-size: 1px;
+    block-size: var(--section-space);
+    background-image: var(--trail-down);
+    background-size: 1px 100%;
+    background-repeat: no-repeat;
+    color: var(--color-input-border);
+  }
+
+  /* Two sentences, two colours, in the page's opening size (.lead-small, decided 2 Nov:
+     48, 40 and 32px felt off). It stands out through the trail, the colours and the
+     animation instead. */
+  .brand-intro {
+    max-inline-size: var(--measure-lead);
+    margin-inline: auto;
+    color: var(--color-text);
+    text-align: center;
+  }
+
+  /* Each sentence starts on its own line (decided 2 Nov). "balance" evens out the lines,
+     so no single word is left alone. */
+  .brand-intro-first,
+  .brand-intro-second {
+    display: block;
+    text-wrap: balance;
+  }
+
+  .brand-intro-second {
+    color: var(--color-text-secondary);
+  }
+
+  /* Phones: "a trail in the morning," and "a city street by evening." each get their own line,
+     so "a" isn't left alone at the end of a line. From tablet up the line is wide enough. */
+  .brand-intro-break {
+    @media (width >= 48rem) {
+      display: none;
+    }
+  }
+
+  /* It writes itself, once (decided 2 Nov, from "plays once" and "on scroll"): the trail
+     comes down, then the words appear one after the other – about 2 seconds in all, so no
+     pause button is needed. It waits for brand-intro.js to set data-write="go".
+     data-js is set in BaseLayout, so without JavaScript nothing is hidden, and with
+     reduced motion the text simply stands there. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html[data-js]) .brand-intro-section:not([data-write="go"]) .word {
+      opacity: 0;
+    }
+
+    :global(html[data-js]) .brand-intro-section:not([data-write="go"])::before {
+      background-size: 1px 0;
+    }
+
+    .brand-intro-section[data-write="go"]::before {
+      animation: trail-in 0.5s var(--motion-ease) both;
+    }
+
+    .brand-intro-section[data-write="go"] .word {
+      animation: word-in 0.4s var(--motion-ease) both;
+      animation-delay: calc(0.4s + var(--i) * 40ms); /* each word 40ms after the one before */
+    }
+  }
+
+  /* Through its size, not clip-path: see BrandTrail.astro */
+  @keyframes trail-in {
+    from {
+      background-size: 1px 0;
+    }
+    to {
+      background-size: 1px 100%;
+    }
+  }
+
+  @keyframes word-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>

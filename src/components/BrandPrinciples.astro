@@ -1,0 +1,267 @@
+---
+// BRAND – THE THREE PRINCIPLES (from my sketch, 2 Nov). A heading and three numbered rows,
+// no boxes: the type does the work. The numbers count what the heading promises, they aren't
+// section numbers. The small words keep the link to Home (Rugged → Built to Last, and so on).
+// The trail comes from the photo's right side and runs around all of it. On tablets it leaves
+// through the middle of the page, on desktop the next section carries it on straight across.
+
+const principles = [
+  {
+    word: "Rugged",
+    title: "Built to Last",
+    text: "A focus on durability and garments intended to be worn for years.",
+  },
+  {
+    word: "Functional",
+    title: "Made to Adapt",
+    text: "Clothing designed to move between environments without compromising on function or style.",
+  },
+  {
+    word: "Refined",
+    title: "Quietly Confident",
+    text: "No unnecessary noise. No oversized logos. Just considered design and details that matter.",
+  },
+];
+---
+
+<div class="brand-principles">
+  <div class="brand-principles-trail" aria-hidden="true"></div>
+
+  <p class="lead brand-principles-heading">Built around three principles</p>
+
+  <!-- An ordered list already tells screen readers the number, so they skip the big one -->
+  <ol class="brand-principles-list" role="list">
+    {
+      principles.map(({ word, title, text }, i) => (
+        <li class="brand-principle" style={`--i: ${i}`}>
+          <span class="brand-principle-number" aria-hidden="true">{i + 1}</span>
+          <div>
+            <p class="label brand-principle-word">{word}</p>
+            <h3 class="lead brand-principle-title">{title}</h3>
+          </div>
+          <p class="brand-principle-text">{text}</p>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<script src="../scripts/brand-principles.js"></script>
+
+<style>
+  /* Written mobile first. The base = phones: as wide as the page. */
+  .brand-principles {
+    --principles-width: 30.75rem; /* 492px: the heading on one line, and the first text line ends on "worn" */
+
+    position: relative;
+    margin-block-start: var(--space-6); /* phones: 24px under the line, which BrandWhy brings along with the coordinates */
+
+    @media (width >= 48rem) {
+      margin-block-start: calc(2 * var(--section-space)); /* the same gap as from my first paragraph to Why We Exist */
+    }
+  }
+
+  .brand-principles-heading,
+  .brand-principles-list {
+    max-inline-size: var(--principles-width);
+    margin-inline: auto;
+  }
+
+  .brand-principles-heading {
+    inline-size: fit-content; /* only as wide as its words, so they sit exactly in the middle */
+    margin-block-end: var(--space-12); /* 48px */
+    color: var(--color-text);
+
+    @media (width >= 48rem) {
+      margin-block-end: var(--space-16); /* 64px */
+    }
+  }
+
+  /* Pulled in by the same distance on both sides: the heading's first letter is as far from the
+     rows' left edge as the S is from their right edge (decided 2 Nov). The gap between the
+     rows is fixed, so a row with two lines of text keeps the same distance to the next one. */
+  .brand-principles-list {
+    display: grid;
+    gap: var(--space-12); /* 48px */
+    margin-block-end: 0; /* a list's normal margin left a 16px hole in the trail at the end of the section */
+    padding: 0 var(--space-4); /* 16px */
+    list-style: none;
+
+    @media (width >= 48rem) {
+      padding-inline: var(--space-12); /* 48px */
+    }
+  }
+
+  /* The number in a fixed column: 2 and 3 are wider than 1, and this way the words of all
+     three rows start on the same line. */
+  .brand-principle {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: var(--space-2); /* 8px */
+  }
+
+  /* From the top of the small word to the bottom of the name. The figure doesn't fill its
+     letter box, so line height 0.83 lands its foot on the bottom of this box. */
+  .brand-principle-number {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 3.75rem; /* 60px */
+    font-weight: 700;
+    line-height: 0.83;
+
+    @media (width >= 48rem) {
+      font-size: 4.25rem; /* 68px */
+    }
+  }
+
+  .brand-principle-word {
+    margin: 0;
+    color: var(--color-text-quiet);
+    font-size: var(--text-body); /* 16px, one step bigger than a normal label */
+    line-height: var(--leading-body);
+  }
+
+  .brand-principle-title {
+    margin-block-end: 0;
+    color: var(--color-text);
+  }
+
+  /* Under the number and the name, starting on the number's left edge */
+  .brand-principle-text {
+    grid-column: 1 / -1;
+    margin-block-start: var(--space-2); /* 8px */
+    color: var(--color-text-secondary);
+
+    /* "worn" only just fits. 4px of spare room, so another browser's rounding can't push it
+       onto the next line. */
+    @media (width >= 48rem) {
+      margin-inline-end: calc(-1 * var(--space-1));
+    }
+  }
+
+  /* Each row fades in once, in its own time, and then stays, also when you scroll back (like
+     my first paragraph). brand-principles.js starts it. Without that script (no JavaScript, or
+     people who asked for less motion) data-reveal is never set, so the rows simply stand there. */
+  .brand-principles[data-reveal] .brand-principle {
+    opacity: 0;
+    translate: 0 var(--space-4);
+    transition:
+      opacity 0.9s ease-out,
+      translate 0.9s ease-out;
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .brand-principles[data-reveal] .brand-principle[data-in] {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  /* The trail. One box with five lines as its backgrounds, like the turn in BrandWhy: down
+     from the photo's side, across to the left, down past the rows, across to the middle of
+     the page, and down out of the section. On desktop the last two have no length: the line
+     runs on down to the end of the section, and the next section takes it straight across,
+     without a step in between (decided 2 Nov). On phones there's nowhere to turn, so it isn't there. */
+  .brand-principles-trail {
+    --trail-drop: calc(2 * var(--section-space) - var(--space-12)); /* from the photo's row down to the first turn, 48px above the heading */
+    --trail-tail: calc(var(--section-space) - var(--space-12)); /* from the last turn to the end of the section */
+    --trail-to-middle: calc(var(--principles-width) / 2 + var(--space-16)); /* 64px beside the rows, then half of them */
+    --trail-out: var(--trail-to-middle); /* how far the last turn runs */
+
+    display: none;
+
+    @media (width >= 64rem) {
+      --trail-tail: 0px;
+      --trail-out: 0px;
+    }
+
+    @media (width >= 48rem) {
+      display: block;
+      position: absolute;
+      inset-block: calc(-2 * var(--section-space)) calc(-1 * var(--section-space));
+      inset-inline-start: calc(50% - var(--trail-to-middle));
+      inset-inline-end: calc(var(--brand-why-shift) - var(--space-6));
+      color: var(--color-input-border); /* Flint */
+      background-image: var(--trail-down), var(--trail-across), var(--trail-down), var(--trail-across), var(--trail-down);
+      background-position:
+        right 0 top 0,
+        right 0 top var(--trail-drop),
+        left 0 top var(--trail-drop),
+        left 0 bottom var(--trail-tail),
+        left var(--trail-to-middle) bottom 0;
+      background-size:
+        1px var(--trail-drop),
+        100% 1px,
+        1px calc(100% - var(--trail-drop) - var(--trail-tail)),
+        var(--trail-out) 1px,
+        1px var(--trail-tail);
+      background-repeat: no-repeat;
+    }
+  }
+
+  /* It draws itself while you scroll, one line after the other. The box starts higher above
+     the block than it ends below it, so the block is in the middle of the screen a little
+     after 50%, at about 55%: by then the line has passed all three rows. */
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose, see BrandTrail.astro */
+      .brand-principles-trail {
+        animation-name: brand-principles-trail-draw;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  @keyframes brand-principles-trail-draw {
+    from {
+      background-size:
+        1px 0,
+        0 1px,
+        1px 0,
+        0 1px,
+        1px 0;
+    }
+    10% {
+      background-size:
+        1px var(--trail-drop),
+        0 1px,
+        1px 0,
+        0 1px,
+        1px 0;
+    }
+    27% {
+      background-size:
+        1px var(--trail-drop),
+        100% 1px,
+        1px 0,
+        0 1px,
+        1px 0;
+    }
+    55% {
+      background-size:
+        1px var(--trail-drop),
+        100% 1px,
+        1px calc(100% - var(--trail-drop) - var(--trail-tail)),
+        0 1px,
+        1px 0;
+    }
+    78% {
+      background-size:
+        1px var(--trail-drop),
+        100% 1px,
+        1px calc(100% - var(--trail-drop) - var(--trail-tail)),
+        var(--trail-out) 1px,
+        1px 0;
+    }
+    to {
+      background-size:
+        1px var(--trail-drop),
+        100% 1px,
+        1px calc(100% - var(--trail-drop) - var(--trail-tail)),
+        var(--trail-out) 1px,
+        1px var(--trail-tail);
+    }
+  }
+</style>

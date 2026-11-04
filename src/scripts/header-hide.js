@@ -27,7 +27,10 @@ function update() {
   const y = scrollPosition();
   const distance = y - lastY;
 
-  if (y <= hideStart) {
+  if (header.hasAttribute("data-frozen")) {
+    // A section asked for no change right now (My Symbol on Brand, brand-symbol.js)
+    lastY = y;
+  } else if (y <= hideStart) {
     // Near the top of the page: always visible
     header.removeAttribute("data-hidden");
     lastY = y;

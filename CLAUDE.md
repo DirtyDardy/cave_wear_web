@@ -1,6 +1,6 @@
 # CLAUDE.md – Cave Wear
 
-Project memory for Claude. Read fully at the start of every session. Updated 31 Oct 2026.
+Project memory for Claude. Read fully at the start of every session. Updated 4 Nov 2026.
 If this file and the code disagree, say so and ask – don't guess which one is right.
 
 ## 1. Project
@@ -182,6 +182,71 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
   discuss) – use them when building the page. Not part of the site build.
+  **Built 2–4 Nov on `feature/brand`, desktop and phones.** Order: `BrandTop` · `BrandTrail` ·
+  Why Cave Wear Exists (`BrandWhy`, with `BrandPrinciples`) · Made to Stay (`BrandStay`) · My Symbol
+  (`BrandSymbol`) · On Record (`BrandRecords`) · Still Here (`BrandBears`, the page's end) · hidden
+  `#my-places`. **Voice: "I", not "we"** (Dardan, 4 Nov) – "we" stays only where it means all people
+  ("Our bears aren't", "we took so much of its habitat"); FAQ, Contact, Pack and Privacy keep "we".
+  **Cut:** Team (one sentence in Why Cave Wear Exists instead), Just the Beginning, Every Mark Has a
+  Reason (text in `drafts/brand-page.md`). Details elsewhere in this file stay as ideas only.
+  - **Made to Stay:** the wash strip settles where "Dyed for wash 10" lives; a deliberate exception to
+    Irr Olive's "large surfaces only" (colours in the strip only).
+  - **Three principles:** each row fades in once over 0.9s and stays (`brand-principles.js`).
+  - **My Symbol:** title and logo stick, texts move at half speed, parts light up one by one
+    (`brand-symbol.js`). Two soft snap stops: first logo + its text, then the cave bear text (from
+    48rem). The header keeps the state it came in with while the logo stays (`data-frozen`,
+    `header-hide.js`). At the closing sentence the crop marks go and the logo grows 5% (`data-done`).
+    **Collapse (4 Nov):** once the section is above the screen and scrolling stopped, the story closes
+    and the page corrects its position, so the way back up is short; "Read the logo story again"
+    opens it. Nothing saved. Must be tested on a real iPhone – if it fails there, off on phones.
+    A bear is an omnivore, the cave bear mostly ate plants: never "the cave bear is an omnivore".
+  - **On Record:** GBIF asked **at build time** (`src/data/cave-bear-records.ts`), so the visitor's
+    browser never contacts GBIF and the Privacy Policy needs nothing; last known numbers if GBIF is
+    down, "as of" date shown. Presentation point against the live weather.
+  - **Still Here:** Irr Olive band, Dardan's brown bear photo (Florian Schindler, Unsplash, credited).
+    European brown bear text only from 1440px (fills the space beside the photo, section doesn't
+    grow). Donation wording: a percentage of profit at the end of every year, amount open (planned).
+    Ends with "That's my bear minimum."
+  - **`#my-places` ("You looked closer.", opens after all four coordinates):** Europe map, one glass
+    card with one text open (hover, keyboard, tap, `my-places.js`), the open place's cross double size
+    (`public/map/found-<id>-big.svg`), texts in `src/data/places.js`.
+  - **Explorer's bonus (4 Nov):** the reward button adds 5€ off, "if and when Cave Wear launches": a
+    line in the Pack, not a product. Once per browser (`cave-wear-bonus`, `pack-store.ts`), one per Pack.
+    `submission-created.mjs` refuses more than one, a bonus alone, or a total that doesn't add up.
+    A game, not a lock (dev tools can fake it, no money moves) – say so in the presentation.
+    The real email with the bonus is only testable after a push.
+  - **Why Cave Wear Exists on desktop (4 Nov, his sketch):** two equal halves, the photo 24px from the
+    trail on top, left and right; it takes the text's height only from 1400px, below that 4:5. The
+    sentence about the one-person team sits under the first paragraph on every screen.
+  - **On Record, every screen (4 Nov):** the number counts up 1,000 and the bars grow, once, on first
+    sight (`brand-records.js`), never with reduced motion. Tabular digits so the number can't shake.
+    Bars Irr Olive and Mossy Elm in turn: a second deliberate exception to "large surfaces only".
+  - **Phones (4 Nov, desktop unchanged, mobile first, except two `width < 48rem` spots on purpose):**
+    - **One line between sections:** every gap is the same as "…family dinner." to "Why Cave Wear
+      Exists" (128px, `<BrandTrail phoneOnly />`). Exceptions: the line from the top photo stays, and
+      the coordinates stand exactly in the middle between Why and the principles, a short line above
+      and below (172px in all).
+    - **Centring:** headings and opening sentences are centred, long paragraphs stay left. Ask before
+      centring body text.
+    - **Photo backgrounds:** Why and Still Here use the photo as a full-screen background that stays
+      in place (absolute box + sticky image, works on iPhones where a fixed background doesn't), and
+      Still Here has no green on phones. Why's photo fades out over the principles
+      (`brand-why-fade.js`). Readability measured over the photos: Wild Honey 4.64:1 at the brightest
+      5% (brightness 0.6), so Why's coordinates are Weathered Bone there. Desktop stays framed on
+      purpose: on wide screens a background would show the limits of the picture's resolution.
+    - **Why:** the long story folds away behind "Read the whole story" / "The whole story".
+    - **Made to Stay:** heading, strongest sentence, the goal, then the heading "Status" (phones only)
+      over Construction, Colour + wash strip (edge to edge) and Materials, then "I don't make
+      sustainability claims yet." The text was also shortened a little on every screen.
+    - **My Symbol:** title and logo still stick, but the texts scroll at normal speed (half speed by
+      script lags behind a finger and would tremble on iPhones). Snap never runs on phones.
+    - **`#my-places`:** the map is its own picture between the text and the card, with a fixed shape,
+      so opening a row can't rescale it, and zoomed so all four crosses show. Chevrons on closed rows
+      (touch has no hover), a smaller card so map + card fit an iPhone 16 screen. Its line above only
+      appears once the section is open.
+  - **Checked 4 Nov (finished site, Chrome without a window):** reduced motion (nothing moves, the
+    finished number and full bars stand there), keyboard (a focus ring on every stop, rows open on
+    focus, fold and "Read the logo story again" work), 200% zoom and 320px (no sideways scroll).
 - **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
   header (a tool page, not a showcase). Top to bottom: Regensburg coordinates (where the Regen
   meets the Danube, see "Hidden coordinates" in 7) · H1 "Contact" · one line + email + "Write to us ↓" ·
@@ -263,10 +328,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Follow the journey** – timeline of real milestones only (small data file) + social links.
   Main place Brand page, teaser on Home, one line near Reserve. Links only, no embedded feeds.
 - **Hidden coordinates** (Dardan's idea) – built 2 Nov. One per page, a real button that looks
-  like a quiet label: Home = Bears' Cave, bottom left in Field conditions · Products = Brente
-  Holme inside Favorites (his favorite island, where he first had the idea for the company) ·
-  Brand = Gjilan, his birth city (just above the footer for now; later under the first team
-  photo, or next to his About Us text if the Team section is cut) · Contact = Regensburg.
+  like a quiet label: Home = Bears' Cave, bottom left in Field conditions · Products = Gjilan,
+  his birth city, inside Favorites · Brand = Brente Holme, after the last paragraph of Why We
+  Exist (where he first had the idea for the company; swapped 2 Nov, the text doesn't name the
+  island, the numbers do) · Contact = Regensburg.
   Grey, hover Weathered Bone, once found it stays Wild Honey and its cross lights up on the Home
   map (yellow pictures `public/map/found-<id>.svg` over the map; two lie behind the Today's pick
   glass and look faint, Dardan's call). Fourth find: a glass bar with a link, and the section
@@ -376,7 +441,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Brand submenu** (only submenu, chevron, disclosure pattern with `aria-expanded`, not
   `role="menu"`; hover opens on hover devices; Escape/click outside closes) + **jump links**
   (`/brand#…`, smooth scroll, `scroll-margin-top`, JS for cross-page jumps) – **postponed until
-  the pages have content**. Placeholder items: Brand overview · The Idea · The Cave Bear ·
+  the pages have content**. **Dropped 4 Nov: no submenu**, the site is small and Brand is one story;
+  the reasons are in the memory "Presentation: why no submenu". Placeholder items: Brand overview · The Idea · The Cave Bear ·
   Conservation · The Journey (one list in the code).
 - **Footer** – built: Obsidian + hairline. Small logo · tagline · journey line · Instagram,
   Threads, YouTube · newsletter. Bottom: © year Cave Wear · A concept brand by Dardan Ademi ·
@@ -706,6 +772,9 @@ Six products: **T-shirt · Hoodie · Half-zip (male + female version, same produ
 Every size, space and line height is a multiple of 4px, only from `--space-*`: 1=4 · 2=8 · 3=12 ·
 4=16 · 6=24 · 8=32 · 12=48 · 16=64 · 24=96px. Measure from the box. Exceptions: 1px lines,
 `clamp()` font sizes, spacing that results inside a component. Break the grid only deliberately.
+**Side margin (Dardan, 4 Nov, after comparing with Apple's phone site):** `--gutter` is 24px on phones
+on the whole site (was 16px), 16px below 360px, unchanged from 600px up. The footer's bottom row
+keeps 16px so its links stay on one row.
 
 ### Corners
 Default **sharp (0)**. Rounding only where Dardan decides. Scale only: `--radius-sm` 4 (inputs,
@@ -756,6 +825,14 @@ then Dardan decides.
   Linear and Vercel):** H2/H3 Geist **450** (was ExtraBold 800), tracking H2 −0.05em · H3 −0.03em,
   H2 line height = font size; Lead 450, −0.03em (was Light 300); body −0.01em; labels 0.08em
   (was 0.14em); nav normal case. Light headings + tight spacing = the premium look. Presentation point.
+
+### The trail line (Dardan, 2 Nov)
+- **Every dotted line looks like the one on Contact:** `--trail-down` / `--trail-across` in
+  `global.css` (long dash, short dash), Flint, 1px.
+- **Every diagonal in the trail leans 15° from vertical**, like the cut in the logo (measured
+  in `bear-light.svg`: 15.1°).
+- On the Brand page it's a visual path through the brand, never a rule for placement: it may
+  change sides, and it never runs through text.
 
 ### Logo & icons
 - `src/assets/logo-horizontal.svg` (`currentColor`, inlined in header/footer) and
@@ -813,6 +890,12 @@ then Dardan decides.
   (a chat message is enough) – right to one's own image.
 
 ## 14. Still open (ask, don't assume)
+
+- **⚠ Brand page: real iPhone test (his girlfriend's iPhone, not done yet).** Built site over Wi-Fi
+  (`astro preview --host`). Check: the photos stay in place, the fade, the fold, My Symbol sticky +
+  collapse + "Read the logo story again" (if the collapse fails: off on phones), count-up and bars,
+  wash strip without sideways scroll, the hidden section's tap and fit (the map's top with Safari's
+  bars open). The real email with the Explorer's bonus can only be tested after a push.
 
 - **🔴 LINRO MUST-HAVES – HIGH PRIORITY (Dardan, 27 Oct): never cut these. Other things get cut
   first.** From Linro's development plan (`C:\Users\Dardan\Desktop\cave-wear-ai\

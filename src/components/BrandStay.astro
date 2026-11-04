@@ -1,0 +1,485 @@
+---
+// BRAND – MADE TO STAY (from my sketch, 3 Nov). My text word for word, no photos. The left side:
+// heading, my last sentence, Construction, Materials. The right side: my first sentence, the
+// intro, Colour. One line straight down between the two, so it never crosses text.
+// The code keeps the order of my desktop text. Phones open with "The most useful thing…" and close
+// with both sentences about claims (order and a hidden copy of one sentence, see the CSS).
+
+// The wash strip (my rules, 3 Nov): 14 blocks, each a mix of two colours. A number says how far
+// that block is on its way to the next colour, in percent. First a clear fade from the first
+// day to the target (block 6, where the next list starts at 0), then only a little brighter.
+const toTarget = [0, 20, 40, 60, 80];
+const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
+---
+
+<section id="made-to-stay" class="container section" aria-labelledby="stay-title">
+  <div class="brand-stay">
+    <!-- The trail comes in from the line beside my three principles. Only decoration, so
+         screen readers skip it. -->
+    <div class="brand-stay-trail" aria-hidden="true"></div>
+
+    <h2 id="stay-title">Made to Stay</h2>
+
+    <div class="brand-stay-intro">
+      <p class="lead-small brand-stay-opening">I don't make sustainability claims yet.</p>
+      <!-- Phones: one more point with a heading, under the opening below. Tablet and desktop: no
+           heading, and this box doesn't count for the layout. -->
+      <div class="brand-stay-detail brand-stay-status">
+        <h3>Status</h3>
+        <p>
+          The final materials and production aren't chosen yet. What I can share is how I plan to
+          think about it.
+        </p>
+      </div>
+      <!-- Phones: this comes first, and its first sentence is the section's opening sentence -->
+      <p class="brand-stay-goal">
+        <span class="brand-stay-goal-first">The most useful thing a garment can do is stay in use.</span>{" "}
+        So the goal is simple: essentials made for years, not seasons. Buy once, keep it. You only
+        need one or two pieces, and the collection grows one considered piece at a time.
+      </p>
+      <p class="brand-stay-lead-in">That idea shapes the details.</p>
+    </div>
+
+    <div class="brand-stay-detail brand-stay-construction">
+      <h3>Construction</h3>
+      <p>
+        Flatlock seams are planned on the T-shirt's shoulders, armholes and sides. The idea comes
+        from military base layers, and the shoulders are where backpack straps sit.
+      </p>
+    </div>
+
+    <div class="brand-stay-detail brand-stay-colour">
+      <h3>Colour</h3>
+      <p class="lead-small">I plan to dye a little darker than the target colour.</p>
+      <p>
+        From my experience in print and production, colour fades with wear and washing. It should
+        reach the target around wash 8 to 12, then stay right for a long time. That's not a measured
+        result. The first day looks a little less perfect, so the piece can look right for longer.
+      </p>
+    </div>
+
+    <!-- The text above already says all of this, so screen readers skip the strip -->
+    <div class="brand-stay-strip" aria-hidden="true">
+      <svg class="brand-stay-arrow" viewBox="0 0 12 16">
+        <path d="M6 0v15M1 10l5 5 5-5" fill="none" stroke="currentColor"></path>
+      </svg>
+      {toTarget.map((mix) => <span class="brand-stay-block" style={`--to: ${mix}%`} />)}
+      {
+        toLater.map((mix) => (
+          <span class="brand-stay-block brand-stay-block-later" style={`--to: ${mix}%`} />
+        ))
+      }
+      <span class="brand-stay-tag">First day</span>
+      <span class="brand-stay-tag brand-stay-tag-target">Target, from wash&nbsp;8&nbsp;to&nbsp;12</span>
+      <span class="brand-stay-tag brand-stay-tag-later">Later</span>
+    </div>
+
+    <div class="brand-stay-detail brand-stay-materials">
+      <h3>Materials</h3>
+      <p>
+        I'm exploring materials that balance comfort, durability, appearance and environmental
+        impact. Wood-derived fibers are among the ideas. For the Pass Gaiter's toggle, recycled
+        plastic is planned.
+      </p>
+    </div>
+
+    <!-- Phones: my two sentences about claims together, closing the section. From tablet up the
+         first one stands at the top instead, beside this one. Hidden with display: none, so
+         screen readers only hear it once. -->
+    <p class="lead-small brand-stay-end">
+      <span class="brand-stay-end-first">I don't make sustainability<br /> claims yet.</span>
+      <span>Specific claims will only follow once </span>
+      <span>the materials, the production </span>
+      <span>and the evidence are clear.</span>
+    </p>
+  </div>
+</section>
+
+<style>
+  /* Written mobile first. The base = phones: one column, in the order of my text. */
+  .brand-stay {
+    --stay-gap: var(--space-12); /* 48px */
+
+    position: relative;
+    display: grid;
+
+    /* Tablets: two halves. Desktop: thirds like Why We Exist, one on the left, two on the right. */
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--stay-gap);
+    }
+
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .brand-stay h2 {
+    margin-block-end: var(--space-4); /* 16px */
+    text-align: center; /* phones: heading, opening and closing sentence on the middle, like Why Cave Wear Exists */
+
+    @media (width >= 48rem) {
+      grid-column: 1;
+      margin-block-end: var(--space-12); /* 48px */
+      text-align: start;
+    }
+  }
+
+  .brand-stay h3 {
+    margin-block-end: 0;
+  }
+
+  .brand-stay p {
+    margin-block-end: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .brand-stay .lead-small {
+    color: var(--color-text);
+  }
+
+  /* The intro runs beside my last sentence and Construction. "That idea shapes the details."
+     stays on its bottom edge, level with the end of Construction, whichever side is taller. */
+  .brand-stay-intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4); /* 16px */
+    margin-block-end: var(--space-8); /* 32px */
+
+    @media (width >= 48rem) {
+      grid-column: 2 / -1;
+      grid-row: 2 / span 2;
+      margin-block-end: var(--space-16); /* 64px */
+    }
+  }
+
+  /* Phones: my first sentence moves down to the last point (Evidence) */
+  .brand-stay .brand-stay-opening {
+    display: none;
+    margin-block-end: var(--space-4); /* 16px + the 16px gap */
+
+    @media (width >= 48rem) {
+      display: block;
+    }
+  }
+
+  /* Only from tablet up: on phones the thin lines lead into the details */
+  .brand-stay-lead-in {
+    display: none;
+    margin-block-start: auto;
+
+    @media (width >= 48rem) {
+      display: block;
+    }
+  }
+
+  /* Phones: a thin line above each of the three details, so they read as three separate
+     points and not as one long text. From tablet up the columns already separate them. */
+  .brand-stay-detail {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2); /* 8px */
+    margin-block-end: var(--space-8); /* 32px */
+    padding-block-start: var(--space-6); /* 24px */
+    border-block-start: 1px solid var(--color-line);
+
+    @media (width >= 48rem) {
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
+  }
+
+  .brand-stay-colour {
+    margin-block-end: 0;
+  }
+
+  /* More room before the closing sentences */
+  .brand-stay-materials {
+    margin-block-end: var(--space-12); /* 48px */
+  }
+
+  /* Phones: the second point, under the opening. The last in the intro, so the intro's own space
+     keeps it apart from Construction. From tablet up: only its text, as a normal paragraph. */
+  .brand-stay-status {
+    order: 2;
+    margin-block: var(--space-4) 0; /* 16px + the 16px gap */
+
+    @media (width >= 48rem) {
+      display: contents;
+
+      & h3 {
+        display: none;
+      }
+    }
+  }
+
+  /* Phones: first in the intro */
+  .brand-stay-goal {
+    order: 1;
+
+    @media (width >= 48rem) {
+      order: 0;
+    }
+  }
+
+  /* Phones: the look of .lead-small on the middle, like the opening of Why Cave Wear Exists.
+     From tablet up it's just the start of the paragraph. */
+  .brand-stay-goal-first {
+    display: block;
+    margin-block-end: var(--space-8); /* 32px */
+    color: var(--color-text);
+    font-size: var(--text-h3); /* 24px */
+    font-weight: 450;
+    line-height: var(--space-8); /* 32px */
+    letter-spacing: var(--tracking-h3);
+    text-align: center;
+    text-wrap: balance;
+
+    @media (width >= 48rem) {
+      display: inline;
+      margin-block-end: 0;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      text-align: inherit;
+      text-wrap: inherit;
+    }
+  }
+
+  /* The wash strip runs to the page's right edge, wider than the text above it: nobody reads it
+     line by line, so it can use the width the text shouldn't (my decision, 3 Nov). It's outside
+     the Colour block so that Materials can end on the same line as Colour's text, with the strip
+     below both.
+     The target is Irr Olive, an exception to its "large areas only" rule (my decision, 3 Nov).
+     The first day is a little darker and more saturated, later is only a little brighter: both
+     are made for this strip, not palette colours. */
+  .brand-stay-strip {
+    --strip-first-day: #343f27;
+    --strip-target: var(--color-irr-olive);
+    --strip-later: #576548;
+
+    display: grid;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    column-gap: 2px;
+    /* Phones: the only picture in this section, so it runs from screen edge to screen edge */
+    margin-block: var(--space-8); /* 32px */
+    margin-inline: calc(-1 * var(--gutter));
+
+    @media (width >= 48rem) {
+      grid-column: 2 / -1;
+      grid-row: 5;
+      margin-block-end: 0;
+      margin-inline: 0;
+    }
+  }
+
+  /* Exactly above the target, block 6 */
+  .brand-stay-arrow {
+    grid-column: 6;
+    grid-row: 1;
+    justify-self: center;
+    inline-size: var(--space-3); /* 12px */
+    block-size: var(--space-4); /* 16px */
+    margin-block-end: var(--space-1); /* 4px */
+    color: var(--color-text-secondary);
+  }
+
+  /* color-mix: the second colour gets the block's percentage, the first one the rest */
+  .brand-stay-block {
+    grid-row: 2;
+    block-size: var(--space-12); /* phones: 48px */
+    background-color: color-mix(in oklab, var(--strip-first-day), var(--strip-target) var(--to));
+
+    @media (width >= 48rem) {
+      block-size: var(--space-6); /* 24px */
+    }
+  }
+
+  .brand-stay-block-later {
+    background-color: color-mix(in oklab, var(--strip-target), var(--strip-later) var(--to));
+  }
+
+  /* The same quiet look as the product code: 12px, light, uppercase */
+  .brand-stay-tag {
+    grid-column: 1 / 6;
+    grid-row: 3;
+    padding-block-start: var(--space-2); /* 8px */
+    padding-inline-start: var(--gutter); /* phones: the strip touches the screen edge, its words don't */
+    color: var(--color-text-quiet);
+    font-size: 0.75rem;
+    font-weight: 300;
+    line-height: var(--space-4); /* 16px */
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+
+    @media (width >= 48rem) {
+      padding-inline-start: 0;
+    }
+  }
+
+  /* Phones: on two lines, so it keeps clear of "Later" */
+  .brand-stay-tag-target {
+    grid-column: 6 / 12;
+    padding-inline-start: 0;
+
+    @media (width >= 48rem) {
+      grid-column: 6 / 13;
+    }
+  }
+
+  .brand-stay-tag-later {
+    grid-column: 13 / -1;
+    justify-self: end;
+    padding-inline: 0 var(--gutter);
+
+    @media (width >= 48rem) {
+      padding-inline-end: 0;
+    }
+  }
+
+  /* Phones: closes the section, on the middle, in two colours like my first paragraph at the top
+     of the page. From tablet up: one colour, left, and without the first sentence. */
+  .brand-stay .brand-stay-end {
+    margin-inline: auto; /* big phones: it stops at its reading width, so its box has to be on the middle too */
+    color: var(--color-text-secondary);
+    text-align: center;
+    text-wrap: balance;
+
+    @media (width >= 48rem) {
+      margin-inline: 0;
+      color: var(--color-text);
+      text-align: start;
+      text-wrap: wrap;
+    }
+  }
+
+  .brand-stay-end .brand-stay-end-first {
+    display: block;
+    color: var(--color-text);
+
+    @media (width >= 48rem) {
+      display: none;
+    }
+  }
+
+  /* My last sentence moves up next to my first one, on the same line. The blocks that share a
+     row end on the same line, so the shorter one starts lower (from my sketch). */
+  @media (width >= 48rem) {
+    .brand-stay .brand-stay-end {
+      grid-column: 1;
+      grid-row: 2;
+      margin-block-end: var(--space-8); /* 32px at least, more when the intro is taller */
+    }
+
+    .brand-stay-construction {
+      grid-column: 1;
+      grid-row: 3;
+      align-self: end;
+      margin-block-end: var(--space-16); /* 64px */
+    }
+
+    .brand-stay-colour,
+    .brand-stay-materials {
+      grid-row: 4;
+      align-self: end;
+      margin-block-end: 0;
+    }
+
+    .brand-stay-colour {
+      grid-column: 2 / -1;
+    }
+
+    .brand-stay-materials {
+      grid-column: 1;
+    }
+  }
+
+  /* My line breaks, once the column is wide enough for the first line */
+  .brand-stay-end span {
+    @media (width >= 90rem) {
+      display: block;
+    }
+  }
+
+  /* The trail. Tablets: straight down the middle, where my principles' line already leaves the
+     page's middle. Desktop: straight across from the line beside my principles (30.75rem = the
+     width of my principles, 64px beside them), then straight down between the left third and
+     the rest. It starts and ends on the edges of the section. On phones it isn't there. */
+  .brand-stay-trail {
+    display: none;
+
+    @media (width >= 48rem) {
+      display: block;
+      position: absolute;
+      inset-block: calc(-1 * var(--section-space));
+      inset-inline-start: 50%;
+      inline-size: 1px;
+      color: var(--color-input-border); /* Flint */
+      background-image: var(--trail-down);
+      background-size: 1px 100%;
+      background-repeat: no-repeat;
+    }
+
+    @media (width >= 64rem) {
+      inset-inline-start: calc(50% - 30.75rem / 2 - var(--space-16));
+      inset-inline-end: calc(100% - (100% - 2 * var(--stay-gap)) / 3 - var(--stay-gap) / 2);
+      inline-size: auto;
+      background-image: var(--trail-across), var(--trail-down);
+      background-position:
+        left 0 top 0,
+        right 0 top 0;
+      background-size:
+        100% 1px,
+        1px 100%;
+    }
+  }
+
+  /* It draws itself while you scroll, like the rest of the trail */
+  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Written as single lines on purpose, see BrandTrail.astro */
+      .brand-stay-trail {
+        animation-name: brand-stay-trail-straight;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view();
+        animation-range: cover 50vh cover calc(100% - 50vh);
+      }
+    }
+  }
+
+  @media (width >= 64rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .brand-stay-trail {
+        animation-name: brand-stay-trail-turn;
+      }
+    }
+  }
+
+  @keyframes brand-stay-trail-straight {
+    from {
+      background-size: 1px 0;
+    }
+    to {
+      background-size: 1px 100%;
+    }
+  }
+
+  @keyframes brand-stay-trail-turn {
+    from {
+      background-size:
+        0 1px,
+        1px 0;
+    }
+    10% {
+      background-size:
+        100% 1px,
+        1px 0;
+    }
+    to {
+      background-size:
+        100% 1px,
+        1px 100%;
+    }
+  }
+</style>

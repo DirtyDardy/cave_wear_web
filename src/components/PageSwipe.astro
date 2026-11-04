@@ -114,11 +114,30 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
       animation: none;
     }
 
-    /* Only the opacity changes: transparent on photo pages, solid on the others */
+    /* Logo, links and Pack are their own picture and switch at once. If they faded too,
+       the old and new header would show through each other: a link that changes from bold
+       to normal shimmers. */
+    .header-inner {
+      view-transition-name: site-header-content;
+    }
+
+    ::view-transition-group(site-header-content),
+    ::view-transition-new(site-header-content) {
+      animation: none;
+    }
+
+    ::view-transition-old(site-header-content) {
+      display: none;
+    }
+
+    /* Only the background's opacity changes: transparent on photo pages, solid on the others */
     ::view-transition-old(site-header),
     ::view-transition-new(site-header),
     ::view-transition-old(site-footer) {
       animation-duration: var(--swipe-speed);
+      /* Hold the end state. Without this the old header comes back at full strength for a
+         moment before the animation closes: a dark flash, when it was the solid one. */
+      animation-fill-mode: both;
     }
 
     /* --- The pages: a short slide, the rest is the fade ------------------------ */

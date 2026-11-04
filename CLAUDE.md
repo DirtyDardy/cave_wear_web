@@ -348,11 +348,17 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 
 ### Ideas – wanted, build later (remind Dardan when we work on that part)
 
-- **Page transitions** – site-wide soft fade (~200ms) with CSS cross-document view transitions
-  (`@view-transition`). Not Astro's `<ClientRouter />` (JS, would break the header and newsletter
-  scripts). Off with reduced motion. Could be done any time – Dardan picks when.
-- **Flying product photo** – the photo moves from the products overview into the detail page
-  (shared element, `view-transition-name`). Build together with the product pages. Demo moment.
+- **Page transitions – built 4 Nov** (`src/components/PageSwipe.astro`: CSS cross-document view
+  transitions, a small script picks the animation. Not Astro's `<ClientRouter />`: JS, would break
+  the header and newsletter scripts). Desktop with a mouse only, off with reduced motion, phones
+  later. Menu pages: a short slide + fade, 0.4s, following the menu order (style C of four compared);
+  a product page counts as Products, so the product cards on Home swipe too. Products <-> a product
+  page: a quiet fade, 0.3s, nothing moves. Footer links: no animation. The header never moves: logo,
+  links and Pack switch at once, only its background fades. A footer on screen fades where it stands.
+  Safari not tested yet.
+- **Flying product photo – tried and rejected 4 Nov, on Products and from Home.** It worked, but felt
+  try-hard, not premium (Dardan). On Home the crops also differ, so you see a doubled person mid-move.
+  Don't suggest it again.
 - **Logo story section** (sticky scroll) – left: short text blocks that explain the company,
   scrolling normally. Right: the logo stays in place (`position: sticky`); the logo part the
   current text talks about lights up, the rest dims (small JS, `IntersectionObserver`). After the
@@ -947,8 +953,7 @@ then Dardan decides.
 - Newsletter double opt-in (the Reserve confirmation email is built, see 5).
 - Product details, donation model, weather → product mapping.
 - Home sections; Brand page sections, then submenu + jump links.
-- Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
-  strip/card. Glass comparison on `/styleguide` (see 11).
+- Ideas to build later (see 7): logo story section, weather strip/card. Glass comparison on `/styleguide` (see 11).
 - Hero at 1280px, Safari check. Card radius.
 - Delete `/styleguide` and its footer link before launch. DNSSEC at the very end.
 - **Final steps before 11 Nov (Dardan, 26 Oct): 2FA on the Cave Wear Gmail and netcup** –

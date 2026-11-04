@@ -237,8 +237,8 @@
   }
 }
 
-/* Jump links on the same page scroll smoothly – but only for people who
-   haven't asked their system for less motion (they get the instant jump) */
+/* Jump links scroll smoothly, also when they come from another page – but only for
+   people who haven't asked their system for less motion (they get the instant jump) */
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;

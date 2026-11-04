@@ -26,7 +26,7 @@ The proposed direction is a clean, relaxed silhouette with balanced proportions.
 
 ## Materials
 
-The material selection will prioritize comfort, durability, and a suitable balance of structure and softness. The back print is planned as a direct-to-garment print, the logo on the chest as embroidery.<!-- Always written as vision: "planned", "our vision", "what I'm working on" – never as fact. -->
+The material selection will prioritise comfort, durability, and a suitable balance of structure and softness. The back print is planned as a direct-to-garment print, the logo on the chest as embroidery.<!-- Always written as vision: "planned", "our vision", "what I'm working on" – never as fact. -->
 
 ## Shot descriptions
 

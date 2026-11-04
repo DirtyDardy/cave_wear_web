@@ -6,7 +6,7 @@ import { Image } from "astro:assets";
 import cityPhoto from "../assets/hero/hero-anywhere.jpg";
 import forestPhoto from "../assets/hero/hero-wild.jpg";
 import CloseIcon from "../assets/icons/close.svg";
-import BagIcon from "../assets/icons/backpack.svg";
+import PackIcon from "../assets/icons/backpack.svg";
 ---
 
 <section class="container section bs">
@@ -60,8 +60,8 @@ import BagIcon from "../assets/icons/backpack.svg";
   <!-- 3. PRODUCT CARD ----------------------------------------------------------->
   <h3 class="bs-heading">3 · Product card</h3>
   <p class="small">
-    Card in smoked glass (card rule), sharp corners (card radius still open). Primary "Add to
-    bag" + outline "Size guide".
+    Card in smoked glass (card rule), sharp corners. Primary "Add to pack" + outline "Size
+    guide".
   </p>
   <div class="bs-cards">
     <article class="bs-card">
@@ -69,9 +69,9 @@ import BagIcon from "../assets/icons/backpack.svg";
         <Image src={forestPhoto} alt="" class="bs-fill" widths={[320, 640]} sizes="320px" />
       </div>
       <h4 class="bs-card-title">Product name</h4>
-      <p class="small">PLACEHOLDER · technique · price</p>
+      <p class="small">Tagline · price</p>
       <div class="bs-row bs-row-card">
-        <button type="button" class="button button-primary">Add to bag</button>
+        <button type="button" class="button button-primary">Add to pack</button>
         <button type="button" class="button button-outline">Size guide</button>
       </div>
     </article>
@@ -92,10 +92,10 @@ import BagIcon from "../assets/icons/backpack.svg";
 
   <!-- 5. ICON BUTTONS ------------------------------------------------------------>
   <h3 class="bs-heading">5 · Icon buttons</h3>
-  <p class="small">Round (a real circle), neutral on dark. For close, bag, menu.</p>
+  <p class="small">Round (a real circle), neutral on dark. For close, Pack, menu.</p>
   <div class="bs-row">
     <button type="button" class="icon-button" aria-label="Close"><CloseIcon aria-hidden="true" /></button>
-    <button type="button" class="icon-button" aria-label="Shopping bag"><BagIcon aria-hidden="true" /></button>
+    <button type="button" class="icon-button" aria-label="Pack"><PackIcon aria-hidden="true" /></button>
   </div>
 
   <!-- 6. RULES ------------------------------------------------------------------>

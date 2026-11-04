@@ -18,7 +18,7 @@ A clean-lined rain jacket concept combining understated styling with practical w
 
 ## Design & Purpose
 
-The All-Weather Shell is envisioned as a versatile outer layer for wet-weather commutes, everyday use, and time outdoors. Its design prioritizes a functional silhouette and purposeful details over unnecessary visual complexity.
+The All-Weather Shell is envisioned as a versatile outer layer for wet-weather commutes, everyday use, and time outdoors. Its design prioritises a functional silhouette and purposeful details over unnecessary visual complexity.
 
 This jacket is a concept prototype. Its design reference is the Carinthia PRG jacket, a jacket I own and love. Cave Wear is not affiliated with or endorsed by Carinthia.
 
@@ -28,7 +28,7 @@ A slightly relaxed fit is the intended direction, allowing room for additional l
 
 ## Materials
 
-The material concept will prioritize weather protection, durability, and comfort. The final fabric and construction will be determined during product development, with performance requirements guiding the selection. <!-- Always written as vision: "planned", "our vision", "what I'm working on" – never as fact. -->
+The material concept will prioritise weather protection, durability, and comfort. The final fabric and construction will be determined during product development, with performance requirements guiding the selection. <!-- Always written as vision: "planned", "our vision", "what I'm working on" – never as fact. -->
 
 ## Shot descriptions
 

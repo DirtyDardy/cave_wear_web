@@ -264,9 +264,9 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   can be bought). Launch answer without jokes ("probably never" dropped – humour stays out of
   anything about trust).
 - **Impressum, Privacy Policy** – built (see 13). **Accessibility** – built 26 Oct (see 12).
-  **404** – not built.
-- **`/styleguide`** – noindex, public by URL. Temporary "Style guide" link in the footer bottom
-  row (before Impressum) while building. **Delete page + link before final launch.**
+  **404** – only a heading so far. Build it on a day that suits; not important for the presentation (Dardan, 4 Nov). Humour idea: memory.
+- **`/styleguide`** – noindex, public by URL. **Stays (Dardan, 4 Nov): he shows it to Linro.** Cleaned up, not in the
+  footer any more.
 
 ## 7. Features
 
@@ -906,7 +906,7 @@ then Dardan decides.
      queries add desktop – `global.css` tokens already work that way), and Dardan explains the
      choice.
   2. **Git branches** – done: `feature/mobile` and `feature/pack-drawer`, both merged into `main` (28 Oct).
-  3. **A real README** – still the Astro starter text → what, why, stack, how to run.
+  3. **A real README** – done 4 Nov (what, why, stack, how to run).
   4. **TypeScript, "a first look"** – done: the Pack (`pack-store.ts`, `PackDrawer.tsx`,
      `ReserveForm.tsx`), and `astro check` runs before every build (a wrong type stops it).
   5. **React for an interactive part** – done: the Pack drawer (React island).
@@ -950,7 +950,7 @@ then Dardan decides.
 - Ideas to build later (see 7): page fade, flying product photo, logo story section, weather
   strip/card. Glass comparison on `/styleguide` (see 11).
 - Hero at 1280px, Safari check. Card radius.
-- Delete `/styleguide` and its footer link before launch. DNSSEC at the very end.
+- DNSSEC at the very end.
 - **Final steps before 11 Nov (Dardan, 26 Oct): 2FA on the Cave Wear Gmail and netcup** –
   remind Dardan, guide click by click (he types passwords and scans codes himself).
   Presentation point: domain + mailbox secured with 2FA, SPF, DKIM, DMARC (Linro = cybersecurity).

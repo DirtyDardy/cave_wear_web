@@ -37,7 +37,10 @@ const baseCollection = cardsFor("Base Collection");
 const supporterCollection = cardsFor("Supporter Collection");
 ---
 
-<BaseLayout title="Products">
+<BaseLayout
+  title="Products"
+  description="The Base Collection and the Supporter Collection: concept pieces made to last. Nothing is for sale. Reserve your place for the launch."
+>
   <!-- Photo header: trees in front of a city – the wild and anywhere in one picture.
        top-fade: soft dark fade at the top for the header (global.css) -->
   <section class="products-hero top-fade">
@@ -77,7 +80,8 @@ const supporterCollection = cardsFor("Supporter Collection");
       </div>
       <p id="base-intro" class="collection-intro">
         Essentials made for years, not seasons. Buy once, keep it. The collection grows one
-        considered piece at a time.
+        considered piece at a time.{" "}
+        <a href="/brand" class="text-link">Why Cave Wear exists ›</a>
       </p>
       <ul class="product-grid" role="list">
         {
@@ -130,9 +134,9 @@ const supporterCollection = cardsFor("Supporter Collection");
     <!-- Filled by favorites.js: a copy of every card whose heart is on.
          The list starts hidden; the text shows until there's a favorite. -->
     <section aria-labelledby="favorites-title">
-      <h2 id="favorites-title" class="label collection-title">Favorites</h2>
+      <h2 id="favorites-title" class="label collection-title">Favourites</h2>
       <ul id="favorites-list" class="product-grid" role="list" hidden></ul>
-      <p id="favorites-empty" class="small favorites-empty">No favorites yet. Click the heart on a product to keep it here.</p>
+      <p id="favorites-empty" class="small favorites-empty">No favourites yet. Click the heart on a product to keep it here.</p>
 
       <!-- Gjilan, my birth city. It moved here on 2 Nov, so the Brand page can have
            Brente Holme, where my story starts. -->
@@ -329,7 +333,7 @@ const supporterCollection = cardsFor("Supporter Collection");
     }
 
     /* "display: grid" above would beat the hidden attribute – this makes
-       hidden win again (used by the empty Favorites list) */
+       hidden win again (used by the empty Favourites list) */
     &[hidden] {
       display: none;
     }

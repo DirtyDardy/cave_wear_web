@@ -43,7 +43,7 @@ function render() {
       list.append(item);
     }
 
-    // 2. Show the list or the "No favorites yet" text – never both
+    // 2. Show the list or the "No favourites yet" text – never both
     list.hidden = favorites.length === 0;
     emptyText.hidden = favorites.length > 0;
   }

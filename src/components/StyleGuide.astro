@@ -1,12 +1,17 @@
 ---
-// STYLE GUIDE – design test only, used on /styleguide.
-// All cave bear text and all images in here are PLACEHOLDERS.
+// STYLE GUIDE – used on /styleguide. The colours, type, spacing and buttons the site is
+// built from. The sample text is about the cave bear; the photos are the site's own.
+import { Image } from "astro:assets";
 import ButtonSystem from "./ButtonSystem.astro";
+import { getProducts } from "../data/products";
+import widePhoto from "../assets/products/products-hero.jpg";
+
+const sampleProduct = (await getProducts()).find((product) => product.id === "core-tee");
 
 // Colour swatches – name, CSS variable, hex, role
 const colours = [
   { name: "Dark Obsidian", token: "--color-dark-obsidian", hex: "#0D0D0E", role: "Background, text on accent" },
-  { name: "Obsidian", token: "--color-obsidian", hex: "#131314", role: "Surface – header, footer, cards, bag" },
+  { name: "Obsidian", token: "--color-obsidian", hex: "#131314", role: "Surface – header, footer, cards, Pack" },
   { name: "Charcoal", token: "--color-charcoal", hex: "#1E1E1E", role: "Lines and dividers" },
   { name: "Flint", token: "--color-flint", hex: "#6B655E", role: "Input borders" },
   { name: "Egret", token: "--color-egret", hex: "#F3EBE0", role: "Main text" },
@@ -23,7 +28,7 @@ const colours = [
   { name: "Mossy Elm", token: "--color-mossy-elm", hex: "#5E6D4E", role: "Reserve – no role yet" },
 ];
 
-// Type scale – one row per style. "text" is PLACEHOLDER text about the cave bear.
+// Type scale – one row per style. "text" is sample text about the cave bear.
 const typeRows = [
   {
     name: "H1 – Barlow Condensed Bold 700",
@@ -170,17 +175,16 @@ const radii = [
 ];
 ---
 
-<!-- Notice: everything below is a design test -->
+<!-- Notice: what this page is -->
   <div class="container">
     <p class="notice" role="note">
-      <strong>Style guide</strong> – all text and images are placeholders and will be replaced before
-      launch. Texts are written in our own words; facts from{" "}
+      <strong>Style guide</strong> – the colours, type, spacing and buttons this whole site is built
+      from. The sample text is about the cave bear, in my own words; facts from{" "}
       <a href="https://en.wikipedia.org/wiki/Cave_bear">Wikipedia (Cave bear)</a>{" "}and{" "}
       <a href="https://www.donsmaps.com/bear.html">donsmaps.com</a>.
     </p>
   </div>
 
-  <!-- PLACEHOLDER -->
   <section class="container section">
     <p class="label">Style guide · Cave Wear</p>
     <h1>The Cave Bear</h1>
@@ -222,7 +226,7 @@ const radii = [
           const Tag = row.tag;
           return (
             <div class="type-row">
-              {/* PLACEHOLDER text in the sample */}
+              {/* Sample text */}
               <div class="type-sample-wrap">
                 <Tag class:list={["type-sample", row.className]}>{row.text}</Tag>
               </div>
@@ -286,7 +290,7 @@ const radii = [
     </ul>
 
     <h3 class="sg-subheading">How a section is built</h3>
-    <!-- PLACEHOLDER text inside the diagram -->
+    <!-- Sample text inside the diagram -->
     <div class="diagram" role="group" aria-label="Diagram: spacing between the parts of a section">
       <div class="diagram-part"><p class="label">Label</p></div>
       <div class="diagram-gap" style="block-size: var(--space-3)"><span class="small">12px · --space-3</span></div>
@@ -303,7 +307,7 @@ const radii = [
   </section>
 
   <!-- ============ EXAMPLE SECTION ============ -->
-  <!-- PLACEHOLDER: own words, facts from Wikipedia (Cave bear) and donsmaps.com -->
+  <!-- Sample text: own words, facts from Wikipedia (Cave bear) and donsmaps.com -->
   <section class="container section sg-section">
     <p class="label">Example section · Prehistoric giant</p>
     <h2>Built for the long cave winter</h2>
@@ -321,10 +325,13 @@ const radii = [
       <a href="https://en.wikipedia.org/wiki/Cave_bear">Wikipedia</a>.
     </p>
 
-    <!-- PLACEHOLDER image -->
-    <div class="placeholder-image ratio-16-9" role="img" aria-label="Placeholder image 16:9">
-      Placeholder image 16:9
-    </div>
+    <Image
+      src={widePhoto}
+      alt="Forest treetops in front of city high-rises."
+      class="sample-image ratio-16-9"
+      widths={[800, 1600]}
+      sizes="(width >= 80rem) 1200px, 100vw"
+    />
 
     <div class="button-row">
       <button type="button" class="button button-primary">Read more</button>
@@ -333,16 +340,21 @@ const radii = [
   </section>
 
   <!-- ============ CARD WITH 4:5 IMAGE ============ -->
-  <!-- PLACEHOLDER: text and image -->
   <section class="container section sg-section">
     <h2>Card</h2>
     <p class="lead">A product card shape: 4:5 image, H3, small details.</p>
     <article class="card">
-      <div class="placeholder-image ratio-4-5" role="img" aria-label="Placeholder image 4:5">
-        Placeholder image 4:5
-      </div>
-      <h3>Ursus spelaeus</h3>
-      <p class="small">Up to 2 m long · males 350–600 kg</p>
+      {sampleProduct && (
+        <Image
+          src={sampleProduct.card.image}
+          alt={sampleProduct.card.alt}
+          class="sample-image ratio-4-5"
+          widths={[480, 800]}
+          sizes="400px"
+        />
+      )}
+      <h3>{sampleProduct?.name}</h3>
+      <p class="small">{sampleProduct?.tagline}</p>
     </article>
   </section>
 
@@ -351,7 +363,6 @@ const radii = [
     <h2>Links and buttons</h2>
 
     <h3 class="sg-subheading">Text links</h3>
-    <!-- PLACEHOLDER text -->
     <p>
       Inside running text, a link is Wild Honey and semi-bold, without underline: early humans and
       cave bears shared the same landscape – read more on{" "}
@@ -600,14 +611,12 @@ const radii = [
   }
 
   /* ---------- Images ---------- */
-  .placeholder-image {
-    display: grid;
-    place-items: center;
+  .sample-image {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
     margin-block: var(--space-8);
-    background-color: var(--color-surface);
-    border: 1px dashed var(--color-flint);
-    color: var(--color-text-quiet);
-    font-size: var(--text-small);
+    object-fit: cover;
   }
 
   .ratio-16-9 {

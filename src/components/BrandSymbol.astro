@@ -24,13 +24,13 @@ const steps = [
   {
     lights: "cave wear",
     glow: "cave wear",
-    text: "The name comes from the cave bear. We make clothing, so the bear became the wear: Cave Wear.",
+    text: "Cave Bear. Cave Wear. One letter apart: the animal that inspired it, and the clothing I design.",
   },
   {
     lights: "rugged functional refined",
     glow: "rugged functional refined",
     stagger: true,
-    text: "RUGGED: loose skin, a thick layer of fat and dense fur.<br />FUNCTIONAL: a bear is an omnivore, and its big paws and claws handle whatever comes next.<br />REFINED: everything it needs and nothing more.",
+    text: "RUGGED: a stout, heavy build, made to last through long ice age winters.<br />FUNCTIONAL: a bear is an omnivore, and its big paws and claws handle whatever comes next.<br />REFINED: everything it needs and nothing more.",
   },
   {
     lights: "dot dot-left dot-right",
@@ -48,7 +48,7 @@ const steps = [
     <div class="brand-symbol-column">
       <!-- The title and the logo stay in place as long as the texts in this box are moving -->
       <div class="brand-symbol-scroller">
-        <h2 id="symbol-title" class="brand-symbol-title">Our Symbol:<br />The Cave Bear</h2>
+        <h2 id="symbol-title" class="brand-symbol-title" tabindex="-1">My Symbol:<br />The Cave Bear</h2>
 
         <div class="brand-symbol-stage">
           <div class="brand-symbol-frame">
@@ -82,6 +82,8 @@ const steps = [
 
         <!-- The script makes this box taller and moves the texts inside it at half the scroll speed -->
         <div class="brand-symbol-slow">
+          <span class="brand-symbol-snap" aria-hidden="true"></span>
+          <span class="brand-symbol-snap" aria-hidden="true"></span>
           <div class="brand-symbol-steps">
             <p class="brand-symbol-step" data-lights="" data-glow="">
               That's my first logo, from 2022. It's the first logo I designed for an idea of my own,
@@ -116,9 +118,13 @@ const steps = [
 
       <!-- Outside the moving box: it stands under the finished logo, and they leave together -->
       <p class="lead-small brand-symbol-step brand-symbol-end" data-lights="" data-glow="">
-        We want to create clothing that feels considered rather than complicated, functional rather
+        I want to create clothing that feels considered rather than complicated, functional rather
         than excessive, and adaptable rather than limited to a single setting.
       </p>
+      <!-- Appears once the story has closed itself behind you (brand-symbol.js) -->
+      <button type="button" class="text-link brand-symbol-again" hidden>
+        Read the logo story again <span aria-hidden="true">›</span>
+      </button>
     </div>
   </div>
 </section>
@@ -146,6 +152,53 @@ const steps = [
 
   :global(body:has(.site-header[data-hidden])) .brand-symbol-scroller {
     --symbol-top: 0px;
+  }
+
+  /* Two soft stops (brand-symbol.js places them): my first logo with its text, then the cave bear
+     text. proximity = the page only snaps when you stop close to one, and nowhere else. From
+     tablets up: phones are for my mobile round. Never for people who asked for less motion. */
+  @media (width >= 48rem) and (height >= 40rem) and (prefers-reduced-motion: no-preference) {
+    :global(html:has(.brand-symbol-snap)) {
+      scroll-snap-type: y proximity;
+    }
+
+    .brand-symbol-slow {
+      position: relative;
+    }
+
+    .brand-symbol-snap {
+      position: absolute;
+      inset-block-start: 0;
+      scroll-snap-align: start;
+      /* Lands on the logo's bottom edge. The page already keeps the header's height free. */
+      scroll-margin-block-start: calc(var(--logo-bottom, 0px) - var(--header-height));
+    }
+  }
+
+  /* Closed: title, finished logo, closing sentence. Nothing sticks, nothing moves. */
+  [data-collapsed] .brand-symbol-slow {
+    display: none;
+  }
+
+  [data-collapsed] .brand-symbol-title,
+  [data-collapsed] .brand-symbol-stage {
+    position: relative;
+    inset-block-start: auto;
+  }
+
+  /* .text-link sets its own display, which would otherwise beat the hidden attribute */
+  .brand-symbol-again[hidden] {
+    display: none;
+  }
+
+  /* A real button that looks like my text links */
+  .brand-symbol-again {
+    margin-block-start: var(--space-4); /* 16px */
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
   }
 
   /* The title stays above everything, with a solid background.
@@ -288,7 +341,29 @@ const steps = [
     inline-size: 100%;
     block-size: auto;
     overflow: visible;
-    transition: opacity 0.8s ease;
+    transform-origin: top center; /* it can only grow downwards and to the sides, never up */
+    transition:
+      opacity 0.8s ease,
+      scale 0.6s ease;
+  }
+
+  .brand-symbol-mark {
+    transition: opacity 0.6s ease;
+  }
+
+  /* The last scroll: this part is done. The marks go and the logo gets 5% bigger. A scale doesn't
+     take up more room, so the texts above and below stay exactly where they are. It lies above the
+     fade under the logo, so that doesn't dim its bottom edge. */
+  [data-done] .brand-symbol-frame {
+    z-index: 1;
+  }
+
+  [data-done] .brand-symbol-logo {
+    scale: 1.05;
+  }
+
+  [data-done] .brand-symbol-mark {
+    opacity: 0;
   }
 
   /* Today's logo waits until my first logo makes way for it */
@@ -381,6 +456,7 @@ const steps = [
     .brand-symbol-stage,
     .brand-symbol-part,
     .brand-symbol-logo,
+    .brand-symbol-mark,
     .brand-symbol-first {
       transition: none;
     }
@@ -404,6 +480,7 @@ const steps = [
      straight down. Tablets come in from the page's middle, desktop from between the thirds.
      On phones it isn't there. */
   .brand-symbol-trail {
+    pointer-events: none; /* only a drawing: clicks and text selection go through it */
     --trail-from: 50%;
 
     display: none;

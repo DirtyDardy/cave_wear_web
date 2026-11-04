@@ -15,15 +15,34 @@ const {
   noindex = false,
   description = "Cave Wear – Rugged. Functional. Refined. Outdoor clothing that also looks right in the city.",
 } = Astro.props;
+
+const pageTitle = `${title} | Cave Wear`;
+
+// The page's one official address, always with the "/" at the end like the live site.
+// Astro.site = the address in astro.config.mjs.
+const path = Astro.url.pathname.endsWith("/") ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const pageUrl = new URL(path, Astro.site);
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{`${title} | Cave Wear`}</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={pageUrl} />
+    <!-- What a shared link shows (Open Graph: WhatsApp, LinkedIn, Slack …) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cave Wear" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={new URL("/og-image.jpg", Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A person standing in the mouth of a cave, looking out at a misty forest." />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0d0d0e" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

@@ -6,7 +6,7 @@ import { Image } from "astro:assets";
 import heroImage from "../assets/brand/brand-hero.jpg";
 
 const first =
-  "We make clothing for people who move between worlds: a trail in the morning, a city street by evening.";
+  "I design clothing for people who move between worlds: a trail in the morning, a city street by evening.";
 const second =
   "Garments that feel right in the wilderness and look right at a bar or a family dinner.";
 
@@ -28,7 +28,7 @@ const secondWords = second.split(" ");
     fetchpriority="high"
   />
   <div class="container brand-top-inner">
-    <p class="label brand-top-label">About Us</p>
+    <p class="label brand-top-label">About</p>
     <h1>CAVE WEAR</h1>
   </div>
 </section>
@@ -77,7 +77,7 @@ const secondWords = second.split(" ");
   }
 
   /* Soft dark fade over the bottom half: the heading lies on the bright reflection in the
-     water, and without it "About Us" falls below the contrast rule (4.5:1). */
+     water, and without it "About" falls below the contrast rule (4.5:1). */
   .brand-top::after {
     content: "";
     position: absolute;

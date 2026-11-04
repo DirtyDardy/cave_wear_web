@@ -14,7 +14,7 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
 
 <section id="on-record" class="container section" aria-labelledby="records-title">
   <div class="brand-records">
-    <!-- The trail comes in from Our Symbol. Only decoration, so screen readers skip it. -->
+    <!-- The trail comes in from My Symbol. Only decoration, so screen readers skip it. -->
     <div class="brand-records-trail" aria-hidden="true"></div>
 
     <div class="brand-records-head">
@@ -24,7 +24,7 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
     </div>
 
     <div class="brand-records-body">
-      <p class="lead-small">The cave bear is gone. Its records aren't.</p>
+      <p class="lead-small">The cave bear is gone. Museums still count it.</p>
       <p>
         Museums still keep its bones and teeth, and GBIF, a public database of the world's species,
         brings their catalogues together. A record is one entry in such a catalogue, not one
@@ -129,6 +129,7 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
   /* The trail: straight across from the line on Our Symbol's right, then straight down between
      the columns to the section's end. On phones it isn't there. */
   .brand-records-trail {
+    pointer-events: none; /* only a drawing: clicks and text selection go through it */
     --trail-to: 50%;
 
     display: none;
@@ -157,13 +158,14 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
 
   @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      /* Written as single lines on purpose, see BrandTrail.astro */
+      /* Written as single lines on purpose, see BrandTrail.astro.
+         It finishes with its bottom at 75% of the screen, where the green section's line takes over. */
       .brand-records-trail {
         animation-name: brand-records-trail-draw;
         animation-timing-function: linear;
         animation-fill-mode: both;
         animation-timeline: view();
-        animation-range: cover 50vh cover calc(100% - 50vh);
+        animation-range: cover 50vh cover calc(100% - 75vh);
       }
     }
   }

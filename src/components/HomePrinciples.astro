@@ -53,6 +53,9 @@ const principles = [
     }
   </ul>
 
+  <!-- The Brand page explains these three principles -->
+  <p class="principles-more"><a href="/brand" class="text-link">Why Cave Wear exists ›</a></p>
+
   <!-- Touch screens only (the script shows it): anything that moves longer than
        5 seconds needs a way to stop it (WCAG 2.2.2) -->
   <button type="button" class="icon-button principles-pause" aria-label="Pause" hidden>
@@ -153,6 +156,12 @@ const principles = [
 
   .principle-line {
     margin-block-end: 0;
+  }
+
+  .principles-more {
+    max-inline-size: none; /* the whole width, so it's centred under the tiles */
+    margin-block: var(--space-8) 0; /* 32px under the tiles */
+    text-align: center;
   }
 
   /* --- Pause button (touch screens) ------------------------------------------ */

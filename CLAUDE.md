@@ -1,6 +1,6 @@
 # CLAUDE.md – Cave Wear
 
-Project memory for Claude. Read fully at the start of every session. Updated 31 Oct 2026.
+Project memory for Claude. Read fully at the start of every session. Updated 4 Nov 2026.
 If this file and the code disagree, say so and ask – don't guess which one is right.
 
 ## 1. Project
@@ -182,6 +182,39 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   timeline, bearbiology.org link. Dardan has started the About/Brand content.
   **His texts are collected in `drafts/brand-page.md`** (27 Oct, his exact wording + notes to
   discuss) – use them when building the page. Not part of the site build.
+  **Built 2–4 Nov on `feature/brand` (desktop done, phones next).** Order: `BrandTop` · `BrandTrail` ·
+  Why Cave Wear Exists (`BrandWhy`, with `BrandPrinciples`) · Made to Stay (`BrandStay`) · My Symbol
+  (`BrandSymbol`) · On Record (`BrandRecords`) · Still Here (`BrandBears`, the page's end) · hidden
+  `#my-places`. **Voice: "I", not "we"** (Dardan, 4 Nov) – "we" stays only where it means all people
+  ("Our bears aren't", "we took so much of its habitat"); FAQ, Contact, Pack and Privacy keep "we".
+  **Cut:** Team (one sentence in Why Cave Wear Exists instead), Just the Beginning, Every Mark Has a
+  Reason (text in `drafts/brand-page.md`). Details elsewhere in this file stay as ideas only.
+  - **Made to Stay:** the wash strip settles where "Dyed for wash 10" lives; a deliberate exception to
+    Irr Olive's "large surfaces only" (colours in the strip only).
+  - **Three principles:** each row fades in once over 0.9s and stays (`brand-principles.js`).
+  - **My Symbol:** title and logo stick, texts move at half speed, parts light up one by one
+    (`brand-symbol.js`). Two soft snap stops: first logo + its text, then the cave bear text (from
+    48rem). The header keeps the state it came in with while the logo stays (`data-frozen`,
+    `header-hide.js`). At the closing sentence the crop marks go and the logo grows 5% (`data-done`).
+    **Collapse (4 Nov):** once the section is above the screen and scrolling stopped, the story closes
+    and the page corrects its position, so the way back up is short; "Read the logo story again"
+    opens it. Nothing saved. Must be tested on a real iPhone – if it fails there, off on phones.
+    A bear is an omnivore, the cave bear mostly ate plants: never "the cave bear is an omnivore".
+  - **On Record:** GBIF asked **at build time** (`src/data/cave-bear-records.ts`), so the visitor's
+    browser never contacts GBIF and the Privacy Policy needs nothing; last known numbers if GBIF is
+    down, "as of" date shown. Presentation point against the live weather.
+  - **Still Here:** Irr Olive band, Dardan's brown bear photo (Florian Schindler, Unsplash, credited).
+    European brown bear text only from 1440px (fills the space beside the photo, section doesn't
+    grow). Donation wording: a percentage of profit at the end of every year, amount open (planned).
+    Ends with "That's my bear minimum."
+  - **`#my-places` ("You looked closer.", opens after all four coordinates):** Europe map, one glass
+    card with one text open (hover, keyboard, tap, `my-places.js`), the open place's cross double size
+    (`public/map/found-<id>-big.svg`), texts in `src/data/places.js`.
+  - **Explorer's bonus (4 Nov):** the reward button adds 5€ off, "if and when Cave Wear launches": a
+    line in the Pack, not a product. Once per browser (`cave-wear-bonus`, `pack-store.ts`), one per Pack.
+    `submission-created.mjs` refuses more than one, a bonus alone, or a total that doesn't add up.
+    A game, not a lock (dev tools can fake it, no money moves) – say so in the presentation.
+    The real email with the bonus is only testable after a push.
 - **Contact** – built 26 Oct (`src/pages/contact.astro`, Dardan's version A sketch). No photo
   header (a tool page, not a showcase). Top to bottom: Regensburg coordinates (where the Regen
   meets the Danube, see "Hidden coordinates" in 7) · H1 "Contact" · one line + email + "Write to us ↓" ·
@@ -376,7 +409,8 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 - **Brand submenu** (only submenu, chevron, disclosure pattern with `aria-expanded`, not
   `role="menu"`; hover opens on hover devices; Escape/click outside closes) + **jump links**
   (`/brand#…`, smooth scroll, `scroll-margin-top`, JS for cross-page jumps) – **postponed until
-  the pages have content**. Placeholder items: Brand overview · The Idea · The Cave Bear ·
+  the pages have content**. **Dropped 4 Nov: no submenu**, the site is small and Brand is one story;
+  the reasons are in the memory "Presentation: why no submenu". Placeholder items: Brand overview · The Idea · The Cave Bear ·
   Conservation · The Journey (one list in the code).
 - **Footer** – built: Obsidian + hairline. Small logo · tagline · journey line · Instagram,
   Threads, YouTube · newsletter. Bottom: © year Cave Wear · A concept brand by Dardan Ademi ·

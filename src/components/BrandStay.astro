@@ -2,7 +2,8 @@
 // BRAND – MADE TO STAY (from my sketch, 3 Nov). My text word for word, no photos. The left side:
 // heading, my last sentence, Construction, Materials. The right side: my first sentence, the
 // intro, Colour. One line straight down between the two, so it never crosses text.
-// The code keeps the order of my text, so phones and screen readers read it from start to end.
+// The code keeps the order of my desktop text. Phones open with "The most useful thing…" and close
+// with both sentences about claims (order and a hidden copy of one sentence, see the CSS).
 
 // The wash strip (my rules, 3 Nov): 14 blocks, each a mix of two colours. A number says how far
 // that block is on its way to the next colour, in percent. First a clear fade from the first
@@ -21,14 +22,20 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
 
     <div class="brand-stay-intro">
       <p class="lead-small brand-stay-opening">I don't make sustainability claims yet.</p>
-      <p>
-        The final materials and production aren't chosen, and a claim needs evidence for the
-        finished piece. What I can share is how I plan to think about it.
-      </p>
-      <p>
-        The most useful thing a garment can do is stay in use. So the goal is simple: essentials
-        made for years, not seasons. Buy once, keep it. You only need one or two pieces, and the
-        collection grows one considered piece at a time.
+      <!-- Phones: one more point with a heading, under the opening below. Tablet and desktop: no
+           heading, and this box doesn't count for the layout. -->
+      <div class="brand-stay-detail brand-stay-status">
+        <h3>Status</h3>
+        <p>
+          The final materials and production aren't chosen yet. What I can share is how I plan to
+          think about it.
+        </p>
+      </div>
+      <!-- Phones: this comes first, and its first sentence is the section's opening sentence -->
+      <p class="brand-stay-goal">
+        <span class="brand-stay-goal-first">The most useful thing a garment can do is stay in use.</span>{" "}
+        So the goal is simple: essentials made for years, not seasons. Buy once, keep it. You only
+        need one or two pieces, and the collection grows one considered piece at a time.
       </p>
       <p class="brand-stay-lead-in">That idea shapes the details.</p>
     </div>
@@ -46,9 +53,8 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
       <p class="lead-small">I plan to dye a little darker than the target colour.</p>
       <p>
         From my experience in print and production, colour fades with wear and washing. It should
-        reach the target around wash 8 to 12, then stay right for a long time. This is experience,
-        not a measured result. The first day looks a little less perfect, so the piece can look
-        right for longer.
+        reach the target around wash 8 to 12, then stay right for a long time. That's not a measured
+        result. The first day looks a little less perfect, so the piece can look right for longer.
       </p>
     </div>
 
@@ -73,11 +79,15 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
       <p>
         I'm exploring materials that balance comfort, durability, appearance and environmental
         impact. Wood-derived fibers are among the ideas. For the Pass Gaiter's toggle, recycled
-        plastic is planned, tinted black all the way through.
+        plastic is planned.
       </p>
     </div>
 
+    <!-- Phones: my two sentences about claims together, closing the section. From tablet up the
+         first one stands at the top instead, beside this one. Hidden with display: none, so
+         screen readers only hear it once. -->
     <p class="lead-small brand-stay-end">
+      <span class="brand-stay-end-first">I don't make sustainability<br /> claims yet.</span>
       <span>Specific claims will only follow once </span>
       <span>the materials, the production </span>
       <span>and the evidence are clear.</span>
@@ -106,10 +116,12 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
 
   .brand-stay h2 {
     margin-block-end: var(--space-4); /* 16px */
+    text-align: center; /* phones: heading, opening and closing sentence on the middle, like Why Cave Wear Exists */
 
     @media (width >= 48rem) {
       grid-column: 1;
       margin-block-end: var(--space-12); /* 48px */
+      text-align: start;
     }
   }
 
@@ -132,7 +144,7 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
     display: flex;
     flex-direction: column;
     gap: var(--space-4); /* 16px */
-    margin-block-end: var(--space-12); /* 48px */
+    margin-block-end: var(--space-8); /* 32px */
 
     @media (width >= 48rem) {
       grid-column: 2 / -1;
@@ -141,23 +153,97 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
     }
   }
 
+  /* Phones: my first sentence moves down to the last point (Evidence) */
   .brand-stay .brand-stay-opening {
+    display: none;
     margin-block-end: var(--space-4); /* 16px + the 16px gap */
+
+    @media (width >= 48rem) {
+      display: block;
+    }
   }
 
+  /* Only from tablet up: on phones the thin lines lead into the details */
   .brand-stay-lead-in {
+    display: none;
     margin-block-start: auto;
+
+    @media (width >= 48rem) {
+      display: block;
+    }
   }
 
+  /* Phones: a thin line above each of the three details, so they read as three separate
+     points and not as one long text. From tablet up the columns already separate them. */
   .brand-stay-detail {
     display: grid;
     align-content: start;
     gap: var(--space-2); /* 8px */
-    margin-block-end: var(--space-12); /* 48px */
+    margin-block-end: var(--space-8); /* 32px */
+    padding-block-start: var(--space-6); /* 24px */
+    border-block-start: 1px solid var(--color-line);
+
+    @media (width >= 48rem) {
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
   }
 
   .brand-stay-colour {
     margin-block-end: 0;
+  }
+
+  /* More room before the closing sentences */
+  .brand-stay-materials {
+    margin-block-end: var(--space-12); /* 48px */
+  }
+
+  /* Phones: the second point, under the opening. The last in the intro, so the intro's own space
+     keeps it apart from Construction. From tablet up: only its text, as a normal paragraph. */
+  .brand-stay-status {
+    order: 2;
+    margin-block: var(--space-4) 0; /* 16px + the 16px gap */
+
+    @media (width >= 48rem) {
+      display: contents;
+
+      & h3 {
+        display: none;
+      }
+    }
+  }
+
+  /* Phones: first in the intro */
+  .brand-stay-goal {
+    order: 1;
+
+    @media (width >= 48rem) {
+      order: 0;
+    }
+  }
+
+  /* Phones: the look of .lead-small on the middle, like the opening of Why Cave Wear Exists.
+     From tablet up it's just the start of the paragraph. */
+  .brand-stay-goal-first {
+    display: block;
+    margin-block-end: var(--space-8); /* 32px */
+    color: var(--color-text);
+    font-size: var(--text-h3); /* 24px */
+    font-weight: 450;
+    line-height: var(--space-8); /* 32px */
+    letter-spacing: var(--tracking-h3);
+    text-align: center;
+    text-wrap: balance;
+
+    @media (width >= 48rem) {
+      display: inline;
+      margin-block-end: 0;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      text-align: inherit;
+      text-wrap: inherit;
+    }
   }
 
   /* The wash strip runs to the page's right edge, wider than the text above it: nobody reads it
@@ -175,12 +261,15 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
     display: grid;
     grid-template-columns: repeat(14, minmax(0, 1fr));
     column-gap: 2px;
-    margin-block: var(--space-8) var(--space-12); /* 32px, 48px */
+    /* Phones: the only picture in this section, so it runs from screen edge to screen edge */
+    margin-block: var(--space-8); /* 32px */
+    margin-inline: calc(-1 * var(--gutter));
 
     @media (width >= 48rem) {
       grid-column: 2 / -1;
       grid-row: 5;
       margin-block-end: 0;
+      margin-inline: 0;
     }
   }
 
@@ -198,8 +287,12 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
   /* color-mix: the second colour gets the block's percentage, the first one the rest */
   .brand-stay-block {
     grid-row: 2;
-    block-size: var(--space-6); /* 24px */
+    block-size: var(--space-12); /* phones: 48px */
     background-color: color-mix(in oklab, var(--strip-first-day), var(--strip-target) var(--to));
+
+    @media (width >= 48rem) {
+      block-size: var(--space-6); /* 24px */
+    }
   }
 
   .brand-stay-block-later {
@@ -211,21 +304,62 @@ const toLater = [0, 12, 25, 37, 50, 62, 75, 87, 100];
     grid-column: 1 / 6;
     grid-row: 3;
     padding-block-start: var(--space-2); /* 8px */
+    padding-inline-start: var(--gutter); /* phones: the strip touches the screen edge, its words don't */
     color: var(--color-text-quiet);
     font-size: 0.75rem;
     font-weight: 300;
     line-height: var(--space-4); /* 16px */
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
+
+    @media (width >= 48rem) {
+      padding-inline-start: 0;
+    }
   }
 
+  /* Phones: on two lines, so it keeps clear of "Later" */
   .brand-stay-tag-target {
-    grid-column: 6 / 13;
+    grid-column: 6 / 12;
+    padding-inline-start: 0;
+
+    @media (width >= 48rem) {
+      grid-column: 6 / 13;
+    }
   }
 
   .brand-stay-tag-later {
     grid-column: 13 / -1;
     justify-self: end;
+    padding-inline: 0 var(--gutter);
+
+    @media (width >= 48rem) {
+      padding-inline-end: 0;
+    }
+  }
+
+  /* Phones: closes the section, on the middle, in two colours like my first paragraph at the top
+     of the page. From tablet up: one colour, left, and without the first sentence. */
+  .brand-stay .brand-stay-end {
+    margin-inline: auto; /* big phones: it stops at its reading width, so its box has to be on the middle too */
+    color: var(--color-text-secondary);
+    text-align: center;
+    text-wrap: balance;
+
+    @media (width >= 48rem) {
+      margin-inline: 0;
+      color: var(--color-text);
+      text-align: start;
+      text-wrap: wrap;
+    }
+  }
+
+  .brand-stay-end .brand-stay-end-first {
+    display: block;
+    color: var(--color-text);
+
+    @media (width >= 48rem) {
+      display: none;
+    }
   }
 
   /* My last sentence moves up next to my first one, on the same line. The blocks that share a

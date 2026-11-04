@@ -1,33 +1,36 @@
 ---
 // BRAND – THE BEARS TODAY. First version: the wording is a draft for me to rewrite, except my
 // last line. Everything Cave Wear does here is planned, so the text says so. bearbiology.org is
-// a normal link, never a partnership. The olive band is the one the style guide keeps for this.
+// a normal link, never a partnership. Tablet and desktop: the olive band the style guide keeps for
+// this, with the photo in a column. Phones: no green, the photo is the background of the section.
 import { Image } from "astro:assets";
 import bear from "../assets/brand/brown-bear.webp";
 ---
 
-<section id="conservation" class="band section" aria-labelledby="bears-title">
+<section id="conservation" class="band section brand-bears-section" aria-labelledby="bears-title">
   <div class="container">
     <div class="brand-bears">
       <!-- The trail comes straight down from On Record. Only decoration, so screen readers skip it. -->
       <div class="brand-bears-trail" aria-hidden="true"></div>
 
       <!-- The bear looks to the right, so it stands left and looks at the text -->
-      <Image
-        class="brand-bears-photo"
-        src={bear}
-        alt="A large brown bear walking through a bare forest, seen from the side."
-        widths={[480, 800, 1334]}
-        sizes="(width >= 64rem) 33vw, (width >= 48rem) 50vw, 100vw"
-        loading="lazy"
-      />
+      <div class="brand-bears-media">
+        <Image
+          class="brand-bears-photo"
+          src={bear}
+          alt="A large brown bear walking through a bare forest, seen from the side."
+          widths={[480, 800, 1334]}
+          sizes="(width >= 64rem) 33vw, (width >= 48rem) 50vw, 67vh"
+          loading="lazy"
+        />
+      </div>
 
       <div class="brand-bears-text">
         <h2 id="bears-title">Still Here</h2>
         <p class="lead-small">The cave bear is extinct. Our bears aren't.</p>
         <p>
           Eight bear species live today. The IUCN Red List, the world's main list of threatened
-          species, counts six of them as vulnerable to extinction.
+          species, counts six of them as vulnerable to extinction.{" "}
           <!-- Only where the brown bear text isn't shown, which says the same -->
           <span class="brand-bears-short">Where people take over more of their land, bears lose their habitat and their numbers fall.</span>
         </p>
@@ -62,14 +65,25 @@ import bear from "../assets/brand/brown-bear.webp";
 </section>
 
 <style>
-  /* Written mobile first. The base = phones: one column, photo on top. */
+  /* Phones (my decision, 4 Nov): no green, the photo is the background of the whole section. Written
+     this way round on purpose: it only takes away what .band gives, without repeating its values. */
+  @media (width < 48rem) {
+    .brand-bears-section {
+      isolation: isolate; /* its own stack of layers, so the photo lies behind the text */
+      padding-block-start: 0;
+      background: none;
+      box-shadow: none;
+    }
+  }
+
+  /* Written mobile first. The base = phones: the text, with the photo behind it. */
   .brand-bears {
     position: relative;
-    display: grid;
-    gap: var(--space-12); /* 48px */
 
     @media (width >= 48rem) {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-12); /* 48px */
     }
 
     @media (width >= 64rem) {
@@ -77,16 +91,55 @@ import bear from "../assets/brand/brown-bear.webp";
     }
   }
 
+  /* Phones: from screen edge to screen edge, behind everything, and exactly as high as this
+     section. So the photo stays in here, and can never reach into the section after it. */
+  .brand-bears-media {
+    position: absolute;
+    z-index: -1;
+    inset-block: 0 calc(-1 * var(--section-space));
+    inset-inline: calc(-1 * var(--gutter));
+    pointer-events: none;
+
+    @media (width >= 48rem) {
+      position: static;
+      z-index: auto;
+      pointer-events: auto;
+    }
+  }
+
+  /* Phones: one whole screen, staying in place (sticky) inside its box while the text passes over
+     it. Dimmed for the text, and its top and bottom melt into the page. Sticky works on iPhones,
+     where a fixed background picture doesn't. */
   .brand-bears-photo {
+    position: sticky;
+    inset-block-start: 0;
     display: block;
     inline-size: 100%;
-    block-size: auto;
+    block-size: 100svh;
+    object-fit: cover;
+    object-position: 62% 50%; /* the bear's face stays on the screen */
+    filter: brightness(0.45);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+
+    @media (width >= 48rem) {
+      position: static;
+      block-size: auto;
+      filter: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
   }
 
   .brand-bears-text {
     display: flex;
     flex-direction: column;
     gap: var(--space-4); /* 16px */
+    padding-block-start: 55svh; /* phones: the first screen belongs to the photo */
+
+    @media (width >= 48rem) {
+      padding-block-start: 0;
+    }
 
     @media (width >= 64rem) {
       grid-column: 2 / -1;
@@ -98,6 +151,36 @@ import bear from "../assets/brand/brown-bear.webp";
 
     & h3 {
       margin-block-start: var(--space-8); /* 32px + the 16px gap */
+    }
+
+    /* Phones: heading, opening sentence and my last line on the middle, like the other sections.
+       The long text and "What I plan to do" stay left. */
+    & h2 {
+      text-align: center;
+
+      @media (width >= 48rem) {
+        text-align: start;
+      }
+    }
+
+    & .lead-small {
+      margin-inline: auto;
+      text-align: center;
+      text-wrap: balance;
+
+      @media (width >= 48rem) {
+        margin-inline: 0;
+        text-align: start;
+        text-wrap: wrap;
+      }
+    }
+
+    & h2 + .lead-small {
+      margin-block-end: var(--space-4); /* phones: 16px + the 16px gap, like the other sections */
+
+      @media (width >= 48rem) {
+        margin-block-end: 0;
+      }
     }
 
     /* On olive the colour alone can't say "link" */

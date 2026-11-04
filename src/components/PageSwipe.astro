@@ -1,0 +1,177 @@
+---
+// The animation between pages. Desktop only for now (phones: later).
+//   Menu pages: a short swipe that follows the menu order.
+//   Products <-> a product page: a quiet fade, nothing moves.
+//
+// How it works: the browser takes a picture of the old page, loads the new one, and
+// animates the two pictures. CSS says how they move. The small script only says which
+// animation: forward or back in the menu order, or the fade.
+
+// The menu order decides the direction: further right in this list = swipe forward.
+const pageOrder = ["/", "/products", "/brand", "/contact"];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+// Only these pages switch the animation on. It needs to be on in BOTH pages, so a legal
+// page simply changes without any animation.
+const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/products/");
+---
+
+{isSwipePage && (
+  <style is:inline>
+    @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+      @view-transition {
+        navigation: auto;
+      }
+    }
+  </style>
+)}
+
+<!-- is:inline = runs right here in the head. The browser asks "how should I animate?"
+     before it draws the new page, so a script that loads later would be too late. -->
+<script is:inline define:vars={{ pageOrder }}>
+  const cleanPath = (path) => (path || "").replace(/\/$/, "") || "/";
+
+  // Old page, just before it goes: remember where we came from for the new page.
+  window.addEventListener("pageswap", () => {
+    // A footer on screen becomes its own picture, so it can fade where it stands
+    // instead of swiping with the page. Off screen it needs nothing.
+    const footer = document.querySelector(".site-footer");
+    if (footer && footer.getBoundingClientRect().top < window.innerHeight) {
+      footer.style.viewTransitionName = "site-footer";
+    }
+    sessionStorage.setItem("swipe-from", location.pathname);
+  });
+
+  // New page, just before it is drawn: pick the animation.
+  window.addEventListener("pagereveal", (event) => {
+    // The browser's back button can bring a saved page back: clean up the footer's name
+    document.querySelector(".site-footer")?.style.removeProperty("view-transition-name");
+
+    if (!event.viewTransition) return;
+
+    const fromPath = cleanPath(sessionStorage.getItem("swipe-from"));
+    const toPath = cleanPath(location.pathname);
+    // In the menu, a product page counts as Products (the menu marks it that way too)
+    const menuPlace = (path) => pageOrder.indexOf(path.startsWith("/products/") ? "/products" : path);
+    const from = menuPlace(fromPath);
+    const to = menuPlace(toPath);
+    const root = document.documentElement;
+
+    if (
+      (fromPath === "/products" && toPath.startsWith("/products/")) ||
+      (toPath === "/products" && fromPath.startsWith("/products/"))
+    ) {
+      root.dataset.swipe = "fade"; // Products <-> a product page
+    } else if (from !== to && from !== -1 && to !== -1) {
+      root.dataset.swipe = to > from ? "next" : "prev"; // between menu pages
+    } else {
+      // The page you are already on, or a move we have no animation for yet
+      event.viewTransition.skipTransition();
+      return;
+    }
+
+    // Coming back to a saved page whose header was scrolled away: the header belongs on
+    // screen, right away and without sliding in (it never moves during the animation).
+    const header = document.querySelector(".site-header");
+    if (header) {
+      header.style.transition = "none";
+      header.removeAttribute("data-hidden");
+    }
+
+    event.viewTransition.finished.finally(() => {
+      delete root.dataset.swipe;
+      header?.style.removeProperty("transition");
+    });
+  });
+</script>
+
+<style is:global>
+  /* Everything only on desktop with a mouse, and never with reduced motion */
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    :root {
+      --swipe-speed: 0.4s;
+      --swipe-ease: var(--motion-ease);
+      --swipe-sign: 1; /* forward: new page from the right */
+    }
+
+    :root[data-swipe="prev"] {
+      --swipe-sign: -1; /* back: everything mirrored, new page from the left */
+    }
+
+    /* Products <-> a product page: no sideways movement, only the fade, a little quicker */
+    :root[data-swipe="fade"] {
+      --swipe-sign: 0;
+      --swipe-speed: var(--motion-duration);
+    }
+
+    /* --- Header: its own picture, never moves --------------------------------- */
+
+    .site-header {
+      view-transition-name: site-header;
+    }
+
+    /* No movement at all, even if the old page had the header scrolled away */
+    ::view-transition-group(site-header) {
+      animation: none;
+    }
+
+    /* Logo, links and Pack are their own picture and switch at once. If they faded too,
+       the old and new header would show through each other: a link that changes from bold
+       to normal shimmers. */
+    .header-inner {
+      view-transition-name: site-header-content;
+    }
+
+    ::view-transition-group(site-header-content),
+    ::view-transition-new(site-header-content) {
+      animation: none;
+    }
+
+    ::view-transition-old(site-header-content) {
+      display: none;
+    }
+
+    /* Only the background's opacity changes: transparent on photo pages, solid on the others */
+    ::view-transition-old(site-header),
+    ::view-transition-new(site-header),
+    ::view-transition-old(site-footer) {
+      animation-duration: var(--swipe-speed);
+      /* Hold the end state. Without this the old header comes back at full strength for a
+         moment before the animation closes: a dark flash, when it was the solid one. */
+      animation-fill-mode: both;
+    }
+
+    /* --- The pages: a short slide, the rest is the fade ------------------------ */
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      mix-blend-mode: normal;
+      animation-duration: var(--swipe-speed);
+      animation-timing-function: var(--swipe-ease);
+      animation-fill-mode: both;
+    }
+
+    ::view-transition-old(root) {
+      animation-name: swipe-old;
+    }
+
+    ::view-transition-new(root) {
+      animation-name: swipe-new;
+    }
+
+    @keyframes swipe-old {
+      to {
+        opacity: 0;
+        transform: translateX(calc(var(--swipe-sign) * calc(-1 * var(--space-8))));
+      }
+    }
+
+    @keyframes swipe-new {
+      from {
+        opacity: 0;
+        transform: translateX(calc(var(--swipe-sign) * var(--space-16)));
+      }
+    }
+  }
+</style>

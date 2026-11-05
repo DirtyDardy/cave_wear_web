@@ -154,7 +154,7 @@ export default function FieldConditions({ pieces }: { pieces: Record<string, Pie
         </div>
         {/* The service's licence (CC BY 4.0) asks for this link next to its data */}
         <p className="small field-note">
-          Sent only to the weather service. We don't store it. <a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>
+          Sent only to the weather service. We don't store it. <a href="/privacy#weather">Privacy Policy</a> · <a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a>
         </p>
       </div>
     </div>

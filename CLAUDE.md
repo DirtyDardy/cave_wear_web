@@ -1018,6 +1018,13 @@ then Dardan decides.
 - OPEN: Privacy "deleted once answered" – Dardan isn't sure yet how he'll handle it.
 - Mobile phase for the product pages: one column, swipe and the photo viewer are done (30 Oct,
   see 10) – still open: card fit icons on touch.
+- **Decided 5 Nov (Dardan):** All-Weather Shell stays 149,90€. Supporter Both stays 5€ more. Home keeps
+  asking Open-Meteo directly for Regensburg before any click (the Privacy Policy says so); plan a
+  screenshot as backup for the presentation, the free service can be overloaded. A Netlify function
+  for it is a "what I still want to learn" point. Page transitions store nothing (`document.referrer`).
+  Netlify's DPA: Netlify says it is part of its terms. Dardan still checks the PDF (Data Privacy
+  Framework, Standard Contractual Clauses, address) and whether the live site has the Netlify badge
+  the Privacy Policy describes.
 - **Supporter – OPEN (2 Nov), ask Dardan:** is Both = 5€ more right, and how is it split between the
   causes (the site only says "both", no promise) · what the head pointing down and the crop marks
   mean (for the card) · a shorter text if the print should be as big as in his picture (74% of the

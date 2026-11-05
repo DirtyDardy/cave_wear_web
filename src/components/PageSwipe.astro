@@ -34,7 +34,7 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
 <script is:inline define:vars={{ pageOrder }}>
   const cleanPath = (path) => (path || "").replace(/\/$/, "") || "/";
 
-  // Old page, just before it goes: remember where we came from for the new page.
+  // Old page, just before it goes
   window.addEventListener("pageswap", () => {
     // A footer on screen becomes its own picture, so it can fade where it stands
     // instead of swiping with the page. Off screen it needs nothing.
@@ -42,7 +42,6 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
     if (footer && footer.getBoundingClientRect().top < window.innerHeight) {
       footer.style.viewTransitionName = "site-footer";
     }
-    sessionStorage.setItem("swipe-from", location.pathname);
   });
 
   // New page, just before it is drawn: pick the animation.
@@ -56,7 +55,11 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
     // nobody listens to it: a red line in the console. This says "skipped is fine".
     event.viewTransition.ready.catch(() => {});
 
-    const fromPath = cleanPath(sessionStorage.getItem("swipe-from"));
+    // Where we came from: the browser already knows (document.referrer), so this site stores
+    // nothing for it. Privacy by design. The back button keeps the page's first referrer, so
+    // going back can occasionally slide the other way. It's only an animation.
+    const referrer = document.referrer ? new URL(document.referrer) : null;
+    const fromPath = cleanPath(referrer?.origin === location.origin ? referrer.pathname : "");
     const toPath = cleanPath(location.pathname);
     // In the menu, a product page counts as Products (the menu marks it that way too)
     const menuPlace = (path) => pageOrder.indexOf(path.startsWith("/products/") ? "/products" : path);

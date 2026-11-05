@@ -78,6 +78,13 @@ const principles = [
 
   .principles {
     scroll-snap-align: center;
+
+    /* Tablet and desktop: on a screen too low for the whole section (about 910px,
+       about 980px with the touch pause button) the pull held the page back before
+       the next part came into view, e.g. on a MacBook. So: free scrolling there. */
+    @media (width >= 48rem) and (height < 62rem) {
+      scroll-snap-align: none;
+    }
   }
 
   .principles-row {

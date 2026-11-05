@@ -81,6 +81,14 @@ const widths = [480, 800, 1200, 1600];
 </section>
 
 <style>
+  /* A little closer to the three tiles above, so the page's next part arrives
+     sooner when scrolling (144px instead of 192px, tablet and desktop). */
+  .home-collection {
+    @media (width >= 48rem) {
+      padding-block-start: var(--space-12); /* 48px */
+    }
+  }
+
   /* --- Width ------------------------------------------------------------------
      Two lines in my design: the header's width (logo → Pack button = .container)
      and, a little further in, the line the Home content follows. --home-inset is

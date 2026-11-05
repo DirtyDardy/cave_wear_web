@@ -2,22 +2,38 @@
 // BRAND – THE TRAIL BETWEEN TWO SECTIONS (2 Nov): the line of the site, in the space
 // between them, never through text. Only decoration, so screen readers skip it.
 // phoneOnly: from tablet up the sections bring their own lines, so this one steps aside.
+// untilDesktop: the same, but it stays on tablets, where the Why section looks like on phones.
+// tabletOnly: only between 768 and 1023px, where that Why section meets a section with its own line.
 // stopsAtEdge: the next section has its own background, and the line ends where that begins.
 // short: half a line, placed by whatever it stands in (above and below the coordinates).
 interface Props {
   phoneOnly?: boolean;
+  untilDesktop?: boolean;
+  tabletOnly?: boolean;
   stopsAtEdge?: boolean;
   short?: boolean;
 }
 
-const { phoneOnly = false, stopsAtEdge = false, short = false } = Astro.props;
+const { phoneOnly = false, untilDesktop = false, tabletOnly = false, stopsAtEdge = false, short = false } = Astro.props;
 ---
 
-<div class:list={["brand-trail", { "brand-trail-phone": phoneOnly, "brand-trail-edge": stopsAtEdge, "brand-trail-short": short }]} aria-hidden="true"></div>
+<div class:list={["brand-trail", { "brand-trail-phone": phoneOnly, "brand-trail-until-desktop": untilDesktop, "brand-trail-tablet": tabletOnly, "brand-trail-edge": stopsAtEdge, "brand-trail-short": short }]} aria-hidden="true"></div>
 
 <style>
   .brand-trail-phone {
     @media (width >= 48rem) {
+      display: none;
+    }
+  }
+
+  .brand-trail-until-desktop {
+    @media (width >= 64rem) {
+      display: none;
+    }
+  }
+
+  .brand-trail-tablet {
+    @media (width < 48rem), (width >= 64rem) {
       display: none;
     }
   }

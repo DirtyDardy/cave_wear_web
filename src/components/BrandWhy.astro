@@ -1,6 +1,6 @@
 ---
-// BRAND – WHY WE EXIST (2 Nov). My text word for word in the left half, one photo in the right
-// half, with the trail around it (4 Nov).
+// BRAND – WHY WE EXIST (2 Nov). Desktop: my text word for word in the left half, one photo in the
+// right half, with the trail around it (4 Nov). Phones and tablets: the photo is the background.
 // The photo comes from the product folder, with its alt text from there: the embroidered
 // bear of the Field Hoodie, for now.
 import { Image } from "astro:assets";
@@ -70,11 +70,11 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
       <!-- Brente Holme, where the idea began. The text doesn't name it: the numbers do, for
            anyone who looks them up. The div keeps the empty status line out of the grid gap. -->
       <div class="brand-why-coordinates">
-        <BrandTrail phoneOnly short />
+        <BrandTrail untilDesktop short />
         <div class="brand-why-coordinates-spot">
           <Coordinates place="brente-holme" />
         </div>
-        <BrandTrail phoneOnly short />
+        <BrandTrail untilDesktop short />
       </div>
     </div>
 
@@ -86,7 +86,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
             alt={photo.alt}
             class="brand-why-photo"
             widths={[640, 960, 1280, 1600]}
-            sizes="(width >= 48rem) 50vw, 80vh"
+            sizes="(width >= 64rem) 50vw, 80vh"
           />
         </div>
       )
@@ -100,12 +100,21 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 <script src="../scripts/brand-why-fade.js"></script>
 
 <style>
-  /* Written mobile first. The base = phones: one column, the photo under my question. */
+  /* Written mobile first. The base = phones and tablets: one column, the photo as the background.
+     Where these notes say "phones", tablets (768–1023px) are meant too (decided 5 Nov): two halves
+     were too narrow there, the heading ran through the trail. Tablets only add this: the text keeps
+     a reading width on the middle. Padding and not a margin, so the photo still reaches the edges. */
+  .brand-why {
+    @media (48rem <= width < 64rem) {
+      padding-inline: calc(50% - 18rem); /* 576px wide */
+    }
+  }
+
   .brand-why-section {
     /* Phones: its own stack of layers, so the photo lies behind the text but above the page */
     isolation: isolate;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       isolation: auto;
     }
 
@@ -126,7 +135,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 
     /* Two equal halves: the heading across both, then the text and the photo. The trail runs
        down the page's middle, so half the gap keeps both 24px from it. */
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       text-align: start;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: var(--space-4) var(--brand-why-gap); /* 16px between rows, 48px between columns */
@@ -142,7 +151,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
   .brand-why h2 {
     margin-block: 55svh 0; /* phones: the first screen belongs to the photo, the heading stands low on it */
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       grid-column: 1 / -1;
       margin-block-start: 0;
     }
@@ -157,7 +166,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
       order: 3;
     }
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: grid;
       gap: var(--space-4); /* 16px */
 
@@ -221,7 +230,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
   :global(html[data-js]) .brand-why-toggle {
     display: inline-flex;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: none;
     }
   }
@@ -234,7 +243,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
       grid-template-rows var(--motion-duration) var(--motion-ease),
       visibility var(--motion-duration);
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: contents;
     }
   }
@@ -245,7 +254,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     min-block-size: 0;
     overflow: hidden;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: contents;
 
       /* It's the last in this box, but my story goes on after it: keep the normal space */
@@ -260,7 +269,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     visibility: hidden;
 
     /* From tablet up the text is always there, also for screen readers */
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       visibility: visible;
     }
   }
@@ -279,7 +288,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     text-align: start; /* long text reads best from a straight left edge */
     text-wrap: pretty; /* no single word alone on the last line */
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       margin-block-end: var(--space-4); /* 16px */
       text-wrap: wrap;
     }
@@ -290,12 +299,12 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
   .brand-why-coordinates {
     padding-block-start: var(--space-2); /* 8px + the 16px gap above = 24px */
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       padding-block-start: 0;
     }
 
     /* Phones: over the photo, and Muted Stone only works on the dark page, so one step lighter */
-    @media (width < 48rem) {
+    @media (width < 64rem) {
       --color-text-quiet: var(--color-text-secondary);
     }
   }
@@ -305,7 +314,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     justify-items: center;
     padding-block: var(--space-3); /* 12px */
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       justify-items: start;
       padding-block: 0;
     }
@@ -318,7 +327,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     color: var(--color-text);
     text-align: center;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       order: 0;
       margin-inline: 0;
       text-align: start;
@@ -337,7 +346,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 
     /* From tablet up the trail wraps around the photo, 24px away on the top, left and right
        (my decision, 4 Nov). The margin keeps it inside the trail's right side. */
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       position: relative;
       z-index: auto;
       inset: auto;
@@ -363,7 +372,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       position: static;
       block-size: auto;
       aspect-ratio: 4 / 5;
@@ -390,7 +399,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 
     display: none;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: block;
       position: absolute;
       inset-block: calc(-1 * var(--space-6)) 0;
@@ -412,7 +421,7 @@ const photo = hoodie?.shotSets[0].shots.find((shot) => shot.number === 4);
 
   /* It draws itself while you scroll, right where BrandTrail stops: a little further down,
      then it slides across, then down the side. */
-  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+  @media (width >= 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       /* Written as single lines on purpose: the build would join a full "animation:"
          line and view() into one, which some browsers can't read */

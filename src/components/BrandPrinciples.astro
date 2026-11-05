@@ -2,8 +2,8 @@
 // BRAND – THE THREE PRINCIPLES (from my sketch, 2 Nov). A heading and three numbered rows,
 // no boxes: the type does the work. The numbers count what the heading promises, they aren't
 // section numbers. The small words keep the link to Home (Rugged → Built to Last, and so on).
-// The trail comes from the photo's right side and runs around all of it. On tablets it leaves
-// through the middle of the page, on desktop the next section carries it on straight across.
+// Desktop: the trail comes from the photo's right side, runs around all of it, and the next
+// section carries it on straight across. Phones and tablets: as wide as the page, no trail here.
 
 const principles = [
   {
@@ -56,7 +56,7 @@ const principles = [
     position: relative;
     margin-block-start: var(--space-6); /* phones: 24px under the line, which BrandWhy brings along with the coordinates */
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       margin-block-start: calc(2 * var(--section-space)); /* the same gap as from my first paragraph to Why We Exist */
     }
   }
@@ -72,7 +72,7 @@ const principles = [
     margin-block-end: var(--space-12); /* 48px */
     color: var(--color-text);
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       margin-block-end: var(--space-16); /* 64px */
     }
   }
@@ -87,7 +87,7 @@ const principles = [
     padding: 0 var(--space-4); /* 16px */
     list-style: none;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       padding-inline: var(--space-12); /* 48px */
     }
   }
@@ -109,7 +109,7 @@ const principles = [
     font-weight: 700;
     line-height: 0.83;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       font-size: 4.25rem; /* 68px */
     }
   }
@@ -134,7 +134,7 @@ const principles = [
 
     /* "worn" only just fits. 4px of spare room, so another browser's rounding can't push it
        onto the next line. */
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       margin-inline-end: calc(-1 * var(--space-1));
     }
   }
@@ -158,23 +158,18 @@ const principles = [
 
   /* The trail. One box with five lines as its backgrounds, like the turn in BrandWhy: down
      from the photo's side, across to the left, down past the rows, across to the middle of
-     the page, and down out of the section. On desktop the last two have no length: the line
+     the page, and down out of the section. The last two have no length: the line
      runs on down to the end of the section, and the next section takes it straight across,
-     without a step in between (decided 2 Nov). On phones there's nowhere to turn, so it isn't there. */
+     without a step in between (decided 2 Nov). On phones and tablets it isn't there. */
   .brand-principles-trail {
     --trail-drop: calc(2 * var(--section-space) - var(--space-12)); /* from the photo's row down to the first turn, 48px above the heading */
-    --trail-tail: calc(var(--section-space) - var(--space-12)); /* from the last turn to the end of the section */
+    --trail-tail: 0px; /* the last two lines have no length, see above */
     --trail-to-middle: calc(var(--principles-width) / 2 + var(--space-16)); /* 64px beside the rows, then half of them */
-    --trail-out: var(--trail-to-middle); /* how far the last turn runs */
+    --trail-out: 0px;
 
     display: none;
 
     @media (width >= 64rem) {
-      --trail-tail: 0px;
-      --trail-out: 0px;
-    }
-
-    @media (width >= 48rem) {
       display: block;
       position: absolute;
       inset-block: calc(-2 * var(--section-space)) calc(-1 * var(--section-space));
@@ -201,7 +196,7 @@ const principles = [
   /* It draws itself while you scroll, one line after the other. The box starts higher above
      the block than it ends below it, so the block is in the middle of the screen a little
      after 50%, at about 55%: by then the line has passed all three rows. */
-  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+  @media (width >= 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       /* Written as single lines on purpose, see BrandTrail.astro */
       .brand-principles-trail {

@@ -1,8 +1,8 @@
 ---
 // BRAND – STILL HERE, the bears today. Everything Cave Wear does here is planned, so the text says
 // so. bearbiology.org is
-// a normal link, never a partnership. Tablet and desktop: the olive band the style guide keeps for
-// this, with the photo in a column. Phones: no green, the photo is the background of the section.
+// a normal link, never a partnership. Desktop: the olive band the style guide keeps for this, with
+// the photo in a column. Phones and tablets: no green, the photo is the background of the section.
 import { Image } from "astro:assets";
 import bear from "../assets/brand/brown-bear.webp";
 ---
@@ -20,7 +20,7 @@ import bear from "../assets/brand/brown-bear.webp";
           src={bear}
           alt="A large brown bear walking through a bare forest, seen from the side."
           widths={[480, 800, 1334]}
-          sizes="(width >= 64rem) 33vw, (width >= 48rem) 50vw, 67vh"
+          sizes="(width >= 64rem) 33vw, 67vh"
           loading="lazy"
         />
       </div>
@@ -35,7 +35,7 @@ import bear from "../assets/brand/brown-bear.webp";
           <span class="brand-bears-short">Where people take over more of their land, bears lose their habitat and their numbers fall.</span>
         </p>
 
-        <!-- Desktop only: fills the empty space beside the photo, phones keep the shorter text -->
+        <!-- Big desktops and tablets: the longer text. Phones and laptops keep the shorter one. -->
         <div class="brand-bears-extra">
           <h3>The European brown bear</h3>
           <p>
@@ -65,9 +65,18 @@ import bear from "../assets/brand/brown-bear.webp";
 </section>
 
 <style>
+  /* Tablets (768–1023px, decided 5 Nov) look like phones here, so "phones" in these notes means both.
+     They only add this: the text keeps a reading width on the middle. Padding and not a margin, so
+     the photo still reaches the edges. */
+  .brand-bears {
+    @media (48rem <= width < 64rem) {
+      padding-inline: calc(50% - 18rem); /* 576px wide */
+    }
+  }
+
   /* Phones (my decision, 4 Nov): no green, the photo is the background of the whole section. Written
      this way round on purpose: it only takes away what .band gives, without repeating its values. */
-  @media (width < 48rem) {
+  @media (width < 64rem) {
     .brand-bears-section {
       isolation: isolate; /* its own stack of layers, so the photo lies behind the text */
       padding-block-start: 0;
@@ -80,14 +89,10 @@ import bear from "../assets/brand/brown-bear.webp";
   .brand-bears {
     position: relative;
 
-    @media (width >= 48rem) {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-12); /* 48px */
-    }
-
     @media (width >= 64rem) {
+      display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-12); /* 48px */
     }
   }
 
@@ -100,7 +105,7 @@ import bear from "../assets/brand/brown-bear.webp";
     inset-inline: calc(-1 * var(--gutter));
     pointer-events: none;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       position: static;
       z-index: auto;
       pointer-events: auto;
@@ -122,7 +127,7 @@ import bear from "../assets/brand/brown-bear.webp";
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       position: static;
       block-size: auto;
       filter: none;
@@ -137,7 +142,7 @@ import bear from "../assets/brand/brown-bear.webp";
     gap: var(--space-4); /* 16px */
     padding-block-start: 55svh; /* phones: the first screen belongs to the photo */
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       padding-block-start: 0;
     }
 
@@ -158,7 +163,7 @@ import bear from "../assets/brand/brown-bear.webp";
     & h2 {
       text-align: center;
 
-      @media (width >= 48rem) {
+      @media (width >= 64rem) {
         text-align: start;
       }
     }
@@ -168,7 +173,7 @@ import bear from "../assets/brand/brown-bear.webp";
       text-align: center;
       text-wrap: balance;
 
-      @media (width >= 48rem) {
+      @media (width >= 64rem) {
         margin-inline: 0;
         text-align: start;
         text-wrap: wrap;
@@ -178,7 +183,7 @@ import bear from "../assets/brand/brown-bear.webp";
     & h2 + .lead-small {
       margin-block-end: var(--space-4); /* phones: 16px + the 16px gap, like the other sections */
 
-      @media (width >= 48rem) {
+      @media (width >= 64rem) {
         margin-block-end: 0;
       }
     }
@@ -189,7 +194,8 @@ import bear from "../assets/brand/brown-bear.webp";
     }
   }
 
-  @media (width >= 90rem) {
+  /* The longer text: from 1440px, and on tablets, where the short one looked too small (decided 5 Nov) */
+  @media (48rem <= width < 64rem), (width >= 90rem) {
     .brand-bears-short {
       display: none;
     }
@@ -199,9 +205,9 @@ import bear from "../assets/brand/brown-bear.webp";
     display: none;
     margin-block-start: var(--space-8); /* 32px + the 16px gap */
 
-    /* Only from 1440px: the photo is tall enough there, so this
-       fills the space beside it and the section doesn't grow */
-    @media (width >= 90rem) {
+    /* From 1440px: the photo is tall enough there, so this fills the space beside it and the
+       section doesn't grow. Tablets: more to read on the bigger screen (decided 5 Nov). */
+    @media (48rem <= width < 64rem), (width >= 90rem) {
       display: grid;
       gap: var(--space-4); /* 16px */
     }
@@ -230,13 +236,48 @@ import bear from "../assets/brand/brown-bear.webp";
     }
   }
 
+  /* Phones and tablets (decided 5 Nov): when the footer is about to come in, the text stands exactly
+     on the middle of the screen. The first 55svh are the photo's first screen (see above), and the
+     rest is one whole screen with the text centred in it, ending on the section's bottom edge.
+     Text taller than the screen can't be centred: then the empty ::before and ::after keep 48px
+     (32px + the 16px gap) to the footer. ::before is there so the middle stays the middle, and the
+     padding takes its 48px back, so the heading doesn't move down. */
+  @media (width < 64rem) {
+    .brand-bears-section {
+      padding-block-end: 0;
+    }
+
+    .brand-bears-media {
+      inset-block-end: 0;
+    }
+
+    .brand-bears-text {
+      --end-room: calc(var(--space-8) + var(--space-4)); /* 48px */
+
+      min-block-size: calc(155svh - var(--end-room));
+      padding-block-start: calc(55svh - var(--end-room));
+      justify-content: center;
+
+      &::before,
+      &::after {
+        content: "";
+        flex: none;
+        block-size: var(--space-8); /* 32px */
+      }
+    }
+
+    .brand-bears-text .brand-bears-end {
+      margin-block-start: 0;
+    }
+  }
+
   /* The trail: straight down between the photo and the text. On phones it isn't there. */
   .brand-bears-trail {
-    --trail-at: 50%;
+    --trail-at: calc((100% - 2 * var(--space-12)) / 3 + var(--space-12) / 2);
 
     display: none;
 
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: block;
       position: absolute;
       inset-block: calc(-1 * var(--section-space));
@@ -246,13 +287,9 @@ import bear from "../assets/brand/brown-bear.webp";
       background-image: var(--trail-down);
       background-repeat: no-repeat;
     }
-
-    @media (width >= 64rem) {
-      --trail-at: calc((100% - 2 * var(--space-12)) / 3 + var(--space-12) / 2);
-    }
   }
 
-  @media (width >= 48rem) and (prefers-reduced-motion: no-preference) {
+  @media (width >= 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       /* Written as single lines on purpose, see BrandTrail.astro.
          The range differs from the other sections: the page stops here, so the green section's

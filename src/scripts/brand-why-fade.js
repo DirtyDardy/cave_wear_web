@@ -1,15 +1,15 @@
-// BRAND ON PHONES – THE PHOTO OF WHY CAVE WEAR EXISTS FADES OUT OVER MY THREE PRINCIPLES (4 Nov).
+// BRAND ON PHONES AND TABLETS – THE PHOTO OF WHY CAVE WEAR EXISTS FADES OUT OVER MY THREE PRINCIPLES (4 Nov).
 // Every time the page scrolls we look at where the principles are on the screen, and that decides
 // how see-through the photo is. A script and not a CSS scroll animation, because those only work
 // on the newest iPhones. Only the opacity changes, so nothing can tremble.
 
 const photo = document.querySelector(".brand-why-photo");
 const principles = document.querySelector(".brand-principles");
-const isPhone = window.matchMedia("(width < 48rem)");
+const isPhone = window.matchMedia("(width < 64rem)");
 
 function update() {
   if (!isPhone.matches) {
-    photo.style.opacity = ""; // tablets and desktops: the CSS decides, the photo is simply there
+    photo.style.opacity = ""; // desktops: the CSS decides, the photo is simply there
     return;
   }
   const screen = window.innerHeight;

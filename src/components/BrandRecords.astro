@@ -121,6 +121,11 @@ const share = (count: number) => `--share: ${(count / top[0].count) * 100}%`;
     flex-direction: column;
     gap: var(--space-4); /* 16px */
 
+    /* Tablets (768–1023px): a little more room on the right, the column is narrow there */
+    @media (48rem <= width < 64rem) {
+      padding-inline-end: var(--space-6); /* 24px */
+    }
+
     @media (width >= 64rem) {
       grid-column: 2 / -1;
     }

@@ -267,6 +267,22 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   **404** – only a heading so far. Build it on a day that suits; not important for the presentation (Dardan, 4 Nov). Humour idea: memory.
 - **`/styleguide`** – noindex, public by URL. **Stays (Dardan, 4 Nov): he shows it to Linro.** Cleaned up, not in the
   footer any more.
+- **Tablets, 768–1023px (Dardan, 5 Nov, from the iPad Mini test):** where older notes in this file say
+  "from 768px" or "tablet and desktop" for these parts, this is newer. From 1024px the site counts as
+  desktop (iPad Pro 13 upright keeps the two halves on Brand: still to check). Real iPad Minis are 744
+  wide and get the phone version. No real iPad or Safari test yet.
+  - **Home:** the three tiles take the full width, 16px apart. Pieces made to stay: the Core Tee photo
+    is square and fills its card, text parts have room for two lines, so the bottoms line up.
+  - **Product page:** the phone's swipe row with dots, not the grid. The row is as wide as a 4:5 photo
+    that is 60% of the screen high, centred, one photo at a time (no peeking: dropped 29 Oct).
+  - **Brand:** Why Cave Wear Exists, the three principles and Still Here use the phone version
+    (photo as background, the fold, no green), with the text 576px wide on the middle. Still Here keeps
+    the long text with the European brown bear. On Record: 24px more room on the right.
+  - **Still Here's end (phones too):** the text stands on the middle of the screen when the footer is
+    about to come in. Text taller than the visible screen can't be centred, it keeps 48px to the footer.
+- **Laptops and scaled screens (5 Nov):** the snap on Home's three tiles only runs on screens from
+  992px high; lower ones scroll freely (it held the page back before the next section came in). Home's
+  product photos fade with a mask, not a layer on top: the layer left a hairline at 125% and 150%.
 
 ## 7. Features
 

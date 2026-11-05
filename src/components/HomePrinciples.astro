@@ -308,6 +308,18 @@ const principles = [
     }
   }
 
+  /* Tablets (768–1023px): the tiles were small with all that room around them. The row
+     takes the full width and only 16px stays between the tiles (decided 5 Nov). */
+  @media (48rem <= width < 64rem) {
+    .principles-row {
+      padding-inline: 0;
+    }
+
+    .principle {
+      padding-inline: var(--space-2); /* 8px */
+    }
+  }
+
   /* Reduced motion: no sliding or growing animation – changes are instant */
   @media (prefers-reduced-motion: reduce) {
     .principle,

@@ -188,6 +188,21 @@ const widths = [480, 800, 1200, 1600];
     }
   }
 
+  /* Tablets (768–1023px, decided 5 Nov): the right column was taller than the big card, so the big
+     card's text part grew into a large empty area. Now the big photo is square and fills whatever
+     is left, and every text part has room for two lines (16 + 24 + 4 + 40 + 16px), so the bottoms
+     of the Core Tee and the Ridge Beanie line up. */
+  @media (48rem <= width < 64rem) {
+    .home-card-big .home-card-media {
+      flex: 1;
+      aspect-ratio: 1 / 1;
+    }
+
+    .home-card-info {
+      min-block-size: calc(2 * var(--space-4) + var(--leading-body) + var(--space-1) + 2 * var(--leading-small));
+    }
+  }
+
   /* Fade over the bottom third of the photo: the photo melts into the text part
      below (the card's Obsidian shows through), no hard edge. A mask makes the photo
      itself transparent. A dark layer on top (the old way) left a hairline of bright

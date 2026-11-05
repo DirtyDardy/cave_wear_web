@@ -189,14 +189,12 @@ const widths = [480, 800, 1200, 1600];
   }
 
   /* Fade over the bottom third of the photo: the photo melts into the text part
-     below (same Obsidian), no hard edge. */
-  .home-card-media::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    /* The bottom 2px are solid Obsidian (see .home-card-image) */
-    background: linear-gradient(to top, var(--color-surface) 2px, transparent 35%);
-    pointer-events: none;
+     below (the card's Obsidian shows through), no hard edge. A mask makes the photo
+     itself transparent. A dark layer on top (the old way) left a hairline of bright
+     photo at the bottom and side edges on scaled screens (125%, 150%, zoom), because
+     the layer and the photo were cut off at slightly different pixels. Same look. */
+  .home-card-media {
+    mask-image: linear-gradient(to top, transparent 2px, #000 35%);
   }
 
   /* Hover: the photo zooms in a little, the fade stays. overflow: hidden on
@@ -219,14 +217,11 @@ const widths = [480, 800, 1200, 1600];
     }
   }
 
-  /* The photo stops 2px above the bottom edge. Photo heights are rarely whole
-     pixels (e.g. 412.8px), and at that edge a hairline of photo showed below
-     the fade on phones (31 Oct). Now only the solid fade is there. */
   .home-card-image {
     position: absolute;
-    inset: 0 0 2px;
+    inset: 0;
     inline-size: 100%;
-    block-size: calc(100% - 2px);
+    block-size: 100%;
     object-fit: cover;
   }
 

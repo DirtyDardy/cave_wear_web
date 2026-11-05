@@ -6,7 +6,7 @@
 // or fit icon opens it with that colour / fit already chosen.
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
-import { toColour } from "../data/products";
+import type { toColour } from "../data/products";
 import { productFits } from "../data/product-fits.js";
 import HeartIcon from "../assets/icons/heart.svg";
 
@@ -20,8 +20,8 @@ interface Props {
   image: ImageMetadata;
   alt: string;
   hoverImage?: ImageMetadata; // shown on hover – leave out for no hover photo
-  href?: string; // the product page – leave out for placeholder cards (then nothing is clickable)
-  colours?: CardColour[]; // leave out → the three placeholder dots
+  href: string; // the product page
+  colours: CardColour[];
   fits?: Fit[]; // leave out → no fit icons
 }
 
@@ -33,7 +33,7 @@ const {
   alt,
   hoverImage,
   href,
-  colours = ["Black", "Olive", "Egret"].map(toColour),
+  colours,
   fits = [],
 } = Astro.props;
 
@@ -58,7 +58,7 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
 
     <!-- Fit icons, top left – each opens the product page with that fit chosen -->
     {
-      href && fits.length > 0 && (
+      fits.length > 0 && (
         <ul class="fits" role="list" aria-label="Fits">
           {fits.map((fit) => {
             const { icon: FitIcon, label } = productFits[fit];
@@ -85,26 +85,20 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
   <div class="product-info">
     <!-- The name link is stretched over the whole card (see CSS) – so a click
          anywhere on the card opens the product page -->
-    <h3 class="product-name">{href ? <a href={href} class="card-link">{name}</a> : name}</h3>
+    <h3 class="product-name"><a href={href} class="card-link">{name}</a></h3>
     <p class="small product-tagline">{tagline}</p>
     <ul class="swatches" role="list" aria-label="Colours">
       {
         colours.map((colour) => (
           <li>
-            {href ? (
-              <a
-                href={colourLink(colour)}
-                class="swatch"
-                style={`--swatch: ${colour.hex}`}
-                data-very-dark={colour.veryDark ? "" : undefined}
-              >
-                <span class="visually-hidden">{`${name} in ${colour.name}`}</span>
-              </a>
-            ) : (
-              <span class="swatch" style={`--swatch: ${colour.hex}`} data-very-dark={colour.veryDark ? "" : undefined}>
-                <span class="visually-hidden">{colour.name}</span>
-              </span>
-            )}
+            <a
+              href={colourLink(colour)}
+              class="swatch"
+              style={`--swatch: ${colour.hex}`}
+              data-very-dark={colour.veryDark ? "" : undefined}
+            >
+              <span class="visually-hidden">{`${name} in ${colour.name}`}</span>
+            </a>
           </li>
         ))
       }

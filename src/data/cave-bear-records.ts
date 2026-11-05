@@ -3,9 +3,9 @@
 // doesn't talk to GBIF, no IP address goes there, and the page needs no JavaScript for it.
 // The numbers get fresh with every deploy.
 
-export type CountryCount = { name: string; count: number };
+type CountryCount = { name: string; count: number };
 
-export type CaveBearRecords = {
+type CaveBearRecords = {
   total: number; // all records of the cave bear
   withCountry: number; // how many of them name a country
   top: CountryCount[]; // the countries with the most records

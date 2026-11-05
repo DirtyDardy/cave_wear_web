@@ -181,7 +181,7 @@ export async function getProducts() {
 
     return {
       id,
-      order: readOrder(filePath), // e.g. 1 – the Products page also sorts placeholders with it
+      order: readOrder(filePath), // e.g. 1 – sets the order on the Products page
       name: data.name,
       code: data.code, // e.g. "THZ01" – the full code comes from productCode() below
       tagline: data.tagline,

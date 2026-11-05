@@ -142,7 +142,7 @@ export function closePack() {
 
 // One reserved row, frozen as it was sent – unlike the Pack, the name and price are
 // saved here, because the reservation is a record of that moment
-export type ReservedLine = {
+type ReservedLine = {
   name: string; // "The Core Tee"
   details: string; // "M · Unisex · Olive"
   quantity: number;

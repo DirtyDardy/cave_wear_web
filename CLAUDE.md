@@ -350,8 +350,10 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
 
 - **Page transitions – built 4 Nov** (`src/components/PageSwipe.astro`: CSS cross-document view
   transitions, a small script picks the animation. Not Astro's `<ClientRouter />`: JS, would break
-  the header and newsletter scripts). Desktop with a mouse only, off with reduced motion, phones
-  later. Menu pages: a short slide + fade, 0.4s, following the menu order (style C of four compared);
+  the header and newsletter scripts). My own animation: desktop with a mouse only. Touch screens: the
+  browser's own fade, 0.25s (decided 4 Nov: safest, no animation code of mine). Off with reduced
+  motion. Not tested on a real iPhone yet.
+  Menu pages: a short slide + fade, 0.4s, following the menu order (style C of four compared);
   a product page counts as Products, so the product cards on Home swipe too. Products <-> a product
   page: a quiet fade, 0.3s, nothing moves. Footer links: no animation. The header never moves: logo,
   links and Pack switch at once, only its background fades. A footer on screen fades where it stands.

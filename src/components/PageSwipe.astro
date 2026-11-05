@@ -1,7 +1,9 @@
 ---
-// The animation between pages. Desktop only for now (phones: later).
-//   Menu pages: a short swipe that follows the menu order.
-//   Products <-> a product page: a quiet fade, nothing moves.
+// The animation between pages.
+//   Touch screens: only the browser's own short fade (0.25s). None of my rules below apply.
+//   Desktop with a mouse:
+//     Menu pages: a short swipe that follows the menu order.
+//     Products <-> a product page: a quiet fade, nothing moves.
 //
 // How it works: the browser takes a picture of the old page, loads the new one, and
 // animates the two pictures. CSS says how they move. The small script only says which
@@ -19,7 +21,7 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
 
 {isSwipePage && (
   <style is:inline>
-    @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    @media (prefers-reduced-motion: no-preference) {
       @view-transition {
         navigation: auto;
       }
@@ -49,6 +51,10 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
     document.querySelector(".site-footer")?.style.removeProperty("view-transition-name");
 
     if (!event.viewTransition) return;
+
+    // A skipped animation (the page you are already on) counts as a failed promise, and
+    // nobody listens to it: a red line in the console. This says "skipped is fine".
+    event.viewTransition.ready.catch(() => {});
 
     const fromPath = cleanPath(sessionStorage.getItem("swipe-from"));
     const toPath = cleanPath(location.pathname);
@@ -87,7 +93,8 @@ const isSwipePage = pageOrder.includes(currentPath) || currentPath.startsWith("/
 </script>
 
 <style is:global>
-  /* Everything only on desktop with a mouse, and never with reduced motion */
+  /* My own animation: only on desktop with a mouse, and never with reduced motion.
+     Touch screens skip all of this and keep the browser's own fade. */
   @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
     :root {
       --swipe-speed: 0.4s;

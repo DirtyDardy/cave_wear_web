@@ -1,0 +1,74 @@
+---
+// QUIET RISE: anything with data-appear fades in and rises 8px, once, when it comes
+// on screen. Sits at the very end of the page, so all the content already exists when
+// this runs. Nothing is hidden by CSS alone: without JavaScript, or if this script
+// fails, everything simply stays visible.
+//
+// data-appear="mouse" = only on devices with a mouse (on touch screens that part
+// already moves by itself).
+---
+
+<script is:inline>
+  (() => {
+    const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const touch = matchMedia("(hover: none)").matches;
+    if (calm) return;
+
+    const items = [...document.querySelectorAll("[data-appear]")].filter(
+      (item) => !(item.dataset.appear === "mouse" && touch),
+    );
+    if (items.length === 0) return;
+    for (const item of items) item.dataset.appear = "wait"; // CSS: invisible for now
+
+    const STEP = 60; // ms between things that come on screen together
+    const MAX_DELAY = 240; // ms – never make anyone wait longer than this
+    let firstLook = true;
+
+    // IntersectionObserver = the browser tells us when something comes on screen.
+    // Its first answer covers what is already visible when the page opens.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let order = 0;
+        for (const entry of entries) {
+          const item = entry.target;
+          if (entry.isIntersecting) {
+            // First screen: only a short fade, the page swipe already moves it
+            item.dataset.appear = firstLook ? "first" : "rise";
+            item.style.setProperty("--appear-delay", `${Math.min(order * STEP, MAX_DELAY)}ms`);
+            order += 1;
+            observer.unobserve(item);
+          } else if (entry.boundingClientRect.bottom < 0) {
+            // Already above the screen (a jump, or going back): just show it, no animation
+            item.dataset.appear = "done";
+            observer.unobserve(item);
+          }
+        }
+        firstLook = false;
+        // A very fast scroll can jump over something without the browser reporting it.
+        // Whatever is above the screen by now just shows, nobody should wait for it on the way back.
+        for (const item of items) {
+          if (item.dataset.appear === "wait" && item.getBoundingClientRect().bottom < 0) showNow(item);
+        }
+      },
+      { rootMargin: "0px 0px -5% 0px" }, // starts when it's a little way in, so it can be seen
+    );
+    for (const item of items) observer.observe(item);
+
+    // The animation is over: back to normal, so it can't interfere with anything else
+    document.addEventListener("animationend", (event) => {
+      if (["first", "rise"].includes(event.target.dataset?.appear)) event.target.dataset.appear = "done";
+    });
+
+    const showNow = (item) => {
+      item.dataset.appear = "done";
+      observer.unobserve(item);
+    };
+    // Keyboard: never let focus land on something still invisible
+    document.addEventListener("focusin", (event) => {
+      const item = event.target.closest('[data-appear="wait"]');
+      if (item) showNow(item);
+    });
+    // Printing: everything has to be there
+    addEventListener("beforeprint", () => document.querySelectorAll('[data-appear="wait"]').forEach(showNow));
+  })();
+</script>

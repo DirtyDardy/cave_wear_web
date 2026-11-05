@@ -65,7 +65,7 @@ const supporterCollection = cardsFor("Supporter Collection");
            The intro is folded away behind the small button on the right of the title
            (description-toggle.js, same button as on the product page). Without
            JavaScript: no button, the intro is always there. -->
-      <div class="collection-head">
+      <div class="collection-head" data-appear>
         <div class="collection-title-row">
           <h2 id="base-title" class="label collection-title">Base Collection</h2>
           <button
@@ -81,12 +81,12 @@ const supporterCollection = cardsFor("Supporter Collection");
       <p id="base-intro" class="collection-intro">
         Essentials made for years, not seasons. Buy once, keep it. The collection grows one
         considered piece at a time.{" "}
-        <a href="/brand" class="text-link">Why Cave Wear exists ›</a>
+        <a href="/brand" class="text-link">Why Cave Wear exists <span aria-hidden="true">›</span></a>
       </p>
       <ul class="product-grid" role="list">
         {
           baseCollection.map((product) => (
-            <li>
+            <li data-appear>
               <ProductCard {...product} />
             </li>
           ))
@@ -97,20 +97,20 @@ const supporterCollection = cardsFor("Supporter Collection");
     <section class="collection" aria-labelledby="supporter-title">
       <!-- The donation is only planned → "Conservation planned", never "Supports conservation"
            until it's real -->
-      <div class="collection-head">
+      <div class="collection-head" data-appear>
         <h2 id="supporter-title" class="label collection-title">Supporter Collection</h2>
         <p class="collection-tags"><span>Pre-launch only</span> · <span>For early believers</span> · <span>Conservation planned</span></p>
       </div>
       <ul class="product-grid" role="list">
         {
           supporterCollection.map((product) => (
-            <li>
+            <li data-appear>
               <ProductCard {...product} />
             </li>
           ))
         }
         <!-- Text card in the third column: what the Supporter Collection is. -->
-        <li class="text-card">
+        <li class="text-card" data-appear>
           <h3>For the ones who were here first.</h3>
           <Image
             src={supporterPrint}

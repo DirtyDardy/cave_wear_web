@@ -11,7 +11,7 @@ import { milestones, nextUp } from "../data/journey.js";
 <section class="band section home-journey" aria-labelledby="home-journey-title">
   <div class="container">
   <div class="home-journey-inner">
-    <div class="home-journey-text">
+    <div class="home-journey-text" data-appear>
       <p class="label home-journey-label">The journey so far</p>
       <h2 id="home-journey-title">Still a concept. Getting real, step by step.</h2>
       <!-- Draft intro + button label – still open, change freely -->
@@ -68,8 +68,8 @@ import { milestones, nextUp } from "../data/journey.js";
     <div class="home-journey-questions">
       <p>Got a question or an idea?</p>
       <ul class="home-journey-links" role="list">
-        <li><a href="/contact#faq" class="text-link">Read the FAQ ›</a></li>
-        <li><a href="/contact#contact-form" class="text-link">Write to us ›</a></li>
+        <li><a href="/contact#faq" class="text-link">Read the FAQ <span aria-hidden="true">›</span></a></li>
+        <li><a href="/contact#contact-form" class="text-link">Write to us <span aria-hidden="true">›</span></a></li>
       </ul>
     </div>
   </div>

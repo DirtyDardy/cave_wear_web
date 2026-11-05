@@ -46,16 +46,16 @@ const widths = [480, 800, 1200, 1600];
 
 <section class="container section home-collection" aria-labelledby="home-collection-title">
   <div class="home-collection-inner">
-    <div class="home-collection-head">
+    <div class="home-collection-head" data-appear>
       <h2 id="home-collection-title">Pieces made to stay.</h2>
-      <a href="/products#base-collection" class="text-link">View all products ›</a>
+      <a href="/products#base-collection" class="text-link">View all products <span aria-hidden="true">›</span></a>
       <p class="home-collection-line">The essentials first. Nothing you'd only wear once.</p>
     </div>
 
     <ul class="home-collection-grid" role="list">
       {
         cards.map((card, index) => (
-          <li class:list={["home-card", { "home-card-big": index === 0 }]}>
+          <li class:list={["home-card", { "home-card-big": index === 0 }]} data-appear>
             <div class="home-card-media">
               <Image
                 src={card.image}
@@ -197,7 +197,7 @@ const widths = [480, 800, 1200, 1600];
      No movement with reduced motion. */
   @media (prefers-reduced-motion: no-preference) {
     .home-card-image {
-      transition: scale 0.4s ease; /* same speed as the card hover on /products */
+      transition: scale 0.8s ease-out; /* same speed as the card hover on /products */
     }
 
     .home-card:has(:focus-visible) .home-card-image {

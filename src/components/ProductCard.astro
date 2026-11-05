@@ -282,6 +282,30 @@ const sizes = "(width >= 64rem) 33vw, (width >= 40rem) 50vw, 100vw";
     }
   }
 
+  /* The photo grows very slowly while you're on the card, as if the camera moves closer.
+     overflow: hidden on .product-media keeps it inside the frame. */
+  @media (prefers-reduced-motion: no-preference) {
+    .product-image {
+      transition: scale 0.8s ease-out;
+    }
+
+    .product-image-hover {
+      transition:
+        opacity 0.4s ease,
+        scale 0.8s ease-out;
+    }
+
+    .product-card:has(:focus-visible) .product-image {
+      scale: 1.02;
+    }
+
+    @media (hover: hover) {
+      .product-card:hover .product-image {
+        scale: 1.02;
+      }
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .product-image-hover,
     .fit-link {

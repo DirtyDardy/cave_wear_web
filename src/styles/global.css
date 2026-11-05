@@ -101,6 +101,9 @@
   /* A panel that travels across the whole screen (the Pack) takes longer to come in,
      so it glides instead of jumping; closing stays at --motion-duration (quick) */
   --motion-duration-slide: 0.5s;
+  /* Hover: reacts quickly, leaves slowly */
+  --hover-in: 0.15s;
+  --hover-out: 0.4s;
 
   /* The line of the site (decided 1 Nov): long dash, short dash, like the centre line in a
      technical drawing – the trail on Home and /contact, and in my Pack drawings. One
@@ -837,6 +840,124 @@ html:not([data-js]) .favorite-button {
 
     &:active {
       scale: 1;
+    }
+  }
+}
+
+/* --- Motion polish -----------------------------------------------------------
+   All only with prefers-reduced-motion: no-preference. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Photos fade in once loaded. An animation with only "from" ends at whatever opacity
+     the photo normally has, so the card's invisible hover photo stays invisible.
+     Not the hero (its own masks and fades), not line drawings, not the photo viewer. */
+  html[data-js] main img:not(.side-image, .conditions-map, .my-places-map, dialog img) {
+    &:not([data-loaded]) {
+      opacity: 0;
+    }
+
+    &[data-loaded] {
+      animation: photo-in 0.5s ease;
+    }
+  }
+
+  /* Quiet rise (Appear.astro) */
+  [data-appear="wait"] {
+    opacity: 0;
+  }
+
+  [data-appear="rise"] {
+    animation: appear-rise 0.6s var(--motion-ease) var(--appear-delay, 0ms) backwards;
+  }
+
+  [data-appear="first"] {
+    animation: photo-in 0.4s ease var(--appear-delay, 0ms) backwards;
+  }
+}
+
+@keyframes photo-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes appear-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--space-2); /* 8px */
+  }
+}
+
+/* Better hover: quick in, slow out. The rule without :hover is the way back, the rule
+   with :hover the way in. Pressing (scale) stays quick. Mouse only.
+   html[data-js] is here for strength: it has to beat each component's own transition.
+   Without JavaScript the hover simply stays the plain 0.2s. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html[data-js] {
+    & .button {
+      transition-duration: var(--hover-out), var(--hover-out), var(--hover-out), 0.1s;
+
+      &:hover {
+        transition-duration: var(--hover-in), var(--hover-in), var(--hover-in), 0.1s;
+      }
+    }
+
+    & .icon-button {
+      transition-duration: var(--hover-out), var(--hover-out), 0.1s;
+
+      &:hover {
+        transition-duration: var(--hover-in), var(--hover-in), 0.1s;
+      }
+    }
+
+    & .favorite-button {
+      transition-duration: var(--hover-out), var(--hover-out), 0.1s;
+
+      &:hover {
+        transition-duration: var(--hover-in), var(--hover-in), 0.1s;
+      }
+    }
+
+    & :is(.nav-link, .logo, .footer-logo, .pack-button, .icon-link, .fit-link, .legal a) {
+      transition-duration: var(--hover-out);
+
+      &:hover {
+        transition-duration: var(--hover-in);
+      }
+    }
+
+    /* Text links: the underline fades instead of jumping, the arrow moves 2px */
+    & .text-link {
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 4px;
+      transition:
+        color var(--hover-out) ease,
+        text-decoration-color var(--hover-out) ease;
+
+      & > span[aria-hidden] {
+        position: relative; /* can move without breaking the underline */
+        inset-inline-start: 0;
+        inset-block-start: 0;
+        transition:
+          inset-inline-start var(--hover-out) var(--motion-ease),
+          inset-block-start var(--hover-out) var(--motion-ease);
+      }
+
+      &:hover {
+        text-decoration-color: currentColor;
+        transition-duration: var(--hover-in);
+
+        & > span[aria-hidden] {
+          inset-inline-start: 2px;
+          transition-duration: var(--hover-in);
+        }
+
+        /* "Write to us ↓" points down, so it moves down */
+        & > span[data-arrow="down"] {
+          inset-inline-start: 0;
+          inset-block-start: 2px;
+        }
+      }
     }
   }
 }

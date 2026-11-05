@@ -341,6 +341,16 @@ content in `content`/`data`. Content stays in HTML/Markdown, not in JS.
   it. Bears' Cave is where the 140 skeletons were found, never "where the cave bear was first
   found" (first described from Zoolithen Cave, Bavaria). OPEN: bar wording, a FAQ question.
 - **Animations** basic only, always respecting `prefers-reduced-motion`.
+- **Motion polish (5 Nov, compared with and without on localhost, all three kept):**
+  - **Photos fade in** over 0.5s once loaded (`BaseLayout.astro`, `global.css`), everywhere in `main`
+    except the hero, the map drawings and the photo viewer.
+  - **Quiet rise** (`data-appear`, `src/components/Appear.astro`): fade + 8px up, 0.6s, once, 60ms between
+    things that arrive together. First screen: a short fade only. Above the screen: just shows. Showcase
+    parts move, tools stay still: not on Contact, the product page, the footer or the Pack. Sections with
+    their own animation keep it. Without JavaScript everything stays visible.
+  - **Hover: quick in, slow out** (`--hover-in` 0.15s, `--hover-out` 0.4s). Card photos zoom over 0.8s:
+    Products 102%, Home 104%. Text links: the underline fades in, the arrow moves 2px.
+  Safari and a real iPhone not tested yet.
 - **Scroll snap** CSS only, `proximity` never `mandatory`: hero, main CTA, max. one more.
   Also for the product gallery and the mobile product row. **One exception (30 Oct):** the
   product page's photo swipe row on phones uses `x mandatory` – sideways only, so it can't

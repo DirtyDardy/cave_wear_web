@@ -20,7 +20,7 @@ const { place } = Astro.props;
      so it has to be on the page before that. The text waits in the template. -->
 <p class="small coordinates-bar" role="status"></p>
 <template class="coordinates-bar-text">
-  <a href="/brand#my-places" class="text-link">4 of 4. Something opened on the Brand page ›</a>
+  <a href="/brand#my-places" class="text-link">4 of 4. Something opened on the Brand page <span aria-hidden="true">›</span></a>
 </template>
 
 <script src="../scripts/coordinates.js"></script>

@@ -1,7 +1,7 @@
-// Phone only: the dots under the product photo row.
+// Phones and tablets: the dots under the product photo row.
 // One dot per photo you can swipe to (shot 0 + the chosen colour/fit's shots 1–5).
 // The dot of the photo you see lights up; a tap on a dot glides to its photo.
-// From 768px the dots are hidden by CSS – there the photos are a grid.
+// From 1024px the dots are hidden by CSS – there the photos are a grid.
 const gallery = document.querySelector(".gallery");
 const dots = document.querySelector(".gallery-dots");
 

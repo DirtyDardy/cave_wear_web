@@ -47,11 +47,11 @@ const firstCode = productCode(product, product.colours[0].fits[0], product.colou
 
 // Photo sizes: the browser picks the smallest file that is still sharp.
 // Big shots are about half the page, the 2×2 shots about a quarter.
-// On a phone every photo is one full-width slide of the swipe row.
+// On phones and tablets every photo is one slide of the swipe row.
 const bigWidths = [480, 960, 1440];
 const bigSizes = "(width >= 64rem) 30rem, 100vw";
 const smallWidths = [240, 480, 720, 960];
-const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
+const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 70vw, 100vw";
 ---
 
 <BaseLayout title={product.name} description={`${product.name} – ${product.tagline}`}>
@@ -71,8 +71,8 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
       <!-- Every photo is a button: a click opens it big in the photo viewer
            (photo-viewer.js). data-shot = its number, data-full = the full-size file.
            aria-haspopup="dialog": screen readers say the button opens a window. -->
-      <!-- On a phone the same photos become one swipe row with dots under it
-           (gallery-dots.js fills in the dots). From 768px: the grid as before. -->
+      <!-- On phones and tablets the same photos become one swipe row with dots under it
+           (gallery-dots.js fills in the dots). From 1024px: the grid as before. -->
       <div class="gallery-column">
         <div class="gallery">
           <!-- Shot 0: the normal one, plus an own one for a fit if its photo exists
@@ -516,8 +516,18 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
     }
   }
 
-  /* From 768px: no row, no dots – the photo grid from my mockup */
-  @media (width >= 48rem) {
+  /* Tablets (768–1023px, decided 5 Nov): the same swipe row, but a full-width 4:5 photo would be
+     taller than the screen and push the sizes and colours far down. So the row is only as wide
+     as a photo that is 60% of the screen high, on the middle. Still one photo at a time. */
+  @media (48rem <= width < 64rem) {
+    .gallery {
+      max-inline-size: calc(60svh * 4 / 5);
+      margin-inline: auto;
+    }
+  }
+
+  /* From 1024px: no row, no dots – the photo grid from my mockup */
+  @media (width >= 64rem) {
     .gallery {
       display: block;
       overflow-x: visible;
@@ -560,7 +570,7 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
        4 close-up  | 2 back
        5 big close-up            */
   .shot-set {
-    @media (width >= 48rem) {
+    @media (width >= 64rem) {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
@@ -571,7 +581,7 @@ const smallSizes = "(width >= 64rem) 15rem, (width >= 48rem) 50vw, 100vw";
 
     /* A product without shot 0: the front big, back and close-up side by side, the last shot big */
     &.no-shot-0 {
-      @media (width >= 48rem) {
+      @media (width >= 64rem) {
         grid-template-areas:
           "shot1 shot1"
           "shot2 shot3"
